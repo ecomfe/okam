@@ -28,11 +28,11 @@
 | [okam-build]          | [![okam-build-status]][okam-build-package] | okam 构建工具 |
 | [okam-core]                | [![okam-core-status]][okam-core-package] | okam 核心运行框架 |
 
-[okam-build]: https://github.com/ecomfe/okam/packages/okam-build
+[okam-build]: https://github.com/ecomfe/okam/tree/master/packages/okam-build
 [okam-build-status]: https://img.shields.io/npm/v/okam-build.svg
 [okam-build-package]: https://npmjs.com/package/okam-build
 
-[okam-core]: https://github.com/ecomfe/okam/packages/okam-core
+[okam-core]: https://github.com/ecomfe/okam/tree/master/packages/okam-core
 [okam-core-status]: https://img.shields.io/npm/v/okam-core.svg
 [okam-core-package]: https://npmjs.com/package/okam-core
 
