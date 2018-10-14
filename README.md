@@ -36,6 +36,10 @@
 [okam-core-status]: https://img.shields.io/npm/v/okam-core.svg
 [okam-core-package]: https://npmjs.com/package/okam-core
 
+## Usage
+
+可以参考这里提供的项目模板：[okam-template](https://github.com/ecomfe/okam-template)。
+
 ## Documentation
 
 TODO
