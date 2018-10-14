@@ -1,11 +1,14 @@
 okam-build
 ======
+[![NPM Version](https://img.shields.io/npm/v/okam-build.svg?style=flat)](https://npmjs.org/package/okam-build)
 
 > OKAM 开发框架构建工具
 
 ## Usage
 
-TODO
+```
+npm i okam-build --save-dev
+```
 
 ## Development
 

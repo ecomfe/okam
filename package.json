@@ -1,7 +1,6 @@
 {
   "private": true,
   "name": "okam",
-  "version": "0.1.0",
   "description": "A progressive development framework for mini program",
   "scripts": {
     "clean": "rimraf package-lock.json packages/*/node_modules packages/*/package-lock.json",

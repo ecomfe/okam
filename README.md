@@ -1,5 +1,8 @@
 # Okam
 
+![](https://travis-ci.org/ecomfe/okam.svg?branch=master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > 奥卡姆，一个面向小程序开发的开发框架。
 
 ## Intro
@@ -18,9 +21,20 @@
 
 * 提供样式单位 rpx 自动转换插件、接口请求 Mock 支持等，以及可配置的构建流程
 
-## Packages
+## Main Packages
 
-TODO
+| Package | Status | Description |
+|---------|--------|-------------|
+| [okam-build]          | [![okam-build-status]][okam-build-package] | okam 构建工具 |
+| [okam-core]                | [![okam-core-status]][okam-core-package] | okam 核心运行框架 |
+
+[okam-build]: https://github.com/ecomfe/okam/packages/okam-build
+[okam-build-status]: https://img.shields.io/npm/v/okam-build.svg
+[okam-build-package]: https://npmjs.com/package/okam-build
+
+[okam-core]: https://github.com/ecomfe/okam/packages/okam-core
+[okam-core-status]: https://img.shields.io/npm/v/okam-core.svg
+[okam-core-package]: https://npmjs.com/package/okam-core
 
 ## Documentation
 
