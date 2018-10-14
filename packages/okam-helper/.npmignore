@@ -1,0 +1,11 @@
+node_modules/
+coverage/
+test/
+.idea/
+npm-debug.log
+Thumbs.db
+.DS_Store
+.npmrc
+*.swp
+*.bat
+yarn.lock

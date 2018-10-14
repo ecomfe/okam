@@ -1,0 +1,34 @@
+{
+  "name": "okam-helper",
+  "version": "0.2.1-alpha.0",
+  "description": "The build helper for Okam develop framework",
+  "main": "index.js",
+  "keywords": [
+    "swan",
+    "wx",
+    "okam",
+    "mini program",
+    "build",
+    "helper"
+  ],
+  "scripts": {
+    "lint": "fecs ./lib index.js --reporter=baidu --rule",
+    "test": "mocha --require intelli-espower-loader test/tasks/**/*.spec.js"
+  },
+  "license": "MIT",
+  "repository": "ecomfe/okam",
+  "bugs": {
+    "url": "https://github.com/ecomfe/okam/issues"
+  },
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "pretty-hrtime": "^1.0.3",
+    "resolve": "^1.8.1"
+  },
+  "engine": {
+    "node": ">= 6"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}

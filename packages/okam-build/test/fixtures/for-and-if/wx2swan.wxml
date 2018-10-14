@@ -1,0 +1,29 @@
+<view wx:for="{{[false, true, false]}}" wx:if="{{item}}" hello="hello">
+    <view>
+        <view>hello im from for and if</view>
+    </view>
+    <view>
+        <view>hello im from for and if</view>
+    </view>
+    hello im from for and if
+</view>
+
+<view wx:if="{{3 > 4}}">text</view>
+<view wx:elif="{{3 > 2}}" wx:for="{{[1, 2]}}" hello="hello">
+    <view>else-if text::{{item}}</view>
+</view>
+<view wx:else wx:for="{{[3, 4]}}">else text:: {{item}}</view>
+
+<view wx:if="{{3 > 4}}">text</view>
+<view wx:elif="{{3 > 2}}" wx:for="{{[1, 2]}}" hello="hello">
+    <view>else-if text</view>
+    hello im from for and if
+</view>
+<view wx:else wx:for="item, index">else text</view>
+
+<view wx:if="{{3 > 4}}">text</view>
+<view wx:elif="{{3 > 5}}" wx:for="{{[1, 2]}}" hello="hello">
+    <view>else-if text</view>
+    hello im from for and if
+</view>
+<view wx:else wx:for="item, index">else text</view>

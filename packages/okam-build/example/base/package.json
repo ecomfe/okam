@@ -1,0 +1,40 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "npm i && ln -s ../../../../okam-core node_modules",
+    "clean": "rm -rf dist/",
+    "build": "npm run clean && cross-env NODE_ENV=dev node scripts/build.js",
+    "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
+    "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
+    "dev:wx": "cross-env NODE_ENV=dev node scripts/build.js --watch --type wx",
+    "dev:wx:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch --type wx",
+    "dev:wx:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean --type wx",
+    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
+    "dev:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server"
+  },
+  "keywords": [
+    "example"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "css": "^2.2.3",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "vant-weapp": "^0.3.7"
+  },
+  "devDependencies": {
+    "connect": "^3.6.6",
+    "cross-env": "^5.2.0",
+    "iview-weapp": "^2.0.0",
+    "okam-plugin-tinyimg": "^0.1.0",
+    "postcss-url": "^8.0.0",
+    "promise-polyfill": "^8.1.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "lerna": "3.4.0",
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "publish": {
+      "allowBranch": ["master"],
+      "message": "chore: publish"
+    }
+  },
+  "npmClient": "npm",
+  "version": "independent"
+}

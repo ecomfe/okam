@@ -1,0 +1,66 @@
+{
+  "private": true,
+  "name": "okam",
+  "version": "0.1.0",
+  "description": "A progressive development framework for mini program",
+  "scripts": {
+    "clean": "rimraf package-lock.json packages/*/node_modules packages/*/package-lock.json",
+    "bootstrap": "npm run clean && lerna bootstrap",
+    "lint": "lerna run lint",
+    "test": "lerna run test",
+    "commit": "git-cz",
+    "commitmsg": "commitlint -E HUSKY_GIT_PARAMS",
+    "publish": "lerna publish --registry https://registry.npmjs.org",
+    "publish:build": "lerna publish prerelease --force-publish=okam-build --registry https://registry.npmjs.org",
+    "build": "echo \"Please implement your build script and modify scripts.build section in package.json\" && exit 1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.js": [
+        "fecs --reporter=baidu --rule"
+      ]
+    },
+    "ignore": [
+      "dist/**/*.js",
+      "example/**/*.js"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/prompt"
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@commitlint/cli": "^7.1.2",
+    "@commitlint/prompt": "^7.1.2",
+    "autoprefixer": "^9.1.5",
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "chalk": "^2.4.1",
+    "commitizen": "^3.0.2",
+    "fecs": "^1.4.0",
+    "husky": "^1.0.0",
+    "intelli-espower-loader": "^1.0.1",
+    "lerna": "^3.4.0",
+    "less": "^3.8.1",
+    "lint-staged": "^7.3.0",
+    "postcss": "^7.0.3",
+    "power-assert": "^1.6.1",
+    "pug": "^2.0.3",
+    "rimraf": "^2.6.2",
+    "stylus": "^0.54.5"
+  },
+  "engine": {
+    "node": ">= 6"
+  }
+}

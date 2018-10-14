@@ -1,0 +1,24 @@
+{
+  "name": "youzan",
+  "version": "1.0.0",
+  "description": "youzan component example test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "ln -s ../../../../../okam-core node_modules",
+    "clean": "rm -rf dist/",
+    "build": "npm run clean && cross-env NODE_ENV=dev node scripts/build.js",
+    "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
+    "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
+    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vant-weapp": "^0.3.0"
+  }
+}

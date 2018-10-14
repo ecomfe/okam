@@ -1,0 +1,29 @@
+<block s-for="item,index in [false,true,false]"><view hello="hello" s-if="item">
+    <view>
+        <view>hello im from for and if</view>
+    </view>
+    <view>
+        <view>hello im from for and if</view>
+    </view>
+    hello im from for and if
+</view></block>
+
+<view s-if="3>4">text</view>
+<block s-elif="3>2"><view hello="hello" s-for="item,index in [1,2]">
+    <view>else-if text::{{item}}</view>
+</view></block>
+<block s-else><view s-for="item,index in [3,4]">else text:: {{item}}</view></block>
+
+<view s-if="3>4">text</view>
+<block s-elif="3>2"><view hello="hello" s-for="item,index in [1,2]">
+    <view>else-if text</view>
+    hello im from for and if
+</view></block>
+<block s-else><view s-for="item,index">else text</view></block>
+
+<view s-if="3>4">text</view>
+<block s-elif="3>5"><view hello="hello" s-for="item,index in [1,2]">
+    <view>else-if text</view>
+    hello im from for and if
+</view></block>
+<block s-else><view s-for="item,index">else text</view></block>

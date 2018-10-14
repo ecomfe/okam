@@ -1,0 +1,65 @@
+/**
+ * @file The app entry style
+ * @author xxx
+ */
+
+@require './common/css/base.styl'
+
+.okam-inline
+    display: inline
+
+.title
+    margin: 15px 0
+    padding: 10px
+    background: #fff
+    width: 10px
+    /* px2rpx: no */
+    border: 1px solid #ff0000
+
+
+/* just for test px2rpx */
+@media screen and (max-width: 500px)
+    .test-no-tans
+        width: 100px
+        border: 1px solid red /* px2rpx: no */
+
+@keyframes testKeyframes
+    0%
+        width: 10px /*px2rpx: no*/
+        transform: scale(1)
+
+    20%
+        width: 20px /* px2rpx: no*/
+        transform: scale(.9)
+
+    40%
+        width: 30px /*px2rpx: no */
+        transform: scale(1)
+        border: 1px /* no */ solid #ff0000
+
+    60%
+        width: 40px /* px2rpx: no */
+        transform: scale(1)
+
+    80%
+        width: 50px    /*px2rpx: no*/
+        transform: scale(.9)  /* invalid note */
+
+    100%
+        width: 60px
+        border: 1px solid #ff0000  /* px2rpx: no */
+        transform: scale(1)
+
+
+testPxFn()
+    width: 100px /* px2rpx: no */
+
+.test-no-tans
+    border: 2px solid red /* px2rpx: no */
+    margin: 100px /* px2rpx: no */ 300px
+    padding: 10px 100px
+    height: 200px
+    /* px2rpx: no */
+    testPxFn()
+    hairline('#fff')
+

@@ -1,0 +1,37 @@
+<view> {{ message }} </view>
+<view id="item-{{id}}"> </view>
+<view s-if="condition"> </view>
+<checkbox checked="{{false}}"> </checkbox>
+<view hidden="{{flag ? true : false}}"> Hidden </view>
+<view> {{a + b}} + {{c}} + d </view>
+<view s-if="length > 5"> </view>
+<view>{{"hello" + name}}</view>
+<view s-for="[zero, 1, 2, 3, 4]"> {{item}} </view>
+
+<view s-for="array" s-for-index="idx" s-for-item="itemName">
+  {{idx}}: {{itemName.message}}
+</view>
+<view s-for="[1, 2, 3, 4, 5, 6, 7, 8, 9]" s-for-item="i">
+  <view s-for="[1, 2, 3, 4, 5, 6, 7, 8, 9]" s-for-item="j">
+    <view s-if="i <= j">
+      {{i}} * {{j}} = {{i * j}}
+    </view>
+  </view>
+</view>
+<block s-for="[1, 2, 3]">
+  <view> {{index}}: </view>
+  <view> {{item}} </view>
+</block>
+<switch style="display: block;" s-for="objectArray"> {{item.id}} </switch>
+<button bindtap="switch"> Switch </button>
+<button bindtap="addToFront"> Add to the front </button>
+<switch style="display: block;" s-for="numberArray"> {{item}} </switch>
+<button bindtap="addNumberToFront"> Add to the front </button>
+
+<view s-if="length > 5"> 1 </view>
+<view s-elif="length > 2"> 2 </view>
+<view s-else> 3 </view>
+<block s-if="true">
+  <view> view1 </view>
+  <view> view2 </view>
+</block>

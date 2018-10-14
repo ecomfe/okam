@@ -1,0 +1,27 @@
+<template is="objectCombine" data="{{for: a, bar: b}}"></template>
+<template is="objectCombine" data="{{...obj1, ...obj2, e: 5}}"></template>
+<template is="objectCombine" data="{{foo, bar}}"></template>
+<template is="objectCombine" data="{{...obj1, ...obj2, a, c: 6}}"></template>
+
+<template name="msgItem">
+  <view>
+    <text> {{index}}: {{msg}} </text>
+    <text> Time: {{time}} </text>
+  </view>
+</template>
+
+<view id="tapTest" data-hi="WeChat" bindtap="tapName"> Click me! </view>
+
+<!-- B.wxml -->
+<import src="a.wxml"/>
+<template name="B">
+  <text> B template </text>
+</template>
+
+<import src="item.wxml"/>
+<template is="item" data="{{text: 'forbar'}}"/>
+
+<!-- index.wxml -->
+<include src="header.wxml"/>
+<view> body </view>
+<include src="footer.wxml"/>

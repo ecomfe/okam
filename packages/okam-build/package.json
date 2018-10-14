@@ -1,0 +1,49 @@
+{
+  "name": "okam-build",
+  "version": "0.2.1-alpha.2",
+  "description": "The build tool for Okam develop framework",
+  "main": "index.js",
+  "keywords": [
+    "swan",
+    "wx",
+    "okam",
+    "mini program",
+    "build"
+  ],
+  "scripts": {
+    "lint": "fecs ./lib index.js --reporter=baidu --rule",
+    "demo": "cd example/base && npm run dev",
+    "demo:debug": "cd example/base && npm run dev:debug",
+    "wx": "cd example/base && npm run dev:wx",
+    "wx:debug": "cd example/base && npm run dev:wx:debug",
+    "prepublish": "npm test",
+    "test": "nyc mocha --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
+    "test:debug": "nyc mocha --inspect-brk --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "license": "MIT",
+  "repository": "ecomfe/okam",
+  "bugs": {
+    "url": "https://github.com/ecomfe/okam/issues"
+  },
+  "dependencies": {
+    "chokidar": "^2.0.4",
+    "hash-sum": "^1.0.2",
+    "htmlparser2": "^3.9.2",
+    "minimatch": "^3.0.4",
+    "mkdirp": "^0.5.1",
+    "okam-helper": "^0.2.1-alpha.0",
+    "resolve": "^1.8.1",
+    "rimraf": "^2.6.2",
+    "vue-template-compiler": "^2.5.16",
+    "yargs-parser": "^11.0.0"
+  },
+  "engine": {
+    "node": ">= 6"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
+  }
+}
