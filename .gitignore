@@ -77,5 +77,4 @@ Thumbs.db
 packages/okam-build/example/dist
 
 # package-lock.json
-package-lock.json
 packages/*/package-lock.json
