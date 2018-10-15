@@ -11,7 +11,7 @@ const wx2swanMap = {
         rext: 'swan'
     },
     wxss: {
-        processor: null,
+        processor: require('./wxssTransform'),
         rext: 'css'
     },
     js: {

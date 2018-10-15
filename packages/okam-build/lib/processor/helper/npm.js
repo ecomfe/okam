@@ -15,8 +15,6 @@ function isNpmModuleFile(modulePath) {
 
 function resolveNpmModuleNewPath(oldPath, rebaseDepDir) {
     let newPath = rebaseDepDir + oldPath.substr(DEP_DIR_NAME.length + 1);
-    // replace all `node_modles` to `npm` to fix weixin cannot find the module
-    // if the module path exists `node_module` dir name
     return nodeModulesToNpm(newPath);
 }
 
