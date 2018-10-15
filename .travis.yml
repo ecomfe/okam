@@ -8,6 +8,10 @@ cache:
   - node_modules
 
 install:
+  - npm install
   - npm run bootstrap
+
+script:
+  - npm run test
 
 after_script: npm run coverage
