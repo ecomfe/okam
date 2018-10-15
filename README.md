@@ -42,11 +42,11 @@
 
 ## Documentation
 
-具体参考[文档](https://ecomfe.github.io/okam)
+具体参考[这里](https://ecomfe.github.io/okam)。
 
 ## Contributions
 
-如果要给该项目贡献代码，可以参考该[文档](./CONTRIBUTING.md)
+如果要给该项目贡献代码，可以参考该[文档](./CONTRIBUTING.md)。
 
 ## License
 
