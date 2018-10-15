@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+dist/
+*.bat
+.idea/
+coverage/
+yarn.lock
+package-lock.json
