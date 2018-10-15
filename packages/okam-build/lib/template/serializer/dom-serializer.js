@@ -15,7 +15,7 @@ const unencodedElements = toObjectMap(require('./unencoded-tags'));
 const singleTag = toObjectMap(require('./selfclose-tags'));
 
 /**
- * Serialize tag abttributes info
+ * Serialize tag attributes info
  *
  * @inner
  * @param {Object} attributes tag attributes info
