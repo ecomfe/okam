@@ -7,9 +7,9 @@ cache:
   directories:
   - node_modules
 
-install:
-  - npm install
-  - npm run bootstrap
+install: case $TRAVIS_BRANCH in greenkeeper*) npm i;; *) npm ci;; esac;
+
+before_script: npm run bootstrap
 
 script:
   - npm run test
