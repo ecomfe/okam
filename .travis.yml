@@ -7,11 +7,8 @@ cache:
   directories:
   - node_modules
 
-before_install:
-  - chmod +x scripts/install.sh
-
 install:
-  - npm run install
+  - npm run ci:install
 
 script:
   - npm run test
