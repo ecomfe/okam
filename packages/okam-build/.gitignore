@@ -1,5 +1,6 @@
 dist
-package-lock.json
+example/**/package-lock.json
+test/**/package-lock.json
 test/example/
 test/test.js
 wx_dist
