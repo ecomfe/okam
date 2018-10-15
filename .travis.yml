@@ -7,11 +7,10 @@ cache:
   directories:
   - node_modules
 
-jobs:
-  include:
-    - stage: test
-      script:
-        - npm install
-        - npm run bootstrap
-        - npm run test
-        - npm run coverage
+install:
+  - npm run install
+
+script:
+  - npm run test
+
+after_script: npm run coverage
