@@ -9,7 +9,7 @@ cache:
 
 install:
   - npm install
-  - npm run ci:boostrap
+  - npm run ci:bootstrap
 
 script:
   - npm run test
