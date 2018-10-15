@@ -8,7 +8,8 @@ cache:
   - node_modules
 
 install:
-  - npm run ci:install
+  - npm install
+  - npm run ci:boostrap
 
 script:
   - npm run test
