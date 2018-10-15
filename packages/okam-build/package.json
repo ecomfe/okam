@@ -16,10 +16,10 @@
     "demo:debug": "cd example/base && npm run dev:debug",
     "wx": "cd example/base && npm run dev:wx",
     "wx:debug": "cd example/base && npm run dev:wx:debug",
-    "prepublish": "npm test",
-    "test": "nyc mocha --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
+    "test": "mocha --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
+    "test:coverage": "nyc mocha --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
     "test:debug": "nyc mocha --inspect-brk --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "prepublish": "npm run lint && npm test"
   },
   "license": "MIT",
   "repository": "ecomfe/okam",
@@ -42,7 +42,6 @@
     "node": ">= 6"
   },
   "devDependencies": {
-    "coveralls": "^3.0.2",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0"
   }
