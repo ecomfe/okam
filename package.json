@@ -6,7 +6,7 @@
     "clean": "rimraf package-lock.json packages/*/node_modules packages/*/package-lock.json",
     "bootstrap": "npm run clean && lerna bootstrap --ignore-scripts",
     "ci:bootstrap": "lerna bootstrap --ignore-scripts",
-    "ci:install": "bash ./scripts/install.sh",
+    "init": "bash ./scripts/install.sh",
     "lint": "lerna run lint",
     "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register --recursive \"packages/*/test/tasks/**/*.spec.js\"",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
