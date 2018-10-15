@@ -1,6 +1,6 @@
 # Okam
 
-![](https://travis-ci.org/ecomfe/okam.svg?branch=master)
+[![Build Status](https://travis-ci.org/ecomfe/okam.svg?branch=master)](https://travis-ci.org/ecomfe/okam)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > 奥卡姆，一个面向小程序开发的开发框架。
