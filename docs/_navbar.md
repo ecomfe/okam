@@ -1,3 +1,2 @@
 * [CHANGELOG](CHANGELOG.md)
 
-* HI群: 1637339
