@@ -95,7 +95,7 @@ function resolveProcessor(name, root, logger) {
 
     if (!result) {
         logger.error(
-            `unknow processor name ${name},`,
+            `unknown processor name ${name},`,
             'you can try execute: `npm i',
             resolveNames[0] + ' -D`',
             'or install `' + resolveNames[1] + '`',
