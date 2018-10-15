@@ -28,7 +28,7 @@
         plugins: [
             function (hook, vm) {
                 hook.beforeEach(function (html) {
-                    var url = 'https://github.com/ecomfe/okam/edit/master/docs/' + vm.route.file;
+                    var url = 'https://github.com/ecomfe/okam/blob/master/docs/' + vm.route.file;
                     var editHtml = '[📝 EDIT DOCUMENT](' + url + ')\n';
 
                     return editHtml
