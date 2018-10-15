@@ -1,12 +1,13 @@
 language: node_js
 
 node_js:
-  - "v10.12.0"
+  - "10"
 
 cache:
   directories:
   - node_modules
-  
+
 install:
-  - npm install
   - npm run bootstrap
+
+after_script: npm run coverage
