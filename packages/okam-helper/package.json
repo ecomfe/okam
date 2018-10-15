@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "lint": "fecs ./lib index.js --reporter=baidu --rule",
-    "test": "mocha --require intelli-espower-loader test/tasks/**/*.spec.js"
+    "test": "mocha --require intelli-espower-loader test/tasks/**/*.spec.js",
+    "prepublish": "npm run lint && npm test"
   },
   "license": "MIT",
   "repository": "ecomfe/okam",
