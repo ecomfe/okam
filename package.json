@@ -7,7 +7,7 @@
     "bootstrap": "lerna bootstrap --ignore-scripts",
     "init": "bash ./scripts/install.sh",
     "lint": "lerna run lint",
-    "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register --recursive \"packages/*/test/tasks/**/*.spec.js\"",
+    "test": "cross-env NODE_ENV=development nyc --reporter=html --reporter=text mocha --require @babel/register --recursive \"packages/*/test/tasks/**/*.spec.js\"",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "commit": "git-cz",
     "commitmsg": "commitlint -E HUSKY_GIT_PARAMS",
