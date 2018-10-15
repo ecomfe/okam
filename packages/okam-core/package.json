@@ -11,12 +11,11 @@
     "framework"
   ],
   "scripts": {
-    "prepublish": "npm test",
+    "prepublish": "npm run lint && npm test",
     "lint": "fecs ./src index.js --reporter=baidu --rule",
     "test:coverage": "cross-env NODE_ENV=development nyc mocha --require babel-register \"test/tasks/**/*.spec.js\"",
-    "test": "cross-env NODE_ENV=development mocha --require babel-register \"test/tasks/**/*.spec.js\"",
-    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require babel-register \"test/tasks/**/*.spec.js\"",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "test": "cross-env NODE_ENV=development mocha --require @babel/register \"test/tasks/**/*.spec.js\"",
+    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require babel-register \"test/tasks/**/*.spec.js\""
   },
   "license": "MIT",
   "repository": "ecomfe/okam",
@@ -24,15 +23,12 @@
     "url": "https://github.com/ecomfe/okam/issues"
   },
   "devDependencies": {
-    "babel-plugin-empower-assert": "^1.4.0",
-    "babel-plugin-espower": "^2.4.0",
-    "babel-plugin-module-resolver": "^3.1.1",
-    "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "expect": "^1.20.2",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
     "promise-polyfill": "^8.0.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "regenerator-runtime": "^0.12.1"
   }
 }
