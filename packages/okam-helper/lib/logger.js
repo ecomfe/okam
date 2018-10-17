@@ -1,12 +1,11 @@
 /**
- * @file Log utitlies
+ * @file Log utilities
  * @author sparklewhy@gmail.com
  */
 
 'use strict';
 
 const colors = require('chalk');
-const util = require('./string');
 
 /* eslint-disable no-console */
 const LOG_LEVEL = {
@@ -38,42 +37,14 @@ const LOG_LEVEL = {
 };
 /* eslint-enable no-console */
 
-function doLog(logPrefix, logLevel, ...args) {
-    let msg = args.map(
-        item => {
-            if (item && typeof item === 'object') {
-                try {
-                    return JSON.stringify(item);
-                }
-                catch (ex) {
-                    return item;
-                }
-            }
-            return item;
-        }
-    ).join(' ');
-
-    let logType = LOG_LEVEL[logLevel];
-    let params = [
-        logType.color(logType.prefix),
-        logType.color(msg)
-    ];
-
-    if (logPrefix) {
-        params.unshift(colors.bold(logPrefix));
-    }
-
-    console.log.apply(console, params);
-}
-
 class Logger {
 
     /**
-     * 创建 logger 实例
+     * Create logger instance
      *
-     * @param {Object} options 选项
-     * @param {string=} options.prefix 打印 log 自定义前缀
-     * @param {string=} options.level 打印 log level
+     * @param {Object} options the options
+     * @param {string=} options.prefix the log prefix
+     * @param {string=} options.level the minimum log level to print
      */
     constructor(options = {}) {
         this.setLogPrefix(options.prefix);
@@ -81,20 +52,20 @@ class Logger {
     }
 
     /**
-     * 设置打印 log 前缀
+     * Setting the log prefix when logging
      *
-     * @param {string} prefix 打印的日志添加的前缀
+     * @param {string} prefix the log prefix to set
      */
     setLogPrefix(prefix) {
         this.logPrefix = prefix || '';
     }
 
     /**
-     * 设置打印 log 的层级，默认打印层级为 `info`
-     * log层级大小定义：
-     * debug > trace > info > warn > error
+     * Setting the minimum log level to print, by default `info`
+     * The log level weight:
+     * debug < trace < info < warn < error
      *
-     * @param {string} level 要打印的层级，所有低于给定层级都不打印
+     * @param {string} level the minimum level to print
      */
     setLogLevel(level) {
         level && (level = String(level).toLowerCase());
@@ -109,10 +80,46 @@ class Logger {
     }
 
     /**
-     * 打印日志
+     * Print log info
      *
-     * @param {string} logLevel 日志 level
-     * @param {...*} msg 要打印的日志消息
+     * @private
+     * @param {string} logPrefix the log prefix
+     * @param {string} logLevel the log level
+     * @param  {...any} args the log args
+     */
+    doLog(logPrefix, logLevel, ...args) {
+        let msg = args.map(
+            item => {
+                if (item && typeof item === 'object') {
+                    try {
+                        return JSON.stringify(item);
+                    }
+                    catch (ex) {
+                        return item;
+                    }
+                }
+                return item;
+            }
+        ).join(' ');
+
+        let logType = LOG_LEVEL[logLevel];
+        let params = [
+            logType.color(logType.prefix),
+            logType.color(msg)
+        ];
+
+        if (logPrefix) {
+            params.unshift(colors.bold(logPrefix));
+        }
+
+        console.log.apply(console, params);
+    }
+
+    /**
+     * Print the specified level info
+     *
+     * @param {string} logLevel the log level to print
+     * @param {...*} msg the msg to print
      */
     log(logLevel, ...msg) {
         let logType = LOG_LEVEL[logLevel];
@@ -120,58 +127,58 @@ class Logger {
             return;
         }
 
-        doLog(this.logPrefix, logLevel, ...msg);
+        this.doLog(this.logPrefix, logLevel, ...msg);
     }
 
     /**
-     * 打印 debug 信息
+     * Print `debug` level info
      *
-     * @param {...*} args 打印的信息参数
+     * @param {...*} args the args to print
      */
     debug(...args) {
         this.log('debug', ...args);
     }
 
     /**
-     * 打印 trace 信息
+     * Print `trace` level info
      *
-     * @param {...*} args 打印的信息参数
+     * @param {...*} args the args to print
      */
     trace(...args) {
         this.log('trace', ...args);
     }
 
     /**
-     * 打印 info 信息
+     * Print `info` level info
      *
-     * @param {...*} args 打印的信息参数
+     * @param {...*} args the args to print
      */
     info(...args) {
         this.log('info', ...args);
     }
 
     /**
-     * 打印 warn 信息
+     * Print `warn` level info
      *
-     * @param {...*} args 打印的信息参数
+     * @param {...*} args the args to print
      */
     warn(...args) {
         this.log('warn', ...args);
     }
 
     /**
-     * 打印 error 信息
+     * Print `error` level info
      *
-     * @param {...*} args 打印的信息参数
+     * @param {...*} args the args to print
      */
     error(...args) {
         this.log('error', ...args);
     }
 
     /**
-     * 创建 logger 工具
+     * Create logger
      *
-     * @param {Object} options 创建选项
+     * @param {Object} options the creation options
      * @return {Logger}
      */
     static create(options) {

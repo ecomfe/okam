@@ -26,35 +26,7 @@ exports.padZero = function (value, bitNum) {
 };
 
 /**
- * format string tpl
- *
- * @param {string} tpl the tpl to format
- * @param {Object} data the data to apply format
- * @return {string}
- */
-exports.formatString = function (tpl, data) {
-    return tpl.replace(/\$\{(.*)\}/g, (match, key) => {
-        let value = data[key];
-        if (value == null) {
-            return '';
-        }
-
-        return value.toString();
-    });
-};
-
-/**
- * Escape regexp string
- *
- * @param {string} str the string to escapse
- * @return {string}
- */
-exports.escapeRegExpString = function (str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-};
-
-/**
- * Convert the name to hyphen seperated name.
+ * Convert the name to hyphen separated name.
  * E.g., 'Abc' => 'abc', 'MyHome' => 'my-home'
  *
  * @param {string} name the name to be converted
@@ -73,14 +45,14 @@ exports.toHyphen = function (name) {
  *
  * @param {string} tpl the tpl to format
  * @param {Object} data the data to apply the tpl
- * @param {boolean} exceptionWhenUndefineVar whether throw exception when
+ * @param {boolean} ignoreUndefined whether throw exception when
  *        happen on the undefined tpl variable
  * @return {string}
  */
-exports.format = function (tpl, data, exceptionWhenUndefineVar = false) {
-    return tpl.replace(/\${(\w+)}/, (match, key) => {
+exports.format = function (tpl, data, ignoreUndefined = false) {
+    return tpl.replace(/\${(\w+)}/g, (match, key) => {
         let result = data[key];
-        if (result === undefined) {
+        if (result === undefined && !ignoreUndefined) {
             throw key;
         }
         return result;

@@ -11,7 +11,7 @@
  * @inner
  * @param {EventEmitter} source the event trigger source
  * @param {EventEmitter} target the proxy target
- * @param {string} eventName the event name to be proxied
+ * @param {string} eventName the proxy event name
  * @param {Object=} options the proxy options
  * @param {string|Function=} options.newEventName the new event name to trigger
  *        or default event handler
@@ -38,9 +38,9 @@ function handleProxyEvent(source, target, eventName, options) {
 /**
  * Proxy the original event emitter events to the target event emitter.
  *
- * @param  {EventEmitter} source the original event trigger to be proxied
- * @param  {EventEmitter} target the target event emitter to proxy
- * @param  {string|Array.<string>|Object} events the events to be proxied.
+ * @param  {EventEmitter} source the proxy original event trigger
+ * @param  {EventEmitter} target the proxy target event emitter
+ * @param  {string|Array.<string>|Object} events the proxy events
  * @param {boolean=} prependSourceArg whether prepend the original event trigger
  *        to event handler argument list. By default, false.
  * @example
@@ -51,7 +51,7 @@ function handleProxyEvent(source, target, eventName, options) {
  *     proxyEvents(source, target, ['change', 'add']);
  *
  *     // custom proxy options using object:
- *     // the key is the event to be proxied, the value is the new event name
+ *     // the key is the proxy event, the value is the new event name
  *     // to trigger or the event handler. If the new event name is empty, it'll
  *     // using the original event name to trigger
  *     proxyEvents(source, target, { change: 'myChange', add: '', delete() {} });

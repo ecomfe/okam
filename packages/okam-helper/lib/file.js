@@ -21,6 +21,7 @@ function getFileState(target) {
         return state;
     }
     catch (ex) {
+        // ignore
     }
 }
 
