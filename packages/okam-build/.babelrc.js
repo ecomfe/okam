@@ -15,7 +15,7 @@ module.exports = {
                     'module-resolver',
                     {
                         alias: {
-                            build: path.join(__dirname, 'lib')
+                            okam: path.join(__dirname, 'lib')
                         }
                     }
                 ]

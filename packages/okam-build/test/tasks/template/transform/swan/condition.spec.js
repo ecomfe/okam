@@ -7,7 +7,7 @@
 
 const assert = require('assert');
 const {readFile, fakeProcessorOptions} = require('../../../helper');
-const templateProcessor = require('../../../../../lib/processor/component/template/index');
+const templateProcessor = require('okam/processor/component/template/index');
 
 function readTpl(file, isExpect) {
     return readFile(

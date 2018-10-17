@@ -8,7 +8,7 @@
 /* eslint-disable max-len */
 const assert = require('assert');
 const {fakeProcessorOptions} = require('../../../helper');
-const templateProcessor = require('../../../../../lib/processor/component/template/index');
+const templateProcessor = require('okam/processor/component/template/index');
 
 describe('style binding', function () {
     it('should transform style-data-binding with object（对象语法）', function () {

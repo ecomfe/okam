@@ -12,7 +12,7 @@ const {
     EVENT_REGEXP,
     EVENT_HANDLE_REGEXP,
     VARIABLE_EVENT
-} = require('../../../../../lib/template/transform/base/constant');
+} = require('okam/template/transform/base/constant');
 
 describe('regexp', function () {
     it('should match data-binding identifier', function () {

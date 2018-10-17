@@ -7,12 +7,13 @@
 
 const path = require('path');
 const fs = require('fs');
-const logger = require('../../lib/util').logger;
+const logger = require('okam/util').logger;
 
-const initBuildOption = require('../../lib/build/init-build-options');
-const syntax = require('../../lib/template/transform/syntax-plugin.js');
-const html = require('../../lib/template/transform/html-plugin.js');
-const ref = require('../../lib/template/transform/ref-plugin.js');
+const initBuildOption = require('okam/build/init-build-options');
+const swanSyntax = require('okam/template/transform/plugins/swan-syntax-plugin.js');
+const wxSyntax = require('okam/template/transform/plugins/wx-syntax-plugin.js');
+const html = require('okam/template/transform/plugins/html-plugin.js');
+const ref = require('okam/template/transform/plugins/ref-plugin.js');
 
 const defaultTags = {
     view: ['div', 'p', 'span'],
@@ -67,7 +68,7 @@ function fakeTemplateTagOptions(tagNames, appType) {
  */
 const getDefaultPlugins = function () {
     return [
-        syntax('swan'),
+        swanSyntax,
         html,
         ref
     ];
@@ -80,7 +81,7 @@ const getDefaultPlugins = function () {
  */
 const getDefaultWXPlugins = function () {
     return [
-        syntax('wx'),
+        wxSyntax,
         html,
         ref
     ];

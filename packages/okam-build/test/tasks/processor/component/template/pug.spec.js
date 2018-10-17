@@ -8,7 +8,7 @@
 const assert = require('assert');
 const helper = require('../../../helper');
 
-const pugProcessor = require('../../../../../lib/processor/component/template/pug');
+const pugProcessor = require('okam/processor/component/template/pug');
 
 describe('pug template processor', function () {
 

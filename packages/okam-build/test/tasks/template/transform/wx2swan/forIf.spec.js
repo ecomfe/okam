@@ -9,8 +9,8 @@
 
 const assert = require('assert');
 const {readFile, fakeProcessorOptions} = require('../../../helper');
-const wx2swanProcessor = require('../../../../../lib/processor/wx2swan/index');
-const syntax = require('../../../../../lib/template/transform/wx2swan-syntax-plugin.js');
+const wx2swanProcessor = require('okam/processor/wx2swan/index');
+const syntax = require('okam/template/transform/plugins/wx2swan-syntax-plugin.js');
 
 function readTpl(file, isExpect) {
     return readFile(

@@ -6,7 +6,7 @@
 'use strict';
 
 const assert = require('assert');
-const util = require('../../../lib/util');
+const util = require('okam/util');
 
 describe('util', function () {
     it('should have given api', function () {

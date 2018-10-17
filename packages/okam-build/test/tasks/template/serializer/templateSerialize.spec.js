@@ -12,7 +12,7 @@ const {
     parse: parseDom,
     ELEMENT_TYPE,
     serialize: serializeDom
-} = require('../../../../lib/template/index');
+} = require('okam/template/index');
 const {readFile} = require('../../helper');
 
 function readTpl(file, isExpect) {

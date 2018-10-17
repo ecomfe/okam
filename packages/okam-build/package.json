@@ -16,9 +16,9 @@
     "demo:debug": "cd example/base && npm run dev:debug",
     "wx": "cd example/base && npm run dev:wx",
     "wx:debug": "cd example/base && npm run dev:wx:debug",
-    "test": "mocha --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
-    "test:coverage": "nyc mocha --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
-    "test:debug": "nyc mocha --inspect-brk --require intelli-espower-loader \"test/tasks/**/*.spec.js\"",
+    "test": "mocha --require intelli-espower-loader --require @babel/register \"test/tasks/**/*.spec.js\"",
+    "test:coverage": "nyc npm run test",
+    "test:debug": "nyc mocha --inspect-brk --require intelli-espower-loader --require @babel/register \"test/tasks/**/*.spec.js\"",
     "prepublish": "npm run lint && npm test"
   },
   "license": "MIT",
