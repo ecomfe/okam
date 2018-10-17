@@ -169,7 +169,7 @@ export default class Observer {
      */
     set(k, val) {
         if (this.isProps) {
-            console.warn(`property ${this.selector || k} is readonly, it\'s not suggested to modify it directly`);
+            console.warn(`property ${this.selector || k} is readonly, it's not suggested to modify it directly`);
         }
 
         let oldVal = k != null ? this.rawData[k] : this.rawData;
