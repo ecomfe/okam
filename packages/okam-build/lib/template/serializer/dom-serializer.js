@@ -129,18 +129,16 @@ function serializeTag(elem, opts) {
         tag += serializeDom(elem.children, opts);
         tag += endTag;
     }
-    else {
-        if (closeAllTag || !isSingleTag) {
-            if (isSingleTag || elem.isSelfClose) {
-                tag += '/>';
-            }
-            else {
-                tag += '>' + endTag;
-            }
+    else if (closeAllTag || !isSingleTag) {
+        if (isSingleTag || elem.isSelfClose) {
+            tag += '/>';
         }
         else {
-            tag += '>';
+            tag += '>' + endTag;
         }
+    }
+    else {
+        tag += '>';
     }
 
     return tag;

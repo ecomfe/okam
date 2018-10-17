@@ -7,7 +7,7 @@
 
 /* eslint-disable fecs-min-vars-per-destructure */
 const path = require('path');
-const PLUGIN_BASE_NAME = path.join(__dirname, '..', '..', 'template/transform');
+const PLUGIN_BASE_NAME = path.join(__dirname, '..', '..', 'template/transform/plugins');
 
 /**
  * The builtin plugins
@@ -16,7 +16,10 @@ const PLUGIN_BASE_NAME = path.join(__dirname, '..', '..', 'template/transform');
  * @type {Object}
  */
 const BUILTIN_PLUGINS = {
-    syntax: path.join(PLUGIN_BASE_NAME, 'syntax-plugin'),
+    syntax: {
+        wx: path.join(PLUGIN_BASE_NAME, 'wx-syntax-plugin'),
+        swan: path.join(PLUGIN_BASE_NAME, 'swan-syntax-plugin')
+    },
     html: path.join(PLUGIN_BASE_NAME, 'html-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
 };
@@ -52,16 +55,16 @@ function normalizeViewPlugins(plugins, appType) {
     return plugins.map(item => {
         if (typeof item === 'string') {
             let pluginPath = BUILTIN_PLUGINS[item];
+            if (pluginPath && typeof pluginPath === 'object') {
+                pluginPath = pluginPath[appType];
+            }
+
             pluginPath && (item = pluginPath);
         }
 
         let pluginItem;
         if (typeof item === 'string') {
             pluginItem = require(item);
-        }
-
-        if (typeof pluginItem === 'function') {
-            pluginItem = pluginItem(appType);
         }
 
         return pluginItem;
@@ -72,7 +75,7 @@ function normalizeViewPlugins(plugins, appType) {
  * Initialize component view template transform options.
  *
  * @param {Object} processOpts the process options
- * @param {Array.<string|Object|Function>} processOpts.plugins the view processor plugins,
+ * @param {Array.<string|Object>} processOpts.plugins the view processor plugins,
  *        the builtin plugins:
  *        `syntax`: transform okam template syntax to mini program template syntax
  *        `html`: transform html tags to mini program component tag
@@ -80,10 +83,6 @@ function normalizeViewPlugins(plugins, appType) {
  *        You can also pass your custom plugin:
  *        {
  *           tag() {} // refer to the ref plugin implementation
- *        }
- *        or
- *        function (appType) { // refer to the syntax plugin implementation
- *            return {tag() {}};
  *        }
  * @param {BuildManager} buildManager the build manager
  * @return {Object}

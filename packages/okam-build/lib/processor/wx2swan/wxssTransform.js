@@ -6,7 +6,7 @@
 'use strict';
 
 const postcssProcessor = require('../css/postcss');
-const wx2swanPlugin = require('../css/postcss-plugin-wx2swan');
+const wx2swanPlugin = require('../css/plugins/postcss-plugin-wx2swan');
 
 module.exports = function (file, options) {
     let config = options.config;

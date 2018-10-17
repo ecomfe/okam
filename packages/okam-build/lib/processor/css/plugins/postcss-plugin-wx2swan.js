@@ -6,7 +6,6 @@
 'use strict';
 
 const postcss = require('postcss');
-const path = require('path');
 
 module.exports = postcss.plugin('postcss-plugin-wx2swan', function (opts = {}) {
 

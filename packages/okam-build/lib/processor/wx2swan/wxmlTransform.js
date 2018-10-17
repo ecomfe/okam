@@ -7,7 +7,7 @@
 
 
 const viewProcessor = require('../component/template');
-const wx2swanPlugin = require('../../template/transform/wx2swan-syntax-plugin');
+const wx2swanPlugin = require('../../template/transform/plugins/wx2swan-syntax-plugin');
 
 
 /**

@@ -21,7 +21,7 @@ const BUILTIN_PLUGINS = {
         }
     },
     px2rpx: {
-        path: path.join(__dirname, 'postcss-plugin-px2rpx.js'),
+        path: path.join(__dirname, 'plugins', 'postcss-plugin-px2rpx.js'),
         options: {
             designWidth: 750,
             precision: 2

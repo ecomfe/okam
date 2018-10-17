@@ -91,6 +91,7 @@ function resolveProcessor(name, root, logger) {
         catch (ex) {
             // ignore
         }
+        return !!result;
     });
 
     if (!result) {

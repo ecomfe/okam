@@ -6,7 +6,7 @@
 'use strict';
 
 const postcss = require('postcss');
-const Px2rpx = require('../helper/px2rpx');
+const Px2rpx = require('../../helper/px2rpx');
 
 module.exports = postcss.plugin('postcss-plugin-px2rpx', function (opts = {}) {
     return function (css, result) {
