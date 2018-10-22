@@ -31,7 +31,7 @@ module.exports = {
     rules: [
         {
             match(file) {
-                return file.isNpmWxCompScript;
+                return file.isWxCompScript;
             },
             processors: ['wx2swan']
         }
