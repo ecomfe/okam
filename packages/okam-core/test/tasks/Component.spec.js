@@ -44,7 +44,7 @@ describe('Component', () => {
         na.getCurrApp = function () {
             return {};
         };
-        na.env = base.$api = global.swan;
+        na.env = global.swan;
 
         global.Component = function (instance) {
             Object.assign(instance, instance.methods);
@@ -57,7 +57,7 @@ describe('Component', () => {
         global.swan = undefined;
         component.selectComponent = rawSelectComponent;
         na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
+        na.env = rawEnv;
         expect.restoreSpies();
     });
 

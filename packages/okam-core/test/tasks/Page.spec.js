@@ -38,7 +38,7 @@ describe('Page', () => {
         na.getCurrApp = function () {
             return {};
         };
-        na.env = base.$api = global.swan;
+        na.env = global.swan;
 
         global.Page = function (instance) {
             return instance;
@@ -49,7 +49,7 @@ describe('Page', () => {
         global.Page = undefined;
         global.swan = undefined;
         na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
+        na.env = rawEnv;
         expect.restoreSpies();
     });
 
