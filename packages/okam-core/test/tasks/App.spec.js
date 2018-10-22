@@ -14,6 +14,7 @@ import MyApp from 'core/App';
 import * as na from 'core/na/index';
 import application from 'core/base/application';
 import base from 'core/base/base';
+import {setApis, getApis} from 'core/na/api';
 import {clearBaseCache} from 'core/helper/factory';
 import {testCallOrder} from '../helper';
 
@@ -25,7 +26,7 @@ describe('App', () => {
             getSystemInfo() {},
             request() {}
         };
-        na.env = base.$api = application.$api = global.swan;
+        setApis(global.swan);
 
         global.App = function (instance) {
             return instance;
@@ -35,7 +36,7 @@ describe('App', () => {
     afterEach('clear global App', function () {
         global.App = undefined;
         global.swan = undefined;
-        na.env = base.$api = application.$api = rawEnv;
+        setApis(rawEnv);
         expect.restoreSpies();
     });
 
@@ -87,7 +88,7 @@ describe('App', () => {
             opts.success(testApiSuccessData);
         }).andCallThrough();
         let testApiFunc = testApiRawFunc;
-        Object.defineProperties(application.$api, {
+        Object.defineProperties(getApis(), {
             testApi: {
                 get() {
                     return testApiFunc;
@@ -95,7 +96,8 @@ describe('App', () => {
                 set(val) {
                     testApiFunc = val;
                     callSetApiCounter++;
-                }
+                },
+                enumerable: true
             }
         });
 
@@ -117,7 +119,10 @@ describe('App', () => {
         assert(typeof getSystemInfo === 'function');
         assert(getSystemInfo() instanceof Promise);
 
-        assert(callSetApiCounter === 1);
+        assert(callSetApiCounter === 0);
+        assert(app.$api !== global.swan);
+        assert(app.$api.getSystemInfo !== global.swan.getSystemInfo);
+        assert(app.$api.testApi !== global.swan.testApi);
         assert(typeof testApi === 'function');
 
         let testSuccessCallback = createSpy(() => {});
@@ -143,7 +148,7 @@ describe('App', () => {
 
     it('should support $interceptApis options', function (done) {
         let callSetApiCounter = 0;
-        application.$http.request = application.$api.request = function (opts) {
+        application.$http.request = function (opts) {
             let {data} = opts;
             if (data > 1) {
                 return Promise.resolve(data);
@@ -152,7 +157,8 @@ describe('App', () => {
         };
         let testApiRawFunc = createSpy(() => {});
         let testApiFunc = testApiRawFunc;
-        Object.defineProperties(application.$api, {
+        let apis = getApis();
+        Object.defineProperties(apis, {
             testApi: {
                 get() {
                     return testApiFunc;
@@ -160,9 +166,11 @@ describe('App', () => {
                 set(val) {
                     testApiFunc = val;
                     callSetApiCounter++;
-                }
+                },
+                enumerable: true
             }
         });
+        apis.request = application.$http.request;
 
         let doneRequestSpy = createSpy((err, res) => {
             return {isFail: !!err, data: res};
@@ -232,7 +240,8 @@ describe('App', () => {
         }, 0);
 
         let testApi = app.$api.testApi;
-        assert(callSetApiCounter === 1);
+        assert(callSetApiCounter === 0);
+        assert(testApi !== global.swan.testApi);
         testApi(23);
         expect(testApiRawFunc).toHaveBeenCalledWith('abc');
     });

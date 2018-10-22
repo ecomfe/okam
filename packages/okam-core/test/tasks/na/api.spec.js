@@ -84,7 +84,9 @@ describe('na/api', function () {
             }
         });
 
-        promisifyApis(['api', 'api2'], ctx);
+        assert.throws(() => promisifyApis(['api', 'api2'], ctx), function (err) {
+            return err.toString().indexOf('which has only a getter') !== -1;
+        });
 
         let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
         let spyFail = createSpy(() => {});
@@ -229,7 +231,9 @@ describe('na/api', function () {
         let spyApi2Init = spyOn(interceptConf.api2, 'init').andCallThrough();
         let spyApi3Init = spyOn(interceptConf.api3, 'init').andCallThrough();
 
-        interceptApis(interceptConf, '$api', ctx);
+        assert.throws(() => interceptApis(interceptConf, '$api', ctx), function (err) {
+            return err.toString().indexOf('which has only a getter') !== -1;
+        });
 
         ctx.$api.api({});
         ctx.$api.api2({});
@@ -238,7 +242,7 @@ describe('na/api', function () {
         setTimeout(() => {
             expect(spyApiInit).toHaveBeenCalled();
             expect(spyApi2Init).toNotHaveBeenCalled();
-            expect(spyApi3Init).toHaveBeenCalled();
+            expect(spyApi3Init).toNotHaveBeenCalled();
 
             done();
         });
