@@ -5,7 +5,7 @@
 
 'use strict';
 
-import expect, {createSpy, spyOn} from 'expect';
+import expect, {spyOn} from 'expect';
 import assert from 'assert';
 import logger, {Logger, getLogger, create as createLogger} from '../../lib/logger';
 

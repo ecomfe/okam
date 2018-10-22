@@ -1,5 +1,5 @@
 /**
- * @file string util test spec
+ * @file String util test spec
  * @author sparklewhy@gmail.com
  */
 
