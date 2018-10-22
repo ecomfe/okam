@@ -7,7 +7,7 @@
 
 const assert = require('assert');
 const helper = require('../../../helper');
-const templateProcessor = require('okam/processor/component/template/index');
+const templateProcessor = require('okam/processor/template/index');
 
 function getClassRemoveVisitor(visitorOpts) {
     visitorOpts || (visitorOpts = {});

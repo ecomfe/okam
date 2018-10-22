@@ -7,7 +7,7 @@
 
 const assert = require('assert');
 const {fakeProcessorOptions} = require('../../../helper');
-const templateProcessor = require('okam/processor/component/template/index');
+const templateProcessor = require('okam/processor/template/index');
 
 describe('class binding', function () {
     it('should transform class-data-binding', function () {

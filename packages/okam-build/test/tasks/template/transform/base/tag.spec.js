@@ -11,7 +11,7 @@
 
 const assert = require('assert');
 const {fakeProcessorOptions} = require('../../../helper');
-const templateProcessor = require('okam/processor/component/template/index');
+const templateProcessor = require('okam/processor/template/index');
 
 const transformTags = {
     view: ['div', 'p']

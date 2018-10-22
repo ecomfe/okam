@@ -9,7 +9,7 @@
 
 const assert = require('assert');
 const {readFile, fakeProcessorOptions} = require('../../../helper');
-const wx2swanProcessor = require('okam/processor/wx2swan/index');
+const viewProcessor = require('okam/processor/template/index');
 const syntax = require('okam/template/transform/plugins/wx2swan-syntax-plugin.js');
 
 function readTpl(file, isExpect) {
@@ -26,7 +26,7 @@ describe('wx2swan for and if', function () {
             extname: 'wxml',
             content: readTpl('wx2swan')
         };
-        let result = wx2swanProcessor(file, fakeProcessorOptions([syntax]));
+        let result = viewProcessor(file, fakeProcessorOptions(null, [syntax]));
         assert.equal(result.content, readTpl('wx2swan', true));
     });
 });
