@@ -3,7 +3,28 @@
  * @author sparklewhy@gmail.com
  */
 
-import {isFunction, isObject, isPromise, isPropertyWritable} from '../util/index';
+import {isFunction, isObject, isPromise} from '../util/index';
+import {env} from './index';
+
+let myPromisifyApis;
+
+/**
+ * Get mini program APIs
+ *
+ * @return {Object}
+ */
+export function getApis() {
+    return myPromisifyApis || env;
+}
+
+/**
+ * Set mini program APIs
+ *
+ * @param {Object} apis the apis to set
+ */
+export function setApis(apis) {
+    myPromisifyApis = apis;
+}
 
 /**
  * Promisify the given function.
@@ -61,12 +82,7 @@ export function promisifyApis(apis, context) {
             return;
         }
 
-        if (isPropertyWritable(context.$api, key)) {
-            context.$api[key] = promisify(api, context.$api);
-        }
-        else {
-            console.warn(`API ${key} readonly cannot promisify`);
-        }
+        context.$api[key] = promisify(api, context.$api);
     });
 }
 
@@ -154,12 +170,7 @@ export function interceptApis(apis, key, ctx) {
     Object.keys(apis).forEach(apiName => {
         let rawApi = allApis[apiName];
         if (rawApi) {
-            if (isPropertyWritable(allApis, apiName)) {
-                allApis[apiName] = proxyAPI.bind(null, ctx, rawApi, apis[apiName]);
-            }
-            else {
-                console.warn(`API ${apiName} readonly cannot intercept`);
-            }
+            allApis[apiName] = proxyAPI.bind(null, ctx, rawApi, apis[apiName]);
         }
     });
 }

@@ -7,10 +7,11 @@
 
 import base from './base';
 import {promisifyApis, interceptApis} from '../na/api';
+import {getApis, setApis} from '../na/api';
 
 /**
  * Initialize promisify APIs and interception APIs.
- * Return false, if inited.
+ * Return false, if initialized.
  *
  * @inner
  * @return {boolean}
@@ -21,6 +22,16 @@ function initApis() {
 
         let promiseApis = this.$promisifyApis;
         let interceptAPis = this.$interceptApis;
+
+        let apis = getApis();
+        if ((promiseApis && promiseApis.length)
+            || (interceptAPis && Object.keys(interceptAPis).length)
+        ) {
+            // create new apis to ami to override existed apis
+            apis = Object.assign({}, apis);
+            setApis(apis);
+        }
+        this.$api = apis;
 
         promisifyApis(promiseApis, this);
         interceptApis(interceptAPis, '$api', this);

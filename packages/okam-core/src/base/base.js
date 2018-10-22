@@ -5,17 +5,10 @@
 
 'use strict';
 
-import {env, global} from '../na/index';
+import {global} from '../na/index';
 import request from '../na/request';
 
 export default {
-
-    /**
-     * The native api
-     *
-     * @type {Object}
-     */
-    $api: env,
 
     /**
      * The global object
