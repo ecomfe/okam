@@ -8,12 +8,26 @@
 import assert from 'assert';
 import expect, {spyOn, createSpy} from 'expect';
 import {promisify, promisifyApis, interceptApis} from 'core/na/api';
+import {setApis, getApis} from 'core/na/api';
+import {env} from 'core/na/index';
 import {isPromise} from '../../helper';
 
 describe('na/api', function () {
 
     afterEach(() => {
         expect.restoreSpies();
+    });
+
+    it('should return default native api', function () {
+        assert(getApis() === env);
+    });
+
+    it('should allow set default native api', function () {
+        let myApi = {};
+        setApis(null);
+        assert(getApis() === env);
+        setApis(myApi);
+        assert(getApis() === myApi);
     });
 
     it('should call promisify api with default context', function () {
