@@ -63,3 +63,17 @@ exports.getRequirePath = function (file, relativeFile) {
     }
     return './' + result;
 };
+
+
+/**
+ * Get file name
+ *
+ * @param {string} filePath the file path
+ * @return {string}
+ */
+exports.getFileName = function (filePath) {
+    let baseName = path.basename(filePath);
+    let lastDotIdx = baseName.lastIndexOf('.');
+    return lastDotIdx === -1
+        ? baseName : baseName.substring(0, lastDotIdx);
+};
