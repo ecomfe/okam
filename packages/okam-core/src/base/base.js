@@ -5,10 +5,17 @@
 
 'use strict';
 
-import {global} from '../na/index';
+import * as na from '../na/index';
 import request from '../na/request';
 
 export default {
+
+    /**
+     * The native env
+     *
+     * @type {Object}
+     */
+    $na: na,
 
     /**
      * The global object

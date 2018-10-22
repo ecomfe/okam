@@ -100,9 +100,9 @@ export default {
      */
     created() {
         // cannot call setData
+        Object.assign(this, base);
         this.$app = getCurrApp();
         this.$api = getApis();
-        Object.assign(this, base);
 
         this.$listener = new EventListener();
 
