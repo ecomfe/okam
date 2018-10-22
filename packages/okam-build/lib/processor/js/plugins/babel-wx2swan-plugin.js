@@ -34,7 +34,6 @@ module.exports = function ({types: t}) {
         visitor: {
             Identifier(path, state) {
                 // let opts = state.opts || {};
-
                 if (path.node.name === 'wx') {
                     path.node.name = 'swan';
                 }

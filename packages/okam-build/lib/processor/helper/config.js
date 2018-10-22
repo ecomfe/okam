@@ -5,14 +5,6 @@
 
 'use strict';
 
-/* eslint-disable fecs-min-vars-per-destructure */
-
-const {resolve: resolveDep} = require('../npm');
-const {
-    string: strUtil
-} = require('../../util');
-const {toHyphen} = strUtil;
-
 /**
  * The abbreviation of the page config item
  *
@@ -23,8 +15,6 @@ const PAGE_CONFIG_ABBR = {
     title: 'navigationBarTitleText',
     opacity: 'enableOpacityNavigationBar'
 };
-
-const USING_COMPONENT_KEY = 'usingComponents';
 
 function normalizeConfig(abbrConfItems, config) {
     let result = {};
@@ -40,42 +30,13 @@ function normalizeConfig(abbrConfItems, config) {
     return result;
 }
 
-function formatUsingComponentInfo(components, file, buildManager) {
-    if (!components) {
-        return;
-    }
-
-    let result = {};
-    Object.keys(components).forEach(k => {
-        let value = components[k];
-        let resolvePath = resolveDep(
-            buildManager, file, components[k]
-        );
-        result[toHyphen(k)] = resolvePath || value;
-    });
-
-    return result;
-}
-
-function normalizeUsingComponentInfo(config, components, file, buildManager) {
-    components = formatUsingComponentInfo(
-        components, file, buildManager
-    );
-
-    let configComponents = formatUsingComponentInfo(
-        config[USING_COMPONENT_KEY], file, buildManager
-    );
-
-    return Object.assign(components, configComponents);
-}
-
 function normalizeUsingComponentConfig(config, components, file, buildManager) {
-    if (components) {
-        config[USING_COMPONENT_KEY] = normalizeUsingComponentInfo(
-            config, components, file, buildManager
-        );
+    let usingComponents = Object.assign({}, components, config.usingComponents);
+    if (Object.keys(usingComponents).length) {
+        config.usingComponents = usingComponents;
     }
-
+    // let componentInfo = initComponents(config, components, file, buildManager);
+    // componentInfo && Object.assign(config, componentInfo);
     return config;
 }
 

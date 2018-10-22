@@ -86,7 +86,19 @@ const BUILTIN_PROCESSORS = {
          *
          * @type {number}
          */
-        order: 0
+        order: 0,
+
+        /**
+         * Processor hook.
+         * {
+         *     before(file, options) {
+         *          // do sth.
+         *     }
+         * }
+         *
+         * @type {?Object}
+         */
+        hook: null
     },
     stylus: {
         processor: getProcessorPath('css/stylus'),
@@ -109,13 +121,11 @@ const BUILTIN_PROCESSORS = {
     babel: {
         processor: getProcessorPath('js/babel-parser'),
         deps: 'babel-core',
-        // extnames: ['es', 'es6'],
         rext: 'js'
     },
     babel7: {
         processor: getProcessorPath('js/babel7-parser'),
         deps: '@babel/core',
-        // extnames: ['es', 'es6'],
         rext: 'js'
     },
     component: {
@@ -127,13 +137,16 @@ const BUILTIN_PROCESSORS = {
         extnames: 'json5',
         rext: 'json'
     },
+    componentJson: {
+        processor: getProcessorPath('json/component-json')
+    },
     view: {
-        processor: getProcessorPath('component/template/index'),
+        processor: getProcessorPath('template/index'),
         extnames: ['tpl'],
         order: 999
     },
     pug: {
-        processor: getProcessorPath('component/template/pug'),
+        processor: getProcessorPath('template/pug'),
         extnames: ['pug'],
         deps: 'pug'
     },
@@ -142,9 +155,6 @@ const BUILTIN_PROCESSORS = {
         deps: ['@babel/core', '@babel/preset-typescript'],
         extnames: 'ts',
         rext: 'js'
-    },
-    wx2swan: {
-        processor: getProcessorPath('wx2swan/index')
     },
     replacement: {
         processor: getProcessorPath('replacement')

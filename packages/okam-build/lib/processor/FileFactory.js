@@ -20,7 +20,6 @@ const relative = require('../util').file.relative;
 
 const {isNpmModuleFile, resolveNpmModuleNewPath} = require('./helper/npm');
 
-
 function loadFileContent() {
     if (this._data) {
         return this._data;
@@ -73,11 +72,14 @@ function resetFile() {
         return;
     }
 
-    this.subFiles = [];
-    this.deps = [];
+    this.subFiles && (this.subFiles = []);
+    this.deps && (this.deps = []);
     this.compiled = false;
-    this.refs = null;
-    this.resolvedModIds = null;
+    this.refs && (this.refs = null);
+    this.resolvedModIds && (this.resolvedModIds = null);
+    if (this.isAnalysedComponents) {
+        this.isAnalysedComponents = false;
+    }
 
     if (this.isSubFile) {
         this.content = this.rawContent;
@@ -85,7 +87,7 @@ function resetFile() {
     else {
         this.rawContent = null;
         this.content = null;
-        this.ast = null;
+        this.ast && (this.ast = null);
     }
 }
 
@@ -165,7 +167,6 @@ class FileFactory {
     constructor(options) {
         this._files = [];
         this._existMap = {};
-        this._npmFullPathMap = {};
 
         let {root, rebaseDepDir} = options;
         this.root = root;
@@ -188,15 +189,19 @@ class FileFactory {
         return this._files;
     }
 
-    getNpmFileFullPath(relPath) {
-        return this._npmFullPathMap[relPath];
-    }
-
     getRelativePath(fullPath) {
         return relative(fullPath, this.root);
     }
 
-    addFile(f, addOnFirst = false) {
+    /**
+     * Add new file
+     *
+     * @param {string|Object} f the full path or the file object to add
+     * @param {boolean=} isUnshift whether unshift the new file to the current
+     *        file list
+     * @return {Object}
+     */
+    addFile(f, isUnshift = false) {
         if (typeof f === 'string') {
             let relPath = this.getRelativePath(f);
             let file = this._existMap[relPath];
@@ -209,15 +214,13 @@ class FileFactory {
             f = createFile(f, this.root);
         }
 
-        addOnFirst ? this.unshift(f) : this.push(f);
-
-        if (isNpmModuleFile(f.path)) {
+        let result = isUnshift ? this.unshift(f) : this.push(f);
+        if (result && isNpmModuleFile(f.path)) {
             f.isNpm = true;
             if (this.rebaseDepDir) {
                 f.resolvePath = resolveNpmModuleNewPath(
                     f.path, this.rebaseDepDir
                 );
-                this._npmFullPathMap[f.resolvePath] = f.fullPath;
             }
         }
         return f;

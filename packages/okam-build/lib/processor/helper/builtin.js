@@ -171,14 +171,6 @@ function initProcessorInfo(info, existedProcessors) {
 }
 
 /**
- * The builtin processor configure attributes that are allowed to override.
- *
- * @const
- * @type {Array.<string>}
- */
-const ALLOW_OVERRIDE_ATTRS = ['deps', 'rext', 'extnames', 'options', 'order'];
-
-/**
  * Override the builtin processor definition
  *
  * @inner
@@ -189,7 +181,7 @@ const ALLOW_OVERRIDE_ATTRS = ['deps', 'rext', 'extnames', 'options', 'order'];
 function overrideProcessor(existedProcessor, extnameProcessorMap, opts) {
     let oldExtnames;
     let newExtnames;
-    ALLOW_OVERRIDE_ATTRS.forEach(k => {
+    Object.keys(opts).forEach(k => {
         let v = opts[k];
         if (!v) {
             return;
@@ -224,7 +216,7 @@ function overrideProcessor(existedProcessor, extnameProcessorMap, opts) {
  * @param {Object} opts the processor config
  */
 function registerProcessor(existedProcessors, extnameProcessorMap, opts) {
-    let {name, processor, deps, rext, extnames, options, order} = opts;
+    let {name, processor, deps, rext, extnames, options, order, hook} = opts;
     if (!name) {
         throw new Error('missing processor name to register');
     }
@@ -242,7 +234,8 @@ function registerProcessor(existedProcessors, extnameProcessorMap, opts) {
             rext,
             extnames,
             options,
-            order
+            order,
+            hook
         }, existedProcessors);
         addFileExtnameAssociatedProcessor(extnames, name, extnameProcessorMap);
     }

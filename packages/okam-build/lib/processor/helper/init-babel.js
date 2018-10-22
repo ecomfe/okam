@@ -6,7 +6,7 @@
 'use strict';
 
 /* eslint-disable fecs-min-vars-per-destructure */
-const {resolve: resolveDep} = require('../npm');
+const {resolve: resolveDep} = require('./npm');
 const programPlugins = require('../js/plugins/babel-program-plugins');
 const polyfillPlugin = require('../js/plugins/babel-polyfill-plugins');
 const {normalPageConfig, normalizeComponentConfig} = require('./config');

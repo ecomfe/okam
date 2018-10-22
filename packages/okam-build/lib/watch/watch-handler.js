@@ -5,6 +5,7 @@
 
 'use strict';
 
+const path = require('path');
 const {colors, Timer} = require('../util');
 
 function compileFile(buildManager, file, releaseFiles) {
@@ -21,13 +22,14 @@ function compileFile(buildManager, file, releaseFiles) {
     file.reset();
 
     logger.debug('compile file', file.path);
+    releaseFiles.processFileNum += 1;
     if (file.isImg) {
-        // xxx: skip image file rebuild to avoid rebuild repeatly
-        file.processing || releaseFiles.files.push(file);
+        // xxx: skip image file rebuild to avoid rebuild repeatedly
+        file.processing || releaseFiles.add(file);
         return;
     }
 
-    // analyse the style file dependences and determine which style file need to recompile
+    // analyse the style file dependence and determine which style file need to recompile
     if (file.isStyle && !file.owner) {
         // TODO init dep map global to search file by dep effectively
         let changeFiles = buildManager.getFilesByDep(file.path);
@@ -49,7 +51,7 @@ function compileFile(buildManager, file, releaseFiles) {
 
     // skip component file release
     if (!file.isPageComponent && !file.isComponent) {
-        releaseFiles.files.push(file);
+        releaseFiles.add(file);
     }
 
     // process script deps
@@ -62,7 +64,7 @@ function compileFile(buildManager, file, releaseFiles) {
     });
 
     (file.subFiles || []).forEach(
-        subFile => compileFile(buildManager, subFile, releaseFiles)
+        subFile => releaseFiles.add(subFile)
     );
 }
 
@@ -70,19 +72,22 @@ function rebuildFiles(file, buildManager) {
     let timer = new Timer();
     timer.start();
 
+    let outputFiles = [];
     let releaseFiles = {
-        files: [],
+        processFileNum: 0,
+        add(file) {
+            outputFiles.push(file);
+        },
         processed: {}
     };
     compileFile(buildManager, file, releaseFiles);
 
-    let outputFiles = releaseFiles.files;
     if (outputFiles.length) {
         let logger = buildManager.logger;
         buildManager.release(outputFiles).then(
             () => logger.info(
                 'rebuild',
-                colors.cyan(outputFiles.length),
+                colors.cyan(releaseFiles.processFileNum),
                 'files done:',
                 colors.grey(timer.tick())
             )
@@ -92,10 +97,17 @@ function rebuildFiles(file, buildManager) {
 
 module.exports = exports = {
     fileDel(file, buildManager) {
-        // do nothing
+        let dirname = path.dirname(
+            path.join(buildManager.root, file)
+        );
+        buildManager.cache.clearDirFileListInfo(dirname);
     },
 
     fileAdd(file, buildManager) {
+        let dirname = path.dirname(
+            path.join(buildManager.root, file)
+        );
+        buildManager.cache.clearDirFileListInfo(dirname);
         rebuildFiles(file, buildManager);
     },
 

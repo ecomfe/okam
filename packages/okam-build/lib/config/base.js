@@ -211,6 +211,13 @@ module.exports = {
     },
 
     /**
+     * 是否启用微信组件转换成 swan 组件处理，可选，默认 false
+     *
+     * @type {boolean}
+     */
+    wx2swan: false,
+
+    /**
      * 自定义的构建处理器
      *
      * 处理器定义：
@@ -277,7 +284,7 @@ module.exports = {
                     // 默认不处理非入口样式及单文件组件的样式文件
                     return false;
                 }
-                return !!file.processor;
+                return !!file.processor || file.isComponentConfig;
             },
 
             /* eslint-disable fecs-valid-jsdoc */
@@ -310,7 +317,7 @@ module.exports = {
                  * @return {string|Array.<string>}
                  */
                 function (file) {
-                    return file.processor;
+                    return file.isComponentConfig ? 'componentJson' : file.processor;
                 }
 
             ]

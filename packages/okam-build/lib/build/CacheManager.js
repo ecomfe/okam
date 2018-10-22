@@ -12,7 +12,25 @@ const {helper, file: fileUtil} = require('../util');
 
 class CacheManager {
     constructor(options) {
+        this.memCache = {
+            dirFileInfo: {}
+        };
         this.cacheDir = options.cacheDir || path.join(helper.getUserHomeDir(), '.okam');
+    }
+
+    setDirFileListInfo(dir, info) {
+        this.memCache.dirFileInfo[dir] = info;
+    }
+
+    getDirFileListInfo(dir) {
+        return this.memCache.dirFileInfo[dir];
+    }
+
+    clearDirFileListInfo(dir) {
+        let cacheInfo = this.memCache.dirFileInfo;
+        if (cacheInfo.hasOwnProperty(dir)) {
+            delete cacheInfo[dir];
+        }
     }
 
     getCacheDir() {

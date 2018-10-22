@@ -8,6 +8,7 @@
 const path = require('path');
 const postcss = require('postcss');
 const normalizePlugins = require('../helper/plugin');
+const relative = require('../../util').file.relative;
 
 const BUILTIN_PLUGINS = {
     autoprefixer: {
@@ -36,7 +37,7 @@ module.exports = function (file, options) {
     plugins = (plugins || []).map(
         ({handler, options}) => handler(options)
     );
-    let {css, map} = postcss(plugins)
+    let {css, result} = postcss(plugins)
         .process(
             file.content.toString(),
             {
@@ -44,9 +45,17 @@ module.exports = function (file, options) {
             }
         );
 
+    // normalize dep path relative to root
+    let deps = result.deps;
+    if (deps) {
+        deps = deps.map(
+            item => relative(path.join(path.dirname(file.fullPath), item), root)
+        );
+    }
+
     return {
         content: css,
-        deps: map
+        deps
     };
 };
 

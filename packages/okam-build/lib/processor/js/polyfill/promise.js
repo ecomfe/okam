@@ -6,7 +6,7 @@
 'use strict';
 
 /* eslint-disable fecs-min-vars-per-destructure */
-const {importLoalPolyfill} = require('./helper');
+const {importLocalPolyfill} = require('./helper');
 
 module.exports = function ({types: t}) {
     return {
@@ -20,7 +20,7 @@ module.exports = function ({types: t}) {
              */
             MemberExpression(path, state) {
                 let name = path.node.object.name;
-                importLoalPolyfill(name, path, state, t);
+                importLocalPolyfill(name, path, state, t);
             },
 
             /**
@@ -31,7 +31,7 @@ module.exports = function ({types: t}) {
              */
             NewExpression(path, state) {
                 let name = path.node.callee.name;
-                importLoalPolyfill(name, path, state, t);
+                importLocalPolyfill(name, path, state, t);
             }
         }
     };

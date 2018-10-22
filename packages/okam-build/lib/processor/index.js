@@ -13,7 +13,6 @@ const {createFile} = require('./FileFactory');
 const {findMatchProcessor} = require('./helper/processor');
 const registerProcessor = require('./type').registerProcessor;
 const {isPromise, md5} = require('../util').helper;
-const {analysisNpmComponents} = require('./npm/component');
 
 function processConfigInfo(file, root, owner) {
     let config = file.config;
@@ -69,8 +68,13 @@ function processEntryScript(file, allFiles, root, componentExtname) {
     allFiles.push(jsonFile);
 }
 
-function processComponentScript(file, root) {
-    processConfigInfo(file, root, file.owner);
+function processComponentScript(buildManager, file, root) {
+    let jsonFile = processConfigInfo(file, root, file.owner);
+    if (jsonFile) {
+        jsonFile.component = file;
+        jsonFile.isComponentConfig = true;
+    }
+    compile(jsonFile, buildManager);
 }
 
 /**
@@ -80,8 +84,7 @@ function processComponentScript(file, root) {
  * @param {BuildManager} buildManager the build manager
  */
 function compile(file, buildManager) {
-    let {cache, logger, root, rules, appType, files: allFiles} = buildManager;
-    let {output: outputOpts} = buildManager.buildConf;
+    let {compileContext, logger, root, rules, files: allFiles} = buildManager;
     let processors = findMatchProcessor(file, rules, buildManager);
     logger.debug('compile file:', file.path, processors.length);
 
@@ -90,14 +93,9 @@ function compile(file, buildManager) {
         let {handler, options: opts, rext} = item;
         logger.debug(`compile file ${file.path}, using ${item.name}: `, opts);
 
-        let result = handler(file, {
-            cache,
-            config: opts,
-            appType,
-            logger,
-            root,
-            output: outputOpts
-        });
+        let result = handler(file, Object.assign({
+            config: opts
+        }, compileContext));
         if (!result) {
             continue;
         }
@@ -123,7 +121,7 @@ function compile(file, buildManager) {
         processEntryScript(file, allFiles, root, buildManager.componentExtname);
     }
     else if (file.isPageScript || file.isComponentScript) {
-        processComponentScript(file, root);
+        processComponentScript(buildManager, file, root);
     }
 
     file.md5 = md5(file.content);
@@ -148,14 +146,6 @@ function compileComponent(component, file, buildManager) {
         // pass the refs info defined in tpl to script
         scriptFile.tplRefs = tplFile.refs;
         compile(scriptFile, buildManager);
-
-        if (scriptFile.config && scriptFile.config.usingComponents) {
-            analysisNpmComponents(
-                scriptFile.config.usingComponents,
-                scriptFile,
-                buildManager
-            );
-        }
     }
 
     let styleFiles = component.styles || [];

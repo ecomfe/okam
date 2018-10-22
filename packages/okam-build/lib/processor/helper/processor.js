@@ -159,6 +159,12 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
         handler = customRequire(handler);
     }
 
+    // call before hook
+    let hook = result.hook;
+    if (hook && typeof hook.before === 'function') {
+        hook.before(file, processorOpts);
+    }
+
     return {
         name: processorName,
         handler,

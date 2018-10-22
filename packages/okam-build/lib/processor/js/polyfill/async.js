@@ -6,7 +6,7 @@
 'use strict';
 
 /* eslint-disable fecs-min-vars-per-destructure */
-const {importLoalPolyfill} = require('./helper');
+const {importLocalPolyfill} = require('./helper');
 
 module.exports = function ({types: t}) {
     return {
@@ -19,7 +19,7 @@ module.exports = function ({types: t}) {
              * @param {Object} state the plugin state
              */
             AwaitExpression(path, state) {
-                importLoalPolyfill(false, path, state, t);
+                importLocalPolyfill(false, path, state, t);
             }
         }
     };

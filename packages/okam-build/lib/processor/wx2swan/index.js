@@ -5,30 +5,98 @@
 
 'use strict';
 
-const wx2swanMap = {
-    wxml: {
-        processor: require('./wxmlTransform'),
-        rext: 'swan'
-    },
-    wxss: {
-        processor: require('./wxssTransform'),
-        rext: 'css'
-    },
-    js: {
-        processor: require('./apiTransform')
+const {registerProcessor} = require('../type');
+const wxmlPlugin = require('../../template/transform/plugins/wx2swan-syntax-plugin');
+const wxssPlugin = require('../css/plugins/postcss-plugin-wx2swan');
+const jsPlugin = require('../js/plugins/babel-wx2swan-plugin');
+
+/**
+ * Initialize wx component js processor
+ *
+ * @inner
+ * @param {Object=} opts the options to init
+ * @param {string=} opts.processor the builtin processor name, by default `babel`
+ * @param {Array=} opts.plugins the processor plugins
+ */
+function initJsProcessor(opts) {
+    let plugins = (opts && opts.plugins) || [jsPlugin];
+    registerProcessor({
+        name: (opts && opts.processor) || 'babel', // override existed processor
+        hook: {
+            before(file, options) {
+                if (file.isWxCompScript) {
+                    options.plugins || (options.plugins = []);
+                    options.plugins.push.apply(options.plugins, plugins);
+                }
+            }
+        }
+    });
+}
+
+/**
+ * Initialize wx tpl processor
+ *
+ * @inner
+ * @param {Object=} opts the processor options
+ * @param {Array=} opts.plugins the view processor plugins
+ */
+function initTplProcessor(opts) {
+    registerProcessor({
+        name: 'wxml2swan',
+        processor: 'view', // using the existed view processor
+        extnames: ['wxml'],
+        rext: 'swan',
+        options: opts || {
+            plugins: [
+                wxmlPlugin
+            ]
+        }
+    });
+}
+
+/**
+ * Initialize wx style processor
+ *
+ * @inner
+ * @param {Object=} opts the processor init options
+ * @param {Array=} opts.plugins the postcss plugins
+ */
+function initStyleProcessor(opts) {
+    registerProcessor({
+        name: 'wxss2css',
+        processor: 'postcss', // using the existed postcss processor
+        extnames: ['wxss'],
+        rext: 'css',
+        options: opts || {
+            plugins: [
+                wxssPlugin
+            ]
+        }
+    });
+}
+
+/**
+ * Init wx2swan processors
+ *
+ * @param {Object=} options the initialization options
+ * @param {Object=} options.js the wx component js processor init options
+ * @param {Object=} options.css the wx component style processor init options
+ * @param {Object=} options.tpl the wx template processor init options
+ */
+function initProcessor(options = {}) {
+    let {js, css, tpl} = options;
+
+    if (tpl !== false) {
+        initTplProcessor(tpl);
     }
-};
 
-module.exports = function (file, options) {
-    const transformDetail = wx2swanMap[file.extname];
-    let result = {
-        content: file.content
-    };
-
-    if (transformDetail) {
-        transformDetail.rext && (file.rext = transformDetail.rext);
-        transformDetail.processor && (result = transformDetail.processor(file, options));
+    if (css !== false) {
+        initStyleProcessor(css);
     }
 
-    return result;
-};
+    if (js !== false) {
+        initJsProcessor(js);
+    }
+}
+
+module.exports = initProcessor;

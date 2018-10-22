@@ -11,7 +11,7 @@
 const {
     parse: parseDom,
     serialize: serializeDom
-} = require('../../../template');
+} = require('../../template');
 
 function visit(ctx, node, plugins, tplOpts) {
     let type = node.type;
