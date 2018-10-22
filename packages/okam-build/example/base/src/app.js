@@ -25,7 +25,8 @@ export default {
             'pages/todos/todoList',
             'pages/todos/counter',
             'pages/behavior/index',
-            'pages/vant/index'
+            'pages/vant/index',
+            'pages/component/na'
         ],
         subPackages: [
             {

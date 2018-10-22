@@ -5,8 +5,6 @@
 
 'use strict';
 
-// const merge = require('deepmerge');
-// const url = require("postcss-url")
 const merge = require('../../../').merge;
 
 module.exports = merge({}, require('./base.config'), {

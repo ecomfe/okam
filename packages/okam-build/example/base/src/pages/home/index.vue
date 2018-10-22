@@ -74,6 +74,14 @@ export default {
                         path: 'vant/index',
                     },
                     {
+                        subName: '微信iView组件',
+                        path: 'component/compiViewPage',
+                    },
+                    {
+                        subName: '原生Swan组件',
+                        path: 'component/na'
+                    },
+                    {
                         subName: '生命周期',
                         path: 'lifecycle/index',
                     },

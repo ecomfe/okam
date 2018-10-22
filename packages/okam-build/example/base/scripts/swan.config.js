@@ -5,13 +5,11 @@
 
 'use strict';
 
-module.exports = Object.assign({}, require('./base.config'), {
+const merge = require('../../../').merge;
+module.exports = merge({}, require('./base.config'), {
     polyfill: ['async'],
+    wx2swan: true,
     processors: {
-        wx2swan: {
-            // 注册 及 配置 wxml、wxss 文件转换
-            extnames: ['wxml', 'wxss']
-        }
         // vant: {
         //     processor: 'babel',
         //     options: {
@@ -31,26 +29,6 @@ module.exports = Object.assign({}, require('./base.config'), {
         //         }
         //     }
         // }
-        // wxml2swan: {
-        //     processor: 'view',
-        //     options: {
-        //         plugins: [
-        //             {
-        //                 tag() {
-        //                 }
-        //             }
-        //         ]
-        //     },
-        //     extnames: 'wxml'
-        // }
     },
-    rules: [
-        {
-            // 配置 js 文件转换
-            match(file) {
-                return file.isNpmWxCompScript;
-            },
-            processors: ['wx2swan']
-        }
-    ]
+    rules: []
 });

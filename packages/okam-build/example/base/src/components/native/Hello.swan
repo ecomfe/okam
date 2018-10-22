@@ -1,0 +1,8 @@
+<view class="hello-wrap">
+    <view>
+        <text class="hello-title">
+            {{title}}
+        </text>
+    </view>
+    <van-btn>VanButton</van-btn>
+</view>
