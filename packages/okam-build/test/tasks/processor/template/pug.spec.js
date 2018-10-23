@@ -6,7 +6,6 @@
 'use strict';
 
 const assert = require('assert');
-const helper = require('../../helper');
 
 const pugProcessor = require('okam/processor/template/pug');
 

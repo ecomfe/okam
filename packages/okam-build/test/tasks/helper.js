@@ -10,10 +10,10 @@ const fs = require('fs');
 const logger = require('okam/util').logger;
 
 const initBuildOption = require('okam/build/init-build-options');
-const swanSyntax = require('okam/template/transform/plugins/swan-syntax-plugin.js');
-const wxSyntax = require('okam/template/transform/plugins/wx-syntax-plugin.js');
-const html = require('okam/template/transform/plugins/html-plugin.js');
-const ref = require('okam/template/transform/plugins/ref-plugin.js');
+const swanSyntax = require('okam/processor/template/plugins/swan-syntax-plugin.js');
+const wxSyntax = require('okam/processor/template/plugins/wx-syntax-plugin.js');
+const html = require('okam/processor/template/plugins/html-plugin.js');
+const ref = require('okam/processor/template/plugins/ref-plugin.js');
 
 const defaultTags = {
     view: ['div', 'p', 'span'],

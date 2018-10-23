@@ -7,11 +7,8 @@
 
 /* eslint-disable fecs-min-vars-per-destructure */
 /* eslint-disable fecs-prefer-destructure */
-
-const {
-    parse: parseDom,
-    serialize: serializeDom
-} = require('../../template');
+const {parse: parseDom} = require('./parser');
+const serializeDom = require('./serializer');
 
 function visit(ctx, node, plugins, tplOpts) {
     let type = node.type;

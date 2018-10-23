@@ -7,7 +7,7 @@
 
 /* eslint-disable fecs-min-vars-per-destructure */
 const path = require('path');
-const PLUGIN_BASE_NAME = path.join(__dirname, '..', '..', 'template/transform/plugins');
+const PLUGIN_BASE_NAME = path.join(__dirname, '..', 'template/plugins');
 
 /**
  * The builtin plugins

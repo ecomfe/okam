@@ -34,5 +34,16 @@ module.exports = merge({}, baseConf, {
             tpl: 'wxml',
             config: 'json'
         }
+    },
+
+    processors: {
+        cssImport: {
+            processor: 'postcss', // using the existed postcss processor
+            extnames: ['wxss'],
+            rext: 'wxss',
+            options: {
+                plugins: ['cssImport']
+            }
+        }
     }
 });

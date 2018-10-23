@@ -115,7 +115,6 @@ const BUILTIN_PROCESSORS = {
     postcss: {
         processor: getProcessorPath('css/postcss'),
         deps: 'postcss',
-        rext: 'css',
         order: 999
     },
     babel: {

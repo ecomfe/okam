@@ -48,12 +48,9 @@ class BuildManager extends EventEmitter {
     }
 
     initProcessor(buildConf) {
-        if (buildConf.wx2swan) {
+        if (this.appType === 'swan' && buildConf.wx2swan) {
             // register wx2swan processors
-            require('../processor/wx2swan')(buildConf.wx2swan);
-        }
-        else if (this.appType === 'wx') {
-            require('../processor/css/wxss')();
+            require('./init-wx2swan-processor')(buildConf.wx2swan);
         }
 
         // register custom processors

@@ -9,6 +9,7 @@ const merge = require('../util').merge;
 const baseConf = require('./base');
 
 module.exports = merge({}, baseConf, {
+
     output: {
 
         /**
@@ -33,6 +34,17 @@ module.exports = merge({}, baseConf, {
             style: 'css',
             tpl: 'swan',
             config: 'json'
+        }
+    },
+
+    processors: {
+        cssImport: {
+            processor: 'postcss', // using the existed postcss processor
+            extnames: ['css'],
+            rext: 'css',
+            options: {
+                plugins: ['cssImport']
+            }
         }
     }
 });

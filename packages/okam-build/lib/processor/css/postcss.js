@@ -27,6 +27,9 @@ const BUILTIN_PLUGINS = {
             designWidth: 750,
             precision: 2
         }
+    },
+    cssImport: {
+        path: path.join(__dirname, 'plugins', 'postcss-plugin-import.js')
     }
 };
 
