@@ -19,14 +19,14 @@ function initBehaviors(component, isPage) {
         mixin(component, behaviors);
     }
     else {
-        let extendMixin = Object.create(null);
+        let extendMixin = {};
         initMixinsOption(component, extendMixin);
         mixin(component, [extendMixin]);
     }
 }
 
 /**
- * Intialize the component relations
+ * Initialize the component relations
  *
  * @inner
  * @param {Object} component the component info

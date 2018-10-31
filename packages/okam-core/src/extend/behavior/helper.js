@@ -143,8 +143,8 @@ export function initMixinsOption(componentOrBehavior, extendMixin) {
  * @return {Object}
  */
 export function normalizeBehavior(item) {
-    let behaviorObj = Object.create(null);
-    let extendBehavior = Object.create(null);
+    let behaviorObj = {};
+    let extendBehavior = {};
 
     // split behavior to extended lifecycle behavior and native behavior mixin
     Object.keys(item).forEach(k => {
