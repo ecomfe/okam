@@ -104,9 +104,9 @@ describe('observable', function () {
         });
         expect(spyInit).toHaveBeenCalled();
         assert(typeof component.$rawProps === 'function');
-
-        Object.keys(component.props).forEach(k => {
-            let value = component.props[k];
+        assert(component.props === undefined);
+        Object.keys(component.properties).forEach(k => {
+            let value = component.properties[k];
             assert(typeof value.observer === 'function');
         });
     });
@@ -602,8 +602,8 @@ describe('observable', function () {
 
         assert(spyComputedB.calls.length === 2);
         setTimeout(() => {
-            instance.props.num.observer.call(instance, 12, 2, 'num');
-            instance.props.obj.observer.call(instance, {c: 3}, null, 'c');
+            instance.properties.num.observer.call(instance, 12, 2, 'num');
+            instance.properties.obj.observer.call(instance, {c: 3}, null, 'c');
 
             setTimeout(() => {
                 expect(spyComputedB).toHaveBeenCalled();

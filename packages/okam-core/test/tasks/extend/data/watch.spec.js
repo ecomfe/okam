@@ -374,7 +374,7 @@ describe('data watch', function () {
         setTimeout(() => {
             assert(spySetData.calls.length === 1);
             component.num = 12;
-            component.props.num.observer.call(component, 12, 2, 'num');
+            component.properties.num.observer.call(component, 12, 2, 'num');
 
             setTimeout(() => {
                 expect(spyWatchProp).toHaveBeenCalledWith(12, undefined);
