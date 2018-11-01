@@ -9,6 +9,22 @@
 
 import connect from './connect';
 
+function onShow() {
+    if (this.__storeChangeHandler && !this.__unsubscribeStore) {
+        this.__unsubscribeStore = this.$app.$store.subscribe(
+            this.__storeChangeHandler.bind(this)
+        );
+    }
+}
+
+function onHide() {
+    let unsubscribe = this.__unsubscribeStore;
+    if (unsubscribe) {
+        unsubscribe();
+        this.__unsubscribeStore = null;
+    }
+}
+
 export default {
     component: {
 
@@ -45,11 +61,7 @@ export default {
          * @private
          */
         onShow() {
-            if (this.__storeChangeHandler && !this.__unsubscribeStore) {
-                this.__unsubscribeStore = this.$app.$store.subscribe(
-                    this.__storeChangeHandler.bind(this)
-                );
-            }
+            onShow.call(this);
         },
 
         /**
@@ -58,11 +70,17 @@ export default {
          * @private
          */
         onHide() {
-            let unsubscribe = this.__unsubscribeStore;
-            if (unsubscribe) {
-                unsubscribe();
-                this.__unsubscribeStore = null;
-            }
+            onHide.call(this);
+        },
+
+        /**
+         * Page lifetimes hook for component
+         *
+         * @private
+         */
+        pageLifetimes: {
+            show: onShow,
+            hide: onHide
         },
 
         /**
@@ -71,9 +89,7 @@ export default {
          * @private
          */
         detached() {
-            let unsubscribe = this.__unsubscribeStore;
-            unsubscribe && unsubscribe();
-            this.__unsubscribeStore = null;
+            onHide.call(this);
             this.__state = null;
             this.$store = null;
         }
