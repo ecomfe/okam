@@ -79,7 +79,7 @@ export function normalizeOkamProps(props) {
 export function normalizeProps(props) {
     Object.keys(props).forEach(k => {
         let propValue = props[k];
-        if (propValue.default !==  undefined) {
+        if (propValue && propValue.default !==  undefined) {
             propValue.value = propValue.default;
             delete propValue.default;
         }
