@@ -1,5 +1,5 @@
 /**
- * @file extend the component base
+ * @file Ant Component base
  * @author sparklewhy@gmail.com
  */
 

@@ -5,9 +5,6 @@
 
 'use strict';
 
-/* global Behavior:false */
-
-import {normalizeAttributeNames} from '../../helper/component';
 import strategy from './strategy';
 
 /**
@@ -103,7 +100,7 @@ function doMixin(target, source, k, opts) {
 }
 
 /**
- * Initialize component/behavior mixins options for support native Behavior
+ * Initialize component/behavior mixins options for native Behavior support
  *
  * @param {Object} componentOrBehavior the component or behavior to init
  * @param {Object} extendMixin the extend mixin used to init
@@ -167,8 +164,7 @@ export function normalizeBehavior(item) {
 
     return {
         mixin: extendBehavior, // okam'll implement this extended mixin
-        /* eslint-disable babel/new-cap */
-        behavior: Behavior(normalizeAttributeNames(behaviorObj))
+        behavior: behaviorObj
     };
 }
 

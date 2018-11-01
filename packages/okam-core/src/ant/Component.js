@@ -5,7 +5,7 @@
 
 'use strict';
 
-import {createComponent} from './helper/factory';
+import {createComponent} from '../helper/factory';
 import {normalizeComponent} from './helper/component';
 import componentBase from './base/component';
 
