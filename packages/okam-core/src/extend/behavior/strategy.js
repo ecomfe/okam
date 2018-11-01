@@ -65,5 +65,5 @@ export default {
      *
      * @type {boolean}
      */
-    useNativeBehavior: typeof Behavior === 'function'
+    useNativeBehavior: true
 };
