@@ -15,7 +15,7 @@
     "lint": "fecs ./src index.js --reporter=baidu --rule",
     "test:coverage": "cross-env NODE_ENV=development nyc mocha --require babel-register \"test/tasks/**/*.spec.js\"",
     "test": "cross-env NODE_ENV=development mocha --require @babel/register \"test/tasks/**/*.spec.js\"",
-    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require babel-register \"test/tasks/**/*.spec.js\""
+    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require @babel/register \"test/tasks/**/*.spec.js\""
   },
   "license": "MIT",
   "repository": "ecomfe/okam",
