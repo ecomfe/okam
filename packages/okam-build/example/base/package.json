@@ -27,7 +27,7 @@
     "moment": "^2.22.2",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "vant-weapp": "^0.3.7"
+    "vant-weapp": "^0.4.5"
   },
   "devDependencies": {
     "connect": "^3.6.6",
