@@ -13,6 +13,8 @@ const {
     NOT_SUPPORT_MODIFIERS
 } = require('./constant');
 
+const {toHyphen} = require('../../../../util').string;
+
 // 1. 使用正则将函数名和函数参数拆分开
 // 2. 给事件绑定事件代理函数__handlerProxy
 // 3. 将原函数名handleClick保存在data-tap-event-proxy中
@@ -37,6 +39,8 @@ module.exports = function (attrs, name, tplOpts) {
 
     // use __handlerProxy(in okam-core/base/component) to agent the event handler
     attrs[eventAttrName] = '__handlerProxy';
+
+    eventType = toHyphen(eventType); // covert the camel case to dash-style
 
     // save the real event handler
     attrs[`data-${eventType}-event-proxy`] = handlerName;
