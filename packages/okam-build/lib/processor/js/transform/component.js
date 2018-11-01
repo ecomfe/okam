@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {removeNode, removeComments} = require('./helper');
+const {removeNode, removeComments, normalizeInternalBehavior} = require('./helper');
 
 /**
  * Get require expression module id
@@ -162,16 +162,17 @@ exports.getUsedComponentInfo = function (node, path, t) {
  * @param {Object} node the components node
  * @param {Object} path the node path
  * @param {Object} t the babel type definition
+ * @param {Object} opts the transformation options
  * @return {Array.<string>}
  */
-exports.getUsedMixinModulePaths = function (node, path, t) {
+exports.getUsedMixinModulePaths = function (node, path, t, opts) {
     if (!t.isArrayExpression(node)) {
         throw path.buildCodeFrameError('require array');
     }
 
     let elements = node.elements || [];
     let elemPaths = path.get('value.elements');
-    let minxiModulePaths = [];
+    let mixinModulePaths = [];
     for (let i = 0, len = elements.length; i < len; i++) {
         let item = elements[i];
         let id;
@@ -183,12 +184,20 @@ exports.getUsedMixinModulePaths = function (node, path, t) {
             id = getRequireExpressionModuleId(item);
         }
 
-        if (!id && !t.isStringLiteral(item)) {
-            throw path.buildCodeFrameError('mixins required string literal or using exported mixin module');
+        if (!id) {
+            if (t.isStringLiteral(item)) {
+                let value = item.value;
+                // normalize the internal behavior id
+                item.value = normalizeInternalBehavior(opts.appType, value);
+            }
+            else {
+                throw path.buildCodeFrameError('mixins required string literal or using exported mixin module');
+            }
         }
-        minxiModulePaths.push(id);
+
+        id && mixinModulePaths.push(id);
     }
 
-    return minxiModulePaths;
+    return mixinModulePaths;
 };
 

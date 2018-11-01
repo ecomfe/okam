@@ -16,12 +16,16 @@ const FRAMEWORK_POLYFILL_BASE = FRAMEWORK_PATH_BASE + 'polyfill/';
  */
 const FRAMEWORK_EXTEND_PATH = {
     data: {
-        default: 'extend/data/observable/index',
-        swan: 'extend/data/observable/swan/index'
+        swan: 'extend/data/observable/swan/index',
+        default: 'extend/data/observable/index'
     },
     watch: 'extend/data/watch',
     broadcast: 'extend/broadcast',
     behavior: {
+        ant: {
+            base: 'extend/behavior/index',
+            creator: 'extend/behavior/ant/Behavior'
+        },
         default: {
             base: 'extend/behavior/index',
             creator: 'extend/behavior/Behavior'
@@ -29,6 +33,17 @@ const FRAMEWORK_EXTEND_PATH = {
     },
     redux: 'extend/data/redux/index',
     ref: '' // ref extend code is not needed
+};
+
+/**
+ * The internal behavior id prefix
+ *
+ * @const
+ * @type {Object}
+ */
+const INTERNAL_BEHAVIOR_PREFIX = {
+    swan: 'swan://',
+    wx: 'wx://'
 };
 
 /**
@@ -72,7 +87,26 @@ exports.getPolyfillInfo = function (type) {
 };
 
 /**
- * Get okam-core framework required moudle base id
+ * Normalize internal behavior id
+ *
+ * @param {string} appType the app type to build
+ * @param {string} behaviorId the behavior id to normalize
+ * @return {string}
+ */
+exports.normalizeInternalBehavior = function (appType, behaviorId) {
+    let prefix = INTERNAL_BEHAVIOR_PREFIX[appType];
+    if (!prefix) {
+        return behaviorId;
+    }
+
+    if (behaviorId.indexOf(prefix) === -1) {
+        return prefix + behaviorId;
+    }
+    return behaviorId;
+};
+
+/**
+ * Get okam-core framework required module base id
  *
  * @param {string} appType the app type, validated values: wx/ant,
  *        other values will return default base id

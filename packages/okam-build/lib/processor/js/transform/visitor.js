@@ -44,7 +44,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             else if (keyName === 'mixins') {
                 // extract the mixins information for page/component
                 let mixins = componentTransformer.getUsedMixinModulePaths(
-                    prop.value, path, t
+                    prop.value, path, t, opts
                 );
                 initConfig.mixins = mixins;
             }

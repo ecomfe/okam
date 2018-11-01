@@ -5,7 +5,11 @@
 
 'use strict';
 
-const {getBaseId, getFrameworkExtendId} = require('../../../framework');
+const {
+    getBaseId,
+    getFrameworkExtendId,
+    normalizeInternalBehavior
+} = require('../../../framework');
 
 const LEADING_COMMENT_TYPE = 'leadingComments';
 const TRAILING_COMMENT_TYPE = 'trailingComments';
@@ -139,6 +143,8 @@ exports.createSimpleObjectExpression = function (simpleObj, t) {
 exports.getBaseId = getBaseId;
 
 exports.getFrameworkExtendId = getFrameworkExtendId;
+
+exports.normalizeInternalBehavior = normalizeInternalBehavior;
 
 /**
  * Remove node comments
