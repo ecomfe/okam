@@ -1,5 +1,5 @@
 /**
- * @file Postcss wxss plugin for weixin
+ * @file Postcss import plugin
  * @author sparklewhy@gmail.com
  */
 

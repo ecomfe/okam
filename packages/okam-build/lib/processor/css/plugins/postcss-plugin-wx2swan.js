@@ -1,5 +1,5 @@
 /**
- * @file postcss plugin px2rpx
+ * @file postcss wxss to swan css plugin
  * @author xiaohong8023@outlook.com
  */
 
