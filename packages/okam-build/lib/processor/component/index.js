@@ -71,9 +71,11 @@ function parse(file, options) {
     initPartFileInfo(file, tplFile, scriptFile, styleFiles);
 
     // fix pad line missing when lang is set in script part
-    scriptFile.content = scriptFile.content.replace(
-        /^\n+/, match => match.replace(/\n/g, '//\n')
-    );
+    if (scriptFile) {
+        scriptFile.content = scriptFile.content.replace(
+            /^\n+/, match => match.replace(/\n/g, '//\n')
+        );
+    }
 
     return {
         isComponent: true,
