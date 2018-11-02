@@ -38,6 +38,9 @@ describe('Component', () => {
         };
 
         component.selectComponent = function (path) {
+            if (path.indexOf('.notExist') === 0) {
+                return null;
+            }
             return 'c' + path;
         };
 
@@ -437,9 +440,9 @@ describe('Component', () => {
 
                 assert(this.$refs.a === 'c.xx-a');
                 assert(this.$refs.b === 'c.xx-b');
-
+                assert(this.$refs.c === '.notExist-c');
             }
-        }, {a: 'xx-a', b: 'xx-b'});
+        }, {a: 'xx-a', b: 'xx-b', c: 'notExist-c'});
         instance.created();
         instance.attached();
         instance.ready();
