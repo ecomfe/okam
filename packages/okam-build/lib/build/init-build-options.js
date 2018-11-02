@@ -127,6 +127,11 @@ function initBuildOptions(appType, options, cliOpts = {}) {
     let {logger, logLevel} = buildConf;
     buildConf.logger = initLogger(logger, logLevel, userConfig);
 
+    // add logger to global
+    if (!global.okamLogger) {
+        global.okamLogger = buildConf.logger;
+    }
+
     // init polyfill options
     let {localPolyfill, polyfill} = buildConf;
     let polyfillConf = normalizePolyfill(
