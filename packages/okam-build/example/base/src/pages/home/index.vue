@@ -55,6 +55,10 @@ export default {
                         path: 'tpl/tplReuse'
                     },
                     {
+                        subName: 'ref 属性支持',
+                        path: 'tpl/ref'
+                    },
+                    {
                         subName: '其他模板引擎',
                         path: 'tpl/tplPug'
                     }

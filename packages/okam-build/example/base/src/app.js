@@ -15,6 +15,7 @@ export default {
             'pages/tpl/tplSyntax',
             'pages/tpl/tplReuse',
             'pages/tpl/tplPug',
+            'pages/tpl/ref',
             'pages/typescript/ts',
             'pages/component/componentPage',
             'pages/component/compiViewPage',
