@@ -29,6 +29,8 @@ const WX2SWAN_MAP = {
     navigateToMiniProgram: 'navigateToSmartProgram'
 };
 
+const INTERNAL_BEHAVIOR_PREFIX = 'wx://';
+
 module.exports = function ({types: t}) {
     return {
         visitor: {
@@ -69,6 +71,24 @@ module.exports = function ({types: t}) {
                 let propertyContent = property[propertyKey];
                 if (propertyContent && WX2SWAN_MAP.hasOwnProperty(propertyContent)) {
                     property[propertyKey] = WX2SWAN_MAP[propertyContent];
+                }
+            },
+
+            /**
+             * Process wx://xx internal behaviors transformation
+             *
+             * @param {Object} path the node path to visit
+             * @param {Object} state the transform state
+             */
+            StringLiteral(path, state) {
+                let value = path.node.value;
+                let prefixIdx = value.indexOf(INTERNAL_BEHAVIOR_PREFIX);
+                if (prefixIdx === 0) {
+                    if (global.okamLogger) {
+                        global.okamLogger.warn('transform internal behavior', value);
+                    }
+                    path.node.value = 'swan://'
+                        + value.substr(INTERNAL_BEHAVIOR_PREFIX.length);
                 }
             }
         }
