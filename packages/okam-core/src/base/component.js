@@ -71,9 +71,12 @@ function initRefs() {
 
     let result = {};
     let ctx;
+    let self = this;
     let select = this.selectComponent;
+    let isSelectComponent = false;
     if (typeof select === 'function') {
-        ctx = this;
+        isSelectComponent = true;
+        ctx = self;
     }
     else {
         ctx = this.$selector;
@@ -83,7 +86,13 @@ function initRefs() {
     Object.keys(refs).forEach(id => {
         result[id] = {
             get() {
-                return select.call(ctx, `.${refs[id]}`);
+                let path = `.${refs[id]}`;
+                let result = select.call(ctx, path);
+                if (!result && isSelectComponent) {
+                    // if not custom component, try to query element info by selector API
+                    result = self.$selector.select(path);
+                }
+                return result;
             }
         };
     });
