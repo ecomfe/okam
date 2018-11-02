@@ -133,7 +133,7 @@ exports.createSimpleObjectExpression = function (simpleObj, t) {
         }
 
         props.push(t.objectProperty(
-            t.identifier(k),
+            t.identifier(`'${k}'`),
             valueNode
         ));
     });
