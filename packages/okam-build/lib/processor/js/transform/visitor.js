@@ -61,10 +61,10 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
 }
 
 /**
- * Transfomr mini program code
+ * Transform mini program code
  *
  * @inner
- * @param {Objecct} t the babel type definition
+ * @param {Object} t the babel type definition
  * @param {Object} path the node path to transform
  * @param {Object} declarationPath the declaration statement path to process
  * @param {Object} config the config used to cache the config information
@@ -89,7 +89,7 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
     let rootPath = path.findParent(p => t.isProgram(p));
     let bodyPath = rootPath.get('body.0');
 
-    // ensure the inserted import declareation is after the leading comment
+    // ensure the inserted import declaration is after the leading comment
     removeComments(t, bodyPath, 'leadingComments');
 
     // insert the base name import statement
