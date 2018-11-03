@@ -17,7 +17,7 @@ import {promisify} from './api';
  * @param {Object=} options the fetch options
  * @return {Promise}
  */
-function fetch(url, options) {
+function fetchData(url, options) {
     let {method = 'GET'} = options || {};
     method = method.toUpperCase();
 
@@ -32,7 +32,7 @@ function fetch(url, options) {
  * @return {Promise}
  */
 function getData(url, options) {
-    return fetch(url, Object.assign({}, options, {method: 'GET'}));
+    return fetchData(url, Object.assign({}, options, {method: 'GET'}));
 }
 
 /**
@@ -43,12 +43,12 @@ function getData(url, options) {
  * @return {Promise}
  */
 function postData(url, options) {
-    return fetch(url, Object.assign({}, options, {method: 'POST'}));
+    return fetchData(url, Object.assign({}, options, {method: 'POST'}));
 }
 
 const httpApi = {
     request: promisify(env.request, env),
-    fetch,
+    fetch: fetchData,
     get: getData,
     post: postData
 };
