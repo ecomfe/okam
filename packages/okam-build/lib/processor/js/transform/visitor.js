@@ -116,14 +116,27 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         ? path.get('declaration')
         : path;
     // wrap the export module using the base name
-    toReplacePath.replaceWith(
-        t.expressionStatement(
-            t.callExpression(
-                t.identifier(baseClassName),
-                callArgs
-            )
-        )
+    let callExpression = t.callExpression(
+        t.identifier(baseClassName),
+        callArgs
     );
+    if (opts.isBehavior) {
+        toReplacePath.replaceWith(t.expressionStatement(
+            callExpression
+        ));
+    }
+    else {
+        toReplacePath.replaceWith(
+            t.expressionStatement(
+                t.callExpression(
+                    t.identifier(opts.baseName),
+                    [
+                        callExpression
+                    ]
+                )
+            )
+        );
+    }
 
     // stop traverse to avoid the new created export default statement above
     // that be revisited in this plugin `ExportDefaultDeclaration` visitor
