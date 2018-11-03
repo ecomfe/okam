@@ -90,6 +90,8 @@
             </block>
 
             <view for="item of {a:1,b:2}" :key="item">of遍历字面量对象: hello {{index}} {{item}}</view>
+            <view for="item of {a,b}" :key="item">of遍历字面量对象2: hello {{index}} {{item}}</view>
+            <view for="item of {a2: a, b2: b}" :key="item">of遍历字面量对象3: hello {{index}} {{item}}</view>
 
             <button class="button" for="item in [1,2,3]" :key="item"
                     @click="handleFor(item)">在for循环中点击：click me</button>
@@ -188,6 +190,8 @@ export default {
     },
 
     data: {
+        a: 'test-a',
+        b: 'test-b',
         keyArray:[{id: 5, unique: 'unique_5'},
             {id: 4, unique: 'unique_4'},
             {id: 3, unique: 'unique_3'},
@@ -254,9 +258,9 @@ export default {
     methods: {
         handleClick(...args) {
             console.log('click happen', args);
-            this.$api.showModal({
-                title: '参数',
-                content: args.toString()
+            this.$api.showToast({
+                title: '参数:' + args,
+                duration: 3000
             });
         },
 
@@ -281,21 +285,19 @@ export default {
             console.log(item);
         },
         handleBubble(arg) {
-            this.$api.showModal({title:arg})
+            this.$api.showToast({title:arg})
             console.log('clicked: ' + arg);
         }
     }
 };
 </script>
 <style lang="stylus">
-html, body
+.home-wrap
     font-size: 14px;
     height: 100%
     min-height: 100%
     background-color: #ffffff
     color: #333333
-
-.home-wrap
     padding: 10px 20px
     .demo-title
         text-align center

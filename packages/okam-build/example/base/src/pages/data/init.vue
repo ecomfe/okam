@@ -25,6 +25,7 @@ export default {
     methods: {
         addNum() {
             this.num++;
+            this.arr.push(this.num);
         }
     }
 };

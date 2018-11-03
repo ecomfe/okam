@@ -11,9 +11,9 @@ export default {
     },
     data: {},
     created() {
-        swan.showModal({
-            title: "123",
-            content: '123'
+        this.$api.showToast({
+            title: '123',
+            duration: 3000
         });
     }
 };
