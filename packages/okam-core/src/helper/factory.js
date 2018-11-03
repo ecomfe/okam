@@ -5,11 +5,6 @@
 
 'use strict';
 
-/* global App:false */
-/* global Page:false */
-/* global Component:false */
-/* eslint-disable babel/new-cap */
-
 import {mixin, isFunction} from '../util/index';
 import {normalizeOkamProps} from './props';
 
@@ -135,8 +130,7 @@ export function use(plugin, pluginOpts) {
  * @return {Object}
  */
 export function createApp(instance, base) {
-    let app = initExtensions(APP_TYPE, instance, base);
-    return App(app);
+    return initExtensions(APP_TYPE, instance, base);
 }
 
 /**
@@ -154,7 +148,7 @@ export function createPage(instance, base, normalize, refs) {
     initComponentData(pageInfo, refs, true);
     normalize && (pageInfo = normalize(pageInfo));
 
-    return Page(pageInfo);
+    return pageInfo;
 }
 
 /**
@@ -173,5 +167,5 @@ export function createComponent(instance, base, normalize, refs) {
     initComponentData(componentInfo, refs, false);
     normalize && (componentInfo = normalize(componentInfo));
 
-    return Component(componentInfo);
+    return componentInfo;
 }
