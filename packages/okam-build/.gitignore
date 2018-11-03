@@ -4,4 +4,5 @@ test/**/package-lock.json
 test/example/
 test/test.js
 wx_dist
+ant_dist
 node_modules
