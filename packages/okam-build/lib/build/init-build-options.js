@@ -22,6 +22,8 @@ function getDefaultBuildConfig(appType) {
             return require('../config/swan');
         case 'wx':
             return require('../config/wx');
+        case 'ant':
+            return require('../config/ant');
         default:
             throw new Error('unknown app type, currently only support `swan` for baidu mini program '
                 + 'and `wx` for weixin mini program');

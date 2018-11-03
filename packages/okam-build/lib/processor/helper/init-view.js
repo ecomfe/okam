@@ -18,7 +18,8 @@ const PLUGIN_BASE_NAME = path.join(__dirname, '..', 'template/plugins');
 const BUILTIN_PLUGINS = {
     syntax: {
         wx: path.join(PLUGIN_BASE_NAME, 'wx-syntax-plugin'),
-        swan: path.join(PLUGIN_BASE_NAME, 'swan-syntax-plugin')
+        swan: path.join(PLUGIN_BASE_NAME, 'swan-syntax-plugin'),
+        ant: path.join(PLUGIN_BASE_NAME, 'ant-syntax-plugin')
     },
     html: path.join(PLUGIN_BASE_NAME, 'html-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
