@@ -64,11 +64,11 @@ function main(appType, options) {
     if (cliOpts.clean) {
         logger.info('clean old build output...');
 
+        let projectConfig = outputPathMap.projectConfig;
+        let keepFilePaths = projectConfig ? [projectConfig] : [];
         cleanBuild({
             outputDir,
-            keepFilePaths: [
-                outputPathMap.projectConfig
-            ]
+            keepFilePaths
         });
     }
 

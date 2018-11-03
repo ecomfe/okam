@@ -67,7 +67,7 @@ function getOutputPath(filePath, file, options) {
         }
     }
 
-    if (typeof getPath === 'function') {
+    if (result !== false && typeof getPath === 'function') {
         result = getPath(result || filePath, file);
     }
 
