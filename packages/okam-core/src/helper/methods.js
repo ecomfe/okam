@@ -13,26 +13,44 @@
 const extendPropMethods = [
     'beforeCreate', 'beforeMount', 'mounted',
     'beforeDestroy', 'destroyed', 'beforeUpdate',
-    'updated', 'computed', '$rawRefData'
+    'updated', ['computed', '$computed'], '$rawRefData'
 ];
 
 /**
  * Normalize component methods
  *
  * @param {Object} componentInfo the component info to normalize
+ * @param {Array.<string>=} extraPropMethods the extra property or methods
+ *        to normalize，optional
  * @return {Object}
  */
-export function normalizeMethods(componentInfo) {
+export function normalizeMethods(componentInfo, extraPropMethods) {
     let methods = {};
+    let target = extendPropMethods;
+    if (extraPropMethods) {
+        target = [].concat(target, extraPropMethods);
+    }
+
     // move new added methods and properties to methods object
-    extendPropMethods.forEach(k => {
-        let value = componentInfo[k];
-        if (typeof value === 'function') {
-            methods[k] = value;
+    target.forEach(k => {
+        let name = k;
+        let oldName = k;
+        if (Array.isArray(k)) {
+            name = k[1];
+            oldName = k[0];
         }
-        else if (value) {
+
+        let value = componentInfo[oldName];
+        if (typeof value === 'function') {
+            methods[name] = value;
+        }
+        else if (value != null) {
             // convert non-method prop to method
-            methods[k] = () => value;
+            methods[name] = () => value;
+        }
+
+        if (value != null && oldName !== name) {
+            delete methods[oldName];
         }
     });
 

@@ -19,9 +19,9 @@ import nextTick from './nextTick';
  * @return {Observer} the observer
  */
 function makeComputedObservable(ctx) {
-    let computedInfo = ctx.computed || {};
+    let computedInfo = ctx.$computed || {};
     if (typeof computedInfo === 'function') {
-        ctx.computed = computedInfo = computedInfo();
+        ctx.$computed = computedInfo = computedInfo();
     }
 
     let observer = new ComputedObserver(ctx, computedInfo);

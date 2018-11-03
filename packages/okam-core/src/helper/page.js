@@ -22,5 +22,12 @@ export function normalizePage(pageInfo) {
             pageInfo[k] = methods[k];
         });
     }
+
+    let computed = pageInfo.computed;
+    if (computed) {
+        pageInfo.$computed = computed;
+        delete pageInfo.computed;
+    }
+
     return pageInfo;
 }

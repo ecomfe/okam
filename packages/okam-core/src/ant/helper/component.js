@@ -9,6 +9,16 @@ import {normalizeProps} from '../../helper/props';
 import {normalizeMethods} from '../../helper/methods';
 
 /**
+ * The extra methods to normalize for ant env
+ *
+ * @const
+ * @type {Array.<string>}
+ */
+const EXTRA_NORMALIZE_METHODS = [
+    'created', 'attached', 'ready', 'detached'
+];
+
+/**
  * Normalize the component or behavior attribute names to native
  *
  * @param {Object} componentInfo the component to normalize
@@ -30,7 +40,7 @@ export function normalizeAttributeNames(componentInfo) {
  */
 export function normalizeComponent(componentInfo) {
     normalizeAttributeNames(componentInfo);
-    normalizeMethods(componentInfo);
+    normalizeMethods(componentInfo, EXTRA_NORMALIZE_METHODS);
 
     return componentInfo;
 }
