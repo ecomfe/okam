@@ -13,7 +13,6 @@ import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
 import MyPage from 'core/Page';
 import * as na from 'core/na/index';
-import base from 'core/base/base';
 import page from 'core/base/page';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
@@ -39,14 +38,9 @@ describe('Page', () => {
             return {};
         };
         na.env = global.swan;
-
-        global.Page = function (instance) {
-            return instance;
-        };
     });
 
     afterEach('clear global App', function () {
-        global.Page = undefined;
         global.swan = undefined;
         na.getCurrApp = rawGetCurrApp;
         na.env = rawEnv;
@@ -54,7 +48,6 @@ describe('Page', () => {
     });
 
     it('should inherit component api', () => {
-        let spyPage = spyOn(global, 'Page').andCallThrough();
         let pageInstance = {};
         let page = MyPage(pageInstance);
         Object.keys(component).forEach(k => {
@@ -65,8 +58,6 @@ describe('Page', () => {
         Object.keys(component.methods).forEach(k => {
             assert(page[k] === component.methods[k]);
         });
-
-        expect(spyPage).toHaveBeenCalledWith(pageInstance);
     });
 
     it('should call base onLoad/onReady/onUnload in order', () => {

@@ -10,19 +10,25 @@
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
 import MyApp from 'core/App';
-import MyComponent from 'core/Component';
 import * as na from 'core/na/index';
 import base from 'core/base/base';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
 import observable from 'core/extend/data/observable';
+import {fakeComponent} from 'test/helper';
 
 describe('observable array', function () {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
     const rawSelectComponent = component.selectComponent;
+
+    let MyComponent;
+
     beforeEach('init global App', function () {
         clearBaseCache();
+
+        MyComponent = fakeComponent();
+
         global.swan = {
             getSystemInfo() {},
             request() {},
@@ -43,15 +49,10 @@ describe('observable array', function () {
             return {};
         };
         na.env = base.$api = global.swan;
-
-        global.Component = function (instance) {
-            Object.assign(instance, instance.methods);
-            return instance;
-        };
     });
 
     afterEach('clear global App', function () {
-        global.Component = undefined;
+        MyComponent = undefined;
         global.swan = undefined;
         component.selectComponent = rawSelectComponent;
         na.getCurrApp = rawGetCurrApp;

@@ -10,18 +10,22 @@
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
-import MyComponent from 'core/Component';
 import * as na from 'core/na/index';
 import base from 'core/base/base';
 import {clearBaseCache} from 'core/helper/factory';
 import observable from 'core/extend/data/observable';
 import watch from 'core/extend/data/watch';
+import {fakeComponent} from 'test/helper';
 
 describe('data watch', function () {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
+    let MyComponent;
     beforeEach('init global App', function () {
         clearBaseCache();
+
+        MyComponent = fakeComponent();
+
         global.swan = {
             getSystemInfo() {},
             request() {},
@@ -38,21 +42,11 @@ describe('data watch', function () {
             return {};
         };
         na.env = base.$api = global.swan;
-
-        global.Component = function (instance) {
-            Object.assign(instance, instance.methods);
-            return instance;
-        };
-
-        global.Page = function (instance) {
-            return instance;
-        };
     });
 
     afterEach('clear global App', function () {
-        global.Component = undefined;
-        global.Page = undefined;
         global.swan = undefined;
+        MyComponent = undefined;
         na.getCurrApp = rawGetCurrApp;
         na.env = base.$api = rawEnv;
         expect.restoreSpies();

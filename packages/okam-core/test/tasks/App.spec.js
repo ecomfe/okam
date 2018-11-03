@@ -27,14 +27,9 @@ describe('App', () => {
             request() {}
         };
         setApis(global.swan);
-
-        global.App = function (instance) {
-            return instance;
-        };
     });
 
     afterEach('clear global App', function () {
-        global.App = undefined;
         global.swan = undefined;
         setApis(rawEnv);
         expect.restoreSpies();
@@ -42,14 +37,11 @@ describe('App', () => {
 
     it('should inherit base api', () => {
         let appInstance = {};
-        let spyApp = spyOn(global, 'App').andCallThrough();
         let app = MyApp(appInstance);
 
         Object.keys(base).forEach(k => {
             assert(app[k] === base[k]);
         });
-
-        expect(spyApp).toHaveBeenCalledWith(appInstance);
     });
 
     it('should call base onLaunch/onShow in order', () => {

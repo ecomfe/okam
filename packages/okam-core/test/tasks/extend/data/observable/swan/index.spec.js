@@ -11,7 +11,6 @@ import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
 import MyPage from 'core/Page';
-import MyComponent from 'core/Component';
 import * as na from 'core/na/index';
 import base from 'core/base/base';
 import component from 'core/base/component';
@@ -21,6 +20,7 @@ import {
     resetObservableArray,
     swanObservablePlugin as observable
 } from '../helper';
+import {fakeComponent} from 'test/helper';
 
 describe('swan observable', function () {
     const rawEnv = na.env;
@@ -37,9 +37,13 @@ describe('swan observable', function () {
         m => rawComponentMethods.push(component[m])
     );
 
+    let MyComponent;
+
     beforeEach('init global App', function () {
         clearBaseCache();
         initSwanObservableArray();
+
+        MyComponent = fakeComponent();
 
         global.swan = {
             getSystemInfo() {},
@@ -71,20 +75,10 @@ describe('swan observable', function () {
             return {};
         };
         na.env = base.$api = global.swan;
-
-        global.Component = function (instance) {
-            Object.assign(instance, instance.methods);
-            return instance;
-        };
-
-        global.Page = function (instance) {
-            return instance;
-        };
     });
 
     afterEach('clear global App', function () {
-        global.Component = undefined;
-        global.Page = undefined;
+        MyComponent = undefined;
         global.swan = undefined;
         na.getCurrApp = rawGetCurrApp;
         na.env = base.$api = rawEnv;

@@ -18,7 +18,8 @@ module.exports = {
                     'module-resolver',
                     {
                         alias: {
-                            core: path.join(__dirname, 'src')
+                            core: path.join(__dirname, 'src'),
+                            test: path.join(__dirname, 'test')
                         }
                     }
                 ]

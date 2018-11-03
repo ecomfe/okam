@@ -7,6 +7,7 @@
 
 import assert from 'assert';
 import expect, {spyOn} from 'expect';
+import CoreComponent from 'core/Component';
 
 const PATH_PREFIX_REGEX = /^\w+\./;
 
@@ -101,4 +102,13 @@ export function testCallOrder(methods, instance, instanceClass, parents) {
 
 export function isPromise(obj) {
     return Object.prototype.toString.call(obj) === '[object Promise]';
+}
+
+export function fakeComponent() {
+    return function (...args) {
+        /* eslint-disable babel/new-cap */
+        let instance = CoreComponent(...args);
+        Object.assign(instance, instance.methods);
+        return instance;
+    };
 }

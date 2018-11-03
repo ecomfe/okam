@@ -11,20 +11,24 @@
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
-import MyComponent from 'core/Component';
 import * as na from 'core/na/index';
 import base from 'core/base/base';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
 import EventListener from 'core/util/EventListener';
-import {testCallOrder} from '../helper';
+import {testCallOrder, fakeComponent} from 'test/helper';
 
 describe('Component', () => {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
     const rawSelectComponent = component.selectComponent;
+
+    let MyComponent;
     beforeEach('init global App', function () {
         clearBaseCache();
+
+        MyComponent = fakeComponent();
+
         global.swan = {
             getSystemInfo() {},
             request() {},
@@ -48,15 +52,10 @@ describe('Component', () => {
             return {};
         };
         na.env = global.swan;
-
-        global.Component = function (instance) {
-            Object.assign(instance, instance.methods);
-            return instance;
-        };
     });
 
     afterEach('clear global App', function () {
-        global.Component = undefined;
+        MyComponent = undefined;
         global.swan = undefined;
         component.selectComponent = rawSelectComponent;
         na.getCurrApp = rawGetCurrApp;
@@ -65,7 +64,6 @@ describe('Component', () => {
     });
 
     it('should inherit base api', () => {
-        let spyComponent = spyOn(global, 'Component').andCallThrough();
         let componentInstance = {};
         let component = MyComponent(componentInstance);
         component.created();
@@ -73,8 +71,6 @@ describe('Component', () => {
         Object.keys(base).forEach(k => {
             assert(component[k] === base[k]);
         });
-
-        expect(spyComponent).toHaveBeenCalledWith(componentInstance);
     });
 
     it('should call base created/attached/ready/detached in order', () => {
