@@ -5,8 +5,8 @@
 
 'use strict';
 
-import {normalizeProps} from '../helper/props';
-import {normalizeMethods} from '../helper/methods';
+import {normalizeProps} from '../../helper/props';
+import {normalizeMethods} from '../../helper/methods';
 
 /**
  * Normalize the component or behavior attribute names to native
