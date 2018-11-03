@@ -92,7 +92,7 @@ export default {
 
     async onLaunch() {
         let result = await this.$api.getSystemInfo();
-        console.log(result);
+        console.log('launch system info', result);
         console.log('show onLaunch...');
 
         let reqResult = await this.testReq();
@@ -101,7 +101,7 @@ export default {
 
     onShow() {
         this.$api.getSystemInfo().then(function (res) {
-            console.log(res);
+            console.log('systemInfo', res);
         });
 
         console.log('show app...');
