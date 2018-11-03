@@ -7,7 +7,7 @@
 
 'use strict';
 
-const {DATA_BIND_REGEXP, PLAIN_OBJECT_REGEPX} = require('../base/constant');
+const {DATA_BIND_REGEXP, PLAIN_OBJECT_REGEXP} = require('../base/constant');
 
 module.exports = function (attrs, name, tplOpts) {
     let {logger, file} = tplOpts;
@@ -15,7 +15,7 @@ module.exports = function (attrs, name, tplOpts) {
     let value = attrs[name];
     if (typeof value === 'string') {
         value = value.trim();
-        if (PLAIN_OBJECT_REGEPX.test(value)) {
+        if (PLAIN_OBJECT_REGEXP.test(value)) {
             value = `{{ ${value} }}`;
         }
         else {

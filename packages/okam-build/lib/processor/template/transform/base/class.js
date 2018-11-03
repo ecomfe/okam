@@ -14,7 +14,7 @@
 
 'use strict';
 
-const {PLAIN_OBJECT_REGEPX, SQUARE_BRACKETS_REGEXP} = require('./constant');
+const {PLAIN_OBJECT_REGEXP, SQUARE_BRACKETS_REGEXP} = require('./constant');
 
 module.exports = function (attrs, name) {
     let value = attrs[name];
@@ -25,7 +25,7 @@ module.exports = function (attrs, name) {
         value = '';
     }
 
-    if (PLAIN_OBJECT_REGEPX.test(value)) {
+    if (PLAIN_OBJECT_REGEXP.test(value)) {
         value = transformObjClass(value);
     }
     else if (SQUARE_BRACKETS_REGEXP.test(value)) {

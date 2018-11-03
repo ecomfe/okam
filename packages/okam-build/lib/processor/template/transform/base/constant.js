@@ -13,7 +13,7 @@ exports.BRACKET_REGEXP = /\(|\)/g;
 exports.EVENT_REGEXP = /^@/;
 exports.EVENT_HANDLE_REGEXP = /^(\w+)\s*(?:\((.+)?\))?$/;
 exports.VARIABLE_EVENT = /([^'])\$event([^'])/g;
-exports.PLAIN_OBJECT_REGEPX = /^{.*}$/;
+exports.PLAIN_OBJECT_REGEXP = /^{.*}$/;
 
 exports.CONDITION_DIRECTIVES = ['if', 'elif', 'else-if', 'else'];
 
