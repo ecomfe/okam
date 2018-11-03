@@ -1,5 +1,5 @@
 /**
- * @file Transform wx condition syntax
+ * @file Transform ant condition syntax
  * @author sparklewhy@gmail.com
  */
 

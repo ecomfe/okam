@@ -20,12 +20,12 @@ const {toHyphen} = require('../../../../util').string;
 // 3. 将原函数名handleClick保存在data-tap-event-proxy中
 // 4. 使用正则解析函数参数
 // 5. 将函数参数中的event对象($event)转化为字符串标识，并且在代理函数中提取出event对象
-module.exports = function (attrs, name, tplOpts) {
+module.exports = function (attrs, name, tplOpts, eventInfoParser) {
 
     // eventType, like 'tap'
     // eventAttrName, like 'bindtap'
     // eventModifier, like '[once,self]'
-    let {eventType, eventAttrName, eventModifiers} = parseEventName(name);
+    let {eventType, eventAttrName, eventModifiers} = (eventInfoParser || parseEventName)(name);
     let handlerString = attrs[name].trim();
 
     // match handleName and handle arguments
@@ -113,7 +113,10 @@ function showEventNameLog(name, newName, eventModifiers, attrs, tplOpts) {
 
     NOT_SUPPORT_MODIFIERS.forEach(item => {
         if (eventModifiers.includes(item)) {
-            logger.warn(`${file.path} template attribute ${name}:: ${appType} is not support with ${item} modifier`);
+            logger.warn(
+                `${file.path} template event attribute ${name}`,
+                `is not support with ${item} modifier in ${appType} env`
+            );
         }
     });
 

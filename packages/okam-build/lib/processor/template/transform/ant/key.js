@@ -1,7 +1,6 @@
 /**
  * @file 解析支付宝小程序的key
  * @author zhoudan03
- * @date 2018/9/17
  */
 
 module.exports = function (attrs, name, tplOpts) {

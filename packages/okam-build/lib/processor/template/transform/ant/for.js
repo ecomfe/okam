@@ -1,5 +1,5 @@
 /**
- * @file Transform wx for syntax
+ * @file Transform ant for syntax
  * @author sparklewhy@gmail.com
  */
 
