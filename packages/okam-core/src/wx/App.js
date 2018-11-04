@@ -5,5 +5,10 @@
 
 'use strict';
 
+import request from './request';
 import App from '../App';
+
+// init request
+request();
+
 export default App;
