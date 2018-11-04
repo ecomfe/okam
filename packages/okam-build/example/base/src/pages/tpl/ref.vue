@@ -1,10 +1,16 @@
 <template>
     <view class="template-ref-syntax-wrap">
         <view>
-            <button class="my-btn" ref="myBtn" @click="handleClick">test button</button>
+            <button class="my-btn" ref="myBtn" @click="handleClick">2test button</button>
         </view>
         <view ref="my-view">
             <simple-component ref="myComponent"></simple-component>
+        </view>
+        <view>
+            <button for="item in [1, 2, 3]" ref="forBtn">button-{{item}}</button>
+        </view>
+        <view>
+            <simple-component for="item in [1, 2, 3]" ref="forSimpleComponent">simple-component-{{item}}</simple-component>
         </view>
     </view>
 </template>
