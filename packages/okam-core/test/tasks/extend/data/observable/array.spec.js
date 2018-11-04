@@ -177,8 +177,6 @@ describe('observable array', function () {
             expect(spySetData).toHaveBeenCalled();
             assert(spySetData.calls.length === 1);
             expect(spySetData.calls[0].arguments[0]).toEqual({
-                'a.b[1]': 56,
-                'a.b[2]': 7,
                 'a.b': [23, 56],
                 'b[2]': 33,
                 'b[3]': 56
@@ -366,6 +364,62 @@ describe('observable array', function () {
             assert(spySetData.calls.length === 1);
             expect(spySetData.calls[0].arguments[0]).toEqual(
                 {a: [2, 5, 67]}
+            );
+            done();
+        });
+    });
+
+    it('should merge the non effective set data', function (done) {
+        MyApp.use(observable);
+        let instance = MyComponent({
+            data: {
+                a: [],
+                obj: {
+                    b: []
+                },
+                c: {
+                    d: 3,
+                    e: {
+                        k: true
+                    }
+                }
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.created();
+
+        instance.a.push(2);
+        instance.a = [2, 33];
+        instance.a.push(5);
+        instance.a = [12, 33, 56];
+
+        instance.obj.b.push(5);
+        instance.obj.b.push(6);
+        instance.obj.b = [23];
+        instance.obj.b.push(5);
+
+        instance.c.d = 56;
+        instance.c.e.k = false;
+        instance.c.e = {a: 3};
+        instance.c.e.a = 55;
+
+        expect(instance.data.a).toEqual([12, 33, 56]);
+
+        setTimeout(() => {
+            expect(spySetData).toHaveBeenCalled();
+            assert(spySetData.calls.length === 1);
+            expect(spySetData.calls[0].arguments[0]).toEqual(
+                {
+                    'a': [12, 33, 56],
+                    'obj.b': [23],
+                    'obj.b[1]': 5,
+                    'c.d': 56,
+                    'c.e': {a: 3},
+                    'c.e.a': 55
+                }
             );
             done();
         });

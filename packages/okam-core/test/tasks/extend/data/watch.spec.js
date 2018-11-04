@@ -12,6 +12,7 @@ import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
 import * as na from 'core/na/index';
 import base from 'core/base/base';
+import MyPage from 'core/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import observable from 'core/extend/data/observable';
 import watch from 'core/extend/data/watch';
@@ -63,6 +64,40 @@ describe('data watch', function () {
         component.created();
         expect(spyWatchInit).toHaveBeenCalled();
         assert(spyWatchInit.calls.length === 1);
+    });
+
+    it('should normalize page watch props', function (done) {
+        let spyWatchInit = spyOn(
+            watch.component.methods, 'afterObserverInit'
+        ).andCallThrough();
+
+        MyApp.use(observable);
+        MyApp.use(watch);
+
+        let spyWatchC = createSpy(() => {});
+        let page = MyPage({
+            data: {
+                c: 'ss'
+            },
+            watch: {
+                c: spyWatchC
+            }
+        });
+        page.onLoad();
+
+        let spySetData = createSpy(() => {});
+        page.setData = spySetData;
+
+        page.c = 23;
+        expect(spyWatchInit).toHaveBeenCalled();
+        assert(spyWatchInit.calls.length === 1);
+
+        setTimeout(() => {
+            expect(spyWatchC).toHaveBeenCalled();
+            assert(spyWatchC.calls.length === 1);
+            expect(spySetData.calls[0].arguments[0]).toEqual({c: 23});
+            done();
+        });
     });
 
     it('should support watch config', function (done) {

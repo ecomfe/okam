@@ -622,7 +622,7 @@ describe('Component', () => {
         const extendPropMethods = [
             'beforeCreate', 'beforeMount', 'mounted',
             'beforeDestroy', 'destroyed', 'updated',
-            '$computed', '$rawRefData'
+            '$rawComputed', '$rawRefData'
         ];
         const computedValue = {};
         const refData = {};
