@@ -11,9 +11,13 @@
  * @type {Array.<string>}
  */
 const extendPropMethods = [
-    'beforeCreate', 'beforeMount', 'mounted',
-    'beforeDestroy', 'destroyed', 'beforeUpdate',
-    'updated', ['computed', '$computed'], '$rawRefData'
+    'beforeCreate',
+    'beforeMount', 'mounted',
+    'beforeDestroy', 'destroyed',
+    'beforeUpdate', 'updated',
+    ['computed', '$rawComputed'],
+    ['watch', '$rawWatch'],
+    '$rawRefData'
 ];
 
 /**

@@ -25,8 +25,14 @@ export function normalizePage(pageInfo) {
 
     let computed = pageInfo.computed;
     if (computed) {
-        pageInfo.$computed = computed;
+        pageInfo.$rawComputed = computed;
         delete pageInfo.computed;
+    }
+
+    let watch = pageInfo.watch;
+    if (watch) {
+        pageInfo.$rawWatch = watch;
+        delete pageInfo.watch;
     }
 
     return pageInfo;

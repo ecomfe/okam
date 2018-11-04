@@ -88,7 +88,7 @@ export default {
             /**
              * Watch the given expression or function
              *
-             * @param {string|Function} expressOrFunc the expression or functon to watch
+             * @param {string|Function} expressOrFunc the expression or function to watch
              * @param {Function|Object} callback the callback to execute when the
              *        expression or function value changes
              * @param {Object=} options watch options
@@ -115,8 +115,12 @@ export default {
              * @private
              */
             afterObserverInit() {
+                let watch = this.$rawWatch;
+                if (typeof watch === 'function') {
+                    watch = this.$rawWatch();
+                }
                 this.__computedObserver.addWatchComputed(
-                    normalizeWatch.call(this, this.watch)
+                    normalizeWatch.call(this, watch)
                 );
             }
         }
