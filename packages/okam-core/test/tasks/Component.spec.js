@@ -22,6 +22,7 @@ describe('Component', () => {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
     const rawSelectComponent = component.selectComponent;
+    const rawSelectAllComponent = component.selectAllComponents;
 
     let MyComponent;
     beforeEach('init global App', function () {
@@ -36,6 +37,9 @@ describe('Component', () => {
                 return {
                     select(path) {
                         return path;
+                    },
+                    selectAll(path) {
+                        return [path];
                     }
                 };
             }
@@ -48,6 +52,13 @@ describe('Component', () => {
             return 'c' + path;
         };
 
+        component.selectAllComponents = function (path) {
+            if (path.indexOf('.notExist') === 0) {
+                return null;
+            }
+            return ['c' + path];
+        };
+
         na.getCurrApp = function () {
             return {};
         };
@@ -58,6 +69,7 @@ describe('Component', () => {
         MyComponent = undefined;
         global.swan = undefined;
         component.selectComponent = rawSelectComponent;
+        component.selectAllComponents = rawSelectAllComponent;
         na.getCurrApp = rawGetCurrApp;
         na.env = rawEnv;
         expect.restoreSpies();
@@ -437,8 +449,10 @@ describe('Component', () => {
                 assert(this.$refs.a === 'c.xx-a');
                 assert(this.$refs.b === 'c.xx-b');
                 assert(this.$refs.c === '.notExist-c');
+                expect(this.$refs.d).toEqual(['c.xx-d']);
+                expect(this.$refs.e).toEqual(['.notExist-e']);
             }
-        }, {a: 'xx-a', b: 'xx-b', c: 'notExist-c'});
+        }, {a: 'xx-a', b: 'xx-b', c: 'notExist-c', d: ['xx-d'], e: ['notExist-e']});
         instance.created();
         instance.attached();
         instance.ready();

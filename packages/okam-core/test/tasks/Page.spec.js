@@ -30,6 +30,9 @@ describe('Page', () => {
                 return {
                     select(path) {
                         return path;
+                    },
+                    selectAll(path) {
+                        return [path];
                     }
                 };
             }
@@ -306,7 +309,7 @@ describe('Page', () => {
     });
 
     it('should support refs', () => {
-        let refInfo = {a: 'xx-a', b: 'xx-b'};
+        let refInfo = {a: 'xx-a', b: 'xx-b', c: ['xx-c']};
         let page = MyPage({
             beforeCreate() {
                 assert(this.$refs == null);
@@ -322,6 +325,7 @@ describe('Page', () => {
 
                 assert(this.$refs.a === '.xx-a');
                 assert(this.$refs.b === '.xx-b');
+                expect(this.$refs.c).toEqual(['.xx-c']);
 
             }
         }, refInfo);
