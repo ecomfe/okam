@@ -10,6 +10,7 @@ import {default as Observer, proxyObject} from './Observer';
 import ComputedObserver from './ComputedObserver';
 import EventListener from '../../../util/EventListener';
 import nextTick from './nextTick';
+import {getSetDataPaths} from './setData';
 
 /**
  * Make computed props observable
@@ -19,9 +20,9 @@ import nextTick from './nextTick';
  * @return {Observer} the observer
  */
 function makeComputedObservable(ctx) {
-    let computedInfo = ctx.$computed || {};
+    let computedInfo = ctx.$rawComputed || {};
     if (typeof computedInfo === 'function') {
-        ctx.$computed = computedInfo = computedInfo();
+        ctx.$rawComputed = computedInfo = computedInfo();
     }
 
     let observer = new ComputedObserver(ctx, computedInfo);
@@ -234,7 +235,7 @@ export default {
                     // TODO optimize value update: merge operations
                     // call lifecycle beforeUpdate hook
                     this.beforeUpdate && this.beforeUpdate();
-                    this.setData(queues, this.__nextTickCallback);
+                    this.setData(getSetDataPaths(queues), this.__nextTickCallback);
                     this.$upQueues = null;
                 }
             },
@@ -252,10 +253,22 @@ export default {
                     obj = {[obj]: value};
                 }
 
+                // shadow copy the data to set
+                Object.keys(obj).forEach(k => {
+                    let value = obj[k];
+                    if (Array.isArray(value)) {
+                        value = [].concat(value);
+                    }
+                    else if (typeof value === 'object' && value) {
+                        value = Object.assign({}, value);
+                    }
+                    obj[k] = value;
+                });
+
                 let queues = this.$upQueues;
                 let isUpdating = !!queues;
-                queues || (queues = this.$upQueues = {});
-                Object.assign(queues, obj);
+                queues || (queues = this.$upQueues = []);
+                queues.push(obj);
 
                 if (!isUpdating) {
                     this.__dataUpTaskNum++;
