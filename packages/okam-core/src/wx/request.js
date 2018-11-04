@@ -84,8 +84,8 @@ export function setMaxRequestNumber(num) {
 }
 
 /**
-* Initialize request
-*/
+ * Initialize request
+ */
 export default function init() {
     naRequest.request = function (options) {
         return doRequest(options);
