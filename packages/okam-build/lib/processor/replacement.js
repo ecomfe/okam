@@ -39,7 +39,7 @@ function doReplacement(content, rules, file) {
             }
             else if (typeof item === 'object') {
                 let {match, replace} = item;
-                replace = strUtil.format(replace, tplData, true);
+                replace = strUtil.format(replace, tplData, false);
                 result = replaceContent(result, match, replace);
             }
         });
@@ -51,7 +51,7 @@ function doReplacement(content, rules, file) {
                 value = '' + value;
             }
 
-            let replace = strUtil.format(value, tplData, true);
+            let replace = strUtil.format(value, tplData, false);
             result = replaceContent(result, k, replace);
         });
     }
