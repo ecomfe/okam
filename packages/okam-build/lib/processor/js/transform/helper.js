@@ -113,6 +113,55 @@ exports.createImportDeclaration = function (varName, requireId, t) {
 };
 
 /**
+ * Create AST node by the given value
+ *
+ * @inner
+ * @param {*} value the value to create
+ * @param {Object} t the babel type definition
+ * @return {?Object}
+ */
+function createNode(value, t) {
+    if (Array.isArray(value)) {
+        let elements = [];
+        value.forEach(item => {
+            let node = createNode(item, t);
+            node && elements.push(node);
+        });
+
+        return t.arrayExpression(elements);
+    }
+
+    if (Object.prototype.toString.call(value) === '[object Object]') {
+        let props = [];
+        Object.keys(value).forEach(k => {
+            let node = createNode(value[k], t);
+            if (node) {
+                props.push(t.objectProperty(
+                    t.identifier(`'${k}'`),
+                    node
+                ));
+            }
+        });
+
+        return t.objectExpression(props);
+    }
+
+    if (value == null) {
+        return t.nullLiteral();
+    }
+
+    let valueType = typeof value;
+    switch (valueType) {
+        case 'boolean':
+            return t.booleanLiteral(value);
+        case 'string':
+            return t.stringLiteral(value);
+        case 'number':
+            return t.numericLiteral(value);
+    }
+}
+
+/**
  * Create simple plain object expression
  *
  * @param {Object} simpleObj the plain object
@@ -120,24 +169,7 @@ exports.createImportDeclaration = function (varName, requireId, t) {
  * @return {Object}
  */
 exports.createSimpleObjectExpression = function (simpleObj, t) {
-    let props = [];
-    Object.keys(simpleObj).forEach(k => {
-        let value = simpleObj[k];
-        let valueNode;
-        let valueType = typeof value;
-        if (valueType !== 'object') {
-            valueNode = t.stringLiteral(value);
-        }
-        else {
-            return;
-        }
-
-        props.push(t.objectProperty(
-            t.identifier(`'${k}'`),
-            valueNode
-        ));
-    });
-    return t.objectExpression(props);
+    return createNode(simpleObj, t);
 };
 
 exports.getBaseId = getBaseId;

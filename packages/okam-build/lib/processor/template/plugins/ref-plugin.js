@@ -7,7 +7,7 @@
 
 const hash = require('hash-sum');
 
-function initRefInfo(refId, refClass, file, logger) {
+function initRefInfo(refId, refInfo, file, logger) {
     let refs = file.refs || {};
     file.refs = refs;
 
@@ -15,14 +15,26 @@ function initRefInfo(refId, refClass, file, logger) {
         logger.warn(`repeated ref id ${refId} existed in ${file.path}`);
     }
     else {
-        refs[refId] = refClass;
+        refs[refId] = refInfo;
     }
+}
+
+function isRefInForContext(element) {
+    if (!element) {
+        return false;
+    }
+
+    if (element.hasForLoop) {
+        return true;
+    }
+
+    return isRefInForContext(element.parent);
 }
 
 module.exports = {
 
     /**
-     * Transform view element node type
+     * Transform element node ref attribute
      *
      * @param {Object} element the element node to transform
      * @param {Object} tplOpts the template transform options
@@ -35,6 +47,7 @@ module.exports = {
             return;
         }
 
+        let isForRef = isRefInForContext(element);
         let classValue = attrs.class;
         let {file, logger} = tplOpts;
         let refId = hash(file.path + '?' + refValue);
@@ -50,6 +63,9 @@ module.exports = {
         delete attrs.ref;
 
         // cache ref info to file
-        initRefInfo(refValue, refClass, file, logger);
+        let refInfo = isForRef
+            ? [refClass]
+            : refClass;
+        initRefInfo(refValue, refInfo, file, logger);
     }
 };

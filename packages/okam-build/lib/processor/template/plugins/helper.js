@@ -81,6 +81,7 @@ function normalizeTransformers(transformerMap) {
     Object.keys(transformerMap).forEach(k => {
         let item = transformerMap[k];
         if (item) {
+            item.transform.type = k;
             result.push(
                 Object.assign({}, item, {name: k})
             );
@@ -106,7 +107,12 @@ function transform(transformers, element, tplOpts, options) {
     let {attribs: attrs} = element;
     attrs && Object.keys(attrs).forEach(k => {
         transformer = findMatchAttrTransformer(transformers.attribute, k);
-        transformer && transformer(attrs, k, tplOpts);
+        if (transformer) {
+            transformer(attrs, k, tplOpts);
+            if (transformer.type === 'for') {
+                element.hasForLoop = true;
+            }
+        }
     });
 }
 
@@ -122,8 +128,6 @@ exports.transform = transform;
  */
 exports.createSyntaxPlugin = function (transformers) {
     let {element, attribute} = transformers;
-    element = normalizeTransformers(element);
-    attribute = normalizeTransformers(attribute);
 
     return {
         tag: transform.bind(undefined, {
