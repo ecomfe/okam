@@ -15,25 +15,10 @@ module.exports = {
         dir: 'dist',
         depDir: 'src/common'
     },
+    wx2swan: true,
     component: {
         extname: 'vue'
     },
     framework: [],
-    polyfill: [],
-    processors: {
-        babel: {
-            extnames: ['js']
-        },
-        wx2swan: {
-            extnames: ['wxml', 'wxss']
-        }
-    },
-    rules: [
-        {
-            match(file) {
-                return file.isWxCompScript;
-            },
-            processors: ['wx2swan']
-        }
-    ]
+    polyfill: []
 };
