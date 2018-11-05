@@ -108,10 +108,7 @@ function initProps(ctx) {
         return;
     }
 
-    // make the new added property accessible which must be added to
-    // methods object and type must be function
-    ctx.methods || /* istanbul ignore next */ (ctx.methods = {});
-    ctx.$rawProps = () => Object.assign({}, props);
+    ctx.$rawProps = Object.assign({}, props);
 
     Object.keys(props).forEach(p => {
         let value = props[p];
@@ -134,6 +131,12 @@ export default {
          */
         $init() {
             initProps(this);
+
+            let computed = this.computed;
+            if (computed) {
+                this.$rawComputed = computed;
+                delete this.computed;
+            }
         },
 
         /**

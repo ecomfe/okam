@@ -83,6 +83,15 @@ function normalizeWatch(watch) {
 
 export default {
     component: {
+
+        $init() {
+            let watch = this.watch;
+            if (watch) {
+                this.$rawWatch = watch;
+                delete this.watch;
+            }
+        },
+
         methods: {
 
             /**

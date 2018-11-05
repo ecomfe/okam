@@ -15,8 +15,9 @@ const extendPropMethods = [
     'beforeMount', 'mounted',
     'beforeDestroy', 'destroyed',
     'beforeUpdate', 'updated',
-    ['computed', '$rawComputed'],
-    ['watch', '$rawWatch'],
+    '$rawComputed',
+    '$rawWatch',
+    '$rawProps',
     '$rawRefData'
 ];
 
@@ -37,24 +38,13 @@ export function normalizeMethods(componentInfo, extraPropMethods) {
 
     // move new added methods and properties to methods object
     target.forEach(k => {
-        let name = k;
-        let oldName = k;
-        if (Array.isArray(k)) {
-            name = k[1];
-            oldName = k[0];
-        }
-
-        let value = componentInfo[oldName];
+        let value = componentInfo[k];
         if (typeof value === 'function') {
-            methods[name] = value;
+            methods[k] = value;
         }
         else if (value != null) {
             // convert non-method prop to method
-            methods[name] = () => value;
-        }
-
-        if (value != null && oldName !== name) {
-            delete methods[oldName];
+            methods[k] = () => value;
         }
     });
 
