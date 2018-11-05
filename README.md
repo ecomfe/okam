@@ -22,6 +22,12 @@
 
 * 提供样式单位 rpx 自动转换插件、接口请求 Mock 支持等，以及可配置的构建流程
 
+## Mini program Support
+
+- [x] 百度小程序
+- [x] 微信小程序
+- [ ] 支付宝小程序（完善中）
+
 ## Main Packages
 
 | Package | Status | Description |
