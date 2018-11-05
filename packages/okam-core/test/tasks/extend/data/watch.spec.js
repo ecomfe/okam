@@ -66,6 +66,26 @@ describe('data watch', function () {
         assert(spyWatchInit.calls.length === 1);
     });
 
+    it('should normalize component watch props', function () {
+        MyApp.use(observable);
+        MyApp.use(watch);
+        let watchProps = {
+            c() {
+                // do sth.
+            }
+        };
+        let component = MyComponent({
+            watch: watchProps,
+            data: {
+                c: 23
+            }
+        });
+
+        assert(typeof component.$rawWatch === 'function');
+        assert(component.watch === undefined);
+        expect(component.$rawWatch()).toEqual(watchProps);
+    });
+
     it('should normalize page watch props', function (done) {
         let spyWatchInit = spyOn(
             watch.component.methods, 'afterObserverInit'
@@ -83,6 +103,11 @@ describe('data watch', function () {
                 c: spyWatchC
             }
         });
+
+        assert(typeof page.$rawWatch === 'object');
+        assert(page.watch === undefined);
+        expect(page.$rawWatch).toEqual({c: spyWatchC});
+
         page.onLoad();
 
         let spySetData = createSpy(() => {});

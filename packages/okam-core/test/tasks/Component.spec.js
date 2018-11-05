@@ -620,10 +620,18 @@ describe('Component', () => {
 
     it('should normalize methods', () => {
         const extendPropMethods = [
-            'beforeCreate', 'beforeMount', 'mounted',
-            'beforeDestroy', 'destroyed', 'updated',
-            '$rawComputed', '$rawRefData'
+            'beforeCreate',
+            'beforeMount', 'mounted',
+            'beforeDestroy', 'destroyed',
+            'beforeUpdate', 'updated',
+            '$rawRefData'
         ];
+        const notExistedProps = [
+            '$rawComputed',
+            '$rawWatch',
+            '$rawProps'
+        ];
+
         const computedValue = {};
         const refData = {};
         let instance = MyComponent({
@@ -632,17 +640,36 @@ describe('Component', () => {
             mounted() {},
             beforeDestroy() {},
             destroyed() {},
+            beforeUpdate() {},
             updated() {},
+            props: {
+                a: {
+                    type: Number
+                }
+            },
+            data: {
+                c: 'xx'
+            },
             computed: computedValue,
+            watch: {
+                c() {
+                    // do sth.
+                }
+            },
             $rawRefData: refData,
             methods: {
                 hi() {}
             }
         });
         const extendProps = {
-            computed: computedValue,
             $rawRefData: refData
         };
+
+        notExistedProps.forEach(k => {
+            let value = instance.methods[k];
+            assert(value === undefined);
+        });
+
         extendPropMethods.forEach(k => {
             let value = instance.methods[k];
             assert(typeof value === 'function');

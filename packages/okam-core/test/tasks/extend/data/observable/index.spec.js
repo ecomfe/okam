@@ -113,6 +113,63 @@ describe('observable', function () {
         });
     });
 
+    it('should normalize component computed props', function () {
+        MyApp.use(observable);
+        let props = {
+            a: String,
+            b: {
+                type: Number,
+                default: 10
+            }
+        };
+        let computedProps = {
+            cc() {
+                return this.a;
+            }
+        };
+        let component = MyComponent({
+            props,
+            computed: computedProps
+        });
+        assert(typeof component.$rawProps === 'function');
+        assert(component.props === undefined);
+
+        assert(typeof component.$rawComputed === 'function');
+        assert(component.computed === undefined);
+        expect(component.$rawComputed()).toEqual(computedProps);
+
+        Object.keys(component.properties).forEach(k => {
+            let value = component.properties[k];
+            assert(typeof value.observer === 'function');
+        });
+    });
+
+    it('should normalize page computed props', function () {
+        MyApp.use(observable);
+        let props = {
+            a: String,
+            b: {
+                type: Number,
+                default: 10
+            }
+        };
+        let computedProps = {
+            cc() {
+                return this.a;
+            }
+        };
+        let page = MyPage({
+            props,
+            computed: computedProps
+        });
+        assert(typeof page.$rawProps === 'object');
+        assert(page.props === props);
+
+        assert(typeof page.$rawComputed === 'object');
+        assert(page.computed === undefined);
+        expect(page.$rawComputed).toEqual(computedProps);
+    });
+
     it('should call observable plugin created hook', () => {
         let spyCreated = spyOn(observable.component, 'created').andCallThrough();
         MyApp.use(observable);
