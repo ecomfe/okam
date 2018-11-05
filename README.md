@@ -49,6 +49,10 @@
 
 如果要给该项目贡献代码，可以参考该[文档](./CONTRIBUTING.md)。
 
+## Communication
+
+可以加入 QQ 群，群号：`728460911`，入群备注：okam
+
 ## License
 
 [MIT](./LICENSE)
