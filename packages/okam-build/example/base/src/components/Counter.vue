@@ -15,6 +15,12 @@ export default {
     computed: {
     },
 
+    watch: {
+        counter(old, newVal) {
+            console.log('watch counter change...', old, newVal);
+        }
+    },
+
     $store: {
         computed: ['counter'],
         actions: {

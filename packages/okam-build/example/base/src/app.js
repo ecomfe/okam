@@ -105,6 +105,18 @@ export default {
         });
 
         console.log('show app...');
+
+        // for (let i = 0; i < 5; i++) {
+        //     this.$http.get(
+        //         'http://www.baidu.com',
+        //         {
+        //             data: {q: 't' + i},
+        //             success(res) {
+        //                 console.log('success' + i, res)
+        //             }
+        //         }
+        //     );
+        // }
     },
 
     onHide() {

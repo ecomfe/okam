@@ -13,6 +13,9 @@
 <script>
 
 export default {
+
+    // mixins: ['form-fields'],
+
     config: { // The component config defined in component.json
     },
 
@@ -54,6 +57,16 @@ export default {
     computed: {
         myComputedNum() {
             return this.num + '-computed';
+        }
+    },
+
+    pageLifetimes: {
+        show() {
+            console.log('hello component show', this)
+        },
+
+        hide() {
+            console.log('hello component hide', this)
         }
     },
 
