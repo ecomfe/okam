@@ -33,15 +33,14 @@ export default {
 };
 </script>
 <style lang="stylus">
-html, body
-    font-size: 14px;
+.home-wrap
     height: 100%
     min-height: 100%
+    padding: 10px 20px
     background-color: #ffffff
     color: #333333
+    font-size: 14px;
 
-.home-wrap
-    padding: 10px 20px
     .a, .b, .c, .d, .e, .f, .g
         border: 1px solid blue
         padding: 10px
