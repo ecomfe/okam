@@ -22,7 +22,7 @@
 
 * 提供样式单位 rpx 自动转换插件、接口请求 Mock 支持等，以及可配置的构建流程
 
-## Mini program Support
+## Mini Program Support
 
 - [x] 百度小程序
 - [x] 微信小程序
