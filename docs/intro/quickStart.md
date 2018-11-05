@@ -22,7 +22,7 @@
 
 ## 运行调试
 
-* 运行命令
+* 百度小程序运行命令
 
     * 带 watch 开发模式：`npm run dev`
 
@@ -32,13 +32,15 @@
 
     * 删掉构建重新构建（没有 watch && 开发 Server）：`npm run build`
 
-    * 删掉构建产物：`npm run clean`
-
     * 生产环境构建：`npm run prod`
+
+* 微信小程序运行命令
 
     * 微信小程序开发构建：`npm run dev:wx`
 
     * 微信小程序：删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式：`npm run dev:wx:clean`
+
+    * 带 watch && 开发 Server 开发模式：`npm run dev:wx:server`
 
     * 微信小程序生产环境构建：`npm run prod:wx`
 
