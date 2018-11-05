@@ -69,7 +69,7 @@ function queryRefInstance(value) {
             result = this.selectAllComponents(path);
         }
 
-        if (!result) {
+        if (!result || !result.length) {
             result = this.$selector.selectAll(path);
         }
     }
