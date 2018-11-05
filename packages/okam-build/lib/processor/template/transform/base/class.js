@@ -6,7 +6,7 @@
  * 2. class="static" :class="{ active: isActive, 'text-danger': hasError }"  ->  class="static {{[isActive ? 'active' : '', hasError ? 'text-danger' : '']}}"
  * 3. class="static" :class="[activeClass, errorClass]" -> class="static {{[activeClass, errorClass]}}
  * 4. class="static" :class="[isActive ? activeClass : '', errorClass]"  ->  class="static {{[isActive ? activeClass : '', errorClass]}}"
- * 5. class="static" :class="[{ active: isActive }, errorClass]" -> class="static {{[[isActive ? 'active' : ''], errorClass]}}
+ * 5. class="static" :class="[{ active: isActive }, errorClass]" -> class="static {{[isActive ? 'active' : '', errorClass]}}
  *
  * @author sharonzd
  * @date 2018/8/15
@@ -16,7 +16,7 @@
 
 const {PLAIN_OBJECT_REGEXP, SQUARE_BRACKETS_REGEXP} = require('./constant');
 
-module.exports = function (attrs, name) {
+module.exports = function (attrs, name, tplOpts, arrToStr = false) {
     let value = attrs[name];
     if (typeof value === 'string') {
         value = value.trim();
@@ -26,10 +26,12 @@ module.exports = function (attrs, name) {
     }
 
     if (PLAIN_OBJECT_REGEXP.test(value)) {
-        value = transformObjClass(value);
+        value = '[' + transformObjClass(value) + ']';
+        arrToStr && (value += '.join(\' \')');
     }
     else if (SQUARE_BRACKETS_REGEXP.test(value)) {
         value = transformArrayClass(value);
+        arrToStr && (value += '.join(\' \')');
     }
 
     value = `{{${value}}}`;
@@ -45,9 +47,10 @@ module.exports = function (attrs, name) {
  * eg: { active: isActive } -> [isActive ? 'active' : '']
  *
  * @param {string} value   string to be transformed
+ * @param {boolean=} wrapArr whether using array syntax wrap, by default false
  * @return {string} transformed result
  */
-function transformObjClass(value) {
+function transformObjClass(value, wrapArr = false) {
     value = value.replace(/[\s*{}]/g, '').split(',').map(item => {
         const arr = item.split(':');
         if (!arr[0].includes('\'')) {
@@ -55,7 +58,7 @@ function transformObjClass(value) {
         }
         return `${arr[1]}?${arr[0]}:''`;
     });
-    return `[${value}]`;
+    return wrapArr ? `[${value}]` : value;
 }
 
 /**

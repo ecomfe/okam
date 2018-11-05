@@ -32,6 +32,9 @@ module.exports = {
         },
         event: {
             transform: require('./event')
+        },
+        class: {
+            transform: require('./class')
         }
     })
 };
