@@ -84,10 +84,16 @@ function normalizeWatch(watch) {
 export default {
     component: {
 
-        $init() {
+        /**
+         * The instance initialization before the instance is normalized and created.
+         *
+         * @param {boolean} isPage whether is page component
+         * @private
+         */
+        $init(isPage) {
             let watch = this.watch;
             if (watch) {
-                this.$rawWatch = watch;
+                this.$rawWatch = isPage ? watch : () => watch;
                 delete this.watch;
             }
         },

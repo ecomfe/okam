@@ -30,9 +30,6 @@ describe('Page', () => {
                 return {
                     select(path) {
                         return path;
-                    },
-                    selectAll(path) {
-                        return [path];
                     }
                 };
             }
@@ -184,7 +181,7 @@ describe('Page', () => {
         let spyInit = spyOn(pageInstance, '$init').andCallThrough();
         let page = MyPage(pageInstance);
 
-        expect(spyInit).toHaveBeenCalledWith(true);
+        expect(spyInit).toHaveBeenCalledWith(true, undefined);
         expect(spyInit.calls[0].context).toBe(pageInstance);
         assert(typeof page.hi === 'function');
     });
@@ -306,32 +303,5 @@ describe('Page', () => {
             expect(item).toHaveBeenCalled();
             expect(item.calls[0].context).toBe(page);
         });
-    });
-
-    it('should support refs', () => {
-        let refInfo = {a: 'xx-a', b: 'xx-b', c: ['xx-c']};
-        let page = MyPage({
-            beforeCreate() {
-                assert(this.$refs == null);
-            },
-            created() {
-                assert(this.$refs == null);
-            },
-            beforeMount() {
-                assert(this.$refs == null);
-            },
-            mounted() {
-                assert(this.$refs != null);
-
-                assert(this.$refs.a === '.xx-a');
-                assert(this.$refs.b === '.xx-b');
-                expect(this.$refs.c).toEqual(['.xx-c']);
-
-            }
-        }, refInfo);
-        page.onLoad();
-        page.onReady();
-
-        assert(page.$rawRefData === refInfo);
     });
 });

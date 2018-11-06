@@ -32,7 +32,7 @@ const FRAMEWORK_EXTEND_PATH = {
         }
     },
     redux: 'extend/data/redux/index',
-    ref: '' // ref extend code is not needed
+    ref: 'extend/ref'
 };
 
 /**

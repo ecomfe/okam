@@ -97,10 +97,11 @@ function makeDataObservable(ctx) {
 /**
  * Initialize the props to add observer to the prop to listen the prop change.
  *
- * @private
+ * @inner
  * @param {Object} ctx the component definition context
+ * @param {boolean} isPage whether is page component
  */
-function initProps(ctx) {
+function initProps(ctx, isPage) {
     // cache the raw props information because the mini program will merge data
     // and props later on.
     let props = ctx.props;
@@ -108,7 +109,8 @@ function initProps(ctx) {
         return;
     }
 
-    ctx.$rawProps = Object.assign({}, props);
+    let rawProps = Object.assign({}, props);
+    ctx.$rawProps = isPage ? rawProps : () => rawProps;
 
     Object.keys(props).forEach(p => {
         let value = props[p];
@@ -127,14 +129,15 @@ export default {
         /**
          * The instance initialization before the instance is normalized and created.
          *
+         * @param {boolean} isPage whether is page component
          * @private
          */
-        $init() {
-            initProps(this);
+        $init(isPage) {
+            initProps(this, isPage);
 
             let computed = this.computed;
             if (computed) {
-                this.$rawComputed = computed;
+                this.$rawComputed = isPage ? computed : () => computed;
                 delete this.computed;
             }
         },

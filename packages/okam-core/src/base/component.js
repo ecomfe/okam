@@ -52,74 +52,6 @@ function normalizeEventArgs(args) {
     return args;
 }
 
-/**
- * Query the reference instance information by the given reference class
- *
- * @inner
- * @param {string|Array.<string>} value the reference class
- * @return {?Object|Array}
- */
-function queryRefInstance(value) {
-    let isSelectAll = Array.isArray(value);
-    let result;
-
-    if (isSelectAll) {
-        let path = `.${value[0]}`;
-        if (typeof this.selectAllComponents === 'function') {
-            result = this.selectAllComponents(path);
-        }
-
-        if (!result || !result.length) {
-            result = this.$selector.selectAll(path);
-        }
-    }
-    else {
-        let path = `.${value}`;
-        if (typeof this.selectComponent === 'function') {
-            result = this.selectComponent(path);
-        }
-
-        if (!result) {
-            // if not custom component, try to query element info by selector API
-            result = this.$selector.select(path);
-        }
-    }
-
-    return result;
-}
-
-/**
- * Initialize the `$refs` value
- *
- * @inner
- */
-function initRefs() {
-    this.$refs = {};
-
-    let refs = this.$rawRefData;
-    if (typeof refs === 'function') {
-        refs = refs();
-    }
-
-    if (!refs) {
-        return;
-    }
-
-    let result = {};
-    const self = this;
-    Object.keys(refs).forEach(id => {
-        result[id] = {
-            get() {
-                let value = refs[id];
-                return queryRefInstance.call(self, value);
-            },
-            enumerable: true
-        };
-    });
-
-    Object.defineProperties(this.$refs, result);
-}
-
 export default {
 
     /**
@@ -157,9 +89,6 @@ export default {
      * @private
      */
     ready() {
-        // init component refs
-        initRefs.call(this);
-
         // call mounted hook
         this.mounted && this.mounted();
     },
@@ -174,7 +103,7 @@ export default {
         this.beforeDestroy && this.beforeDestroy();
 
         this.$listener.off();
-        this.$refs = this.$selector = null;
+        this.$selector = null;
         this.$isDestroyed = true; // add destroyed flag
 
         // call destroyed hook
