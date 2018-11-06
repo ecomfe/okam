@@ -58,19 +58,16 @@ const broadcastAPIs = {
     /**
      * Bind the declaration broadcast events
      *
+     * @param {Object} events the broadcast events to listen
      * @private
      */
-    __bindBroadcastEvents() {
-        let events = this.$rawBroadcastEvents;
-        if (typeof events === 'function') {
-            events = this.$rawBroadcastEvents = events();
-        }
-
+    __bindBroadcastEvents(events) {
         if (!events) {
             return;
         }
 
         let bindEvents = this._bindBroadcastEvents;
+        /* istanbul ignore next */
         if (!bindEvents) {
             bindEvents = this._bindBroadcastEvents = [];
         }
@@ -98,6 +95,7 @@ const broadcastAPIs = {
      */
     __removeBroadcastEventListeners() {
         let bindEvents = this._bindBroadcastEvents;
+        /* istanbul ignore next */
         if (!bindEvents) {
             return;
         }
@@ -116,7 +114,7 @@ export default {
          * @private
          */
         onLaunch() {
-            this.__bindBroadcastEvents();
+            this.__bindBroadcastEvents(this.broadcastEvents);
         }
     }, broadcastAPIs),
 
@@ -142,7 +140,11 @@ export default {
          * @private
          */
         created() {
-            this.__bindBroadcastEvents();
+            let events = this.$rawBroadcastEvents;
+            if (typeof events === 'function') {
+                events = this.$rawBroadcastEvents = events();
+            }
+            this.__bindBroadcastEvents(events);
         },
 
         /**
