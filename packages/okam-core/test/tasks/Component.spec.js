@@ -21,8 +21,6 @@ import {testCallOrder, fakeComponent} from 'test/helper';
 describe('Component', () => {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
-    const rawSelectComponent = component.selectComponent;
-    const rawSelectAllComponent = component.selectAllComponents;
 
     let MyComponent;
     beforeEach('init global App', function () {
@@ -37,26 +35,9 @@ describe('Component', () => {
                 return {
                     select(path) {
                         return path;
-                    },
-                    selectAll(path) {
-                        return [path];
                     }
                 };
             }
-        };
-
-        component.selectComponent = function (path) {
-            if (path.indexOf('.notExist') === 0) {
-                return null;
-            }
-            return 'c' + path;
-        };
-
-        component.selectAllComponents = function (path) {
-            if (path.indexOf('.notExist') === 0) {
-                return null;
-            }
-            return ['c' + path];
         };
 
         na.getCurrApp = function () {
@@ -68,8 +49,6 @@ describe('Component', () => {
     afterEach('clear global App', function () {
         MyComponent = undefined;
         global.swan = undefined;
-        component.selectComponent = rawSelectComponent;
-        component.selectAllComponents = rawSelectAllComponent;
         na.getCurrApp = rawGetCurrApp;
         na.env = rawEnv;
         expect.restoreSpies();
@@ -195,12 +174,11 @@ describe('Component', () => {
             .andCall(() => callDestroyOrder.push(1));
         let spyDestroyed = spyOn(componentInstance, 'destroyed')
             .andCall(() => callDestroyOrder.push(2));
-        let instance = MyComponent(componentInstance, {a: 'xx-1'});
+        let instance = MyComponent(componentInstance);
         instance.created();
         instance.attached();
         instance.ready();
 
-        assert(instance.$refs != null);
         assert(instance.$selector != null);
 
         instance.$listener.on('xx', () => {});
@@ -214,7 +192,6 @@ describe('Component', () => {
         expect(spyBaseDetached).toHaveBeenCalled();
         expect(spyDetached).toHaveBeenCalled();
 
-        assert(instance.$refs == null);
         assert(instance.$selector == null);
         expect(instance.$listener._listeners).toEqual({});
         assert(instance.$isDestroyed);
@@ -432,32 +409,6 @@ describe('Component', () => {
         expect(spyTest2.calls[0].context).toBe(instance);
     });
 
-    it('should support refs', () => {
-        let instance = MyComponent({
-            beforeCreate() {
-                assert(this.$refs == null);
-            },
-            created() {
-                assert(this.$refs == null);
-            },
-            beforeMount() {
-                assert(this.$refs == null);
-            },
-            mounted() {
-                assert(this.$refs != null);
-
-                assert(this.$refs.a === 'c.xx-a');
-                assert(this.$refs.b === 'c.xx-b');
-                assert(this.$refs.c === '.notExist-c');
-                expect(this.$refs.d).toEqual(['c.xx-d']);
-                expect(this.$refs.e).toEqual(['.notExist-e']);
-            }
-        }, {a: 'xx-a', b: 'xx-b', c: 'notExist-c', d: ['xx-d'], e: ['notExist-e']});
-        instance.created();
-        instance.attached();
-        instance.ready();
-    });
-
     it('should call $init before normalize', () => {
         let componentInstance = {
             $init() {
@@ -475,7 +426,7 @@ describe('Component', () => {
         let spyInit = spyOn(componentInstance, '$init').andCallThrough();
         let component = MyComponent(componentInstance);
 
-        expect(spyInit).toHaveBeenCalledWith(false);
+        expect(spyInit).toHaveBeenCalledWith(false, undefined);
         expect(spyInit.calls[0].context).toBe(componentInstance);
         assert(typeof component.hi === 'function');
     });
@@ -623,8 +574,7 @@ describe('Component', () => {
             'beforeCreate',
             'beforeMount', 'mounted',
             'beforeDestroy', 'destroyed',
-            'beforeUpdate', 'updated',
-            '$rawRefData'
+            'beforeUpdate', 'updated'
         ];
         const notExistedProps = [
             '$rawComputed',
@@ -633,7 +583,6 @@ describe('Component', () => {
         ];
 
         const computedValue = {};
-        const refData = {};
         let instance = MyComponent({
             beforeCreate() {},
             beforeMount() {},
@@ -656,14 +605,10 @@ describe('Component', () => {
                     // do sth.
                 }
             },
-            $rawRefData: refData,
             methods: {
                 hi() {}
             }
         });
-        const extendProps = {
-            $rawRefData: refData
-        };
 
         notExistedProps.forEach(k => {
             let value = instance.methods[k];
@@ -673,12 +618,7 @@ describe('Component', () => {
         extendPropMethods.forEach(k => {
             let value = instance.methods[k];
             assert(typeof value === 'function');
-            if (extendProps[k]) {
-                assert(value() === extendProps[k]);
-            }
-            else {
-                assert(value === instance[k]);
-            }
+            assert(value === instance[k]);
         });
 
         assert(typeof instance.hi === 'function');
