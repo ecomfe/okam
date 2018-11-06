@@ -75,8 +75,7 @@ function initComponentData(instance, refData, isPage) {
         instance.data = instance.data();
     }
 
-    refData && (instance.$rawRefData = refData);
-    instance.$init && instance.$init(isPage);
+    instance.$init && instance.$init(isPage, refData);
 }
 
 /**

@@ -14,8 +14,7 @@ const extendPropMethods = [
     'beforeCreate',
     'beforeMount', 'mounted',
     'beforeDestroy', 'destroyed',
-    'beforeUpdate', 'updated',
-    '$rawRefData'
+    'beforeUpdate', 'updated'
 ];
 
 /**
