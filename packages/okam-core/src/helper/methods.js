@@ -15,9 +15,6 @@ const extendPropMethods = [
     'beforeMount', 'mounted',
     'beforeDestroy', 'destroyed',
     'beforeUpdate', 'updated',
-    '$rawComputed',
-    '$rawWatch',
-    '$rawProps',
     '$rawRefData'
 ];
 
