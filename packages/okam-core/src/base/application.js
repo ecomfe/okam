@@ -20,6 +20,8 @@ function initApis() {
     if (!this.__apisInited) {
         this.__apisInited = true;
 
+        Object.assign(this, base);
+
         let promiseApis = this.$promisifyApis;
         let interceptAPis = this.$interceptApis;
 
@@ -46,7 +48,7 @@ function initApis() {
     return false;
 }
 
-export default Object.assign({
+export default {
 
     /**
      * The hook when app launch
@@ -65,5 +67,5 @@ export default Object.assign({
     onShow() {
         initApis.call(this);
     }
-}, base);
+};
 

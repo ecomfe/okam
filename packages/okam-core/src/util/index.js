@@ -60,7 +60,8 @@ function doMixin(target, source) {
                 target[k] = Object.assign({}, sValue, currValue);
             }
             else if (!target.hasOwnProperty(k)) {
-                target[k] = sValue;
+                target[k] = isPlainObject(sValue)
+                    ? Object.assign({}, sValue) : sValue;
             }
         }
     }
@@ -71,7 +72,7 @@ function doMixin(target, source) {
  * If the target has the prop, then the target will override the sources.
  * If the target and sources prop value is both plain object will mixin.
  * If the target and sources prop value is both function type, it'll create a new function,
- * the function will call sources first (parent), then call target(child).
+ * the function will call sources first(parent), then call target(child).
  *
  * The mixin is shadow mixin, it means that only the first level props of the target will mixin.
  * e.g., mixin({a: 3, b: {c: 5, d: {e: 2}}}, {a: 5, b: {d: {k: 5}, k: 5}, c: 10});
