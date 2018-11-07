@@ -19,7 +19,7 @@ exports.compile = function (file, options, babelVersion = 6) {
     }
 
     let babel = babelVersion <= 6 ? require('babel-core') : require('@babel/core');
-    let config = Object.assign({}, options.config, {filename: file.path});
+    let config = Object.assign({babelrc: false}, options.config, {filename: file.path});
 
     // transform code
     let result = file.ast
