@@ -75,7 +75,7 @@ describe('broadcast', function () {
             broadcastEvents
         });
 
-        assert(typeof component.$rawBroadcastEvents === 'function');
+        assert(typeof component.methods.$rawBroadcastEvents === 'function');
         assert(component.broadcastEvents === undefined);
         expect(component.$rawBroadcastEvents()).toEqual(broadcastEvents);
     });

@@ -38,6 +38,7 @@ describe('App', () => {
     it('should inherit base api', () => {
         let appInstance = {};
         let app = MyApp(appInstance);
+        app.onLaunch();
 
         Object.keys(base).forEach(k => {
             assert(app[k] === base[k]);
@@ -140,7 +141,7 @@ describe('App', () => {
 
     it('should support $interceptApis options', function (done) {
         let callSetApiCounter = 0;
-        application.$http.request = function (opts) {
+        base.$http.request = function (opts) {
             let {data} = opts;
             if (data > 1) {
                 return Promise.resolve(data);
@@ -162,7 +163,7 @@ describe('App', () => {
                 enumerable: true
             }
         });
-        apis.request = application.$http.request;
+        apis.request = base.$http.request;
 
         let doneRequestSpy = createSpy((err, res) => {
             return {isFail: !!err, data: res};

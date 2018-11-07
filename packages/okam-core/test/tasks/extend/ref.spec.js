@@ -18,7 +18,7 @@ import ref from 'core/extend/ref';
 import component from 'core/base/component';
 import {fakeComponent} from 'test/helper';
 
-describe('broadcast', function () {
+describe('ref plugin', function () {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
     const rawSelectComponent = component.selectComponent;
@@ -136,7 +136,7 @@ describe('broadcast', function () {
             }
         }, refInfo);
 
-        assert(typeof instance.$rawRefData === 'function');
+        assert(typeof instance.methods.$rawRefData === 'function');
         instance.created();
         instance.attached();
         instance.ready();

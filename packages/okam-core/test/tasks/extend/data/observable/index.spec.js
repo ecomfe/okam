@@ -105,7 +105,7 @@ describe('observable', function () {
             props
         });
         expect(spyInit).toHaveBeenCalled();
-        assert(typeof component.$rawProps === 'function');
+        assert(typeof component.methods.$rawProps === 'function');
         assert(component.props === undefined);
         Object.keys(component.properties).forEach(k => {
             let value = component.properties[k];
@@ -131,10 +131,10 @@ describe('observable', function () {
             props,
             computed: computedProps
         });
-        assert(typeof component.$rawProps === 'function');
+        assert(typeof component.methods.$rawProps === 'function');
         assert(component.props === undefined);
 
-        assert(typeof component.$rawComputed === 'function');
+        assert(typeof component.methods.$rawComputed === 'function');
         assert(component.computed === undefined);
         expect(component.$rawComputed()).toEqual(computedProps);
 

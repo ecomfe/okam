@@ -84,7 +84,7 @@ describe('App', () => {
         });
 
         obj = {a: 3, b: {c: 6, e: {b: 3}}, d: [23], h: null};
-        obj2 = {a: 56, b: {c: 78, d: 23, e: {a: 3}}, d: [56], e: 555, h: 666};
+        obj2 = {a: 56, b: {c: 78, d: 23, e: {a: 3}}, d: [56], e: 555, h: 666, f: {a: 3}};
         let obj3 = {a: 32, e: {a: 3}, k: 56};
         result = mixin(obj, obj2, null, obj3);
         assert(obj === result);
@@ -94,8 +94,10 @@ describe('App', () => {
             d: [23],
             h: null,
             e: 555,
-            k: 56
+            k: 56,
+            f: {a: 3}
         });
+        assert(obj.f !== obj2.f);
 
         obj = {a: () => {}, b: {c: () => {}}, c: () => {}};
         obj2 = {a: () => {}, b: {c: () => {}}};

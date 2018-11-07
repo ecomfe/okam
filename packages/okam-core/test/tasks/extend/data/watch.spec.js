@@ -81,7 +81,7 @@ describe('data watch', function () {
             }
         });
 
-        assert(typeof component.$rawWatch === 'function');
+        assert(typeof component.methods.$rawWatch === 'function');
         assert(component.watch === undefined);
         expect(component.$rawWatch()).toEqual(watchProps);
     });
