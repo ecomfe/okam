@@ -6,6 +6,8 @@
 
 'use strict';
 
+import {normalizeExtendProp} from '../../helper/methods';
+
 function toDataGetter(path) {
     let parts = path.split('.');
     return function () {
@@ -91,11 +93,8 @@ export default {
          * @private
          */
         $init(isPage) {
-            let watch = this.watch;
-            if (watch) {
-                this.$rawWatch = isPage ? watch : () => watch;
-                delete this.watch;
-            }
+            // normalize extended watch property
+            normalizeExtendProp(this, 'watch', '$rawWatch', isPage);
         },
 
         methods: {

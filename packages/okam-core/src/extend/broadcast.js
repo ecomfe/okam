@@ -7,6 +7,7 @@
 
 /* eslint-disable fecs-export-on-declare */
 
+import {normalizeExtendProp} from '../helper/methods';
 import eventCenter from '../helper/eventCenter';
 
 const ONCE_LISTEN_REGEXP = /^(.*)\.once$/;
@@ -127,11 +128,9 @@ export default {
          * @private
          */
         $init(isPage) {
-            let events = this.broadcastEvents;
-            if (events) {
-                this.$rawBroadcastEvents = isPage ? events : () => events;
-                delete this.broadcastEvents;
-            }
+            normalizeExtendProp(
+                this, 'broadcastEvents', '$rawBroadcastEvents', isPage
+            );
         },
 
         /**

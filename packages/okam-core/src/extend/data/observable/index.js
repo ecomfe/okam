@@ -6,9 +6,10 @@
 'use strict';
 
 import {isPlainObject} from '../../../util/index';
+import EventListener from '../../../util/EventListener';
+import {normalizeExtendProp} from '../../../helper/methods';
 import {default as Observer, proxyObject} from './Observer';
 import ComputedObserver from './ComputedObserver';
-import EventListener from '../../../util/EventListener';
 import nextTick from './nextTick';
 import {getSetDataPaths} from './setData';
 
@@ -110,7 +111,8 @@ function initProps(ctx, isPage) {
     }
 
     let rawProps = Object.assign({}, props);
-    ctx.$rawProps = isPage ? rawProps : () => rawProps;
+    ctx.rawProps = rawProps;
+    normalizeExtendProp(ctx, 'rawProps', '$rawProps', isPage);
 
     Object.keys(props).forEach(p => {
         let value = props[p];
@@ -135,11 +137,8 @@ export default {
         $init(isPage) {
             initProps(this, isPage);
 
-            let computed = this.computed;
-            if (computed) {
-                this.$rawComputed = isPage ? computed : () => computed;
-                delete this.computed;
-            }
+            // normalize extend computed property
+            normalizeExtendProp(this, 'computed', '$rawComputed', isPage);
         },
 
         /**

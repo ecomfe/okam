@@ -18,6 +18,31 @@ const extendPropMethods = [
 ];
 
 /**
+ * Normalize extended property
+ *
+ * @param {Object} component the component instance
+ * @param {string} propName the extended property name
+ * @param {string} newPropName the new extended property name
+ * @param {boolean} isPage whether is page component
+ */
+export function normalizeExtendProp(component, propName, newPropName, isPage) {
+    let value = component[propName];
+    if (!value) {
+        return;
+    }
+
+    delete component[propName];
+    if (isPage) {
+        component[newPropName] = value;
+    }
+    else {
+        let methods = component.methods;
+        methods || (component.methods = methods = {});
+        methods[newPropName] = () => value;
+    }
+}
+
+/**
  * Normalize component methods
  *
  * @param {Object} componentInfo the component info to normalize
@@ -45,9 +70,10 @@ export function normalizeMethods(componentInfo, extraPropMethods) {
     });
 
     if (Object.keys(methods).length) {
-        componentInfo.methods = Object.assign(
-            {}, methods, componentInfo.methods
-        );
+        let currMethods = componentInfo.methods || {};
+        componentInfo.methods = currMethods;
+        Object.assign(currMethods, methods);
     }
+
     return componentInfo;
 }

@@ -5,6 +5,8 @@
 
 'use strict';
 
+import {normalizeExtendProp} from '../helper/methods';
+
 /**
  * Query the reference instance information by the given reference class
  *
@@ -88,7 +90,8 @@ export default {
                 return;
             }
 
-            this.$rawRefData = isPage ? refData : () => refData;
+            this._refData = refData;
+            normalizeExtendProp(this, '_refData', '$rawRefData', isPage);
         },
 
         /**
