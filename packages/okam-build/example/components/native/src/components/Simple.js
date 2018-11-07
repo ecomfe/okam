@@ -8,6 +8,6 @@
 
 Component({
     data: {
-        title: 'Hello Native Component'
+        title: 'Simple Native Component'
     }
 });

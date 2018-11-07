@@ -8,15 +8,9 @@
 export default {
     config: {
         pages: [
-            'pages/compYouzanPage'
+            'pages/index'
         ],
         window: {
-            navigationBarTitleText: 'Demo'
         }
-    },
-
-    // apis which need promisify
-    // $promisifyApis: [],
-
-    $interceptApis: {}
+    }
 };

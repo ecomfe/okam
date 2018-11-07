@@ -18,16 +18,13 @@ export default {
             'pages/tpl/ref',
             'pages/typescript/ts',
             'pages/component/componentPage',
-            'pages/component/compiViewPage',
             'pages/lifecycle/index',
             'pages/data/computed',
             'pages/data/init',
             'pages/data/watch',
             'pages/todos/todoList',
             'pages/todos/counter',
-            'pages/behavior/index',
-            'pages/vant/index',
-            'pages/component/na'
+            'pages/behavior/index'
         ],
         subPackages: [
             {

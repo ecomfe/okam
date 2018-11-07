@@ -1,7 +1,6 @@
 <template>
-    <view class="comp-page">
-        <view class="title">微信自定义组件(wux weapp)引入</view>
-
+    <view class="wux-home-page">
+        <view class="title">Wux Weapp</view>
         <view class="title">按钮</view>
         <wux-button block type="balanced" @click="clickWux">balanced</wux-button>
         <wux-input-number default-value="1024"  />
@@ -16,7 +15,7 @@ import WuxIcon from 'wux-weapp/dist/icon/index';
 
 export default {
     config: {
-        navigationBarTitleText: '微信自定义组件(wux weapp)引入'
+        title: 'Wux Weapp 支持'
     },
 
     components: {

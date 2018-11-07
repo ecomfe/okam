@@ -3,6 +3,7 @@
         <text class="hello-title">
             {{title}}
         </text>
+        <button bindtap="handleTap">Click me</butotn>
     </view>
-    <van-btn>VanButton</van-btn>
+    <simple>SimpleSlot</simple>
 </view>

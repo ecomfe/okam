@@ -1,4 +1,0 @@
-<view class="wrapper">
-    <view><text>外部属性：{{outText}}<text></view>
-    <view><text>内部属性：{{innerText}}<text></view>
-</view>

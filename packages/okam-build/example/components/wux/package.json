@@ -19,6 +19,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wux-weapp": "^3.0.6"
+    "wux-weapp": "^3.2.0"
   }
 }

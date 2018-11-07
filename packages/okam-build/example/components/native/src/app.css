@@ -3,18 +3,7 @@
  * @author xxx
  */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html,
-body {
-
+page {
     font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
 }
 
-.okam-inline {
-    display: inline;
-}

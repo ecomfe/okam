@@ -1,6 +1,6 @@
 <template>
     <view class="comp-page">
-        <view class="title">微信自定义组件(iview)引入</view>
+        <view class="title">iView Weapp</view>
         <i-button @click="handleClick">默认按钮</i-button>
         <i-button @click="handleClick" type="error" long="true">联通两边按钮</i-button>
         <i-row>
@@ -74,7 +74,7 @@ import IInputNumber from 'iview-weapp/dist/input-number/index';
 
 export default {
     config: {
-        navigationBarTitleText: '微信自定义组件(iview)引入'
+        title: 'iView Weapp 支持'
     },
 
     components: {

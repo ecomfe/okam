@@ -1,0 +1,8 @@
+.hello-wrap {
+    padding: 20rpx;
+    background: #fff;
+}
+
+.hello-wrap .hello-title {
+    font-size: 32rpx;
+}

@@ -8,15 +8,9 @@
 export default {
     config: {
         pages: [
-            'pages/compWuxWeappPage'
+            'pages/index'
         ],
         window: {
-            navigationBarTitleText: 'Demo'
         }
-    },
-
-    // apis which need promisify
-    // $promisifyApis: [],
-
-    $interceptApis: {}
+    }
 };

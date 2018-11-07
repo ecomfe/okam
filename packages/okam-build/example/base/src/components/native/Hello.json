@@ -1,7 +1,0 @@
-{
-    "component": true,
-    "usingComponents": {
-        "van-btn": "vant-weapp/dist/button",
-        "van-btn2": "vant-weapp/dist/button"
-    }
-}

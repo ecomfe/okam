@@ -1,6 +1,6 @@
 <template>
     <view class="comp-page">
-        <view class="title">微信自定义组件(youzan)引入</view>
+        <view class="title">有赞 Vant 组件</view>
         <van-progress percentage="50" />
         <van-button type="primary">主要按钮</van-button>
     </view>
@@ -12,7 +12,7 @@ import VanProgress from 'vant-weapp/dist/progress/index';
 
 export default {
     config: {
-        navigationBarTitleText: '微信自定义组件(youzan)引入'
+        title: '有赞 Vant 组件支持'
     },
 
     components: {

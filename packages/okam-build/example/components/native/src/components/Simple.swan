@@ -1,0 +1,8 @@
+<view class="simple-wrap">
+    <view>
+        <text class="simple-title">
+            {{title}}
+        </text>
+        <slot></slot>
+    </view>
+</view>
