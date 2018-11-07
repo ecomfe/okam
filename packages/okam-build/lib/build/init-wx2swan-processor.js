@@ -9,6 +9,7 @@ const {registerProcessor} = require('../processor/type');
 const wxmlPlugin = require('../processor/template/plugins/wx2swan-syntax-plugin');
 const wxssPlugin = require('../processor/css/plugins/postcss-plugin-wx2swan');
 const jsPlugin = require('../processor/js/plugins/babel-wx2swan-plugin');
+const adapterPlugin = require('../processor/js/plugins/babel-native-swan-plugin');
 
 /**
  * Initialize wx component js processor
@@ -19,12 +20,12 @@ const jsPlugin = require('../processor/js/plugins/babel-wx2swan-plugin');
  * @param {Array=} opts.plugins the processor plugins
  */
 function initJsProcessor(opts) {
-    let plugins = (opts && opts.plugins) || [jsPlugin];
+    let plugins = (opts && opts.plugins) || [jsPlugin, adapterPlugin];
     registerProcessor({
         name: (opts && opts.processor) || 'babel', // override existed processor
         hook: {
             before(file, options) {
-                if (file.isWxCompScript) {
+                if (file.isWxCompScript && !adapterPlugin.isAdapterModule(file.path)) {
                     options.plugins || (options.plugins = []);
                     options.plugins.push.apply(options.plugins, plugins);
                 }

@@ -65,7 +65,7 @@ function getPlainObjectNodeValue(node, path, t) {
 /**
  * Create require variable declaration statement
  *
- * @param {string} varName the varialble name
+ * @param {string} varName the variable name
  * @param {string} requireId the required id
  * @param {Object} t the babel type definition
  * @return {Object}
@@ -86,7 +86,7 @@ exports.createRequireVarDeclaration = function (varName, requireId, t) {
 /**
  * Create import declaration statement
  *
- * @param {string|Array.<string>} varName the varialble name to export
+ * @param {string|Array.<string>} varName the variable name to export
  * @param {string} requireId the required id
  * @param {Object} t the babel type definition
  * @return {Object}
@@ -186,8 +186,8 @@ exports.normalizeInternalBehavior = normalizeInternalBehavior;
  * @param {string} type the comment type
  */
 function removeComments(t, path, type) {
-    let commmentPaths = path.get(type);
-    if (!commmentPaths || !commmentPaths.length) {
+    let commentPaths = path.get(type);
+    if (!commentPaths || !commentPaths.length) {
         return;
     }
 
@@ -200,12 +200,12 @@ function removeComments(t, path, type) {
         if (isParentProgram) {
             parentPath.addComments(
                 'leading',
-                commmentPaths.map(item => item.node)
+                commentPaths.map(item => item.node)
             );
         }
     }
 
-    commmentPaths.forEach(item => item.remove());
+    commentPaths.forEach(item => item.remove());
 }
 
 exports.removeComments = removeComments;
@@ -244,3 +244,14 @@ exports.removeNode = function (t, path, commentsRemoveOpts = {}) {
  * @return {Object}
  */
 exports.getPlainObjectNodeValue = getPlainObjectNodeValue;
+
+/**
+ * Check whether the given variable name is defined in its scope
+ *
+ * @param {Object} path the variable used path
+ * @param {string} varName the variable name
+ * @return {boolean}
+ */
+exports.isVariableDefined = function (path, varName) {
+    return path.scope.hasBinding(varName);
+};

@@ -48,11 +48,6 @@ class BuildManager extends EventEmitter {
     }
 
     initProcessor(buildConf) {
-        if (this.appType === 'swan' && buildConf.wx2swan) {
-            // register wx2swan processors
-            require('./init-wx2swan-processor')(buildConf.wx2swan);
-        }
-
         // register custom processors
         processor.registerProcessor(buildConf.processors);
 
@@ -63,6 +58,20 @@ class BuildManager extends EventEmitter {
                 name: 'component',
                 extnames: componentConf.extname
             }]);
+        }
+
+        if (this.appType === 'swan') {
+            // register native swan processor
+            let nativeOpts = buildConf.native;
+            if (nativeOpts !== false) {
+                require('./init-native-swan-processor')(nativeOpts);
+            }
+
+            // register wx2swan processors
+            let wx2swanOpts = buildConf.wx2swan;
+            if (wx2swanOpts) {
+                require('./init-wx2swan-processor')(wx2swanOpts);
+            }
         }
     }
 
@@ -84,12 +93,12 @@ class BuildManager extends EventEmitter {
         let {rules: baseRules, processors: baseProcessors} = buildConf;
         let {rules, processors} = extraConf || {};
 
+        rules && (rules = [].concat(baseRules, rules));
+        this.rules = rules || baseRules || [];
+
         processors && (processors = merge({}, baseProcessors, processors));
         buildConf.processors = processors || baseProcessors;
         this.initProcessor(buildConf);
-
-        rules && (rules = [].concat(baseRules, rules));
-        this.rules = rules || baseRules || [];
     }
 
     /**

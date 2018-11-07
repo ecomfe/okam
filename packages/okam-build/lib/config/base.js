@@ -212,10 +212,36 @@ module.exports = {
 
     /**
      * 是否启用微信组件转换成 swan 组件处理，可选，默认 false
+     * 可以传入对象，控制各个部分转换选项
+     * {
+     *     js: {
+     *         plugins: [], // babel plugins using，重写内部使用的 plugins
+     *         processor: 'babel' // 使用的 babel 处理器，默认 babel（即 babel6），
+     *                            // 如果整个项目转换使用 babel7，这里改成 babel7
+     *     },
+     *     tpl: {}, // 模板转换选项，具体可以参考模板处理器选项
+     *     css: {}, // 样式转换选项，具体可以参考 postcss 处理器选项
+     * }
      *
-     * @type {boolean}
+     * @type {boolean|Object}
      */
     wx2swan: false,
+
+    /**
+     * 是否启用原生转换处理，可选，默认 true。
+     * 当前主要用在 swan 原生支持上适配 okam。
+     * 也可以传入配置对象：
+     * {
+     *     js: {
+     *         plugins: [], // babel plugins using，重写内部使用的 plugins
+     *         processor: 'babel' // 使用的 babel 处理器，默认 babel（即 babel6），
+     *                            // 如果整个项目转换使用 babel7，这里改成 babel7
+     *     }
+     * }
+     *
+     * @type {boolean|Object}
+     */
+    native: true,
 
     /**
      * 自定义的构建处理器

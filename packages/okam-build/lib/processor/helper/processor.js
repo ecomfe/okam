@@ -16,6 +16,14 @@ const BUILTIN_PROCESSORS = require('../type').BUILTIN_PROCESSORS;
 const initBabelProcessorOptions = require('./init-babel');
 const initViewProcessorOptions = require('./init-view');
 
+/**
+ * The default babel processor to use
+ *
+ * @const
+ * @type {string}
+ */
+const DEFAULT_BABEL_PROCESSOR = 'babel';
+
 function hasBabelProcessor(processorName) {
     return (processorName === 'babel'
         || processorName === 'babel7'
@@ -196,7 +204,7 @@ function addScriptDefaultBabelProcessor(file, buildManager, processors) {
     if (!hasBabel) {
         processors.unshift(
             getBuiltinProcessor(
-                file, {name: 'babel', options: {}}, buildManager
+                file, {name: DEFAULT_BABEL_PROCESSOR, options: {}}, buildManager
             )
         );
     }
