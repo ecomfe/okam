@@ -13,3 +13,4 @@ yarn.lock
 .babelrc
 .fecsignore
 .fecsrc
+.babelrc.js
