@@ -10,48 +10,6 @@ import EventListener from '../util/EventListener';
 import {getApis} from '../na/api';
 import base from './base';
 
-/**
- * Normalize event arguments to fix the native swan framework bug
- *
- * @inner
- * @param {Object} args the event args to normalize
- * @return {Object}
- */
-function normalizeEventArgs(args) {
-    let eventData = args[1];
-    if (eventData.currentTarget && eventData.target) {
-        return args;
-    }
-
-    let propData = this.properties;
-    let dataset = {};
-    propData && Object.keys(propData).forEach(k => {
-        if (/^data\w+$/.test(k)) {
-            let dataKey = k.replace(
-                /^data(\w)/,
-                (match, char) => char.toLowerCase()
-            );
-            dataset[dataKey] = propData[k];
-        }
-    });
-
-    let eventObj = {
-        type: args[0],
-        currentTarget: {
-            dataset,
-            id: this.id
-        },
-        target: {
-            dataset,
-            id: this.id
-        },
-        detail: eventData
-    };
-    args[1] = eventObj;
-
-    return args;
-}
-
 export default {
 
     /**
@@ -118,7 +76,7 @@ export default {
          * @param  {...any} args the event arguments
          */
         $emit(...args) {
-            args = normalizeEventArgs.call(this, args);
+            this.__beforeEmit && this.__beforeEmit(args);
             this.$listener.emit.apply(this.$listener, args);
 
             let triggerEvent = this.triggerEvent;
