@@ -8,7 +8,7 @@
 'use strict';
 
 const assert = require('assert');
-const {fakeProcessorOptions} = require('test/helper');
+const {fakeProcessorOptions, getTemplateEventPlugin} = require('test/helper');
 const templateProcessor = require('okam/processor/template/index');
 
 describe('事件类型转化', function () {
@@ -223,5 +223,88 @@ describe('show log', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions());
         assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+    });
+});
+
+describe('event transform', function () {
+    it('should transform wx click event to tap', function () {
+        let file = {
+            path: 'event.tpl',
+            content: '<button @click=" handleClick "></button>'
+        };
+        let result = templateProcessor(file, fakeProcessorOptions(null, [
+            getTemplateEventPlugin('wx')
+        ]));
+        assert(result.content === '<button bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></button>');
+    });
+
+    it('should not transform wx click event to tap for custom component', function () {
+        let file = {
+            path: 'event.tpl',
+            content: '<hello @click=" handleClick "></hello>'
+        };
+        let result = templateProcessor(file, fakeProcessorOptions(null, [
+            [
+                getTemplateEventPlugin('wx'),
+                {
+                    customComponentTags: ['hello']
+                }
+            ]
+        ]));
+        assert(result.content === '<hello bindclick="__handlerProxy" data-click-event-proxy="handleClick"></hello>');
+    });
+
+    it('should transform swan click event to tap', function () {
+        let file = {
+            path: 'event.tpl',
+            content: '<button @click=" handleClick "></button>'
+        };
+        let result = templateProcessor(file, fakeProcessorOptions(null, [
+            getTemplateEventPlugin('swan')
+        ]));
+        assert(result.content === '<button bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></button>');
+    });
+
+    it('should not transform swan click event to tap for custom component', function () {
+        let file = {
+            path: 'event.tpl',
+            content: '<hello @click=" handleClick "></hello>'
+        };
+        let result = templateProcessor(file, fakeProcessorOptions(null, [
+            [
+                getTemplateEventPlugin('swan'),
+                {
+                    customComponentTags: ['hello']
+                }
+            ]
+        ]));
+        assert(result.content === '<hello bindclick="__handlerProxy" data-click-event-proxy="handleClick"></hello>');
+    });
+
+    it('should transform ant click event to tap', function () {
+        let file = {
+            path: 'event.tpl',
+            content: '<button @click=" handleClick "></button>'
+        };
+        let result = templateProcessor(file, fakeProcessorOptions(null, [
+            getTemplateEventPlugin('ant')
+        ]));
+        assert(result.content === '<button onTap="__handlerProxy" data-tap-event-proxy="handleClick"></button>');
+    });
+
+    it('should not transform swan click event to tap for custom component', function () {
+        let file = {
+            path: 'event.tpl',
+            content: '<hello @click=" handleClick "></hello>'
+        };
+        let result = templateProcessor(file, fakeProcessorOptions(null, [
+            [
+                getTemplateEventPlugin('ant'),
+                {
+                    customComponentTags: ['hello']
+                }
+            ]
+        ]));
+        assert(result.content === '<hello onClick="__handlerProxy" data-click-event-proxy="handleClick"></hello>');
     });
 });
