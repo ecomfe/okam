@@ -13,7 +13,7 @@
  * @return {Object}
  */
 export function normalizeEventArgs(component, args) {
-    let eventData = args[1];
+    let eventData = args[1] || {};
     if (eventData.currentTarget && eventData.target) {
         return args;
     }
