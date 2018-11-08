@@ -34,14 +34,14 @@ function getRequireExpressionModuleId(node, t) {
  *
  * @inner
  * @param {Object} t the babel type definition
- * @param {Object} bindVar the binded variable path information
+ * @param {Object} bindVar the bind variable path information
  * @param {Object} removeOpts the remove options
  */
 function removeVariableDeclaration(t, bindVar, removeOpts) {
     let refPaths = bindVar.referencePaths || [];
     let removed;
 
-    // try to remove the binded variable in multiple variable decarlations
+    // try to remove the bind variable in multiple variable declarations
     refPaths.forEach(item => {
         let parentPath = item.getStatementParent();
         if (t.isVariableDeclaration(parentPath) && t.isIdentifier(item)) {

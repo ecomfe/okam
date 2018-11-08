@@ -78,7 +78,7 @@ function findMatchElemTransformer(elemTransformers, element) {
  */
 function normalizeTransformers(transformerMap) {
     let result = [];
-    Object.keys(transformerMap).forEach(k => {
+    transformerMap && Object.keys(transformerMap).forEach(k => {
         let item = transformerMap[k];
         if (item) {
             item.transform.type = k;
@@ -101,14 +101,14 @@ function normalizeTransformers(transformerMap) {
 function transform(transformers, element, tplOpts, options) {
     // transform element first
     let transformer = findMatchElemTransformer(transformers.element, element);
-    transformer && transformer(element, tplOpts);
+    transformer && transformer(element, tplOpts, options);
 
     // transform element attributes
     let {attribs: attrs} = element;
     attrs && Object.keys(attrs).forEach(k => {
         transformer = findMatchAttrTransformer(transformers.attribute, k);
         if (transformer) {
-            transformer(attrs, k, tplOpts);
+            transformer(attrs, k, tplOpts, options, element);
             if (transformer.type === 'for') {
                 element.hasForLoop = true;
             }

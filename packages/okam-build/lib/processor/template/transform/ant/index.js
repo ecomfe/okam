@@ -30,9 +30,6 @@ module.exports = {
         bind: {
             transform: require('./data-bind')
         },
-        event: {
-            transform: require('./event')
-        },
         class: {
             transform: require('./class')
         }

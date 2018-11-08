@@ -21,6 +21,11 @@ const BUILTIN_PLUGINS = {
         swan: path.join(PLUGIN_BASE_NAME, 'swan-syntax-plugin'),
         ant: path.join(PLUGIN_BASE_NAME, 'ant-syntax-plugin')
     },
+    eventSyntax: {
+        wx: path.join(PLUGIN_BASE_NAME, 'event', 'wx-event-plugin'),
+        swan: path.join(PLUGIN_BASE_NAME, 'event', 'swan-event-plugin'),
+        ant: path.join(PLUGIN_BASE_NAME, 'event', 'ant-event-plugin')
+    },
     html: path.join(PLUGIN_BASE_NAME, 'html-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
 };
@@ -54,21 +59,26 @@ function addRefPlugin(plugins) {
  */
 function normalizeViewPlugins(plugins, appType) {
     return plugins.map(item => {
-        if (typeof item === 'string') {
+        let pluginItem = item;
+        let pluginOptions;
+        if (Array.isArray(item)) {
+            pluginItem = item[0];
+            pluginOptions = item[1];
+        }
+        else if (typeof item === 'string') {
             let pluginPath = BUILTIN_PLUGINS[item];
             if (pluginPath && typeof pluginPath === 'object') {
                 pluginPath = pluginPath[appType];
             }
 
-            pluginPath && (item = pluginPath);
+            pluginPath && (pluginItem = pluginPath);
         }
 
-        let pluginItem;
-        if (typeof item === 'string') {
-            pluginItem = require(item);
+        if (typeof pluginItem === 'string') {
+            pluginItem = require(pluginItem);
         }
 
-        return pluginItem;
+        return pluginOptions ? [pluginItem, pluginOptions] : pluginItem;
     });
 }
 
@@ -120,3 +130,13 @@ function initViewTransformOptions(processOpts, buildManager) {
 }
 
 module.exports = exports = initViewTransformOptions;
+
+/**
+ * Get event syntax transformation plugin
+ *
+ * @param {string} appType the app type to transform
+ * @return {Object}
+ */
+exports.getEventSyntaxPlugin = function (appType) {
+    return BUILTIN_PLUGINS.eventSyntax[appType];
+};

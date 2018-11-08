@@ -8,9 +8,8 @@
 const classTransformer = require('./class');
 const styleTransformer = require('./style');
 const dataBindTransformer = require('./data-bind');
-const eventTransformer = require('./event');
 
-const {DATA_BIND_REGEXP, CONDITION_DIRECTIVES, EVENT_REGEXP} = require('./constant');
+const {DATA_BIND_REGEXP, CONDITION_DIRECTIVES} = require('./constant');
 
 /* eslint-disable fecs-properties-quote */
 /**
@@ -44,9 +43,5 @@ module.exports = {
             return CONDITION_DIRECTIVES.includes(name);
         },
         transform: null
-    },
-    event: {
-        match: EVENT_REGEXP,
-        transform: eventTransformer
     }
 };

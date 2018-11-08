@@ -245,7 +245,7 @@ function findMatchProcessor(file, rules, buildManager) {
                     matchProcessors.push(result);
                 }
                 else {
-                    unknownProcessors.push({ruleIndex: r, procesorIndex: k});
+                    unknownProcessors.push({ruleIndex: r, processorIndex: k});
                 }
             }
         }
@@ -262,5 +262,24 @@ function findMatchProcessor(file, rules, buildManager) {
 
     return matchProcessors;
 }
+
+exports.getBuiltinProcessor = function (name, options) {
+    let result = BUILTIN_PROCESSORS[name];
+    if (!result) {
+        return;
+    }
+
+    let handler = result.processor;
+    if (typeof handler === 'string') {
+        handler = customRequire(handler);
+    }
+
+    return {
+        name,
+        handler,
+        options,
+        rext: result.rext
+    };
+};
 
 exports.findMatchProcessor = findMatchProcessor;

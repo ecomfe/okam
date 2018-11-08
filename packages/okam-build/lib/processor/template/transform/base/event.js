@@ -7,97 +7,12 @@
 'use strict';
 
 const {
-    EVENT_REGEXP,
     EVENT_HANDLE_REGEXP,
     VARIABLE_EVENT,
     NOT_SUPPORT_MODIFIERS
 } = require('./constant');
 
 const {toHyphen} = require('../../../../util').string;
-
-// 1. 使用正则将函数名和函数参数拆分开
-// 2. 给事件绑定事件代理函数__handlerProxy
-// 3. 将原函数名handleClick保存在data-tap-event-proxy中
-// 4. 使用正则解析函数参数
-// 5. 将函数参数中的event对象($event)转化为字符串标识，并且在代理函数中提取出event对象
-module.exports = function (attrs, name, tplOpts, eventInfoParser) {
-
-    // eventType, like 'tap'
-    // eventAttrName, like 'bindtap'
-    // eventModifier, like '[once,self]'
-    let {eventType, eventAttrName, eventModifiers} = (eventInfoParser || parseEventName)(name);
-    let handlerString = attrs[name].trim();
-
-    // match handleName and handle arguments
-    let {
-        handlerName = handlerString,
-        handlerArgs,
-        eventObjectAlias
-    } = parseHandlerByREGEXP(handlerString);
-
-    showEventNameLog(name, eventAttrName, eventModifiers, attrs, tplOpts);
-
-    // use __handlerProxy(in okam-core/base/component) to agent the event handler
-    attrs[eventAttrName] = '__handlerProxy';
-
-    eventType = toHyphen(eventType); // covert the camel case to dash-style
-
-    // save the real event handler
-    attrs[`data-${eventType}-event-proxy`] = handlerName;
-
-    // save all arguments in dataSet
-    if (handlerArgs && handlerArgs.length > 0) {
-        attrs[`data-${eventType}-arguments-proxy`] = `{{[${handlerArgs}]}}`;
-
-        if (eventObjectAlias) {
-            attrs[`data-${eventType}-event-object-alias`] = eventObjectAlias;
-        }
-    }
-
-    if (eventModifiers.includes('self')) {
-        attrs[`data-${eventType}-modifier-self`] = true;
-    }
-
-    delete attrs[name];
-};
-
-/**
- * parse event name
- * eg:
- * `@click` -> bindtap
- * `@click.stop` -> catchtap
- * `@click.capture` -> capture-bindtap
- * `@click.capture.stop` -> capture-catchtap
- *
- * @param {string} name  attribute name
- * @return {Object} event type, new attribute name, event modifier
- */
-function parseEventName(name) {
-    let eventAttrName = name.replace(EVENT_REGEXP, '');
-    let [eventType, ...eventModifiers] = eventAttrName.split('.');
-    let eventMode = 'bind';
-
-    if (eventType === 'click') {
-        eventType = 'tap';
-    }
-
-    const includesStop = eventModifiers.includes('stop');
-    const includesCapture = eventModifiers.includes('capture');
-    if (includesCapture) {
-        eventMode = includesStop ? 'capture-catch:' : 'capture-bind:';
-    }
-    else if (includesStop) {
-        eventMode = 'catch';
-    }
-
-    eventAttrName = eventMode + eventType;
-
-    return {
-        eventType,
-        eventAttrName,
-        eventModifiers
-    };
-}
 
 /**
  * show warning log when parsing event name
@@ -189,3 +104,50 @@ function getRandomStringNotIn(string) {
     }
     return getRandomStringNotIn(string);
 }
+
+// 1. 使用正则将函数名和函数参数拆分开
+// 2. 给事件绑定事件代理函数__handlerProxy
+// 3. 将原函数名handleClick保存在data-tap-event-proxy中
+// 4. 使用正则解析函数参数
+// 5. 将函数参数中的event对象($event)转化为字符串标识，并且在代理函数中提取出event对象
+module.exports = function (attrs, name, tplOpts, parseEventName) {
+
+    // eventType, like 'tap'
+    // eventAttrName, like 'bindtap'
+    // eventModifier, like '[once,self]'
+    let {eventType, eventAttrName, eventModifiers} = parseEventName(name);
+
+    let handlerString = attrs[name].trim();
+
+    // match handleName and handle arguments
+    let {
+        handlerName = handlerString,
+        handlerArgs,
+        eventObjectAlias
+    } = parseHandlerByREGEXP(handlerString);
+
+    showEventNameLog(name, eventAttrName, eventModifiers, attrs, tplOpts);
+
+    // use __handlerProxy(in okam-core/base/component) to agent the event handler
+    attrs[eventAttrName] = '__handlerProxy';
+
+    eventType = toHyphen(eventType); // covert the camel case to dash-style
+
+    // save the real event handler
+    attrs[`data-${eventType}-event-proxy`] = handlerName;
+
+    // save all arguments in dataSet
+    if (handlerArgs && handlerArgs.length > 0) {
+        attrs[`data-${eventType}-arguments-proxy`] = `{{[${handlerArgs}]}}`;
+
+        if (eventObjectAlias) {
+            attrs[`data-${eventType}-event-object-alias`] = eventObjectAlias;
+        }
+    }
+
+    if (eventModifiers.includes('self')) {
+        attrs[`data-${eventType}-modifier-self`] = true;
+    }
+
+    delete attrs[name];
+};
