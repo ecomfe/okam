@@ -312,10 +312,6 @@ export default {
 
 ## 组件通信
 
-* 广播事件
-
-> TODO
-
 * 触发事件
 
 子组件触发事件，父组件进行事件接收，原生小程序 使用 ` this.triggerEvent('eventName', eventData);`，`okam` 框架使用 `$emit` 来进行事件触发。

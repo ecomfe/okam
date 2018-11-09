@@ -40,6 +40,8 @@
 
     * [Mixins支持](component/mixins.md)
 
+    * [Broadcast支持](component/broadcast.md)
+
 * 进阶
 
     * [分包加载](advance/subPackages.md)
