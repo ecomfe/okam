@@ -16,7 +16,7 @@ import * as na from 'core/na/index';
 import base from 'core/base/base';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
-import observable from 'core/extend/data/observable';
+import observable, {setPropDataKey} from 'core/extend/data/observable';
 import {fakeComponent} from 'test/helper';
 
 describe('observable', function () {
@@ -65,6 +65,8 @@ describe('observable', function () {
         component.selectComponent = rawSelectComponent;
         na.getCurrApp = rawGetCurrApp;
         na.env = base.$api = rawEnv;
+
+        setPropDataKey('data');
         expect.restoreSpies();
     });
 
@@ -622,6 +624,25 @@ describe('observable', function () {
         let spyNotifyWatcher = spyOn(instance.__dataObserver, 'notifyWatcher');
         instance.__dataObserver.firePropValueChange('b', 2, 3);
         expect(spyNotifyWatcher).toNotHaveBeenCalled();
+    });
+
+    it('should allow set property data key', function () {
+        MyApp.use(observable);
+        let instance = MyComponent({
+            props: {
+                b: Number
+            }
+        });
+
+        instance.propsData = {
+            b: 3
+        };
+        setPropDataKey('propsData');
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+        instance.created();
+
+        assert(instance.b === 3);
     });
 
     it('should update prop data when prop change', function (done) {
