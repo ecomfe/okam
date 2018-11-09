@@ -14,6 +14,13 @@ import nextTick from './nextTick';
 import {getSetDataPaths} from './setData';
 
 /**
+ * The component property data key
+ *
+ * @type {string}
+ */
+let propDataKey = 'data';
+
+/**
  * Make computed props observable
  *
  * @inner
@@ -56,7 +63,7 @@ function makePropsObservable(ctx) {
         return;
     }
 
-    let observer = new Observer(ctx, ctx.data, null, true);
+    let observer = new Observer(ctx, ctx[propDataKey] || {}, null, true);
     let propsObj = {};
 
     Object.keys(props).reduce((last, item) => {
@@ -123,6 +130,15 @@ function initProps(ctx, isPage) {
             propObserver && propObserver.firePropValueChange(p, newVal, oldVal);
         };
     });
+}
+
+/**
+ * Set the component property data key
+ *
+ * @param {string} key the prop data key
+ */
+export function setPropDataKey(key) {
+    key && (propDataKey = key);
 }
 
 export default {
