@@ -17,6 +17,7 @@ const FRAMEWORK_POLYFILL_BASE = FRAMEWORK_PATH_BASE + 'polyfill/';
 const FRAMEWORK_EXTEND_PATH = {
     data: {
         swan: 'extend/data/observable/swan/index',
+        ant: 'extend/data/observable/ant/index',
         default: 'extend/data/observable/index'
     },
     watch: 'extend/data/watch',
