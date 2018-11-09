@@ -88,6 +88,29 @@
  -`passive` 百度智能小程序事件中，没有相关功能。<br>
  -`once` 百度智能小程序尚不支持移除模板中的事件功能，如果通过转换之后在运行时实现不够优雅，未来可能会支持。<br>
 
+## 事件命名风格
+
+ 由于`支付宝`小程序，事件命名风格跟微信、百度小程序风格不一致，为了保证命名风格统一，要求原生事件名全小写，自定义组件避免触发跟原生事件同名的事件（忽略大小写情况下），下面列出来的是目前针对支付宝小程序会转换的原生事件，会自动将原生事件的命名风格转成支付宝的驼峰形式的命名风格：
+
+|声明的事件|转换后的事件名|
+|---|---|
+|tap|tap|
+|touchstart|touchStart|
+|touchmove|touchMove|
+|touchend|touchEnd|
+|touchcancel|touchCancel|
+|longtap|longTap|
+
+OKAM 开发模板语法：
+```
+<view @touchstart="handleTouchStart"></view>
+```
+
+转换成支付宝小程序的模板语法：
+```
+<view onTouchStart="__handlerProxy" data-touch-start-event-proxy="handleTouchStart"></view>
+```
+
 ## 参数传递
 
 **在事件被触发的时候，写在模板中的参数，会按照绑定的顺序传入事件处理函数中。**

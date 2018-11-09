@@ -5,6 +5,8 @@ Mixin 定义支持任何组件选项、生命周期钩子及其它自定义的�
 
 目前原生小程序只支持自定义组件的 `mixins` 配置（对应原生的 `behaviors` ），`okam` 框架把 Page 组件 和 自定义组件做了统一，都支持 `mixins` 的配置，底层对于自定义组件基于原生 `Behavior` 实现，对于 Page 组件则直接在框架层面进行实现。**注意：** 对于内建的 mixin，比如 `wx://form-field`，由于不同端支持未统一，框架层面也未提供相应的兼容实现，因此使用时候请谨慎。
 
+**注意：** `支付宝` 小程序目前未提供相应的内建 `mixin`，如果要多端兼容注意规避，其次支付宝的 `mixin` 策略跟 `微信` 和 `百度` 不同，要求多个 `mixin` 中的属性 `key` 要确保不同，否则会报错，即不同 `mixin` 在 `methods`、`data`、`props` 里彼此间不能存在同名的 `key`。
+
 ## Mixin 合并策略
 
 关于组件 `mixins` 策略，可以参考[微信官方文档](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html)。

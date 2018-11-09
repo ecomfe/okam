@@ -44,6 +44,16 @@
 
     * 微信小程序生产环境构建：`npm run prod:wx`
 
+* 支付宝小程序运行命令
+
+    * 微信小程序开发构建：`npm run dev:ant`
+
+    * 微信小程序：删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式：`npm run dev:ant:clean`
+
+    * 带 watch && 开发 Server 开发模式：`npm run dev:ant:server`
+
+    * 微信小程序生产环境构建：`npm run prod:ant`
+
 * 打开开发工具，打开项目构建目录：`开发工具` -> `打开` -> `<项目Root>/dist`
 
 * 等待开发工具编译，就可以看到预览效果
