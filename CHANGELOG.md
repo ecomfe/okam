@@ -1,5 +1,25 @@
 # ChangeLog
 
+## 0.3.0 (2018-11-09)
+
+### Bug Fixes
+
+* **okam-build:** fix ant prop data observe ([a1ea9fa](https://github.com/ecomfe/okam/commit/a1ea9fa))
+* **okam-core:** fix ant component prop data observe ([c061f88](https://github.com/ecomfe/okam/commit/c061f88))
+* **okam-core:** fix ant custom component event emit ([fc53d2f](https://github.com/ecomfe/okam/commit/fc53d2f))
+* **okam-core:** fix ant page onload data reference problem ([25b8eab](https://github.com/ecomfe/okam/commit/25b8eab))
+* **okam-core:** fix mixin source plain object reference ([c8d16e6](https://github.com/ecomfe/okam/commit/c8d16e6))
+* **okam-core:** fix triggerEvent none event detail case ([3581107](https://github.com/ecomfe/okam/commit/3581107))
+
+### Features
+
+* **okam-build:** add default babel parser options: {babelrc: false} ([7221830](https://github.com/ecomfe/okam/commit/7221830))
+* **okam-build:** add native swan component event handler adapter in okam ([410dbda](https://github.com/ecomfe/okam/commit/410dbda))
+* **okam-build:** disable transform click event to tap event for custom component ([60d098a](https://github.com/ecomfe/okam/commit/60d098a))
+* **okam-core:** add broadcast support ([9bba7a4](https://github.com/ecomfe/okam/commit/9bba7a4))
+* **okam-core:** add native swan component adapter to okam ([d1fa2ea](https://github.com/ecomfe/okam/commit/d1fa2ea))
+
+
 ## 0.3.0-alpha.0 (2018-11-05)
 
 ### Bug Fixes
