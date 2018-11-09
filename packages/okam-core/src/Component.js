@@ -1,5 +1,5 @@
 /**
- * @file Create component instance
+ * @file Create swan component instance
  * @author sparklewhy@gmail.com
  */
 
@@ -7,7 +7,7 @@
 
 import {createComponent} from './helper/factory';
 import {normalizeComponent} from './helper/component';
-import {normalizeEventArgs} from './helper/triggerEvent';
+import {normalizeEventArgs} from './swan/triggerEvent';
 import componentBase from './base/component';
 
 /**

@@ -1,5 +1,5 @@
 /**
- * @file Component props helper
+ * @file OKAM component props helper
  * @author sparklewhy@gmail.com
  */
 
@@ -69,21 +69,3 @@ export function normalizeOkamProps(props) {
     });
     return result;
 }
-
-/**
- * Normalize component props data using mini program syntax
- *
- * @param {Object} props the props data to normalize
- * @return {?Object}
- */
-export function normalizeProps(props) {
-    Object.keys(props).forEach(k => {
-        let propValue = props[k];
-        if (propValue && propValue.default !==  undefined) {
-            propValue.value = propValue.default;
-            delete propValue.default;
-        }
-    });
-    return props;
-}
-

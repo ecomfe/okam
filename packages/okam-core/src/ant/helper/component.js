@@ -5,7 +5,6 @@
 
 'use strict';
 
-import {normalizeProps} from '../../helper/props';
 import {normalizeMethods} from '../../helper/methods';
 
 /**
@@ -17,6 +16,24 @@ import {normalizeMethods} from '../../helper/methods';
 const EXTRA_NORMALIZE_METHODS = [
     'created', 'attached', 'ready', 'detached'
 ];
+
+/**
+ * Normalize component props data using mini program syntax
+ *
+ * @param {Object} props the props data to normalize
+ * @return {?Object}
+ */
+function normalizeProps(props) {
+    Object.keys(props).forEach(k => {
+        let propValue = props[k];
+        let defaultValue = null;
+        if (propValue && propValue.default !==  undefined) {
+            defaultValue = propValue.default;
+        }
+        props[k] = defaultValue;
+    });
+    return props;
+}
 
 /**
  * Normalize the component or behavior attribute names to native

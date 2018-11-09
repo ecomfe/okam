@@ -73,7 +73,7 @@ export default {
         /**
          * Emit custom component event
          *
-         * @param  {...any} args the event arguments
+         * @param {...any} args the event arguments
          */
         $emit(...args) {
             this.__beforeEmit && this.__beforeEmit(args);

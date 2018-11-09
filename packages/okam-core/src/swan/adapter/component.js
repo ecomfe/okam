@@ -5,7 +5,7 @@
 
 'use strict';
 
-import {normalizeEventArgs} from '../../helper/triggerEvent';
+import {normalizeEventArgs} from '../triggerEvent';
 
 /**
  * Emit custom component event
