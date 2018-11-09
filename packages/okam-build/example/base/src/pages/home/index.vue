@@ -80,6 +80,10 @@ export default {
                     {
                         subName: 'Behavior支持',
                         path: 'behavior/index',
+                    },
+                    {
+                        subName: '广播支持',
+                        path: 'broadcast/index',
                     }
                 ]
             },

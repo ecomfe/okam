@@ -24,7 +24,8 @@ export default {
             'pages/data/watch',
             'pages/todos/todoList',
             'pages/todos/counter',
-            'pages/behavior/index'
+            'pages/behavior/index',
+            'pages/broadcast/index'
         ],
         subPackages: [
             {
@@ -72,6 +73,12 @@ export default {
 
                 return res;
             }
+        }
+    },
+
+    broadcastEvents: {
+        broadcastEventC(e) {
+            console.log('receive broadcast event c in app...', e, this);
         }
     },
 

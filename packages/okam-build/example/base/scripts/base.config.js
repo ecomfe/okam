@@ -46,7 +46,7 @@ module.exports = {
         'data',
         'watch',
         ['behavior', '{useNativeBehavior: true}'],
-        // 'broadcast',
+        'broadcast',
         'redux',
         'ref'
     ],
