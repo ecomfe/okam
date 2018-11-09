@@ -9,7 +9,7 @@
 <view @click="handleClick">按钮</view>
 ```
 
-最常见的`click`事件，会被映射为百度智能小程序中的`bindtap`。其他事件映射关系没有变化。
+最常见的`click`事件，会被映射为百度智能小程序中的`bindtap`。其他事件映射关系没有变化。**注意：** 此映射主要针对原生组件，对于自定义组件不会自动映射到 `tap` 事件。
 
 ## 修饰符
 
@@ -124,15 +124,15 @@
         <view @click="handleClick(hello, 'hello', 123, true)">Hello World</view>
     </view>
     ```
-    
+
     也支持传入`for`循环时的索引及变量：
     ```html
     <view for="item in [1,2,3]" @click="handleFor(item)">click me</view>
     ```
 
     **请注意，变量取值是在事件触发的时候传入，而不是在事件绑定的时候。**
-    
-    
+
+
 
 * `$event` 事件参数
 
