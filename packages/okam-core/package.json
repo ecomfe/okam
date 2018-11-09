@@ -1,6 +1,6 @@
 {
   "name": "okam-core",
-  "version": "0.3.0-alpha.0",
+  "version": "0.3.0",
   "description": "The extension for small program framework",
   "main": "index.js",
   "keywords": [
