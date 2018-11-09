@@ -10,6 +10,15 @@ const transformEvent = require('../../transform/base/event');
 const {EVENT_REGEXP} = require('../../transform/base/constant');
 const {transformMiniProgramEventType} = require('./event-helper');
 
+const NATIVE_EVENT_MAP = {
+    'tap': 'tap',
+    'touchstart': 'touchStart',
+    'touchmove': 'touchMove',
+    'touchend': 'touchEnd',
+    'touchcancel': 'touchCancel',
+    'longtap': 'longTap'
+};
+
 /**
  * Parse event bind information
  *
@@ -39,6 +48,11 @@ function parseEventName(name, element, tplOpts, opts) {
     }
     else if (includesStop) {
         eventMode = 'catch';
+    }
+
+    let nativeEvent = NATIVE_EVENT_MAP[eventType.toLowerCase()];
+    if (nativeEvent) {
+        eventType = nativeEvent;
     }
 
     let formatEventType = eventType.charAt(0).toUpperCase() + eventType.substr(1);
