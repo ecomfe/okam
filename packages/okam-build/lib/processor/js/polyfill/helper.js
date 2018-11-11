@@ -43,6 +43,7 @@ exports.importLocalPolyfill = function (name, path, state, t) {
     if (name === false) {
         name = importName;
     }
+
     if (!shouldPolyfill(importName, name, path)) {
         return;
     }

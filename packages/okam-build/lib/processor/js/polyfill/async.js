@@ -20,6 +20,32 @@ module.exports = function ({types: t}) {
              */
             AwaitExpression(path, state) {
                 importLocalPolyfill(false, path, state, t);
+            },
+
+            /**
+             * Process `async xxx` expression
+             *
+             * @param {Object} path the node path
+             * @param {Object} state the plugin state
+             */
+            FunctionExpression(path, state) {
+                let node = path.node;
+                if (node.async) {
+                    importLocalPolyfill(false, path, state, t);
+                }
+            },
+
+            /**
+             * Process `async xxx() {}` object member
+             *
+             * @param {Object} path the node path
+             * @param {Object} state the plugin state
+             */
+            ObjectMember(path, state) {
+                let node = path.node;
+                if (node.async) {
+                    importLocalPolyfill(false, path, state, t);
+                }
             }
         }
     };
