@@ -1,5 +1,5 @@
 /**
- * @file Transform ant for key syntax
+ * @file Transform toutiao for key syntax
  * @author sparklewhy@gmail.com
  */
 
@@ -9,7 +9,7 @@ const transformKey = require('../base/key');
 
 module.exports = function (attrs, name, tplOpts, opts) {
     transformKey(attrs, name, tplOpts, Object.assign({
-        forItemDirectiveName: 'a:for-item',
-        forKeyDirectiveName: 'a:key'
+        forItemDirectiveName: 'tt:for-item',
+        forKeyDirectiveName: 'tt:key'
     }, opts));
 };

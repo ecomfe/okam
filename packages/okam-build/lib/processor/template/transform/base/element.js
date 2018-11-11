@@ -9,6 +9,7 @@
 /* eslint-disable fecs-min-vars-per-destructure */
 
 const forIfTransformer = require('./for-if');
+const transformTplElement = require('./tpl');
 const {CONDITION_DIRECTIVES} = require('./constant');
 
 function transformIncludeImportElement(element, tplOpts) {
@@ -20,10 +21,6 @@ function transformIncludeImportElement(element, tplOpts) {
         // change included tpl file path extname to mini program template extname
         attrs.src = src.replace(/\.\w+$/, '.' + tplExtname);
     }
-}
-
-function transformTplElement(element) {
-    element.name = 'template';
 }
 
 module.exports = {

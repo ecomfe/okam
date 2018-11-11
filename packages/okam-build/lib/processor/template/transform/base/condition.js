@@ -7,15 +7,33 @@
 
 'use strict';
 
-module.exports = function (conditionMap, attrs, name, tplOpts) {
+/**
+ * Transform condition syntax, e.g, if/if-else/else
+ *
+ * @param {Object} attrs the attrs of the element
+ * @param {string} name the data binding attribute name
+ * @param {Object} tplOpts the template transform options
+ * @param {Object=} opts the transformation plugin options
+ * @param {boolean=} opts.wrapCondition whether wrap the condition attribute value
+ *        using variable syntax, e.g., if='a>3' => if="{{a>3}}",
+ *        if wrapVariable is true
+ * @param {Object} opts.syntaxMap the okam condition syntax map that map to the
+ *        specified app type condition syntax
+ */
+module.exports = function (attrs, name, tplOpts, opts) {
     const {logger, file} = tplOpts;
-    const newName = conditionMap[name];
+    const {syntaxMap, wrapCondition = false} = opts;
+    const newName = syntaxMap[name];
 
     if (attrs.hasOwnProperty(newName)) {
         logger.warn(`${file.path} template attribute ${name} is conflicted with ${newName}`);
     }
 
-    attrs[newName] = attrs[name];
+    let value = attrs[name];
+    if (wrapCondition) {
+        value = `{{${value}}}`;
+    }
+    attrs[newName] = value;
 
     delete attrs[name];
 };

@@ -6,20 +6,42 @@
 
 'use strict';
 
-const BRACKET_REGEXP = require('./constant').BRACKET_REGEXP;
+const {FOR_ITEM_INDEX_REGEXP, BRACKET_REGEXP} = require('./constant');
 
-module.exports = function (forDirectionName, attrs, name, tplOpts) {
+module.exports = function (attrs, name, tplOpts, opts) {
     let {logger, file} = tplOpts;
+    let {forDirectionName, supportForAbbr = false} = opts;
     let newName = forDirectionName;
     let newValue = attrs[name].replace(BRACKET_REGEXP, '');
 
     newValue = transformNumberToArray(newValue);
     newValue = transformOfToIn(newValue);
+    newValue = newValue.trim();
 
     if (attrs.hasOwnProperty(newName)) {
         logger.warn(`${file.path} template attribute ${name} is conflicted with ${newName}`);
     }
     delete attrs[name];
+
+    if (!supportForAbbr) {
+        let {forItemDirectiveName, forIndexDirectiveName} = opts;
+        let result = FOR_ITEM_INDEX_REGEXP.exec(newValue);
+        if (result) {
+            let args = result[1];
+            let arrVarName = result[2];
+            newValue = arrVarName.trim();
+
+            args = args.split(',');
+            let itemName = args[0].trim();
+            let indexName = args[1];
+            attrs[forItemDirectiveName] = itemName;
+            indexName && (attrs[forIndexDirectiveName] = indexName.trim());
+        }
+
+        if (newValue) {
+            newValue = `{{ ${newValue} }}`;
+        }
+    }
 
     attrs[newName] = newValue;
 };

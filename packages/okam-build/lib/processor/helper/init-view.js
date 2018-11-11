@@ -19,12 +19,14 @@ const BUILTIN_PLUGINS = {
     syntax: {
         wx: path.join(PLUGIN_BASE_NAME, 'wx-syntax-plugin'),
         swan: path.join(PLUGIN_BASE_NAME, 'swan-syntax-plugin'),
-        ant: path.join(PLUGIN_BASE_NAME, 'ant-syntax-plugin')
+        ant: path.join(PLUGIN_BASE_NAME, 'ant-syntax-plugin'),
+        tt: path.join(PLUGIN_BASE_NAME, 'tt-syntax-plugin')
     },
     eventSyntax: {
         wx: path.join(PLUGIN_BASE_NAME, 'event', 'wx-event-plugin'),
         swan: path.join(PLUGIN_BASE_NAME, 'event', 'swan-event-plugin'),
-        ant: path.join(PLUGIN_BASE_NAME, 'event', 'ant-event-plugin')
+        ant: path.join(PLUGIN_BASE_NAME, 'event', 'ant-event-plugin'),
+        tt: path.join(PLUGIN_BASE_NAME, 'event', 'tt-event-plugin')
     },
     html: path.join(PLUGIN_BASE_NAME, 'html-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')

@@ -14,6 +14,7 @@ exports.EVENT_REGEXP = /^@/;
 exports.EVENT_HANDLE_REGEXP = /^(\w+)\s*(?:\((.+)?\))?$/;
 exports.VARIABLE_EVENT = /([^'])\$event([^'])/g;
 exports.PLAIN_OBJECT_REGEXP = /^{.*}$/;
+exports.FOR_ITEM_INDEX_REGEXP = /^(.+)\s+in\s+(.+)$/;
 
 exports.CONDITION_DIRECTIVES = ['if', 'elif', 'else-if', 'else'];
 

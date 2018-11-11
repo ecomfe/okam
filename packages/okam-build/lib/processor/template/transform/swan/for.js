@@ -5,6 +5,11 @@
 
 'use strict';
 
-const transformer = require('../base/for');
+const transformFor = require('../base/for');
 
-module.exports = transformer.bind(this, 's-for');
+module.exports = function (attrs, name, tplOpts, opts) {
+    transformFor(attrs, name, tplOpts, Object.assign({
+        forDirectionName: 's-for',
+        supportForAbbr: true
+    }, opts));
+};

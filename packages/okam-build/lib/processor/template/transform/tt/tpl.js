@@ -1,5 +1,5 @@
 /**
- * @file Transform ant tpl syntax
+ * @file Transform toutiao tpl syntax
  * @author sparklewhy@gmail.com
  */
 

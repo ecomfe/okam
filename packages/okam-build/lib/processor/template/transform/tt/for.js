@@ -1,5 +1,5 @@
 /**
- * @file Transform wx for syntax
+ * @file Transform toutiao for syntax
  * @author sparklewhy@gmail.com
  */
 
@@ -9,8 +9,8 @@ const transformFor = require('../base/for');
 
 module.exports = function (attrs, name, tplOpts, opts) {
     transformFor(attrs, name, tplOpts, Object.assign({
-        forDirectionName: 'wx:for',
-        forItemDirectiveName: 'wx:for-item',
-        forIndexDirectiveName: 'wx:for-index'
+        forDirectionName: 'tt:for',
+        forItemDirectiveName: 'tt:for-item',
+        forIndexDirectiveName: 'tt:for-index'
     }, opts));
 };

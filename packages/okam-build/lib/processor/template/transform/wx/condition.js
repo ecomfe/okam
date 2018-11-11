@@ -5,7 +5,7 @@
 
 'use strict';
 
-const transformer = require('../base/condition');
+const transformCondition = require('../base/condition');
 
 const CONDITION_MAP = {
     'if': 'wx:if',
@@ -14,13 +14,9 @@ const CONDITION_MAP = {
     'else': 'wx:else'
 };
 
-module.exports = function (attrs, name, tplOpts) {
-    transformer(CONDITION_MAP, attrs, name, tplOpts);
-
-    let newName = CONDITION_MAP[name];
-    let value = attrs[newName];
-    if (typeof value === 'string' && value) {
-        value = `{{${value}}}`;
-    }
-    attrs[newName] = value;
+module.exports = function (attrs, name, tplOpts, opts) {
+    transformCondition(attrs, name, tplOpts, Object.assign({
+        syntaxMap: CONDITION_MAP,
+        wrapCondition: true
+    }, opts));
 };

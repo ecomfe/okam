@@ -122,6 +122,9 @@ exports.getBaseId = function (appType, baseName) {
     else if (appType === 'wx') {
         baseId += 'wx/';
     }
+    else if (appType === 'tt') {
+        baseId += 'tt/';
+    }
 
     return baseId + baseName;
 };

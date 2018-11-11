@@ -1,5 +1,5 @@
 /**
- * @file Weixin mini program syntax transformer
+ * @file Toutiao mini program syntax transformer
  * @author sparklewhy@gmail.com
  */
 

@@ -1,9 +1,5 @@
 /**
- * @file Transform swan condition syntax
- * if   -> s-if
- * elif -> s-elif
- * else-if  ->  s-elif
- * else -> s-else
+ * @file Transform toutiao condition syntax
  * @author sparklewhy@gmail.com
  */
 
@@ -12,14 +8,15 @@
 const transformCondition = require('../base/condition');
 
 const CONDITION_MAP = {
-    'if': 's-if',
-    'elif': 's-elif',
-    'else-if': 's-elif',
-    'else': 's-else'
+    'if': 'tt:if',
+    'elif': 'tt:elif',
+    'else-if': 'tt:elif',
+    'else': 'tt:else'
 };
 
 module.exports = function (attrs, name, tplOpts, opts) {
     transformCondition(attrs, name, tplOpts, Object.assign({
-        syntaxMap: CONDITION_MAP
+        syntaxMap: CONDITION_MAP,
+        wrapCondition: true
     }, opts));
 };

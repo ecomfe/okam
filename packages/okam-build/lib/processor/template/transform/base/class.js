@@ -16,8 +16,9 @@
 
 const {PLAIN_OBJECT_REGEXP, SQUARE_BRACKETS_REGEXP} = require('./constant');
 
-module.exports = function (attrs, name, tplOpts, arrToStr = false) {
+module.exports = function (attrs, name, tplOpts, opts) {
     let value = attrs[name];
+    let arrToStr = opts && opts.arrToStr;
     if (typeof value === 'string') {
         value = value.trim();
     }

@@ -6,15 +6,31 @@
 
 'use strict';
 
-const DATA_BIND_REGEXP = require('./constant').DATA_BIND_REGEXP;
+const {PLAIN_OBJECT_REGEXP, DATA_BIND_REGEXP} = require('./constant');
 
-// :attr=value   ->    attr={{value}}
-module.exports = function (attrs, name, tplOpts) {
+/**
+ * Transform data binding syntax
+ *
+ * @param {Object} attrs the attrs of the element
+ * @param {string} name the data binding attribute name
+ * @param {Object} tplOpts the template transform options
+ * @param {Object=} opts the transformation plugin options
+ * @param {boolean=} opts.tripleBrace whether wrap the object data using triple
+ *        brace, e.g., :obj='{a: 3}' => obj="{{{a: 3}}}", if tripleBrace is true
+ */
+module.exports = function (attrs, name, tplOpts, opts) {
     let {logger, file} = tplOpts;
+    let tripleBrace = opts && opts.tripleBrace;
     let newName = name.replace(DATA_BIND_REGEXP, '');
     let value = attrs[name];
     if (typeof value === 'string') {
-        value = '{{' + value.trim() + '}}';
+        value = value.trim();
+        if (!tripleBrace && PLAIN_OBJECT_REGEXP.test(value)) {
+            value = `{${value}}`;
+        }
+        else {
+            value = `{{${value}}}`;
+        }
     }
 
     if (attrs.hasOwnProperty(newName)) {

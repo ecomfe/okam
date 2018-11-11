@@ -16,6 +16,9 @@
     "dev:ant": "cross-env NODE_ENV=dev node scripts/build.js --watch --type ant",
     "dev:ant:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch --type ant",
     "dev:ant:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean --type ant",
+    "dev:tt": "cross-env NODE_ENV=dev node scripts/build.js --watch --type tt",
+    "dev:tt:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch --type tt",
+    "dev:tt:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean --type tt",
     "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
     "dev:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server"
   },
