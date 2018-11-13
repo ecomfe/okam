@@ -12,62 +12,29 @@ import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
 import MyPage from 'core/Page';
-import * as na from 'core/na/index';
-import base from 'core/base/base';
-import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
-import observable, {setPropDataKey} from 'core/extend/data/observable';
-import {fakeComponent} from 'test/helper';
+import {setObservableContext} from 'core/extend/data/observable';
+import observable from 'core/extend/data/observable/wx';
+import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
 describe('observable', function () {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
-    const rawSelectComponent = component.selectComponent;
-
     let MyComponent;
+    let restoreAppEnv;
 
     beforeEach('init global App', function () {
         clearBaseCache();
 
         MyComponent = fakeComponent();
-
-        global.swan = {
-            getSystemInfo() {},
-            request() {},
-            createSelectorQuery() {
-                return {
-                    select(path) {
-                        return path;
-                    }
-                };
-            }
-        };
-
-        component.selectComponent = function (path) {
-            return 'c' + path;
-        };
-
-        na.getCurrApp = function () {
-            return {};
-        };
-        na.env = base.$api = global.swan;
-
-        global.Page = function (instance) {
-            return instance;
-        };
+        restoreAppEnv = fakeAppEnvAPIs('wx');
     });
 
     afterEach('clear global App', function () {
         MyComponent = undefined;
+        restoreAppEnv();
 
-        global.Page = undefined;
-        global.swan = undefined;
-        component.selectComponent = rawSelectComponent;
-        na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
-
-        setPropDataKey('data');
         expect.restoreSpies();
+
+        setObservableContext('data', false);
     });
 
     it('should support Vue data access way', () => {
@@ -212,7 +179,7 @@ describe('observable', function () {
 
         let component = MyComponent({
             methods: {
-                afterObserverInit: spyAfterObserverInit
+                __afterObserverInit: spyAfterObserverInit
             }
         });
 
@@ -637,7 +604,7 @@ describe('observable', function () {
         instance.propsData = {
             b: 3
         };
-        setPropDataKey('propsData');
+        setObservableContext('propsData');
         let spySetData = createSpy(() => {});
         instance.setData = spySetData;
         instance.created();
