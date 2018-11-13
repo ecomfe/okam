@@ -18,7 +18,7 @@ const FRAMEWORK_EXTEND_PATH = {
     data: {
         swan: 'extend/data/observable/swan/index',
         ant: 'extend/data/observable/ant/index',
-        default: 'extend/data/observable/index'
+        wx: 'extend/data/observable/wx/index'
     },
     watch: 'extend/data/watch',
     broadcast: 'extend/broadcast',
