@@ -5,4 +5,5 @@ test/example/
 test/test.js
 wx_dist
 ant_dist
+tt_dist
 node_modules
