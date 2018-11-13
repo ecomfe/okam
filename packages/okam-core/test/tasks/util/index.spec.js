@@ -90,6 +90,23 @@ describe('App', () => {
         let fObj2 = Object.create(fObj);
         definePropertyValue(fObj2, 'c', 12);
         assert(fObj2.c === 12);
+
+        let obj3 = {};
+        let val = 8;
+        Object.defineProperty(obj3, 'h', {
+            get() {
+                return val;
+            },
+            set(newVal) {
+                val = newVal;
+            }
+        });
+        definePropertyValue(obj3, 'h', 12);
+        assert(obj3.h === 12);
+        definePropertyValue(obj3, 'k', 6);
+        assert(obj3.k === 6);
+        definePropertyValue(obj3, 'k', 23);
+        assert(obj3.k === 23);
     });
 
     it('isPromise', () => {

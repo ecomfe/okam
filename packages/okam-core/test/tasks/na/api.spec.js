@@ -8,26 +8,12 @@
 import assert from 'assert';
 import expect, {spyOn, createSpy} from 'expect';
 import {promisify, promisifyApis, interceptApis} from 'core/na/api';
-import {setApis, getApis} from 'core/na/api';
-import {env} from 'core/na/index';
 import {isPromise} from '../../helper';
 
 describe('na/api', function () {
 
     afterEach(() => {
         expect.restoreSpies();
-    });
-
-    it('should return default native api', function () {
-        assert(getApis() === env);
-    });
-
-    it('should allow set default native api', function () {
-        let myApi = {};
-        setApis(null);
-        assert(getApis() === env);
-        setApis(myApi);
-        assert(getApis() === myApi);
     });
 
     it('should call promisify api with default context', function () {
@@ -99,7 +85,7 @@ describe('na/api', function () {
         });
 
         assert.throws(() => promisifyApis(['api', 'api2'], ctx), function (err) {
-            return err.toString().indexOf('Cannot redefine property') !== -1;
+            return err.toString().indexOf('which has only a getter') !== -1;
         });
 
         let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
@@ -246,7 +232,7 @@ describe('na/api', function () {
         let spyApi3Init = spyOn(interceptConf.api3, 'init').andCallThrough();
 
         assert.throws(() => interceptApis(interceptConf, '$api', ctx), function (err) {
-            return err.toString().indexOf('Cannot redefine property') !== -1;
+            return err.toString().indexOf('which has only a getter') !== -1;
         });
 
         ctx.$api.api({});

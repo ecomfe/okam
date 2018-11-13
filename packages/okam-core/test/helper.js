@@ -10,6 +10,7 @@ import expect, {spyOn} from 'expect';
 import CoreComponent from 'core/Component';
 import AntCoreComponent from 'core/ant/Component';
 import * as na from 'core/na/index';
+import base from 'core/base/base';
 
 const PATH_PREFIX_REGEX = /^\w+\./;
 
@@ -127,6 +128,7 @@ export function fakeAntComponent() {
 export function fakeAppEnvAPIs(appType) {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
+    const rawApi = base.$api;
     const rawApp = global[appType];
 
     global[appType] = {
@@ -152,11 +154,13 @@ export function fakeAppEnvAPIs(appType) {
         return {};
     };
     na.env = global[appType];
+    base.$api = Object.create(global[appType]);
 
     return () => {
         global[appType] = rawApp;
         global.Page = undefined;
         na.getCurrApp = rawGetCurrApp;
+        base.$api = rawApi;
         na.env = rawEnv;
     };
 }
