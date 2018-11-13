@@ -3,7 +3,7 @@
  * @author sparklewhy@gmail.com
  */
 
-import {isFunction, isObject, isPromise} from '../util/index';
+import {isFunction, isObject, isPromise, definePropertyValue} from '../util/index';
 import {env} from './index';
 
 let myPromisifyApis;
@@ -75,14 +75,15 @@ export function promisifyApis(apis, context) {
         apis = [apis];
     }
 
+    let allApis = context.$api;
     apis.forEach(key => {
-        let api = context.$api[key];
+        let api = allApis[key];
 
         if (!api) {
             return;
         }
 
-        context.$api[key] = promisify(api, context.$api);
+        definePropertyValue(allApis, key, promisify(api, context.$api));
     });
 }
 
@@ -170,7 +171,11 @@ export function interceptApis(apis, key, ctx) {
     Object.keys(apis).forEach(apiName => {
         let rawApi = allApis[apiName];
         if (rawApi) {
-            allApis[apiName] = proxyAPI.bind(null, ctx, rawApi, apis[apiName]);
+            definePropertyValue(
+                allApis,
+                apiName,
+                proxyAPI.bind(null, ctx, rawApi, apis[apiName])
+            );
         }
     });
 }

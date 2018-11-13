@@ -6,8 +6,7 @@
 'use strict';
 
 import base from './base';
-import {promisifyApis, interceptApis} from '../na/api';
-import {getApis, setApis} from '../na/api';
+import {getApis, setApis, promisifyApis, interceptApis} from '../na/api';
 
 /**
  * Initialize promisify APIs and interception APIs.
@@ -30,7 +29,7 @@ function initApis() {
             || (interceptAPis && Object.keys(interceptAPis).length)
         ) {
             // create new apis to ami to override existed apis
-            apis = Object.assign({}, apis);
+            apis = Object.create(apis);
             setApis(apis);
         }
         this.$api = apis;
