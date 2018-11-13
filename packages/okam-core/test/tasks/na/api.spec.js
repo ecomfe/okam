@@ -99,7 +99,7 @@ describe('na/api', function () {
         });
 
         assert.throws(() => promisifyApis(['api', 'api2'], ctx), function (err) {
-            return err.toString().indexOf('which has only a getter') !== -1;
+            return err.toString().indexOf('Cannot redefine property') !== -1;
         });
 
         let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
@@ -246,7 +246,7 @@ describe('na/api', function () {
         let spyApi3Init = spyOn(interceptConf.api3, 'init').andCallThrough();
 
         assert.throws(() => interceptApis(interceptConf, '$api', ctx), function (err) {
-            return err.toString().indexOf('which has only a getter') !== -1;
+            return err.toString().indexOf('Cannot redefine property') !== -1;
         });
 
         ctx.$api.api({});
