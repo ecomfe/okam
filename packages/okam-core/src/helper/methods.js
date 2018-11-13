@@ -18,7 +18,7 @@ const extendPropMethods = [
 ];
 
 /**
- * Normalize extended property
+ * Normalize extended property: convert the extended prop to methods prop
  *
  * @param {Object} component the component instance
  * @param {string} propName the extended property name

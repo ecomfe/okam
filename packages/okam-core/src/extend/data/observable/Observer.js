@@ -47,11 +47,12 @@ export function proxyObject(observer, data, root) {
  *
  * @param {Observer} observer the observer to observe array
  * @param {Array} arr the array data to proxy
+ * @param {boolean} isPage whether is page component
  * @return {Array}
  */
-export function proxyArray(observer, arr) {
+export function proxyArray(observer, arr, isPage) {
     let newArr = [];
-    makeArrayObservable(newArr, observer);
+    makeArrayObservable(newArr, observer, isPage);
 
     // XXX: copy array
     // we cannot proxy array element visited by index, so we should not proxy array element by default
@@ -83,6 +84,41 @@ export default class Observer {
         this.observableData = this.isArray ? [] : {};
         this.paths = paths || [];
         this.selector = getDataSelector(this.paths);
+    }
+
+    /**
+     * Set context data
+     *
+     * @private
+     * @param {*} value the value to set
+     */
+    setContextData(value) {
+        let paths = this.paths;
+        let result = this.ctx.data;
+        let lastIdx = paths.length - 1;
+        for (let i = 0; i < lastIdx; i++) {
+            let p = paths[i];
+            result = result[p];
+        }
+
+        /* istanbul ignore next */
+        if (lastIdx >= 0) {
+            result[paths[lastIdx]] = value;
+        }
+    }
+
+    /**
+     * Get context data
+     *
+     * @return {*}
+     */
+    getContextData() {
+        let paths = this.paths;
+        let result = this.ctx.data;
+        for (let i = 0, len = paths.length; i < len; i++) {
+            result = result[paths[i]];
+        }
+        return result;
     }
 
     /**
@@ -121,7 +157,7 @@ export default class Observer {
         if (Array.isArray(value)) {
             paths || (paths = this.getPaths(k));
             let observer = new Observer(ctx, value, paths, this.isProps);
-            return (observeData[k] = proxyArray(observer, value));
+            return (observeData[k] = proxyArray(observer, value, ctx.$isPage));
         }
         else if (value && typeof value === 'object') {
             paths || (paths = this.getPaths(k));
@@ -188,6 +224,9 @@ export default class Observer {
             }
 
             this.rawData[k] = val;
+        }
+        else {
+            this.setContextData(this.rawData);
         }
 
         this.ctx.$setData({[selector]: val});

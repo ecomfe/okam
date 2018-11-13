@@ -5,6 +5,13 @@
 
 'use strict';
 
+const hasProto = '__proto__' in {};
+
+/**
+ * The default override Array APIs to proxy array data update
+ *
+ * @type {Object}
+ */
 export const observableArray = {
     push(observer, rawPush, ...items) {
         let rawData = observer.rawData;
@@ -81,6 +88,37 @@ export const observableArray = {
 };
 
 /**
+ * The Page Array APIs to override
+ *
+ * @inner
+ * @type {Object}
+ */
+let overridePageArrApis = observableArray;
+
+/**
+ * The component Array APIs to override
+ *
+ * @inner
+ * @type {Object}
+ */
+let overrideComponentArrApis = observableArray;
+
+/**
+ * Extend the array operation methods
+ *
+ * @param {Object} arrApis the array methods to override
+ * @param {boolean} isPage whether is page Array APIs to override
+ */
+export function overrideArrayMethods(arrApis, isPage) {
+    if (isPage) {
+        overridePageArrApis = arrApis;
+    }
+    else {
+        overrideComponentArrApis = arrApis;
+    }
+}
+
+/**
  * Update array item value
  *
  * @param {Observer} observer the observer
@@ -103,41 +141,34 @@ function getArrayItem(observer, idx) {
     return observer.get(idx);
 }
 
-let overrideArrApis = observableArray;
-
-/**
- * Extend the array operation methods
- *
- * @param {Object} extension the array method extension
- * @param {boolean} isOverride whether override default array extend apis,
- *        by default false, for test purpose
- */
-export function extendArrayMethods(extension, isOverride) {
-    /* istanbul ignore next */
-    if (isOverride) {
-        overrideArrApis = extension;
-    }
-    else {
-        /* istanbul ignore next */
-        Object.assign(overrideArrApis, extension);
-    }
-}
-
 /**
  * Make array observable
  *
  * @param {Array} arr the array to observe
  * @param {Observer} observer the observer
+ * @param {boolean} isPage whether is page Array APIs to override
  * @return {Array}
  */
-export default function makeArrayObservable(arr, observer) {
+export default function makeArrayObservable(arr, observer, isPage) {
+    let arrayMethods;
+    /* istanbul ignore next */
+    if (hasProto) {
+        arrayMethods = Object.create(Array.prototype);
+        /* eslint-disable no-proto */
+        arr.__proto__ = arrayMethods;
+    }
+    else {
+        arrayMethods = arr;
+    }
+
+    let overrideArrApis = isPage ? overridePageArrApis : overrideComponentArrApis;
     Object.keys(overrideArrApis).forEach(method => {
-        let rawMethod = arr[method];
-        arr[method] = overrideArrApis[method].bind(arr, observer, rawMethod);
+        let rawMethod = arrayMethods[method];
+        arrayMethods[method] = overrideArrApis[method].bind(arr, observer, rawMethod);
     });
 
-    arr.setItem = updateArrayItem.bind(arr, observer);
-    arr.getItem = getArrayItem.bind(arr, observer);
+    arrayMethods.setItem = updateArrayItem.bind(arr, observer);
+    arrayMethods.getItem = getArrayItem.bind(arr, observer);
 
     return arr;
 }
