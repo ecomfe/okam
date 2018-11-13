@@ -125,8 +125,12 @@ export function isPropertyWritable(obj, name) {
  */
 export function definePropertyValue(obj, name, value) {
     let desc = Object.getOwnPropertyDescriptor(obj, name);
-    desc || (desc = {enumerable: true, configurable: true});
+    if (desc && !desc.configurable) {
+        obj[name] = value;
+        return;
+    }
 
+    desc || (desc = {enumerable: true, configurable: true});
     if (desc.get) {
         desc.get = () => value;
     }

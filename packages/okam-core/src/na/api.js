@@ -4,27 +4,6 @@
  */
 
 import {isFunction, isObject, isPromise, definePropertyValue} from '../util/index';
-import {env} from './index';
-
-let myPromisifyApis;
-
-/**
- * Get mini program APIs
- *
- * @return {Object}
- */
-export function getApis() {
-    return myPromisifyApis || env;
-}
-
-/**
- * Set mini program APIs
- *
- * @param {Object} apis the apis to set
- */
-export function setApis(apis) {
-    myPromisifyApis = apis;
-}
 
 /**
  * Promisify the given function.

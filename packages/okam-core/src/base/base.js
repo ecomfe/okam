@@ -18,6 +18,11 @@ export default {
     $na: na,
 
     /**
+     * The native API
+     */
+    $api: Object.create(na.env),
+
+    /**
      * The global object
      *
      * @type {Object}

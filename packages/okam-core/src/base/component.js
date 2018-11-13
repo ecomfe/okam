@@ -7,7 +7,6 @@
 
 import {env, getCurrApp} from '../na/index';
 import EventListener from '../util/EventListener';
-import {getApis} from '../na/api';
 import base from './base';
 
 export default {
@@ -21,7 +20,6 @@ export default {
         // cannot call setData
         Object.assign(this, base);
         this.$app = getCurrApp();
-        this.$api = getApis();
 
         this.$listener = new EventListener();
 
