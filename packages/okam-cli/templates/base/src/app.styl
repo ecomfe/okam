@@ -1,0 +1,27 @@
+/**
+ * @file The app entry style
+ * @author ${author|raw}
+ */
+
+<% if: ${style} === 'stylus' %>
+
+<% if: ${h5tag} %>
+.okam-inline
+    display: inline
+<% /if %>
+.page-footer
+    position: absolute
+    bottom: 80px
+    text-align: center
+<% else %>
+<% if: ${h5tag} %>
+.okam-inline {
+    display: inline
+}
+<% /if %>
+.page-footer {
+    position: absolute;
+    bottom: 80px;
+    text-align: center;
+}
+<% /if %>

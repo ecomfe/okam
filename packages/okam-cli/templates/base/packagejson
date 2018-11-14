@@ -1,0 +1,75 @@
+{
+  "private": true,
+  "name": "${projectName}",
+  "version": "0.1.0",
+  "description": "${description}",
+  "main": "index.js",
+  "scripts": {
+    <% if: ${lint} === 'fecs' %>
+    "lint": "fecs ./src --reporter=baidu --rule --type=${sfcExt},js",
+    <% /if %>
+    <% if: ${lint} === 'eslint' %>
+    "lint": "eslint src",
+    <% /if %>
+    "build": "cross-env NODE_ENV=dev node scripts/build.js --clean",
+    "prod": "node scripts/build.js --clean",
+    "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
+    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
+    "dev:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server",
+    "dev:wx": "cross-env NODE_ENV=dev node scripts/build.js --watch --type wx",
+    "dev:wx:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server --type wx",
+    "dev:wx:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean --type wx",
+    "prod:wx": "node scripts/build.js --clean --type wx",
+    "dev:ant": "cross-env NODE_ENV=dev node scripts/build.js --watch --type ant",
+    "dev:ant:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server --type ant",
+    "dev:ant:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean --type ant",
+    "prod:ant": "node scripts/build.js --clean --type ant"
+  },
+  <% if: ${lint} !== 'lintnone' %>
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  <% /if %>
+  <% if: ${lint} === 'fecs' %>
+  "lint-staged": {
+    "linters": {
+      "*.{js,${sfcExt}}": [
+        "fecs --reporter=baidu --rule --type=${sfcExt},js"
+      ]
+    },
+    "ignore": [
+      "dist/**/*"
+    ]
+  },
+  <% /if %>
+  <% if: ${lint} === 'eslint' %>
+  "lint-staged": {
+    "linters": {
+      "*.{js,${sfcExt}}": [
+        "eslint --fix",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "dist/**/*"
+    ]
+  },
+  <% /if %>
+  "author": "${author|raw}",
+  "devDependencies": {
+    <% var: len = ${devDeps.length} - 1 %>
+    <% for: ${devDeps} as ${devDep}, ${idx} %>
+    "${devDep.name}": "^${devDep.version}"<% if: ${idx} !== ${len} %>,
+    <% /if %>
+    <% /for %>
+
+  },
+  "engine": {
+    "node": ">= 8"
+  },
+  "dependencies": {
+    "okam-core": "^${coreVersion}"
+  }
+}

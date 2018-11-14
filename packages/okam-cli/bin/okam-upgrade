@@ -1,0 +1,79 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const program = require('commander');
+const chalk = require('chalk');
+const exec = require('child_process').exec;
+const ora = require('ora');
+const fs = require('fs-extra');
+const getLatestVersion = require('latest-version')
+const PROJECT_CONFIG = 'scripts/build.js';
+const projectConfPath = path.join(process.cwd(), PROJECT_CONFIG);
+
+function info () {
+    console.log(chalk.red('command error:'));
+    console.log(`${chalk.green(' okam upgrade self')} upgrade okam-cli to the latest version`);
+    console.log(`${chalk.green(' okam upgrade project')} upgrade okam project packages to the latest version`);
+}
+
+function upgradeSelf(cb) {
+    let child = exec('npm i -g okam-cli@latest');
+
+    const spinner = ora('Upgrading the okam-cli version to the latest version...').start();
+
+    child.stdout.on('data', function (data) {
+        console.log(data);
+        spinner.stop()
+    })
+    child.stderr.on('data', function (data) {
+        console.log(data);
+        spinner.stop();
+    })
+}
+
+function upgradeProject() {
+
+    if (!fs.existsSync(projectConfPath)) {
+        console.log(chalk.red(`
+            The project configuration file [${PROJECT_CONFIG}] could not be found.
+            Please make sure that the current directory is the root of the Okam project！`
+        ));
+        process.exit(1);
+    }
+
+    let child = exec('npm install');
+
+    const spinner = ora('Updating packages in the project, awaiting a moment...').start();
+
+    child.stdout.on('data', function (data) {
+        spinner.stop();
+        console.log(data);
+    })
+    child.stderr.on('data', function (data) {
+        spinner.stop();
+        console.log(data);
+    })
+}
+
+program.parse(process.argv);
+
+const args = program.args
+
+if (args.length === 1) {
+    switch (args[0]) {
+        case 'self': {
+            upgradeSelf();
+            break;
+        }
+        case 'project': {
+            upgradeProject();
+            break;
+        }
+        default:
+            info();
+    }
+}
+else {
+    info();
+}
+

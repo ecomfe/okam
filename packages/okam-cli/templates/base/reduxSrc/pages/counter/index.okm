@@ -1,0 +1,119 @@
+<% if: ${template} === 'pug' %>
+    <% use: pc-tpl-pug() %>
+<% else %>
+    <% use: pc-tpl-normal() %>
+<% /if %>
+
+<% if: ${script} === 'typescript' %>
+    <% use: pc-script-ts() %>
+<% else %>
+    <% use: pc-script-js() %>
+<% /if %>
+
+<% if: ${style} === 'stylus' %>
+    <% use: pc-stylus() %>
+<% elif: ${style} === 'less' %>
+    <% use: pc-less() %>
+<% elif: ${style} === 'sass' %>
+    <% use: pc-sass() %>
+<% else %>
+    <% use: pc-css() %>
+<% /if %>
+<% target: pc-tpl-normal %>
+<template>
+    <view class="my-counter-wrap">
+        <counter @counterChange="handleCounterChange"></counter>
+        <image src="../../common/img/okm.png" />
+    </view>
+</template>
+<% target: pc-tpl-pug %>
+<template lang="pug">
+view.my-counter-wrap
+    counter(
+        @counterChange="handleCounterChange"
+    )
+    image(
+        src="../../common/img/okm.png"
+    )/
+</template>
+<% target: pc-script-js %>
+<script>
+import Counter from '../../components/Counter';
+
+export default {
+    config: {
+        // The page config defined in page.json
+        navigationBarTitleText: 'Counter',
+        backgroundColor: '#fff'
+    },
+
+    components: {
+        Counter
+    },
+
+    methods: {
+        handleCounterChange() {
+            console.log('counter change...', arguments)
+        }
+    }
+};
+</script>
+<% target: pc-script-ts %>
+<script lang="typescript">
+import Counter from '../../components/Counter';
+
+export default {
+    config: {
+        // The page config defined in page.json
+        navigationBarTitleText: 'Counter',
+        backgroundColor: '#fff'
+    },
+
+    components: {
+        Counter
+    },
+
+    methods: {
+        handleCounterChange() {
+            console.log('counter change...', arguments)
+        }
+    }
+};
+</script>
+<% target: pc-stylus %>
+<style lang="stylus">
+.my-counter-wrap
+    min-height: 100vh
+    padding: 20px
+    box-sizing: border-box
+    background: #fff
+</style>
+
+<% target: pc-less %>
+<style lang="less">
+.my-counter-wrap {
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    background: #fff;
+}
+</style>
+<% target: pc-sass %>
+<style lang="sass">
+.my-counter-wrap {
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    background: #fff;
+}
+</style>
+<% target: pc-css %>
+<style>
+.my-counter-wrap {
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    background: #fff;
+}
+</style>
+
