@@ -6,4 +6,4 @@
 'use strict';
 
 const build = require('../../../../');
-build.run();
+build.run('ant', require('./ant.config'));

@@ -1,7 +1,7 @@
 {
-  "name": "wux",
+  "name": "custom-component",
   "version": "1.0.0",
-  "description": "wux component example test",
+  "description": "custom-component example test",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,10 +10,7 @@
     "build": "npm run clean && cross-env NODE_ENV=dev node scripts/build.js",
     "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
     "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
-    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
-    "dev:wx": "cross-env NODE_ENV=dev node scripts/build.js --type wx --watch",
-    "dev:wx:clean": "cross-env NODE_ENV=dev node scripts/build.js --type wx --watch --clean",
-    "dev:wx:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --type wx --watch"
+    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean"
   },
   "devDependencies": {
     "cross-env": "^5.2.0"
@@ -22,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wux-weapp": "^3.2.0"
+    "@antv/my-f2": "^1.1.3",
+    "mini-ddui": "0.0.5"
   }
 }
