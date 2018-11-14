@@ -21,11 +21,11 @@ import {getSetDataPaths} from './setData';
 let propDataKey = 'data';
 
 /**
- * Whether skip the `beforeUpdate`/`updated` hook
+ * Whether skip the `updated` hook
  *
  * @type {boolean}
  */
-let isSkipUpdateHook = false;
+let shouldSkipUpdateHook = false;
 
 /**
  * Make computed props observable
@@ -122,7 +122,7 @@ function makeDataObservable(ctx) {
  */
 export function setObservableContext(key, ignoreUpdateHook) {
     propDataKey = key;
-    isSkipUpdateHook = !!ignoreUpdateHook;
+    shouldSkipUpdateHook = !!ignoreUpdateHook;
 }
 
 export default {
@@ -239,7 +239,7 @@ export default {
                 }
 
                 // call lifecycle updated hook
-                isSkipUpdateHook || (this.updated && this.updated());
+                shouldSkipUpdateHook || (this.updated && this.updated());
             },
 
             /**
@@ -257,7 +257,7 @@ export default {
                 if (queues) {
                     // TODO optimize value update: merge operations
                     // call lifecycle beforeUpdate hook
-                    isSkipUpdateHook || (this.beforeUpdate && this.beforeUpdate());
+                    this.beforeUpdate && this.beforeUpdate();
                     this.setData(getSetDataPaths(queues), this.__nextTickCallback);
                     this.$upQueues = null;
                 }

@@ -15,7 +15,6 @@ const antComponent = Object.assign({}, componentBase, {
     },
 
     didUpdate() {
-        this.beforeUpdate && this.beforeUpdate();
         this.updated && this.updated();
     },
 
