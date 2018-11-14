@@ -4,8 +4,8 @@
  */
 
 const fs = require('fs-extra');
-
-const user = require('./git').getUser();
+const path = require('path');
+const {getAuthor, isEmptyDir} = require('./index');
 
 function setPromptsValue(prompts, name, options) {
     let promptsLen = prompts.length;
@@ -26,7 +26,7 @@ let promptList = [
             if (!input) {
                 return 'The project name can not be empty!';
             }
-            if (fs.existsSync(input)) {
+            if (fs.existsSync(input) && (!isEmptyDir(input))) {
                 return 'The target directory is existed, please change another name！';
             }
             return true;
@@ -41,7 +41,7 @@ let promptList = [
     {
         'type': 'input',
         'name': 'author',
-        'default': user,
+        'default': getAuthor(),
         'message': 'Author'
     },
     {

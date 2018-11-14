@@ -8,6 +8,7 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 const semver = require('semver');
 const Etpl = require('./utils/etpl');
+const isEmptyDir = require('./utils').isEmptyDir;
 const BaseTemplate = require('../templates/index');
 
 const {promptList, setPromptsValue} = require('./utils/prompts');
@@ -47,15 +48,16 @@ class Project {
     ask() {
         const prompts = promptList.slice(0);
         const conf = this.conf;
-        if (conf.dirName && fs.existsSync(conf.dirName)) {
+        const dirName = conf.dirName;
+        if (dirName && fs.existsSync(dirName) && (!isEmptyDir(dirName))) {
             this.conf.dirName = '';
             setPromptsValue(prompts, 'projectName', {
                 message: 'The target directory is existed, change another name：'
             });
         }
-        else if (conf.dirName) {
+        else if (dirName) {
             setPromptsValue(prompts, 'projectName', {
-                'default': conf.dirName
+                'default': dirName
             });
         }
         else {
