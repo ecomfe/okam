@@ -72,6 +72,7 @@ function addComponentSameNameFiles(scriptFile, options) {
 
     let hasWxmlFile;
     let hasSwanFile;
+    let hasAxmlFile;
     let jsonFile;
     if (!scriptFile.isNpm) {
         let filePathBase = `${currDir}/${scriptFileName}`;
@@ -80,6 +81,7 @@ function addComponentSameNameFiles(scriptFile, options) {
         if (jsonFile && !jsonFile.owner) {
             hasWxmlFile = !!getFileByFullPath(`${filePathBase}.wxml`);
             hasSwanFile = !!getFileByFullPath(`${filePathBase}.swan`);
+            hasAxmlFile = !!getFileByFullPath(`${filePathBase}.axml`);
         }
     }
     else {
@@ -99,6 +101,9 @@ function addComponentSameNameFiles(scriptFile, options) {
             else if (extname === 'swan') {
                 hasSwanFile = true;
             }
+            else if (extname === 'axml') {
+                hasAxmlFile = true;
+            }
             else if (fileObj.isJson) {
                 jsonFile = fileObj;
             }
@@ -111,6 +116,9 @@ function addComponentSameNameFiles(scriptFile, options) {
     }
     else if (hasSwanFile) {
         scriptFile.isSwanCompScript = true;
+    }
+    else if (hasAxmlFile) {
+        scriptFile.isAntCompScript = true;
     }
 
     return jsonFile;

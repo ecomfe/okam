@@ -18,11 +18,12 @@ const adapterPlugin = require('../processor/js/plugins/babel-native-swan-plugin'
  * @param {Object=} opts the options to init
  * @param {string=} opts.processor the builtin processor name, by default `babel`
  * @param {Array=} opts.plugins the processor plugins
+ * @param {string} defaultBabelProcessorName default babel processor name
  */
-function initJsProcessor(opts) {
+function initJsProcessor(opts, defaultBabelProcessorName) {
     let plugins = (opts && opts.plugins) || [jsPlugin, adapterPlugin];
     registerProcessor({
-        name: (opts && opts.processor) || 'babel', // override existed processor
+        name: (opts && opts.processor) || defaultBabelProcessorName, // override existed processor
         hook: {
             before(file, options) {
                 if (file.isWxCompScript && !adapterPlugin.isAdapterModule(file.path)) {
@@ -83,8 +84,9 @@ function initStyleProcessor(opts) {
  * @param {Object=} options.js the wx component js processor init options
  * @param {Object=} options.css the wx component style processor init options
  * @param {Object=} options.tpl the wx template processor init options
+ * @param {string} defaultBabelProcessorName default babel processor name
  */
-function initProcessor(options = {}) {
+function initProcessor(options = {}, defaultBabelProcessorName) {
     let {js, css, tpl} = options;
 
     if (tpl !== false) {
@@ -96,7 +98,7 @@ function initProcessor(options = {}) {
     }
 
     if (js !== false) {
-        initJsProcessor(js);
+        initJsProcessor(js, defaultBabelProcessorName);
     }
 }
 

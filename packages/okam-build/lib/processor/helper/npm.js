@@ -66,6 +66,7 @@ exports.resolve = function (buildManager, file, requireModId) {
     file.addDeps(depFile.path);
     file.isWxCompScript && (depFile.isWxCompScript = true);
     file.isSwanCompScript && (depFile.isSwanCompScript = true);
+    file.isAntCompScript && (depFile.isAntCompScript = true);
 
     let resolveModId = requireModId;
     if (!isRelModId) {

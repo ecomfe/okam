@@ -15,6 +15,7 @@ const CacheManager = require('./CacheManager');
 const FileOutput = require('../generator/FileOutput');
 const processor = require('../processor');
 const npm = require('../processor/helper/npm');
+const {getDefaultBabelProcessor} = require('../processor/helper/processor');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
@@ -60,17 +61,27 @@ class BuildManager extends EventEmitter {
             }]);
         }
 
-        if (this.appType === 'swan') {
+        const appType = this.appType;
+        const nativeOpts = buildConf.native;
+        const defaultBabelProcessorName = getDefaultBabelProcessor(
+            buildConf.processors
+        );
+        if (appType === 'swan') {
             // register native swan processor
-            let nativeOpts = buildConf.native;
             if (nativeOpts !== false) {
-                require('./init-native-swan-processor')(nativeOpts);
+                require('./init-native-swan-processor')(nativeOpts, defaultBabelProcessorName);
             }
 
             // register wx2swan processors
             let wx2swanOpts = buildConf.wx2swan;
             if (wx2swanOpts) {
-                require('./init-wx2swan-processor')(wx2swanOpts);
+                require('./init-wx2swan-processor')(wx2swanOpts, defaultBabelProcessorName);
+            }
+        }
+        else if (appType === 'ant') {
+            // register native swan processor
+            if (nativeOpts !== false) {
+                require('./init-native-ant-processor')(nativeOpts, defaultBabelProcessorName);
             }
         }
     }

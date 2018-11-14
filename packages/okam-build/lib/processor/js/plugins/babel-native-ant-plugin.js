@@ -1,6 +1,6 @@
 /**
- * @file Native swan component transformation plugin.
- *       Fix component triggerEvent API to adapt the okam event handler.
+ * @file Native ant component transformation plugin.
+ *       Fix component event handler to adapt the okam event handler.
  * @author sparklewhy@gmail.com
  */
 
@@ -14,13 +14,13 @@ const replaceComponentInit = require('../transform/native-component');
  * @const
  * @type {string}
  */
-const COMPONENT_ADAPTER_MODULE_ID = 'okam-core/src/swan/adapter/component';
+const COMPONENT_ADAPTER_MODULE_ID = 'okam-core/src/ant/adapter/component';
 
 module.exports = exports = function ({types: t}) {
     return {
         visitor: {
 
-             /**
+            /**
              * Replace native component init
              *
              * @param {Object} path ast node path
@@ -28,20 +28,6 @@ module.exports = exports = function ({types: t}) {
              */
             CallExpression(path, state) {
                 replaceComponentInit(COMPONENT_ADAPTER_MODULE_ID, path, state, t);
-            },
-
-            /**
-             * Replace `triggerEvent` API with custom `$emit` API
-             *
-             * @param {Object} path ast node path
-             * @param {Object} state the processed node state
-             */
-            MemberExpression(path, state) {
-                let {property} = path.node;
-                if (t.isIdentifier(property) && property.name === 'triggerEvent') {
-                    property.name = '$emit';
-                    return;
-                }
             }
         }
     };

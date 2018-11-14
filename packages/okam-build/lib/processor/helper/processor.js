@@ -31,6 +31,38 @@ function hasBabelProcessor(processorName) {
     );
 }
 
+function getDefaultBabelProcessor(processorsConfig) {
+    if (!processorsConfig) {
+        return DEFAULT_BABEL_PROCESSOR;
+    }
+
+    let processorNames = processorsConfig;
+    if (Array.isArray(processorsConfig)) {
+        processorNames = processorsConfig.map(item => item.name);
+    }
+    else {
+        processorNames = Object.keys(processorsConfig);
+    }
+
+    let defaultProcessor;
+    processorNames.some(name => {
+        let hasBabel = hasBabelProcessor(name);
+        if (hasBabel) {
+            defaultProcessor = name;
+            return true;
+        }
+
+        return false;
+    });
+
+    defaultProcessor || (defaultProcessor = DEFAULT_BABEL_PROCESSOR);
+    if (defaultProcessor === 'typescript') {
+        defaultProcessor = 'babel7';
+    }
+
+    return defaultProcessor;
+}
+
 function isMatch(file, pattern) {
     let typeStr = typeof pattern;
     if (typeStr === 'string') {
@@ -283,3 +315,5 @@ exports.getBuiltinProcessor = function (name, options) {
 };
 
 exports.findMatchProcessor = findMatchProcessor;
+
+exports.getDefaultBabelProcessor = getDefaultBabelProcessor;

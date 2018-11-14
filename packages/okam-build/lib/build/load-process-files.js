@@ -70,7 +70,7 @@ function resolvePath(file, rootDir) {
     return file;
 }
 
-function loadToProcessFiles(options, logger) {
+function loadProcessFiles(options, logger) {
     let rootDir = options.root;
     let {dir, exclude, include} = options.source;
     if (!dir) {
@@ -146,4 +146,4 @@ function loadToProcessFiles(options, logger) {
     };
 }
 
-module.exports = loadToProcessFiles;
+module.exports = loadProcessFiles;
