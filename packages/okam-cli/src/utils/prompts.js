@@ -4,7 +4,6 @@
  */
 
 const fs = require('fs-extra');
-const path = require('path');
 const {getAuthor, isEmptyDir} = require('./index');
 
 function setPromptsValue(prompts, name, options) {
@@ -22,6 +21,7 @@ let promptList = [
         'type': 'input',
         'name': 'projectName',
         'message': 'Project name：',
+        /* eslint-disable fecs-use-method-definition */
         'validate': function (input) {
             if (!input) {
                 return 'The project name can not be empty!';
@@ -136,7 +136,7 @@ let promptList = [
     {
         'type': 'confirm',
         'name': 'tinyimg',
-        'message': 'Automatic compression of pictures in your project?'
+        'message': 'Use tinyimg in your project?'
     },
     {
         'type': 'list',
