@@ -87,7 +87,7 @@ describe('Ant component adapter', () => {
         expect(clickSpy.calls[0].context).toBe(component);
     });
 
-    it.only('should do nothing when no props', function () {
+    it('should do nothing when no props', function () {
         let spyDidMount = createSpy(() => {}).andCallThrough();
         let component = {
             didMount: spyDidMount
