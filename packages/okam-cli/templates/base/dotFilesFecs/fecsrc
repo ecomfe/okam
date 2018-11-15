@@ -1,0 +1,8 @@
+{
+    "eslint": {
+        "rules": {
+            "fecs-esnext-ext": -1,
+            "fecs-valid-jsdoc": -1
+        }
+    }
+}

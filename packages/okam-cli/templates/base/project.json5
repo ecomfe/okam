@@ -1,0 +1,5 @@
+{
+    appid: 0,
+    description: '${description}',
+    projectname: '${projectName}'
+}
