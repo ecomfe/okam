@@ -6,9 +6,15 @@
 
 > 奥卡姆，一个面向小程序开发的开发框架，提供类 `Vue` 的开发体验。
 
-## Intro
+## Introduction
 
-功能特性：
+### 小程序支持
+
+- [x] 百度小程序
+- [x] 微信小程序
+- [x] 支付宝小程序
+
+### 功能特性
 
 * 开发模式
     * 支持单文件组件化开发方式，目录结构更加清晰简洁
@@ -40,9 +46,9 @@
 
 ## Usage
 
-- [使用教程](https://ecomfe.github.io/okam)
+* [使用教程](https://ecomfe.github.io/okam)
 
-- [使用示例](https://github.com/ecomfe/okam-template)
+* [使用示例](https://github.com/ecomfe/okam-template)
 
     ```shell
     git clone https://github.com/ecomfe/okam-template.git
@@ -61,18 +67,13 @@
     # `ant_dist`: 支付宝小程序构建产物
     ```
 
-## Mini Program Support
-
-- [x] 百度小程序
-- [x] 微信小程序
-- [x] 支付宝小程序
-
 ## Main Packages
 
 | Package | Status | Description |
 |---------|--------|-------------|
-| [okam-build]          | [![okam-build-status]][okam-build-package] | okam 构建工具 |
-| [okam-core]                | [![okam-core-status]][okam-core-package] | okam 核心运行框架 |
+| [okam-build] | [![okam-build-status]][okam-build-package] | okam 构建工具 |
+| [okam-core] | [![okam-core-status]][okam-core-package] | okam 核心运行框架 |
+| [okam-cli] | [![okam-cli-status]][okam-cli-package] | okam 命令行工具 |
 
 [okam-build]: https://github.com/ecomfe/okam/tree/master/packages/okam-build
 [okam-build-status]: https://img.shields.io/npm/v/okam-build.svg
@@ -81,6 +82,10 @@
 [okam-core]: https://github.com/ecomfe/okam/tree/master/packages/okam-core
 [okam-core-status]: https://img.shields.io/npm/v/okam-core.svg
 [okam-core-package]: https://npmjs.com/package/okam-core
+
+[okam-cli]: https://github.com/ecomfe/okam/tree/master/packages/okam-cli
+[okam-cli-status]: https://img.shields.io/npm/v/okam-cli.svg
+[okam-cli-package]: https://npmjs.com/package/okam-cli
 
 ## Communication
 
