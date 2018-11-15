@@ -43,9 +43,8 @@ class BuildManager extends EventEmitter {
 
         this.runningTasks = [];
         this.doneTasks = [];
-        this.reBuildFiles = [];
+        this.waitingBuildFiles = [];
         this.cache = new CacheManager({cacheDir: buildConf.cacheDir});
-        this.generator = new FileOutput(this, buildConf.output);
     }
 
     initProcessor(buildConf) {
@@ -119,34 +118,56 @@ class BuildManager extends EventEmitter {
         let {
             root,
             sourceDir,
-            files
+            files,
+            buildFiles
         } = loadProcessFiles(this.buildConf, this.logger);
 
         this.files = files;
         this.root = root;
         this.sourceDir = sourceDir;
         this.babelConfig = babelUtil.readBabelConfig(root);
+        this.waitingBuildFiles = buildFiles;
 
         let {output} = this.buildConf;
         this.compileContext = {
             cache: this.cache,
             resolve: npm.resolve.bind(null, this),
-            addFile: this.files.addFile.bind(this.files),
+            addFile: this.addNewFile.bind(this),
             getFileByFullPath: this.getFileByFullPath.bind(this),
             appType: this.appType,
             logger: this.logger,
             root,
             output
         };
+
+        this.generator = new FileOutput(this, this.buildConf.output);
     }
 
     /**
-     * Add need to recompile file
+     * Add new file to process
+     *
+     * @param {string} fullPath the new file full path to add
+     * @return {Object}
+     */
+    addNewFile(fullPath) {
+        let result = this.files.addFile(fullPath);
+        this.addNeedBuildFile(result);
+        return result;
+    }
+
+    /**
+     * Add file that need to build
      *
      * @param {Object} file the file need to recompile
+     * @param {boolean=} force whether force recompile if the file is compiled,
+     *        by default false
      */
-    addNeedRecompileFile(file) {
-        let reBuilds = this.reBuildFiles;
+    addNeedBuildFile(file, force = false) {
+        if (!force && file.compiled) {
+            return;
+        }
+
+        let reBuilds = this.waitingBuildFiles;
         if (reBuilds.indexOf(file) === -1) {
             reBuilds.push(file);
         }
@@ -225,25 +246,14 @@ class BuildManager extends EventEmitter {
 
     build(timer) {
         let logger = this.logger;
-        let fileList = this.files.getFileList();
 
-        let processIdx = 0;
         let t = new Timer();
         let buildFail = false;
 
-        while (processIdx < fileList.length) {
-            let f = fileList[processIdx];
-            if (!this.compile(f, t)) {
-                buildFail = true;
-                break;
-            }
-            processIdx++;
-        }
-
-        // rebuild need to recompile files
-        let reBuildFiles = this.reBuildFiles;
-        while (reBuildFiles.length) {
-            let f = reBuildFiles.shift();
+        // build files that need to compile
+        let waitingBuildFiles = this.waitingBuildFiles;
+        while (waitingBuildFiles.length) {
+            let f = waitingBuildFiles.shift();
             if (!this.compile(f, t)) {
                 buildFail = true;
                 break;
@@ -328,6 +338,7 @@ class BuildManager extends EventEmitter {
             let depFile = this.files.getByPath(item);
             depFile || (depFile = this.files.addFile({path: item}));
             file.addDeps(depFile.path);
+            this.addNeedBuildFile(depFile);
         });
 
         sourceMap && (file.sourceMap = sourceMap);

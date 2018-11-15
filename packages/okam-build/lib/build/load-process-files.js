@@ -78,6 +78,7 @@ function loadProcessFiles(options, logger) {
         return;
     }
 
+    let initBuildFiles = [];
     let componentExtname = options.component.extname;
     let {style: entryStyle, script: entryScript, projectConfig} = options.entry;
     entryStyle = resolvePath(entryStyle, rootDir);
@@ -128,12 +129,20 @@ function loadProcessFiles(options, logger) {
         });
 
         // ensure the entry app script can be compiled at first
-        if (toProcessFile.isEntryScript) {
-            processFiles.unshift(toProcessFile);
+        if (toProcessFile.isEntryScript
+            || toProcessFile.isEntryStyle
+            || toProcessFile.isProjectConfig
+        ) {
+            initBuildFiles.unshift(toProcessFile);
         }
-        else {
-            processFiles.push(toProcessFile);
+        else if (!toProcessFile.isScript
+            && !toProcessFile.isStyle
+            && !toProcessFile.isJson
+        ) {
+            initBuildFiles.push(toProcessFile);
         }
+
+        processFiles.push(toProcessFile);
     };
 
     logger.debug('load files', rootDir, sourceDir);
@@ -142,7 +151,8 @@ function loadProcessFiles(options, logger) {
     return {
         root: rootDir,
         sourceDir,
-        files: processFiles
+        files: processFiles,
+        buildFiles: initBuildFiles
     };
 }
 
