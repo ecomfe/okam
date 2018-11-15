@@ -1,8 +1,7 @@
 <% if: ${template} === 'pug' %>
-<template name="page-footer">
-    view(class="page-footer")
+template(name='page-footer')
+    view.page-footer
         text footer
-</template>
 <% else %>
 <template name="page-footer">
     <view class="page-footer">

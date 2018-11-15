@@ -4,3 +4,4 @@ test/**/*
 mock/**/*
 example/**/*
 output/**/*
+templates/base/**/*

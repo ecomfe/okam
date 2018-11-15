@@ -73,16 +73,21 @@ module.exports = {
         <% /if %>
         <% if: ${template} === 'pug' %>
         pug: {
-          options: {
-              doctype: 'xml',
-              data: {
-                  name: 'efe'
-              }
-          }
+            extnames: ['pug', 'tpl'],
+            options: {
+                doctype: 'xml',
+                data: {
+                    name: 'efe'
+                }
+            }
         },
         // 定义小程序模板转换的文件后缀名
         view: {
+            <% if: ${template} === 'pug' %>
             extnames: ['pug', 'tpl']
+            <% else %>
+            extnames: ['tpl']
+            <% /if %>
         },
         <% /if %>
         postcss: {
