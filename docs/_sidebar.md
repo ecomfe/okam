@@ -42,6 +42,8 @@
 
     * [Broadcast支持](component/broadcast.md)
 
+    * [原生自定义组件支持](component/native.md)
+
 * 进阶
 
     * [分包加载](advance/subPackages.md)

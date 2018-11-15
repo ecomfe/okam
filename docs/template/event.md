@@ -162,6 +162,8 @@ OKAM 开发模板语法：
     那么如何在事件触发的时候，获取到事件本身呢？目前支持通过使用`$event`方式，来直接拿到[百度智能小程序事件对象](!https://smartprogram.baidu.com/docs/develop/framework/view_incident/#%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1)。
     `$event`可以位于参数列表的任意位置。
 
+    **注意：** 不管是自定义组件的事件还是原生组件事件，事件数据统一通过 `event.detail` 获取到。
+
     ```html
     <view @click="handleClick(hello, $event, 'hello', 123, true)">Hello World</view>
     ```
