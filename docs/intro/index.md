@@ -49,6 +49,6 @@
 
 ## 交流反馈
 
-技术交流：QQ 群：`728460911`，入群备注：okam
+技术交流：QQ 群 `728460911`，入群备注：okam
 
 反馈建议：项目代码开源在 [Github](https://github.com/ecomfe/okam) 上，有任何问题或者建议，欢迎提 [issue](https://github.com/ecomfe/okam/issues/new), 发 [pr](https://github.com/ecomfe/okam)。
