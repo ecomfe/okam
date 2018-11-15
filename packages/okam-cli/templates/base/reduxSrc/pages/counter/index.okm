@@ -22,19 +22,19 @@
 <% target: pc-tpl-normal %>
 <template>
     <view class="my-counter-wrap">
+        <image class="page-img" src="../../common/img/okm.png" />
         <counter @counterChange="handleCounterChange"></counter>
-        <image src="../../common/img/okm.png" />
     </view>
 </template>
 <% target: pc-tpl-pug %>
 <template lang="pug">
 view.my-counter-wrap
+    image.page-img(
+        src="../../common/img/okm.png"
+    )/
     counter(
         @counterChange="handleCounterChange"
     )
-    image(
-        src="../../common/img/okm.png"
-    )/
 </template>
 <% target: pc-script-js %>
 <script>
