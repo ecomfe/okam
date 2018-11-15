@@ -1,5 +1,28 @@
 # ChangeLog
 
+## 0.3.1 (2018-11-15)
+
+### Bug Fixes
+
+* **okam-build:** 修复 `支付宝小程序` 原生事件命名风格跟其它小程序不一致问题 ([2816599](https://github.com/ecomfe/okam/commit/2816599))
+* **okam-build:** 修复 `支付宝小程序` 使用原生自定义组件事件处理出错问题 [#7](https://github.com/ecomfe/okam/issues/2) ([9bc800b](https://github.com/ecomfe/okam/commit/9bc800b))
+* **okam-build:** 修复 `Babel7` 处理器编译问题，API 跟 `Babel6` 不一致 ([c6a4473](https://github.com/ecomfe/okam/commit/c6a4473))
+* **okam-build:** 修复 `微信小程序` 使用 `localPolyfill` 有些代码写法没有分析到情况 [#2](https://github.com/ecomfe/okam/issues/2) ([f63bbcc](https://github.com/ecomfe/okam/commit/f63bbcc))
+* **okam-core:** 废弃掉 `百度小程序` 使用的 `pushData` 等内部原生 API 进行 `数组` 数据操作优化的逻辑，考虑到这些接口暂未对外开放，且还有些 Bug ([c81b323](https://github.com/ecomfe/okam/commit/c81b323))
+
+### Features
+
+* **okam-build:** 文件构建改成按分析依赖的顺序进行构建 ([3f44454](https://github.com/ecomfe/okam/commit/3f44454))
+* **okam-cli:** 增加 CLI 工具 ([3bfc69e](https://github.com/ecomfe/okam/commit/3bfc69e))
+* **okam-core:** 增加 `支付宝小程序` 原生自定义组件的 `Okam` 框架适配器 ([0efded5](https://github.com/ecomfe/okam/commit/0efded5))
+* **okam-core:** 增加 `支付宝小程序` `showToast` 原生 API 的适配，保持跟微信、百度小程序的 API 的统一  ([cc8fc34](https://github.com/ecomfe/okam/commit/cc8fc34))
+* **okam-core:** 增加 `支付宝小程序` 数组数据操作优化，基于 `$spliceData` API ([20be465](https://github.com/ecomfe/okam/commit/20be465))
+
+### Performance Improvements
+
+* **okam-core:** 优化原生 API 改写方式 ([a64f234](https://github.com/ecomfe/okam/commit/a64f234))
+
+
 ## 0.3.0 (2018-11-09)
 
 ### Bug Fixes
