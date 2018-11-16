@@ -21,6 +21,7 @@ export default {
             'pages/lifecycle/index',
             'pages/data/computed',
             'pages/data/init',
+            'pages/data/array',
             'pages/data/watch',
             'pages/todos/todoList',
             'pages/todos/counter',

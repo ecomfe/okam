@@ -72,7 +72,13 @@ function main(appType, options) {
         });
     }
 
-    startBuild(buildConf);
+    try {
+        startBuild(buildConf);
+    }
+    catch (ex) {
+        logger.error(ex.message || ex.toString());
+        logger.error(ex.stack);
+    }
 }
 
 module.exports = exports = main;

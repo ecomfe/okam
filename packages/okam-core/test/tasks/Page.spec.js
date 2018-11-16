@@ -12,38 +12,21 @@ import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
 import MyPage from 'core/Page';
-import * as na from 'core/na/index';
 import page from 'core/base/page';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
-import {testCallOrder} from '../helper';
+import {testCallOrder, fakeAppEnvAPIs} from 'test/helper';
 
 describe('Page', () => {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
+    let restoreAppEnv;
+
     beforeEach('init global App', function () {
         clearBaseCache();
-        global.swan = {
-            getSystemInfo() {},
-            request() {},
-            createSelectorQuery() {
-                return {
-                    select(path) {
-                        return path;
-                    }
-                };
-            }
-        };
-        na.getCurrApp = function () {
-            return {};
-        };
-        na.env = global.swan;
+        restoreAppEnv = fakeAppEnvAPIs('swan');
     });
 
     afterEach('clear global App', function () {
-        global.swan = undefined;
-        na.getCurrApp = rawGetCurrApp;
-        na.env = rawEnv;
+        restoreAppEnv();
         expect.restoreSpies();
     });
 

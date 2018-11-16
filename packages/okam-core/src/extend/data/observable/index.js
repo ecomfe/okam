@@ -21,6 +21,13 @@ import {getSetDataPaths} from './setData';
 let propDataKey = 'data';
 
 /**
+ * Whether skip the `updated` hook
+ *
+ * @type {boolean}
+ */
+let shouldSkipUpdateHook = false;
+
+/**
  * Make computed props observable
  *
  * @inner
@@ -63,7 +70,12 @@ function makePropsObservable(ctx) {
         return;
     }
 
-    let observer = new Observer(ctx, ctx[propDataKey] || {}, null, true);
+    let observer = new Observer(
+        ctx,
+        ctx[propDataKey] || /* istanbul ignore next */ {},
+        null,
+        true
+    );
     let propsObj = {};
 
     Object.keys(props).reduce((last, item) => {
@@ -103,58 +115,40 @@ function makeDataObservable(ctx) {
 }
 
 /**
- * Initialize the props to add observer to the prop to listen the prop change.
- *
- * @inner
- * @param {Object} ctx the component definition context
- * @param {boolean} isPage whether is page component
- */
-function initProps(ctx, isPage) {
-    // cache the raw props information because the mini program will merge data
-    // and props later on.
-    let props = ctx.props;
-    if (!props) {
-        return;
-    }
-
-    let rawProps = Object.assign({}, props);
-    ctx.rawProps = rawProps;
-    normalizeExtendProp(ctx, 'rawProps', '$rawProps', isPage);
-
-    Object.keys(props).forEach(p => {
-        let value = props[p];
-        let rawObserver = value.observer;
-        value.observer = function (newVal, oldVal, changePath) {
-            rawObserver && rawObserver.call(this, newVal, oldVal, changePath);
-            let propObserver = this.__propsObserver;
-            propObserver && propObserver.firePropValueChange(p, newVal, oldVal);
-        };
-    });
-}
-
-/**
- * Set the component property data key
+ * Set observable context setting
  *
  * @param {string} key the prop data key
+ * @param {boolean} ignoreUpdateHook whether skip update hook
  */
-export function setPropDataKey(key) {
-    key && (propDataKey = key);
+export function setObservableContext(key, ignoreUpdateHook) {
+    propDataKey = key;
+    shouldSkipUpdateHook = !!ignoreUpdateHook;
 }
 
 export default {
     component: {
 
         /**
-         * The instance initialization before the instance is normalized and created.
+         * Initialize the props to add observer to the prop to listen the prop change.
          *
          * @param {boolean} isPage whether is page component
-         * @private
          */
         $init(isPage) {
-            initProps(this, isPage);
-
             // normalize extend computed property
             normalizeExtendProp(this, 'computed', '$rawComputed', isPage);
+
+            // cache the raw props information because the mini program will merge data
+            // and props later on.
+            let props = this.props;
+            if (!props) {
+                return;
+            }
+
+            let rawProps = Object.assign({}, props);
+            this._rawProps = rawProps;
+            normalizeExtendProp(this, '_rawProps', '$rawProps', isPage);
+
+            this.__initProps && this.__initProps();
         },
 
         /**
@@ -187,7 +181,7 @@ export default {
             // init computed data
             computedObserver.initComputedPropValues();
 
-            this.afterObserverInit && this.afterObserverInit();
+            this.__afterObserverInit && this.__afterObserverInit();
         },
 
         /**
@@ -245,7 +239,7 @@ export default {
                 }
 
                 // call lifecycle updated hook
-                this.updated && this.updated();
+                shouldSkipUpdateHook || (this.updated && this.updated());
             },
 
             /**

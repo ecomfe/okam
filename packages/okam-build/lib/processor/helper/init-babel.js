@@ -27,7 +27,6 @@ function initMixinFile(mixins, buildManager, file) {
         let mixinFile = moduleFullPath && buildManager.getFileByFullPath(moduleFullPath);
         if (mixinFile && !mixinFile.isBehavior) {
             mixinFile.isBehavior = true;
-            mixinFile.compiled && buildManager.addNeedRecompileFile(mixinFile);
         }
     });
 }

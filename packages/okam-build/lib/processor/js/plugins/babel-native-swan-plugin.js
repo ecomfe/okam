@@ -6,7 +6,7 @@
 
 'use strict';
 
-const {isVariableDefined, createImportDeclaration} = require('../transform/helper');
+const replaceComponentInit = require('../transform/native-component');
 
 /**
  * The component polyfill module id
@@ -20,52 +20,14 @@ module.exports = exports = function ({types: t}) {
     return {
         visitor: {
 
-            /**
+             /**
              * Replace native component init
              *
              * @param {Object} path ast node path
              * @param {Object} state the processed node state
              */
             CallExpression(path, state) {
-                if (path.isComponentAdapted) {
-                    return;
-                }
-
-                let {arguments: args, callee} = path.node;
-                const calleeName = callee.name;
-                if (!t.isIdentifier(callee) || args.length !== 1) {
-                    return;
-                }
-
-                if (calleeName === 'Component') {
-                    if (isVariableDefined(path, calleeName)) {
-                        return;
-                    }
-
-                    let rootPath = path.findParent(p => t.isProgram(p));
-                    let bodyPath = rootPath.get('body.0');
-
-                    // insert the component fix import statement
-                    const fixComponentFuncName = path.scope.generateUid('fixComponent');
-                    bodyPath.insertBefore(
-                        createImportDeclaration(
-                            fixComponentFuncName, COMPONENT_ADAPTER_MODULE_ID, t
-                        )
-                    );
-
-                    path.replaceWith(t.callExpression(
-                        t.identifier(calleeName),
-                        [
-                            t.callExpression(
-                                t.identifier(fixComponentFuncName),
-                                args
-                            )
-                        ]
-                    ));
-
-                    // add flag to avoid repeat visiting
-                    path.isComponentAdapted = true;
-                }
+                replaceComponentInit(COMPONENT_ADAPTER_MODULE_ID, path, state, t);
             },
 
             /**

@@ -6,56 +6,47 @@
 'use strict';
 
 /* eslint-disable babel/new-cap */
+/* global before:false */
+/* global after:false */
 
 import assert from 'assert';
-import expect, {createSpy, spyOn} from 'expect';
-import MyApp from 'core/App';
-import MyPage from 'core/Page';
-import * as na from 'core/na/index';
-import base from 'core/base/base';
-import component from 'core/base/component';
+import expect from 'expect';
+import MyApp from 'core/ant/App';
+import MyPage from 'core/ant/Page';
 import {clearBaseCache} from 'core/helper/factory';
-import {fakeComponent} from 'test/helper';
-import {setPropDataKey} from 'core/extend/data/observable';
+import {setObservableContext} from 'core/extend/data/observable';
 import observable from 'core/extend/data/observable/ant';
+import {fakeAntComponent, fakeAppEnvAPIs} from 'test/helper';
+import {resetObservableArray, initAntObservableArray, fakeAntArrayAPIs} from '../helper';
 
 describe('ant observable', function () {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
-
     let MyComponent;
+    let restoreAppEnv;
+    let restoreAntArrayApi;
+
+    before('init observable array', function () {
+        initAntObservableArray();
+    });
+
+    after('restore observable array', function () {
+        resetObservableArray();
+    });
 
     beforeEach('init global App', function () {
         clearBaseCache();
 
-        MyComponent = fakeComponent();
+        MyComponent = fakeAntComponent();
+        restoreAppEnv = fakeAppEnvAPIs('ant');
+        restoreAntArrayApi = fakeAntArrayAPIs();
 
-        global.swan = {
-            getSystemInfo() {},
-            request() {},
-            createSelectorQuery() {
-                return {
-                    select(path) {
-                        return path;
-                    }
-                };
-            }
-        };
-
-        setPropDataKey('props');
-
-        na.getCurrApp = function () {
-            return {};
-        };
-        na.env = base.$api = global.swan;
+        setObservableContext('props', true);
     });
 
     afterEach('clear global App', function () {
         MyComponent = undefined;
-        global.swan = undefined;
-        na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
-        setPropDataKey('data');
+        restoreAppEnv();
+        restoreAntArrayApi();
+        setObservableContext('data', false);
         expect.restoreSpies();
     });
 
@@ -94,7 +85,7 @@ describe('ant observable', function () {
         });
 
         instance.props = {a: 'a'};
-        instance.created();
+        instance.didMount();
 
         assert(instance.a === 'a');
     });

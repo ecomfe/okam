@@ -1,0 +1,152 @@
+<% if: ${template} === 'pug' %>
+    <% use: ch-tpl-pug() %>
+<% else %>
+    <% use: ch-tpl-normal() %>
+<% /if %>
+
+<% if: ${script} === 'typescript' %>
+    <% use: ch-script-ts() %>
+<% else %>
+    <% use: ch-script-js() %>
+<% /if %>
+
+<% if: ${style} === 'stylus' %>
+    <% use: ch-stylus() %>
+<% elif: ${style} === 'less' %>
+    <% use: ch-less() %>
+<% elif: ${style} === 'sass' %>
+    <% use: ch-sass() %>
+<% else %>
+    <% use: ch-css() %>
+<% /if %>
+<% target: ch-tpl-normal %>
+<template>
+    <view class="hello-wrap">
+        <button plain class="hello-btn" @click="handleClick">Hello in {{from}}</button>
+    </view>
+</template>
+<% target: ch-tpl-pug %>
+<template lang="pug">
+view.hello-wrap
+    button(
+        plain
+        class="hello-btn"
+        @click="handleClick"
+    ) Hello in {{from}}
+</template>
+<% target: ch-script-js %>
+<script>
+export default {
+    config: {
+    },
+
+    props: {
+        from: String
+    },
+
+    components: {
+    },
+
+    data: {
+    },
+
+    methods: {
+        handleClick() {
+            this.$emit('hello', {from: this.from});
+        }
+    }
+};
+</script>
+<% target: ch-script-ts %>
+<script lang="typescript">
+export default {
+    config: {
+    },
+
+    props: {
+        from: String
+    },
+
+    components: {
+    },
+
+    data: {
+    },
+
+    methods: {
+        handleClick() {
+            this.$emit('hello', {from: this.from});
+        }
+    }
+};
+</script>
+<% target: ch-stylus %>
+<style lang="stylus">
+.hello-wrap
+    padding: 20px
+    margin: 20px 0
+
+    .hello-btn
+        margin: 0 auto
+        border: none
+        border-radius: 120px
+        width: 846px
+        height: 148px
+        line-height: 148px
+        text-align: center
+        background: #fff
+</style>
+<% target: ch-less %>
+<style lang="less">
+.hello-wrap {
+    margin: 20px 0;
+    padding: 20px;
+
+    .hello-btn {
+        margin: 0 auto;
+        border: none;
+        border-radius: 120px;
+        width: 846px;
+        height: 148px;
+        line-height: 148px;
+        text-align: center;
+        background: #fff;
+    }
+}
+</style>
+<% target: ch-sass %>
+<style lang="sass">
+.hello-wrap {
+    margin: 20px 0;
+    padding: 20px;
+
+    .hello-btn {
+        margin: 0 auto;
+        border: none;
+        border-radius: 120px;
+        width: 846px;
+        height: 148px;
+        line-height: 148px;
+        text-align: center;
+        background: #fff;
+    }
+}
+</style>
+<% target: ch-css %>
+<style>
+.hello-wrap {
+    margin: 20px 0;
+    padding: 20px;
+}
+
+.hello-wrap .hello-btn {
+    margin: 0 auto;
+    border: none;
+    border-radius: 120px;
+    width: 846px;
+    height: 148px;
+    line-height: 148px;
+    text-align: center;
+    background: #fff;
+}
+</style>

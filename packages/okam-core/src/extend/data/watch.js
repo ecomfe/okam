@@ -128,7 +128,7 @@ export default {
              *
              * @private
              */
-            afterObserverInit() {
+            __afterObserverInit() {
                 let watch = this.$rawWatch;
                 if (typeof watch === 'function') {
                     watch = this.$rawWatch();

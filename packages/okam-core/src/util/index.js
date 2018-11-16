@@ -115,3 +115,28 @@ export function isPropertyWritable(obj, name) {
     desc ? (result = !!desc.set || desc.writable) : (result = true);
     return result;
 }
+
+/**
+ * Define property value
+ *
+ * @param {Object} obj the object to define property
+ * @param {string} name the property name
+ * @param {*} value the property value to define
+ */
+export function definePropertyValue(obj, name, value) {
+    let desc = Object.getOwnPropertyDescriptor(obj, name);
+    if (desc && !desc.configurable) {
+        obj[name] = value;
+        return;
+    }
+
+    desc || (desc = {enumerable: true, configurable: true});
+    if (desc.get) {
+        desc.get = () => value;
+    }
+    else {
+        desc.value = value;
+    }
+
+    Object.defineProperty(obj, name, desc);
+}

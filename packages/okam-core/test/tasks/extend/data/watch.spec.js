@@ -10,52 +10,32 @@
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
-import * as na from 'core/na/index';
-import base from 'core/base/base';
 import MyPage from 'core/Page';
 import {clearBaseCache} from 'core/helper/factory';
-import observable from 'core/extend/data/observable';
+import observable from 'core/extend/data/observable/wx';
 import watch from 'core/extend/data/watch';
-import {fakeComponent} from 'test/helper';
+import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
 describe('data watch', function () {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
     let MyComponent;
+    let restoreAppEnv;
+
     beforeEach('init global App', function () {
         clearBaseCache();
 
         MyComponent = fakeComponent();
-
-        global.swan = {
-            getSystemInfo() {},
-            request() {},
-            createSelectorQuery() {
-                return {
-                    select(path) {
-                        return path;
-                    }
-                };
-            }
-        };
-
-        na.getCurrApp = function () {
-            return {};
-        };
-        na.env = base.$api = global.swan;
+        restoreAppEnv = fakeAppEnvAPIs('swan');
     });
 
     afterEach('clear global App', function () {
-        global.swan = undefined;
         MyComponent = undefined;
-        na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
+        restoreAppEnv();
         expect.restoreSpies();
     });
 
     it('should call afterObserverInit', function () {
         let spyWatchInit = spyOn(
-            watch.component.methods, 'afterObserverInit'
+            watch.component.methods, '__afterObserverInit'
         ).andCallThrough();
         MyApp.use(observable);
         MyApp.use(watch);
@@ -88,7 +68,7 @@ describe('data watch', function () {
 
     it('should normalize page watch props', function (done) {
         let spyWatchInit = spyOn(
-            watch.component.methods, 'afterObserverInit'
+            watch.component.methods, '__afterObserverInit'
         ).andCallThrough();
 
         MyApp.use(observable);

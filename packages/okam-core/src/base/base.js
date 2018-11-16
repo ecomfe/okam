@@ -6,6 +6,7 @@
 'use strict';
 
 import * as na from '../na/index';
+import api from '../na/api';
 import request from '../na/request';
 
 export default {
@@ -16,6 +17,11 @@ export default {
      * @type {Object}
      */
     $na: na,
+
+    /**
+     * The native API
+     */
+    $api: api,
 
     /**
      * The global object

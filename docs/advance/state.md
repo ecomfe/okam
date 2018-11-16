@@ -2,7 +2,7 @@
 
 `okam` 支持使用 [redux](https://github.com/reduxjs/redux) 作为状态管理库，由于 [vuex](https://github.com/vuejs/vuex) 跟 [vue](https://github.com/vuejs/vue) 是耦合的，暂时不支持在 `okam` 框架下使用。
 
-**注意：** 目前实现，在页面隐藏时候，组件的状态变更监听暂时不会自动销毁，待完善修复。
+**注意：** 目前实现，在页面隐藏时候，组件的状态变更监听自动销毁，依赖原生自定义组件 `pageLifetimes` 提供的页面生命周期钩子 `hide`、`show`，因此有相应版本要求，具体可以查看[微信小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/component.html)、[百度小程序](http://smartprogram.baidu.com/docs/develop/framework/custom-component_comp/)，对于支付宝暂未有相应实现。
 
 ## 安装依赖
 
@@ -10,11 +10,31 @@
 
 ## 构建配置
 
-`framework` 构建配置项增加 `data` `redux` 属性值，`redux` 依赖 `data` 扩展，因此需要一起配置。
+`framework` 构建配置项增加 `data` `redux` 属性值，`redux` 依赖 `data` 扩展，因此需要一起配置。此外，需要把环境变量做下替换，使用 `replacement` 处理器。
 
 ```javascript
 {
-    framework: ['data', 'redux']
+    framework: ['data', 'redux'],
+    dev: {
+        rules: [
+            {
+                match: '*.js',
+                processors: [
+                    ['replacement', {'process.env.NODE_ENV': '"development"'}]
+                ]
+            }
+        ]
+    },
+    prod: {
+        rules: [
+            {
+                match: '*.js',
+                processors: [
+                    ['replacement', {'process.env.NODE_ENV': '"production"'}]
+                ]
+            }
+        ]
+    }
 }
 ```
 

@@ -10,44 +10,26 @@
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
 import MyApp from 'core/App';
-import * as na from 'core/na/index';
-import base from 'core/base/base';
 import MyPage from 'core/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import broadcast from 'core/extend/broadcast';
 import eventCenter from 'core/helper/eventCenter';
-import {fakeComponent} from 'test/helper';
+import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
 describe('broadcast', function () {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
     let MyComponent;
+    let restoreAppEnv;
+
     beforeEach('init global App', function () {
         clearBaseCache();
 
         MyComponent = fakeComponent();
-
-        global.swan = {
-            createSelectorQuery() {
-                return {
-                    select(path) {
-                        return path;
-                    }
-                };
-            }
-        };
-
-        na.getCurrApp = function () {
-            return {};
-        };
-        na.env = base.$api = global.swan;
+        restoreAppEnv = fakeAppEnvAPIs('swan');
     });
 
     afterEach('clear global App', function () {
-        global.swan = undefined;
         MyComponent = undefined;
-        na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
+        restoreAppEnv();
         expect.restoreSpies();
         eventCenter.off();
     });

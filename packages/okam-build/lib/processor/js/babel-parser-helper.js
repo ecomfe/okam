@@ -18,13 +18,22 @@ exports.compile = function (file, options, babelVersion = 6) {
         return;
     }
 
-    let babel = babelVersion <= 6 ? require('babel-core') : require('@babel/core');
-    let config = Object.assign({babelrc: false}, options.config, {filename: file.path});
+    let isBabel6 = babelVersion <= 6;
+    let babel = isBabel6 ? require('babel-core') : require('@babel/core');
+    let config = Object.assign({babelrc: false, ast: true}, options.config, {filename: file.path});
 
     // transform code
-    let result = file.ast
-        ? babel.transformFromAst(file.ast, file.content, config)
-        : babel.transform(file.content, config);
+    let result;
+    if (isBabel6) {
+        result = file.ast
+            ? babel.transformFromAst(file.ast, file.content, config)
+            : babel.transform(file.content, config);
+    }
+    else {
+        result = file.ast
+            ? babel.transformFromAstSync(file.ast, file.content, config)
+            : babel.transformSync(file.content, config);
+    }
 
     // extract used babel helper api
     let usedHelpers = result.metadata

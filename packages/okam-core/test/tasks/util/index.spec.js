@@ -15,7 +15,8 @@ import {
     mixin,
     isFunction,
     isObject,
-    isPlainObject
+    isPlainObject,
+    definePropertyValue
 } from 'core/util/index';
 
 describe('App', () => {
@@ -53,6 +54,59 @@ describe('App', () => {
         assert.ok(!isPropertyWritable(obj, 'a'));
         assert.ok(isPropertyWritable(obj, 'b'));
         assert.ok(isPropertyWritable(obj, 'c'));
+    });
+
+    it('definePropertyValue', () => {
+        let obj = {a: 3};
+        definePropertyValue(obj, 'b', 6);
+        expect(obj).toEqual({a: 3, b: 6});
+
+        definePropertyValue(obj, 'c', 5);
+        expect(obj).toEqual({a: 3, b: 6, c: 5});
+        Object.defineProperty(obj, 'd', {
+            get() {
+                return 8;
+            }
+        });
+        Object.defineProperty(obj, 'e', {
+            value: 10,
+            enumerable: true
+        });
+        Object.defineProperty(obj, 'f', {});
+        let obj2 = Object.create(obj);
+        definePropertyValue(obj2, 'd', 9);
+        definePropertyValue(obj2, 'e', 12);
+        definePropertyValue(obj2, 'f', 66);
+
+        assert(obj2.a === 3);
+        assert(obj2.b === 6);
+        assert(obj2.c === 5);
+        assert(obj2.d === 9);
+        assert(obj2.e === 12);
+        assert(obj2.f === 66);
+        expect(Object.keys(obj2)).toEqual(['d', 'e', 'f']);
+
+        let fObj = Object.freeze({c: 's'});
+        let fObj2 = Object.create(fObj);
+        definePropertyValue(fObj2, 'c', 12);
+        assert(fObj2.c === 12);
+
+        let obj3 = {};
+        let val = 8;
+        Object.defineProperty(obj3, 'h', {
+            get() {
+                return val;
+            },
+            set(newVal) {
+                val = newVal;
+            }
+        });
+        definePropertyValue(obj3, 'h', 12);
+        assert(obj3.h === 12);
+        definePropertyValue(obj3, 'k', 6);
+        assert(obj3.k === 6);
+        definePropertyValue(obj3, 'k', 23);
+        assert(obj3.k === 23);
     });
 
     it('isPromise', () => {

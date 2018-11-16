@@ -13,6 +13,22 @@ const {toHyphen} = strUtil;
 const USING_COMPONENT_KEY = 'usingComponents';
 
 /**
+ * The native component file ext names
+ *
+ * @const
+ * @type {Object}
+ */
+const COMPONENT_FILE_EXT_NAMES = {
+    wxml: 'isWxCompScript',
+    swan: 'isSwanCompScript',
+    axml: 'isAntCompScript',
+    acss: false,
+    wxss: false,
+    css: false,
+    js: false
+};
+
+/**
  * Initialize the file list information in the given directory.
  * Return the file info structure:
  * {
@@ -62,7 +78,6 @@ function initDirFiles(dir, cache) {
  * @inner
  * @param {Object} scriptFile the component script file
  * @param {Object} options the process options
- * @return {?Object}
  */
 function addComponentSameNameFiles(scriptFile, options) {
     const {dirname: currDir, path: relPath} = scriptFile;
@@ -70,19 +85,9 @@ function addComponentSameNameFiles(scriptFile, options) {
     const {cache, addFile, getFileByFullPath} = options;
     let cacheDirFiles = cache.getDirFileListInfo(currDir);
 
-    let hasWxmlFile;
-    let hasSwanFile;
     let jsonFile;
-    if (!scriptFile.isNpm) {
-        let filePathBase = `${currDir}/${scriptFileName}`;
-        let jsonFilePath = `${filePathBase}.json`;
-        jsonFile = getFileByFullPath(jsonFilePath);
-        if (jsonFile && !jsonFile.owner) {
-            hasWxmlFile = !!getFileByFullPath(`${filePathBase}.wxml`);
-            hasSwanFile = !!getFileByFullPath(`${filePathBase}.swan`);
-        }
-    }
-    else {
+    let toAddFiles = [];
+    if (scriptFile.isNpm) {
         if (!cacheDirFiles) {
             cacheDirFiles = initDirFiles(currDir, cache);
         }
@@ -93,27 +98,41 @@ function addComponentSameNameFiles(scriptFile, options) {
             let fileObj = addFile(sameNameFiles[i]);
             let extname = fileObj.extname;
 
-            if (extname === 'wxml') {
-                hasWxmlFile = true;
-            }
-            else if (extname === 'swan') {
-                hasSwanFile = true;
+            let flagKey = COMPONENT_FILE_EXT_NAMES[extname];
+            if (typeof flagKey === 'string') {
+                // add flag for native component script
+                scriptFile[flagKey] = true;
             }
             else if (fileObj.isJson) {
                 jsonFile = fileObj;
             }
         }
     }
+    else {
+        let filePathBase = `${currDir}/${scriptFileName}`;
+        jsonFile = getFileByFullPath(`${filePathBase}.json`);
 
-    // add flag for npm component script
-    if (hasWxmlFile) {
-        scriptFile.isWxCompScript = true;
-    }
-    else if (hasSwanFile) {
-        scriptFile.isSwanCompScript = true;
+        if (jsonFile && !jsonFile.owner) {
+            Object.keys(COMPONENT_FILE_EXT_NAMES).forEach(k => {
+                let f = getFileByFullPath(`${filePathBase}.${k}`);
+                if (f) {
+                    toAddFiles.push(f.fullPath);
+                    let flagKey = COMPONENT_FILE_EXT_NAMES[k];
+                    // add flag for native component script
+                    typeof flagKey === 'string' && (scriptFile[flagKey] = true);
+                }
+            });
+        }
     }
 
-    return jsonFile;
+    if (jsonFile) {
+        jsonFile.isComponentConfig = true;
+        jsonFile.component = scriptFile;
+
+        toAddFiles.push(jsonFile.fullPath);
+    }
+
+    toAddFiles.forEach(item => addFile(item));
 }
 
 /**
@@ -131,11 +150,7 @@ function analyseNativeComponent(scriptFile, options) {
     scriptFile.isAnalysedComponents = true;
 
     // add native component definition files
-    let jsonFile = addComponentSameNameFiles(scriptFile, options);
-    if (jsonFile) {
-        jsonFile.isComponentConfig = true;
-        jsonFile.component = scriptFile;
-    }
+    addComponentSameNameFiles(scriptFile, options);
 }
 
 /**

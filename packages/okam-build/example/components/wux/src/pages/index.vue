@@ -2,7 +2,7 @@
     <view class="wux-home-page">
         <view class="title">Wux Weapp</view>
         <view class="title">按钮</view>
-        <wux-button block type="balanced" @click="clickWux">balanced</wux-button>
+        <wux-button block type="balanced" @click="clickWux(23, $event)">balanced</wux-button>
         <wux-input-number default-value="1024"  />
         <wux-icon type="ios-add" />
     </view>

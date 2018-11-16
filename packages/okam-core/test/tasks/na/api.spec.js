@@ -8,26 +8,12 @@
 import assert from 'assert';
 import expect, {spyOn, createSpy} from 'expect';
 import {promisify, promisifyApis, interceptApis} from 'core/na/api';
-import {setApis, getApis} from 'core/na/api';
-import {env} from 'core/na/index';
 import {isPromise} from '../../helper';
 
 describe('na/api', function () {
 
     afterEach(() => {
         expect.restoreSpies();
-    });
-
-    it('should return default native api', function () {
-        assert(getApis() === env);
-    });
-
-    it('should allow set default native api', function () {
-        let myApi = {};
-        setApis(null);
-        assert(getApis() === env);
-        setApis(myApi);
-        assert(getApis() === myApi);
     });
 
     it('should call promisify api with default context', function () {
@@ -305,6 +291,309 @@ describe('na/api', function () {
 
             done();
         });
+    });
+
+    it('should intercept api response content for async API', function (done) {
+        let ctx = {
+            $api: {
+                api(opts) {
+                    setTimeout(() => {
+                        opts.fail && opts.fail('fail');
+                        opts.complete && opts.complete('fail');
+                    });
+                },
+                api2(opts) {
+                    setTimeout(() => {
+                        opts.success && opts.success('ok');
+                        opts.complete && opts.complete('ok');
+                    });
+                },
+                api3(opts) {
+                    let data = 'abc';
+                    setTimeout(() => {
+                        opts.success && opts.success(data);
+                        opts.complete && opts.complete(data);
+                    });
+                }
+            }
+        };
+
+        ctx.$api.api3 = promisify(ctx.$api.api3);
+
+        let interceptConf = {
+            api: {
+                done(err, data) {
+                    return {err, data};
+                }
+            },
+
+            api2: {
+                done(err, data) {
+                    return {data, a: 2};
+                }
+            },
+
+            api3: {
+                done(err, data) {
+                    if (err) {
+                        throw err;
+                    }
+                    return data + '666';
+                }
+            }
+        };
+
+        let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
+        let spyApi2 = spyOn(ctx.$api, 'api2').andCallThrough();
+        let spyApi3 = spyOn(ctx.$api, 'api3').andCallThrough();
+        let spyApiDone = spyOn(interceptConf.api, 'done').andCallThrough();
+        let spyApi2Done = spyOn(interceptConf.api2, 'done').andCallThrough();
+        let spyApi3Done = spyOn(interceptConf.api3, 'done').andCallThrough();
+
+        interceptApis(interceptConf, '$api', ctx);
+
+        let spySuccess = createSpy(() => {}).andCallThrough();
+        let spyFail = createSpy(() => {}).andCallThrough();
+        ctx.$api.api({a: 1, success: spySuccess, fail: spyFail});
+
+        let spySuccess2 = createSpy(() => {}).andCallThrough();
+        let spyFail2 = createSpy(() => {}).andCallThrough();
+        let spyComplete2 = createSpy(() => {}).andCallThrough();
+        const api2Opts = {
+            a: 2,
+            success: spySuccess2,
+            fail: spyFail2,
+            complete: spyComplete2
+        };
+        ctx.$api.api2(api2Opts);
+
+        let spyResolve3 = createSpy(() => {}).andCallThrough();
+        let spyReject3 = createSpy(() => {}).andCallThrough();
+        let spySuccess3 = createSpy(() => {}).andCallThrough();
+        let spyFail3 = createSpy(() => {}).andCallThrough();
+        ctx.$api.api3({a: 3, success: spySuccess3, fail: spyFail3}).then(
+            spyResolve3, spyReject3
+        );
+
+        setTimeout(() => {
+            expect(spySuccess).toNotHaveBeenCalled();
+            expect(spyFail).toHaveBeenCalledWith({err: 'fail', data: null});
+            assert(spyFail.calls.length === 1);
+
+            assert(spyApi.calls.length === 1);
+            expect(Object.keys(spyApi.calls[0].arguments[0])).toEqual([
+                'a', 'success', 'fail'
+            ]);
+
+            expect(spyApiDone).toHaveBeenCalled();
+            assert(spyApiDone.calls.length === 1);
+            expect(spyApiDone.calls[0].arguments).toEqual(['fail', null, ctx]);
+
+            let doneData2 = {data: 'ok', a: 2};
+            expect(spySuccess2).toHaveBeenCalledWith(doneData2);
+            assert(spySuccess2.calls.length === 1);
+            expect(spyComplete2).toHaveBeenCalledWith(doneData2);
+            assert(spyComplete2.calls.length === 1);
+            expect(spyFail2).toNotHaveBeenCalled();
+
+            expect(spyApi2Done).toHaveBeenCalled();
+            assert(spyApi2Done.calls.length === 1);
+            expect(spyApi2Done.calls[0].arguments).toEqual([null, 'ok', ctx]);
+
+            expect(spyApi2).toHaveBeenCalled();
+            assert(spyApi2.calls.length === 1);
+            expect(Object.keys(spyApi2.calls[0].arguments[0])).toEqual([
+                'a', 'success', 'fail', 'complete'
+            ]);
+            assert(spyApi2.calls[0].arguments[0].complete === undefined);
+
+            expect(spySuccess3).toHaveBeenCalledWith('abc666');
+            assert(spySuccess3.calls.length === 1);
+            expect(spyFail3).toNotHaveBeenCalled();
+            expect(spyResolve3).toHaveBeenCalledWith('abc666');
+            assert(spyResolve3.calls.length === 1);
+            expect(spyReject3).toNotHaveBeenCalled();
+
+            expect(spyApi3Done).toHaveBeenCalled();
+            assert(spyApi3Done.calls.length === 1);
+            expect(spyApi3Done.calls[0].arguments).toEqual([null, 'abc', ctx]);
+
+            expect(spyApi3).toHaveBeenCalled();
+            assert(spyApi3.calls.length === 1);
+            expect(Object.keys(spyApi3.calls[0].arguments[0])).toEqual([
+                'a', 'success', 'fail'
+            ]);
+
+            done();
+        }, 10);
+    });
+
+    it('should reject when throw exception in done callback for async API', function (done) {
+        let ctx = {
+            $api: {
+                api(opts) {
+                    let err = 'err233';
+                    setTimeout(() => {
+                        opts.fail && opts.fail(err);
+                        opts.complete && opts.complete(err);
+                    });
+                }
+            }
+        };
+
+        ctx.$api.api = promisify(ctx.$api.api);
+
+        let interceptConf = {
+            api: {
+                done(err, data) {
+                    if (err) {
+                        throw err + '666';
+                    }
+                    return data + '666';
+                }
+            }
+        };
+
+        let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
+        let spyApiDone = spyOn(interceptConf.api, 'done').andCallThrough();
+
+        interceptApis(interceptConf, '$api', ctx);
+
+        let spyResolve = createSpy(() => {}).andCallThrough();
+        let spyReject = createSpy(() => {}).andCallThrough();
+        let spyFail = createSpy(() => {}).andCallThrough();
+        ctx.$api.api({a: 3, fail: spyFail}).then(
+            spyResolve, spyReject
+        );
+
+        setTimeout(() => {
+            let resErrInfo = 'err233666';
+            expect(spyFail).toHaveBeenCalledWith(resErrInfo);
+            assert(spyFail.calls.length === 1);
+
+            assert(spyApi.calls.length === 1);
+            expect(Object.keys(spyApi.calls[0].arguments[0])).toEqual([
+                'a', 'fail', 'success'
+            ]);
+
+            expect(spyApiDone).toHaveBeenCalled();
+            assert(spyApiDone.calls.length === 1);
+            expect(spyApiDone.calls[0].arguments).toEqual(['err233', null, ctx]);
+
+            expect(spyReject).toHaveBeenCalledWith(resErrInfo);
+            assert(spyReject.calls.length === 1);
+            expect(spyResolve).toNotHaveBeenCalled();
+
+            done();
+        }, 10);
+    });
+
+    it('should not reject when not throw exception in done callback', function (done) {
+        let ctx = {
+            $api: {
+                api(opts) {
+                    let err = 'err233';
+                    setTimeout(() => {
+                        opts.fail && opts.fail(err);
+                        opts.complete && opts.complete(err);
+                    });
+                }
+            }
+        };
+
+        ctx.$api.api = promisify(ctx.$api.api);
+
+        let interceptConf = {
+            api: {
+                done(err, data) {
+                    if (err) {
+                        return 'catch';
+                    }
+                    return data + '666';
+                }
+            }
+        };
+
+        let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
+        let spyApiDone = spyOn(interceptConf.api, 'done').andCallThrough();
+
+        interceptApis(interceptConf, '$api', ctx);
+
+        let spyResolve = createSpy(() => {}).andCallThrough();
+        let spyReject = createSpy(() => {}).andCallThrough();
+        let spyFail = createSpy(() => {}).andCallThrough();
+        ctx.$api.api({a: 3, fail: spyFail}).then(
+            spyResolve, spyReject
+        );
+
+        setTimeout(() => {
+            let resErrInfo = 'catch';
+            assert(spyFail.calls.length === 1);
+            expect(spyFail).toHaveBeenCalledWith(resErrInfo);
+
+            assert(spyApi.calls.length === 1);
+            expect(Object.keys(spyApi.calls[0].arguments[0])).toEqual([
+                'a', 'fail', 'success'
+            ]);
+
+            expect(spyApiDone).toHaveBeenCalled();
+            assert(spyApiDone.calls.length === 1);
+            expect(spyApiDone.calls[0].arguments).toEqual(['err233', null, ctx]);
+
+            expect(spyReject).toNotHaveBeenCalled();
+            expect(spyResolve).toHaveBeenCalledWith(resErrInfo);
+            assert(spyResolve.calls.length === 1);
+
+            done();
+        }, 10);
+    });
+
+    it('should not intercept success callback when specified sync true', function (done) {
+        let ctx = {
+            $api: {
+                api(opts) {
+                    setTimeout(() => {
+                        opts.success && opts.success('ok');
+                        opts.complete && opts.complete('ok');
+                    });
+                }
+            }
+        };
+
+        let interceptConf = {
+            api: {
+                sync: true,
+                done(err, data) {
+                    return '666';
+                }
+            }
+        };
+
+        let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
+        let spyApiDone = spyOn(interceptConf.api, 'done').andCallThrough();
+
+        interceptApis(interceptConf, '$api', ctx);
+
+        let spySuccess = createSpy(() => {}).andCallThrough();
+        let result = ctx.$api.api({a: 1, success: spySuccess});
+        assert(result === '666');
+
+        setTimeout(() => {
+            expect(spySuccess).toHaveBeenCalledWith('ok');
+            assert(spySuccess.calls.length === 1);
+
+            assert(spyApi.calls.length === 1);
+            expect(Object.keys(spyApi.calls[0].arguments[0])).toEqual([
+                'a', 'success'
+            ]);
+
+            expect(spyApiDone).toHaveBeenCalled();
+            assert(spyApiDone.calls.length === 1);
+            expect(spyApiDone.calls[0].arguments).toEqual([null, undefined, ctx]);
+
+            done();
+        }, 10);
 
     });
+
 });

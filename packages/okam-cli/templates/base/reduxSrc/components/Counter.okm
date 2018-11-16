@@ -1,0 +1,188 @@
+<% if: ${template} === 'pug' %>
+    <% use: cc-tpl-pug() %>
+<% else %>
+    <% use: cc-tpl-normal() %>
+<% /if %>
+
+<% if: ${script} === 'typescript' %>
+    <% use: cc-script-ts() %>
+<% else %>
+    <% use: cc-script-js() %>
+<% /if %>
+
+<% if: ${style} === 'stylus' %>
+    <% use: cc-stylus() %>
+<% elif: ${style} === 'less' %>
+    <% use: cc-less() %>
+<% elif: ${style} === 'sass' %>
+    <% use: cc-sass() %>
+<% else %>
+    <% use: cc-css() %>
+<% /if %>
+<% target: cc-tpl-normal %>
+<template>
+    <view class="counter-wrap">
+        <view class="counter-title">Counter: {{counter}}</view>
+        <button plain class="counter-btn" @click="onAddCounter">增加 Counter</button>
+        <button plain class="counter-btn" @click="onMinusCounter">减少 Counter</button>
+    </view>
+</template>
+<% target: cc-tpl-pug %>
+<template lang="pug">
+view.counter-wrap
+    view.counter-title Counter: {{counter}}
+    button.counter-btn(
+        plain,
+        @click="onAddCounter"
+    ) 增加 Counter
+    button.counter-btn(
+        plain,
+        @click="onMinusCounter"
+    ) 增加 Counter
+</template>
+<% target: cc-script-js %>
+<script>
+import actions from '../actions/index';
+
+export default {
+    data: {
+    },
+
+    computed: {
+    },
+
+    watch: {
+        counter(old, newVal) {
+            console.log('watch counter change...', old, newVal);
+        }
+    },
+
+    $store: {
+        computed: ['counter'],
+        actions: [
+            // original actions
+            actions,
+            {
+                // this.incr(10) 等价于 store.dispatch(actions.increment(10))
+                incr: 'addCounter',
+                decr: 'reduceCounter'
+            }
+        ]
+    },
+
+    created() {
+        let state = this.$store.getState();
+        console.log('created counter', state);
+    },
+
+    methods: {
+        onAddCounter() {
+            this.incr(5);
+            this.$emit('counterChange', this.counter);
+        },
+
+        onMinusCounter() {
+            this.decr();
+            this.$emit('counterChange', this.counter);
+        }
+    }
+};
+</script>
+<% target: cc-script-ts %>
+<script lang="typescript">
+import actions from '../actions/index';
+
+export default {
+    data: {
+    },
+
+    computed: {
+    },
+
+    watch: {
+        counter(old, newVal) {
+            console.log('watch counter change...', old, newVal);
+        }
+    },
+
+    $store: {
+        computed: ['counter'],
+        actions: [
+            // original actions
+            actions,
+            {
+                // this.incr(10) 等价于 store.dispatch(actions.increment(10))
+                incr: 'addCounter',
+                decr: 'reduceCounter'
+            }
+        ]
+    },
+
+    created() {
+        let state = this.$store.getState();
+        console.log('created counter', state);
+    },
+
+    methods: {
+        onAddCounter() {
+            this.incr(5);
+            this.$emit('counterChange', this.counter);
+        },
+
+        onMinusCounter() {
+            this.decr();
+            this.$emit('counterChange', this.counter);
+        }
+    }
+};
+</script>
+<% target: cc-stylus %>
+<style lang="stylus">
+.counter-wrap
+    .counter-title
+        font-weight: 600
+        padding: 20px
+        text-align: center
+
+    .counter-btn
+        margin: 20px 0
+</style>
+
+<% target: cc-less %>
+<style lang="less">
+.counter-wrap .counter-title {
+    font-weight: 600;
+    padding: 20px;
+    text-align: center;
+}
+
+.counter-wrap .counter-btn {
+    margin: 20px 0;
+}
+
+</style>
+<% target: cc-sass %>
+<style lang="sass">
+.counter-wrap .counter-title {
+    font-weight: 600;
+    padding: 20px;
+    text-align: center;
+}
+
+.counter-wrap .counter-btn {
+    margin: 20px 0;
+}
+</style>
+<% target: cc-css %>
+<style>
+.counter-wrap .counter-title {
+    font-weight: 600;
+    padding: 20px;
+    text-align: center;
+}
+
+.counter-wrap .counter-btn {
+    margin: 20px 0;
+}
+</style>
+

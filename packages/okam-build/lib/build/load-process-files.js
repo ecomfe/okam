@@ -70,7 +70,7 @@ function resolvePath(file, rootDir) {
     return file;
 }
 
-function loadToProcessFiles(options, logger) {
+function loadProcessFiles(options, logger) {
     let rootDir = options.root;
     let {dir, exclude, include} = options.source;
     if (!dir) {
@@ -78,6 +78,7 @@ function loadToProcessFiles(options, logger) {
         return;
     }
 
+    let initBuildFiles = [];
     let componentExtname = options.component.extname;
     let {style: entryStyle, script: entryScript, projectConfig} = options.entry;
     entryStyle = resolvePath(entryStyle, rootDir);
@@ -128,12 +129,20 @@ function loadToProcessFiles(options, logger) {
         });
 
         // ensure the entry app script can be compiled at first
-        if (toProcessFile.isEntryScript) {
-            processFiles.unshift(toProcessFile);
+        if (toProcessFile.isEntryScript
+            || toProcessFile.isEntryStyle
+            || toProcessFile.isProjectConfig
+        ) {
+            initBuildFiles.unshift(toProcessFile);
         }
-        else {
-            processFiles.push(toProcessFile);
+        else if (!toProcessFile.isScript
+            && !toProcessFile.isStyle
+            && !toProcessFile.isJson
+        ) {
+            initBuildFiles.push(toProcessFile);
         }
+
+        processFiles.push(toProcessFile);
     };
 
     logger.debug('load files', rootDir, sourceDir);
@@ -142,8 +151,9 @@ function loadToProcessFiles(options, logger) {
     return {
         root: rootDir,
         sourceDir,
-        files: processFiles
+        files: processFiles,
+        buildFiles: initBuildFiles
     };
 }
 
-module.exports = loadToProcessFiles;
+module.exports = loadProcessFiles;

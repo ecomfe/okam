@@ -1,0 +1,6 @@
+<view class="add-button-wrap">
+    <button class="add-button" hover-class="none" onTap="onClickMe">
+        <text class="add-icon">+</text>
+    </button>
+    <hello hi="{{hi}}"></hello>
+</view>

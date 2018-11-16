@@ -97,6 +97,10 @@ export default {
                         path: 'data/init',
                     },
                     {
+                        subName: '数组操作',
+                        path: 'data/array',
+                    },
+                    {
                         subName: '计算属性',
                         path: 'data/computed',
                     },
@@ -114,6 +118,7 @@ export default {
     },
 
     methods: {
+
         oneItemClick(e) {
             let viewPath = e.currentTarget.dataset.path;
             this.$api.navigateTo({

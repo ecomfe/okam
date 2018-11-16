@@ -16,6 +16,7 @@ export default Object.assign({}, component, {
      * @param {Object} query the page query params
      */
     onLoad(query) {
+        this.$isPage = true;
         this.$query = query || {};
 
         // call component create life cycle method

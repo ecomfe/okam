@@ -13,57 +13,23 @@ import expect, {createSpy} from 'expect';
 import MyApp from 'core/App';
 import MyPage from 'core/Page';
 import * as na from 'core/na/index';
-import base from 'core/base/base';
-import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
 import reduxPlugin from 'core/extend/data/redux/index';
 import observable from 'core/extend/data/observable';
 import store from './store/index';
+import {fakeAppEnvAPIs} from 'test/helper';
 
 describe('behavior', function () {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
-    const rawSelectComponent = component.selectComponent;
+    let restoreAppEnv;
+
     beforeEach('init global App', function () {
         clearBaseCache();
-        global.swan = {
-            getSystemInfo() {},
-            request() {},
-            createSelectorQuery() {
-                return {
-                    select(path) {
-                        return path;
-                    }
-                };
-            }
-        };
 
-        component.selectComponent = function (path) {
-            return 'c' + path;
-        };
-
-        na.getCurrApp = function () {
-            return {};
-        };
-        na.env = base.$api = global.swan;
-
-        global.Component = function (instance) {
-            Object.assign(instance, instance.methods);
-            return instance;
-        };
-
-        global.Page = function (instance) {
-            return instance;
-        };
+        restoreAppEnv = fakeAppEnvAPIs('swan');
     });
 
     afterEach('clear global App', function () {
-        global.Component = undefined;
-        global.Page = undefined;
-        global.swan = undefined;
-        component.selectComponent = rawSelectComponent;
-        na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
+        restoreAppEnv();
         expect.restoreSpies();
     });
 

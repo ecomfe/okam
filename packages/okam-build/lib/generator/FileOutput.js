@@ -142,6 +142,10 @@ function addFileOutputTask(allTasks, options, file) {
         return;
     }
 
+    if (!file.compiled) {
+        this.logger.debug('file is not compiled:', file.path);
+    }
+
     allTasks.push(
         outputFile(file, path.join(outputDir, outputRelPath), options.logger)
     );

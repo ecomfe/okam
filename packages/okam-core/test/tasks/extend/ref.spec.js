@@ -10,38 +10,24 @@
 import assert from 'assert';
 import expect from 'expect';
 import MyApp from 'core/App';
-import * as na from 'core/na/index';
-import base from 'core/base/base';
 import MyPage from 'core/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import ref from 'core/extend/ref';
 import component from 'core/base/component';
-import {fakeComponent} from 'test/helper';
+import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
 describe('ref plugin', function () {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
     const rawSelectComponent = component.selectComponent;
     const rawSelectAllComponent = component.selectAllComponents;
 
     let MyComponent;
+    let restoreAppEnv;
+
     beforeEach('init global App', function () {
         clearBaseCache();
 
         MyComponent = fakeComponent();
-
-        global.swan = {
-            createSelectorQuery() {
-                return {
-                    select(path) {
-                        return path;
-                    },
-                    selectAll(path) {
-                        return [path];
-                    }
-                };
-            }
-        };
+        restoreAppEnv = fakeAppEnvAPIs('swan');
 
         component.selectComponent = function (path) {
             if (path.indexOf('.notExist') === 0) {
@@ -56,25 +42,17 @@ describe('ref plugin', function () {
             }
             return ['c' + path];
         };
-
-        na.getCurrApp = function () {
-            return {};
-        };
-        na.env = base.$api = global.swan;
     });
 
     afterEach('clear global App', function () {
-        global.swan = undefined;
         MyComponent = undefined;
+        restoreAppEnv();
 
         component.selectComponent = rawSelectComponent;
         component.selectAllComponents = rawSelectAllComponent;
 
-        na.getCurrApp = rawGetCurrApp;
-        na.env = base.$api = rawEnv;
         expect.restoreSpies();
     });
-
 
     it('should support refs in page', () => {
         MyApp.use(ref);

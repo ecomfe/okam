@@ -62,10 +62,14 @@ exports.resolve = function (buildManager, file, requireModId) {
 
     let {files: fileFactory, logger} = buildManager;
     logger.debug('resolve', file.path, requireModId);
+
     let depFile = fileFactory.addFile(depFileFullPath);
+    buildManager.addNeedBuildFile(depFile);
     file.addDeps(depFile.path);
+
     file.isWxCompScript && (depFile.isWxCompScript = true);
     file.isSwanCompScript && (depFile.isSwanCompScript = true);
+    file.isAntCompScript && (depFile.isAntCompScript = true);
 
     let resolveModId = requireModId;
     if (!isRelModId) {

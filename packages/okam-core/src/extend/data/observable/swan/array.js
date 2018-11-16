@@ -8,28 +8,25 @@
 /* eslint-disable fecs-export-on-declare */
 
 const componentApi = {
-    $pushData(path, value) {
+    __pushData(path, value) {
         this.pushData(path, value, this.__nextTickCallback);
     },
 
-    $popData(path) {
+    __popData(path) {
         this.popData(path, this.__nextTickCallback);
     },
 
-    $unshiftData(path, value) {
+    __unshiftData(path, value) {
+        // FIXME: native bug
         this.unshiftData(path, value, this.__nextTickCallback);
     },
 
-    $shiftData(path) {
+    __shiftData(path) {
         this.shiftData(path, this.__nextTickCallback);
     },
 
-    // $removeAtData(path, value) {
-    //     // TODO usage of removeAtData
-    //     this.removeAtData(path, value, this.__nextTickCallback);
-    // },
-
-    $spliceData(path, spliceArgs) {
+    __spliceData(path, spliceArgs) {
+        // FIXME: native bug
         this.spliceData(path, spliceArgs, this.__nextTickCallback);
     }
 };
@@ -37,7 +34,11 @@ const componentApi = {
 const observableArray = {
     push(observer, rawPush, ...items) {
         let {ctx, selector} = observer;
-        items.forEach(data => ctx.$pushData(selector, data));
+        items.forEach(data => ctx.__pushData(selector, data));
+
+        // update the cache raw data
+        observer.rawData = observer.getContextData();
+
         return rawPush.apply(this, items);
     },
 
@@ -47,14 +48,20 @@ const observableArray = {
             return rawShift.call(this);
         }
 
-        ctx.$shiftData(selector);
+        ctx.__shiftData(selector);
+
+        // update the cache raw data
+        observer.rawData = observer.getContextData();
 
         return rawShift.call(this);
     },
 
     unshift(observer, rawUnshift, ...items) {
         let {ctx, selector} = observer;
-        ctx.$unshiftData(selector, items);
+        ctx.__unshiftData(selector, items);
+
+        // update the cache raw data
+        observer.rawData = observer.getContextData();
 
         return rawUnshift.apply(this, items);
     },
@@ -64,14 +71,20 @@ const observableArray = {
         if (!this.length) {
             return rawPop.call(this);
         }
-        ctx.$popData(selector);
+        ctx.__popData(selector);
+
+        // update the cache raw data
+        observer.rawData = observer.getContextData();
 
         return rawPop.call(this);
     },
 
     splice(observer, rawSplice, ...args) {
         let {ctx, selector} = observer;
-        ctx.$spliceData(selector, args);
+        ctx.__spliceData(selector, args);
+
+        // update the cache raw data
+        observer.rawData = observer.getContextData();
 
         return rawSplice.apply(this, args);
     }

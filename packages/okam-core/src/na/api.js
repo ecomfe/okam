@@ -3,27 +3,192 @@
  * @author sparklewhy@gmail.com
  */
 
-import {isFunction, isObject, isPromise} from '../util/index';
+import {isFunction, isObject, isPromise, definePropertyValue} from '../util/index';
 import {env} from './index';
 
-let myPromisifyApis;
-
 /**
- * Get mini program APIs
+ * Execute API initialization hook
  *
- * @return {Object}
+ * @inner
+ * @param {Function} init the initialization hook
+ * @param {Array} args the API call arguments
+ * @param {Object} ctx the extra call context for the hook
  */
-export function getApis() {
-    return myPromisifyApis || env;
+function hookAPIInit(init, args, ctx) {
+    // API init interception
+    if (isFunction(init)) {
+        let isArrArgs = false;
+        if (args.length > 1 || !isObject(args[0])) {
+            // convert as one array type argument to make the developer
+            // can modify the call arguments directly
+            args = [args];
+            isArrArgs = true;
+        }
+        init.apply(this, [...args, ctx]);
+
+        // restore args type
+        args = isArrArgs ? args[0] : args;
+    }
 }
 
 /**
- * Set mini program APIs
+ * Crate API done hook
  *
- * @param {Object} apis the apis to set
+ * @inner
+ * @param {Function} done the done hook to execute
+ * @param {Object} ctx the extra call context for the hook
+ * @return {Object}
  */
-export function setApis(apis) {
-    myPromisifyApis = apis;
+function createAPIDoneHook(done, ctx) {
+    let hookInfo = {
+        resData: null,
+        resException: false,
+        hook: null
+    };
+
+    hookInfo.hook = (err, res, complete, shouldCatchException) => {
+        let result;
+        if (err != null) {
+            result = err;
+            if (shouldCatchException) {
+                try {
+                    let data = done(result, null, ctx);
+                    data == null || (result = data);
+                }
+                catch (ex) {
+                    // cache exception info for promise
+                    hookInfo.resException = true;
+                    result = ex;
+                }
+            }
+            else {
+                let data = done(result, null, ctx);
+                data == null || (result = data);
+            }
+        }
+        else {
+            let data = done(null, res, ctx);
+            data == null || (res = data);
+            result = res;
+        }
+
+        // cache response data for promise
+        hookInfo.resData = result;
+
+        complete && complete(result); // call complete callback
+
+        return result;
+    };
+
+    return hookInfo;
+}
+
+/**
+ * Intercept async API done based on the call arguments: `success`/`fail`
+ *
+ * @inner
+ * @param {boolean} sync whether is sync API, if true, it will not hook the
+ *        API done result based the call arguments
+ * @param {Array} args the API call arguments
+ * @param {Function} doneHook the done hook to execute
+ * @return {boolean} whether intercept the API done result by the arguments
+ */
+function interceptAsyncAPIDone(sync, args, doneHook) {
+    let callOpts = args[0];
+    let {success, fail, complete} = callOpts || {};
+    let hasIntercepted = false;
+
+    if (!sync
+        && (isFunction(success) || isFunction(fail) || isFunction(complete))
+    ) {
+        hasIntercepted = true;
+        let newCallOpts = Object.assign({}, callOpts);
+        newCallOpts.success = res => {
+            let data = doneHook(null, res, complete, true);
+            success && success(data);
+        };
+
+        newCallOpts.fail = err => {
+            err = doneHook(err || /* istanbul ignore next */ 'err', null, complete, true);
+            fail && fail(err);
+        };
+
+        // remove complete callback
+        // using success and fail callback instead of using complete callback
+        complete && (newCallOpts.complete = undefined);
+        args[0] = newCallOpts;
+    }
+
+    return hasIntercepted;
+}
+
+/**
+ * Intercept the API promise response
+ *
+ * @inner
+ * @param {boolean} hasIntercepted whether intercepted by the API call arguments
+ * @param {Promise} promise the promise response
+ * @param {Object} doneHookInfo the done hook info
+ * @return {Promise}
+ */
+function interceptPromiseResponse(hasIntercepted, promise, doneHookInfo) {
+    let {hook} = doneHookInfo;
+    return promise.then(
+        res => (hasIntercepted ? doneHookInfo.resData : hook(null, res)),
+        err => {
+            // check whether is intercepted to avoid repeated interception
+            if (hasIntercepted) {
+                let {resException, resData} = doneHookInfo;
+                if (resException) {
+                    throw resData;
+                }
+                return resData;
+            }
+
+            return hook(err || /* istanbul ignore next */ 'err');
+        }
+    );
+}
+
+/**
+ * Proxy API
+ *
+ * @inner
+ * @param {Object} ctx the extra context information for the hook
+ * @param {Function} rawApi the original API to call
+ * @param {Object} apiOpts the API hook options
+ * @param  {...any} args the arguments to call the API
+ * @return {*}
+ */
+function proxyAPI(ctx, rawApi, apiOpts, ...args) {
+    let {init, done, sync} = apiOpts;
+
+    // API init interception
+    hookAPIInit(init, args, ctx);
+
+    // API done interception
+    let hasDoneHook = isFunction(done);
+    let hasIntercepted = false;
+    let doneHookInfo;
+    if (hasDoneHook) {
+        doneHookInfo = createAPIDoneHook(done, ctx);
+        // intercept async API based the args: `success`/`fail`/`complete` callback
+        hasIntercepted = interceptAsyncAPIDone(sync, args, doneHookInfo.hook);
+    }
+
+    // call API
+    let result = rawApi.apply(this, args);
+    if (hasDoneHook) {
+        // intercept the API call result
+        if (isPromise(result)) {
+            result = interceptPromiseResponse(hasIntercepted, result, doneHookInfo);
+        }
+        else if (!hasIntercepted) {
+            result = doneHookInfo.hook(null, result);
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -75,52 +240,16 @@ export function promisifyApis(apis, context) {
         apis = [apis];
     }
 
+    let allApis = context.$api;
     apis.forEach(key => {
-        let api = context.$api[key];
+        let api = allApis[key];
 
         if (!api) {
             return;
         }
 
-        context.$api[key] = promisify(api, context.$api);
+        definePropertyValue(allApis, key, promisify(api, context.$api));
     });
-}
-
-function proxyAPI(ctx, rawApi, apiOpts, ...args) {
-    let {init, done} = apiOpts;
-
-    if (isFunction(init)) {
-        let isArrArgs = false;
-        if (args.length > 1 || !isObject(args[0])) {
-            // convert as one array type argument to make the developer
-            // can modify the call arguments directly
-            args = [args];
-            isArrArgs = true;
-        }
-        init.apply(this, [...args, ctx]);
-
-        // restore args type
-        args = isArrArgs ? args[0] : args;
-    }
-
-    let result = rawApi.apply(this, args);
-    if (isFunction(done)) {
-        if (isPromise(result)) {
-            result = result.then(
-                res => {
-                    let data = done(null, res, ctx);
-                    data == null || (res = data);
-                    return res;
-                },
-                err => done(err || /* istanbul ignore next */ 'error', null, ctx)
-            );
-        }
-        else {
-            result = done(null, result, ctx);
-        }
-    }
-
-    return result;
 }
 
 /**
@@ -170,7 +299,13 @@ export function interceptApis(apis, key, ctx) {
     Object.keys(apis).forEach(apiName => {
         let rawApi = allApis[apiName];
         if (rawApi) {
-            allApis[apiName] = proxyAPI.bind(null, ctx, rawApi, apis[apiName]);
+            definePropertyValue(
+                allApis,
+                apiName,
+                proxyAPI.bind(null, ctx, rawApi, apis[apiName])
+            );
         }
     });
 }
+
+export default Object.create(env);

@@ -6,7 +6,7 @@
 'use strict';
 
 /* eslint-disable babel/new-cap */
-
+/*
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
@@ -14,14 +14,13 @@ import * as na from 'core/na/index';
 import base from 'core/base/base';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
+import observable from 'core/extend/data/observable/swan';
 import {fakeComponent} from 'test/helper';
 import {
-    initSwanObservableArray,
-    resetObservableArray,
-    swanObservablePlugin as observable
+    resetObservableArray
 } from '../helper';
 
-describe('swan observable', function () {
+describe('swan array observable', function () {
     const rawEnv = na.env;
     const rawGetCurrApp = na.getCurrApp;
 
@@ -461,3 +460,4 @@ describe('swan observable', function () {
         });
     });
 });
+*/

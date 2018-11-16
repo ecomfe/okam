@@ -1,0 +1,3 @@
+<view class="hi-wrap">
+    <text>HI:{{hi}}</text>
+</view>

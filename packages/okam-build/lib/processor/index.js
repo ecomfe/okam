@@ -32,7 +32,8 @@ function processConfigInfo(file, root, owner) {
     return jsonFile;
 }
 
-function processEntryScript(file, allFiles, root, componentExtname) {
+function processEntryScript(file, buildManager) {
+    let {root, files: allFiles, componentExtname} = buildManager;
     let appConfig = file.config || {};
     file.config = appConfig;
 
@@ -60,14 +61,18 @@ function processEntryScript(file, allFiles, root, componentExtname) {
             let pageFullPath = path.resolve(file.dirname, p)
                 + '.' + componentExtname;
             let pageFile = allFiles.getByFullPath(pageFullPath);
-            pageFile && (pageFile.isPageComponent = true);
+            if (pageFile) {
+                pageFile.isPageComponent = true;
+                buildManager.addNeedBuildFile(pageFile);
+            }
         }
     );
 
     let jsonFile = processConfigInfo(file, root, file);
     jsonFile.isAppConfig = true;
-
     allFiles.push(jsonFile);
+
+    buildManager.addNeedBuildFile(jsonFile);
 }
 
 function processComponentScript(buildManager, file, root) {
@@ -123,7 +128,7 @@ function processFile(file, processor, buildManager) {
  * @param {BuildManager} buildManager the build manager
  */
 function compile(file, buildManager) {
-    let {logger, root, rules, files: allFiles} = buildManager;
+    let {logger, root, rules} = buildManager;
     let processors = findMatchProcessor(file, rules, buildManager);
     logger.debug('compile file:', file.path, processors.length);
 
@@ -132,7 +137,7 @@ function compile(file, buildManager) {
     }
 
     if (file.isEntryScript) {
-        processEntryScript(file, allFiles, root, buildManager.componentExtname);
+        processEntryScript(file, buildManager);
     }
     else if (file.isPageScript || file.isComponentScript) {
         processComponentScript(buildManager, file, root);
@@ -142,6 +147,7 @@ function compile(file, buildManager) {
 /**
  * Get custom component tags
  *
+ * @inner
  * @param {Object} config the component config
  * @return {?Array.<string>}
  */

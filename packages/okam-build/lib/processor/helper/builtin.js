@@ -131,6 +131,9 @@ function resolveProcessor(processor) {
     if (typeof processor === 'string') {
         processor = customRequire(processor);
     }
+    else if (!processor) {
+        throw 'processor handler is not specified, please make sure your processor name is correct';
+    }
     return processor;
 }
 
@@ -138,11 +141,12 @@ function resolveProcessor(processor) {
  * Initialize processor information
  *
  * @inner
+ * @param {string} name the processor name
  * @param {Object} info the processor info
  * @param {Object} existedProcessors the existed processors
  * @return {Object}
  */
-function initProcessorInfo(info, existedProcessors) {
+function initProcessorInfo(name, info, existedProcessors) {
     let processor = info.processor;
     if (typeof processor === 'string') {
         // if the processor refer to the existed processor, merge the existed
@@ -166,7 +170,14 @@ function initProcessorInfo(info, existedProcessors) {
         }
     }
 
-    info.processor = resolveProcessor(processor);
+    try {
+        info.processor = resolveProcessor(processor);
+    }
+    catch (ex) {
+        let msg = `processor \`${name}\` handler \`${processor}\` not `
+            + `found: ${ex.message || ex.toString()}`;
+        throw new Error(msg);
+    }
     return info;
 }
 
@@ -228,7 +239,7 @@ function registerProcessor(existedProcessors, extnameProcessorMap, opts) {
         );
     }
     else {
-        existedProcessors[name] = initProcessorInfo({
+        existedProcessors[name] = initProcessorInfo(name, {
             processor,
             deps,
             rext,

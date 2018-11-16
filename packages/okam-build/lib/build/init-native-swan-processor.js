@@ -1,5 +1,5 @@
 /**
- * @file Native swan support processor initialization
+ * @file Native swan mini program support processor initialization
  * @author sparklewhy@gmail.com
  */
 
@@ -15,8 +15,9 @@ const adapterPlugin = require('../processor/js/plugins/babel-native-swan-plugin'
  * @param {Object=} opts the options to init
  * @param {string=} opts.processor the builtin processor name, by default `babel`
  * @param {Array=} opts.plugins the processor plugins
+ * @param {string} defaultBabelProcessorName default babel processor name
  */
-function initJsProcessor(opts) {
+function initJsProcessor(opts, defaultBabelProcessorName) {
     let plugins = (opts && opts.plugins) || [adapterPlugin];
     registerProcessor({
         name: (opts && opts.processor) || 'babel', // override existed processor
@@ -36,12 +37,13 @@ function initJsProcessor(opts) {
  *
  * @param {Object=} options the initialization options
  * @param {Object=} options.js the component js processor init options
+ * @param {string} defaultBabelProcessorName default babel processor name
  */
-function initProcessor(options = {}) {
+function initProcessor(options = {}, defaultBabelProcessorName) {
     let {js} = options;
 
     if (js !== false) {
-        initJsProcessor(js);
+        initJsProcessor(js, defaultBabelProcessorName);
     }
 }
 
