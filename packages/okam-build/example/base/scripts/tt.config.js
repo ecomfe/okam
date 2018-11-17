@@ -12,8 +12,18 @@ module.exports = merge({}, require('./base.config'), {
         dir: 'tt_dist',
         depDir: 'src/common'
     },
-    localPolyfill: [
-        'async',
-        'promise'
-    ]
+    polyfill: ['async'],
+    dev: {
+        processors: {
+            postcss: {
+                options: {
+                    plugins: {
+                        'postcss-url': {
+                            url: 'inline'
+                        }
+                    }
+                }
+            }
+        }
+    }
 });
