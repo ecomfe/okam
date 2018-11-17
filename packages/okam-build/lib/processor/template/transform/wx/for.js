@@ -11,6 +11,7 @@ module.exports = function (attrs, name, tplOpts, opts) {
     transformFor(attrs, name, tplOpts, Object.assign({
         forDirectionName: 'wx:for',
         forItemDirectiveName: 'wx:for-item',
-        forIndexDirectiveName: 'wx:for-index'
+        forIndexDirectiveName: 'wx:for-index',
+        tripleBrace: true
     }, opts));
 };

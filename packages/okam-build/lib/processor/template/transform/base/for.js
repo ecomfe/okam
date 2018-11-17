@@ -6,11 +6,11 @@
 
 'use strict';
 
-const {FOR_ITEM_INDEX_REGEXP, BRACKET_REGEXP} = require('./constant');
+const {PLAIN_OBJECT_REGEXP, FOR_ITEM_INDEX_REGEXP, BRACKET_REGEXP} = require('./constant');
 
 module.exports = function (attrs, name, tplOpts, opts) {
     let {logger, file} = tplOpts;
-    let {forDirectionName, supportForAbbr = false} = opts;
+    let {forDirectionName, supportForAbbr = false, tripleBrace} = opts;
     let newName = forDirectionName;
     let newValue = attrs[name].replace(BRACKET_REGEXP, '');
 
@@ -39,7 +39,17 @@ module.exports = function (attrs, name, tplOpts, opts) {
         }
 
         if (newValue) {
-            newValue = `{{ ${newValue} }}`;
+            if (PLAIN_OBJECT_REGEXP.test(newValue)) {
+                if (tripleBrace) {
+                    newValue = `{{ ${newValue} }}`;
+                }
+                else {
+                    newValue = `{${newValue}}`;
+                }
+            }
+            else {
+                newValue = `{{${newValue}}}`;
+            }
         }
     }
 

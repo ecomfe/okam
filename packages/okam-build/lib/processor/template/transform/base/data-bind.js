@@ -25,8 +25,14 @@ module.exports = function (attrs, name, tplOpts, opts) {
     let value = attrs[name];
     if (typeof value === 'string') {
         value = value.trim();
-        if (!tripleBrace && PLAIN_OBJECT_REGEXP.test(value)) {
-            value = `{${value}}`;
+
+        if (PLAIN_OBJECT_REGEXP.test(value)) {
+            if (tripleBrace) {
+                value = `{{ ${value} }}`;
+            }
+            else {
+                value = `{${value}}`;
+            }
         }
         else {
             value = `{{${value}}}`;

@@ -25,7 +25,7 @@ module.exports = function (node) {
 
     // 对于for和if共存，for 优先级高于 if
     // 对于for和else-if/elif/else，for优先级低于else-if/elif/else
-    CONDITION_DIRECTIVES.forEach(item => {
+    CONDITION_DIRECTIVES.some(item => {
         if (node.attribs[item]) {
             let blockAttr = (item === 'if' ? 'for' : item);
             node.attribs = {[blockAttr]: childAttrs[blockAttr]};
@@ -36,7 +36,10 @@ module.exports = function (node) {
                 node.attribs[':key'] = forKeyValue;
                 delete childAttrs[':key'];
             }
+
+            return true;
         }
+        return false;
     });
 
     // create new node according to the AST node structure

@@ -26,6 +26,9 @@ module.exports = {
         },
         key: {
             transform: require('./key')
+        },
+        bind: {
+            transform: require('./data-bind')
         }
     })
 };

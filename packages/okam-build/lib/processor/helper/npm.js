@@ -31,7 +31,12 @@ exports.resolveNpmModuleNewPath = function (oldPath, rebaseDepDir) {
     let newPath = rebaseDepDir + oldPath.substr(DEP_DIR_NAME.length + 1);
     // replace all `node_modles` to `npm` to fix weixin cannot find the module
     // if the module path exists `node_module` dir name
-    return newPath.replace(DEP_DIR_NAME_REGEXP, NEW_DEP_DIR_NAME);
+    let result = newPath.replace(
+        DEP_DIR_NAME_REGEXP, NEW_DEP_DIR_NAME
+    );
+
+    // remove `src` to fix toutiao cannot init correctly
+    return result.replace('/src/', '/').replace('okam-core', 'okam');
 };
 
 /**

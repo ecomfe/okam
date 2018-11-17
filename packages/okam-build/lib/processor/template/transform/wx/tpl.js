@@ -7,8 +7,8 @@
 
 const transformTpl = require('../base/tpl');
 
-module.exports = function (attrs, name, tplOpts, opts) {
-    transformTpl(attrs, name, tplOpts, Object.assign({
+module.exports = function (element, tplOpts, opts) {
+    transformTpl(element, tplOpts, Object.assign({
         transformDataAttr: true
     }, opts));
 };
