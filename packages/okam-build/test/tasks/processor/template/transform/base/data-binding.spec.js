@@ -23,6 +23,6 @@ describe('data-binding', function () {
             content: '<div :class="hello" :style="world" :id="bye" id="2"></div>'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view id="{{bye}}" class="{{hello}}" style="{{world}}"></view>');
+        assert.equal(result.content, '<view id="{{bye}}" class="{{hello}}" style="{{world}}"></view>');
     });
 });
