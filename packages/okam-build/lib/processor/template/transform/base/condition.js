@@ -30,7 +30,7 @@ module.exports = function (attrs, name, tplOpts, opts) {
     }
 
     let value = attrs[name];
-    if (wrapCondition) {
+    if (wrapCondition && typeof value === 'string') {
         value = `{{${value}}}`;
     }
     attrs[newName] = value;
