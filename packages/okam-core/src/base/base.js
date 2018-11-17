@@ -24,13 +24,6 @@ export default {
     $api: api,
 
     /**
-     * The global object
-     *
-     * @type {Object}
-     */
-    $global: global,
-
-    /**
      * The http request object
      *
      * @type {Object}
