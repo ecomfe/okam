@@ -1,5 +1,5 @@
 /**
- * @file Make component support data operation like Vue for weixin mini program
+ * @file Make component support data operation like Vue for toutiao mini program
  * @author sparklewhy@gmail.com
  */
 

@@ -8,6 +8,7 @@
 /* global wx:false */
 /* global my:false */
 /* global swan:false */
+/* global tt:false */
 /* global self:false */
 /* global window:false */
 /* global getCurrentPages:false */
@@ -33,7 +34,7 @@ const envGlobal = (function getGlobal() {
  *
  * @type {Object}
  */
-export {envGlobal as global};
+export {envGlobal as g};
 
 /**
  * Whether is running in Tencent wx mini program env
@@ -66,6 +67,16 @@ export const isAntEnv = (function () {
 })();
 
 /**
+ * Whether is running in Ali ant mini program env
+ *
+ * @type {boolean}
+ */
+export const isToutiaoEnv = (function () {
+    /* istanbul ignore next */
+    return !!(typeof tt === 'object' && tt && typeof tt.getSystemInfo === 'function');
+})();
+
+/**
  * Native env variable
  *
  * @param {Object}
@@ -84,6 +95,11 @@ export const env = (function getEnv() {
     /* istanbul ignore next */
     if (isAntEnv) {
         return my;
+    }
+
+    /* istanbul ignore next */
+    if (isToutiaoEnv) {
+        return tt;
     }
 
     return envGlobal;

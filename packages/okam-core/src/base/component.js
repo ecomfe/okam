@@ -17,9 +17,23 @@ export default {
      * @private
      */
     created() {
-        // cannot call setData
-        Object.assign(this, base);
-        this.$app = getCurrApp();
+        // cannot call setData，cannot set `$app` enumerable true,
+        // it'll lead to error in toutiao mini program
+        let propDescriptors = {
+            '$app': {
+                get() {
+                    return getCurrApp();
+                }
+            }
+        };
+        Object.keys(base).forEach(k => {
+            propDescriptors[k] = {
+                get() {
+                    return base[k];
+                }
+            };
+        });
+        Object.defineProperties(this, propDescriptors);
 
         this.$listener = new EventListener();
 

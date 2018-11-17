@@ -5,7 +5,7 @@
 
 'use strict';
 
-import observable from '../index';
+import observable from '../base';
 // import {observableArray, overrideArrayMethods} from '../array';
 // import {component as swanApi, array as swanArray} from './array';
 import initProps from '../initProps';

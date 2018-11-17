@@ -5,7 +5,7 @@
 
 'use strict';
 
-import observable, {setObservableContext} from '../index';
+import observable, {setObservableContext} from '../base';
 import {observableArray, overrideArrayMethods} from '../array';
 import {component as antApi, array as antArray} from './array';
 
