@@ -36,7 +36,7 @@ exports.resolveNpmModuleNewPath = function (oldPath, rebaseDepDir) {
     );
 
     // remove `src` to fix toutiao cannot init correctly
-    return result.replace('/src/', '/').replace('okam-core', 'okam');
+    return result.replace('/src/', '/').replace('okam-core/', 'okam/');
 };
 
 /**

@@ -117,18 +117,7 @@ exports.normalizeInternalBehavior = function (appType, behaviorId) {
  * @return {string}
  */
 exports.getBaseId = function (appType, baseName) {
-    let baseId = FRAMEWORK_PATH_BASE;
-    if (appType === 'ant') {
-        baseId += 'ant/';
-    }
-    else if (appType === 'wx') {
-        baseId += 'wx/';
-    }
-    else if (appType === 'tt') {
-        baseId += 'tt/';
-    }
-
-    return baseId + baseName;
+    return FRAMEWORK_PATH_BASE + appType + '/' + baseName;
 };
 
 /**

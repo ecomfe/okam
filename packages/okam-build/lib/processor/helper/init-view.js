@@ -10,24 +10,35 @@ const path = require('path');
 const PLUGIN_BASE_NAME = path.join(__dirname, '..', 'template/plugins');
 
 /**
+ * Get event syntax transformation plugin
+ *
+ * @param {string} appType the app type to transform
+ * @return {Object}
+ */
+function getEventSyntaxPlugin(appType) {
+    return path.join(PLUGIN_BASE_NAME, 'event', `${appType}-event-plugin`);
+}
+
+/**
+ * Get template syntax transformation plugin
+ *
+ * @inner
+ * @param {string} appType the app type to transform
+ * @return {Object}
+ */
+function getTemplateSyntaxPlugin(appType) {
+    return path.join(PLUGIN_BASE_NAME, `${appType}-syntax-plugin`);
+}
+
+/**
  * The builtin plugins
  *
  * @const
  * @type {Object}
  */
 const BUILTIN_PLUGINS = {
-    syntax: {
-        wx: path.join(PLUGIN_BASE_NAME, 'wx-syntax-plugin'),
-        swan: path.join(PLUGIN_BASE_NAME, 'swan-syntax-plugin'),
-        ant: path.join(PLUGIN_BASE_NAME, 'ant-syntax-plugin'),
-        tt: path.join(PLUGIN_BASE_NAME, 'tt-syntax-plugin')
-    },
-    eventSyntax: {
-        wx: path.join(PLUGIN_BASE_NAME, 'event', 'wx-event-plugin'),
-        swan: path.join(PLUGIN_BASE_NAME, 'event', 'swan-event-plugin'),
-        ant: path.join(PLUGIN_BASE_NAME, 'event', 'ant-event-plugin'),
-        tt: path.join(PLUGIN_BASE_NAME, 'event', 'tt-event-plugin')
-    },
+    syntax: getTemplateSyntaxPlugin,
+    eventSync: getEventSyntaxPlugin,
     html: path.join(PLUGIN_BASE_NAME, 'html-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
 };
@@ -69,7 +80,10 @@ function normalizeViewPlugins(plugins, appType) {
         }
         else if (typeof item === 'string') {
             let pluginPath = BUILTIN_PLUGINS[item];
-            if (pluginPath && typeof pluginPath === 'object') {
+            if (typeof pluginPath === 'function') {
+                pluginPath = pluginPath(appType);
+            }
+            else if (pluginPath && typeof pluginPath === 'object') {
                 pluginPath = pluginPath[appType];
             }
 
@@ -133,12 +147,4 @@ function initViewTransformOptions(processOpts, buildManager) {
 
 module.exports = exports = initViewTransformOptions;
 
-/**
- * Get event syntax transformation plugin
- *
- * @param {string} appType the app type to transform
- * @return {Object}
- */
-exports.getEventSyntaxPlugin = function (appType) {
-    return BUILTIN_PLUGINS.eventSyntax[appType];
-};
+exports.getEventSyntaxPlugin = getEventSyntaxPlugin;
