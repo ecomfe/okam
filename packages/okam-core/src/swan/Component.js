@@ -5,10 +5,10 @@
 
 'use strict';
 
-import {createComponent} from './helper/factory';
-import {normalizeComponent} from './helper/component';
-import {normalizeEventArgs} from './swan/triggerEvent';
-import componentBase from './base/component';
+import {createComponent} from '../helper/factory';
+import {normalizeComponent} from '../helper/component';
+import {normalizeEventArgs} from './helper/triggerEvent';
+import componentBase from '../base/component';
 
 /**
  * Fix swan component event args

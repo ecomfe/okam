@@ -14,7 +14,7 @@ import expect from 'expect';
 import MyApp from 'core/ant/App';
 import MyPage from 'core/ant/Page';
 import {clearBaseCache} from 'core/helper/factory';
-import {setObservableContext} from 'core/extend/data/observable';
+import {setObservableContext} from 'core/extend/data/observable/base';
 import observable from 'core/extend/data/observable/ant';
 import {fakeAntComponent, fakeAppEnvAPIs} from 'test/helper';
 import {resetObservableArray, initAntObservableArray, fakeAntArrayAPIs} from '../helper';

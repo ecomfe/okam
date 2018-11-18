@@ -1,13 +1,13 @@
 /**
- * @file Create page instance
+ * @file Create swan page instance
  * @author sparklewhy@gmail.com
  */
 
 'use strict';
 
-import {createPage} from './helper/factory';
-import {normalizePage} from './helper/page';
-import pageBase from './base/page';
+import {createPage} from '../helper/factory';
+import {normalizePage} from '../helper/page';
+import pageBase from '../base/page';
 
 /**
  * Create the page instance

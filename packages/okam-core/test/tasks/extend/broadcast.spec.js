@@ -10,7 +10,7 @@
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
 import MyApp from 'core/App';
-import MyPage from 'core/Page';
+import MyPage from 'core/swan/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import broadcast from 'core/extend/broadcast';
 import eventCenter from 'core/helper/eventCenter';

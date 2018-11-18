@@ -11,9 +11,9 @@
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
-import MyPage from 'core/Page';
+import MyPage from 'core/swan/Page';
 import {clearBaseCache} from 'core/helper/factory';
-import {setObservableContext} from 'core/extend/data/observable';
+import {setObservableContext} from 'core/extend/data/observable/base';
 import observable from 'core/extend/data/observable/wx';
 import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 

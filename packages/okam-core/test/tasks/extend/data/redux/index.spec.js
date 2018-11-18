@@ -11,7 +11,7 @@
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
 import MyApp from 'core/App';
-import MyPage from 'core/Page';
+import MyPage from 'core/swan/Page';
 import * as na from 'core/na/index';
 import {clearBaseCache} from 'core/helper/factory';
 import reduxPlugin from 'core/extend/data/redux/index';

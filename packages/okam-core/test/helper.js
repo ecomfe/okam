@@ -7,7 +7,7 @@
 
 import assert from 'assert';
 import expect, {spyOn} from 'expect';
-import CoreComponent from 'core/Component';
+import CoreComponent from 'core/swan/Component';
 import AntCoreComponent from 'core/ant/Component';
 import * as na from 'core/na/index';
 import base from 'core/base/base';

@@ -16,7 +16,7 @@ describe('na/index', function () {
         assert(na.isWxEnv === false);
         assert(na.isAntEnv === false);
         assert(na.env === global);
-        assert(na.global === global);
+        assert(na.g === global);
     });
 
     it('getCurrPages', () => {

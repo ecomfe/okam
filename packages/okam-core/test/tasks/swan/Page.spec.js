@@ -11,7 +11,7 @@
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/App';
-import MyPage from 'core/Page';
+import MyPage from 'core/swan/Page';
 import page from 'core/base/page';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';
