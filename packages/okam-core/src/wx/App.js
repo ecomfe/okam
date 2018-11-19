@@ -5,6 +5,7 @@
 
 'use strict';
 
+import './init';
 import request from './request';
 import App from '../App';
 

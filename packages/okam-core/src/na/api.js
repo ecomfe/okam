@@ -4,7 +4,7 @@
  */
 
 import {isFunction, isObject, isPromise, definePropertyValue} from '../util/index';
-import {env} from './index';
+import {getAppEnv} from './index';
 
 /**
  * Execute API initialization hook
@@ -308,4 +308,4 @@ export function interceptApis(apis, key, ctx) {
     });
 }
 
-export default Object.create(env);
+export default Object.create(getAppEnv());

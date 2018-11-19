@@ -5,6 +5,7 @@
 
 'use strict';
 
+import './init';
 import App from '../App';
 import extendApi from './api';
 import {definePropertyValue} from '../util/index';

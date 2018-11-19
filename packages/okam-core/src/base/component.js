@@ -5,7 +5,7 @@
 
 'use strict';
 
-import {env, getCurrApp} from '../na/index';
+import {getAppEnv, getCurrApp} from '../na/index';
 import EventListener from '../util/EventListener';
 import base from './base';
 
@@ -20,7 +20,7 @@ export default {
         // cannot call setData，cannot set `$app` enumerable true,
         // it'll lead to error in toutiao mini program
         let propDescriptors = {
-            '$app': {
+            $app: {
                 get() {
                     return getCurrApp();
                 }
@@ -50,7 +50,7 @@ export default {
         // call beforeMount hook
         this.beforeMount && this.beforeMount();
 
-        this.$selector = env.createSelectorQuery();
+        this.$selector = getAppEnv().createSelectorQuery();
     },
 
     /**

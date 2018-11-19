@@ -5,5 +5,6 @@
 
 'use strict';
 
+import './init';
 import App from '../App';
 export default App;

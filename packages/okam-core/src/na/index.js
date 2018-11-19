@@ -1,21 +1,44 @@
 /**
- * @file The mini program API
+ * @file The mini program global API/object
  * @author sparklewhy@gmail.com
  */
 
 'use strict';
 
-/* global wx:false */
-/* global my:false */
-/* global swan:false */
-/* global tt:false */
 /* global self:false */
 /* global window:false */
-/* global getCurrentPages:false */
-/* global getApp:false */
-/* eslint-disable fecs-prefer-destructure */
 
-const envGlobal = (function getGlobal() {
+/**
+ * The native app global environment object
+ *
+ * @inner
+ * @type {Object}
+ */
+let appEnv;
+
+/**
+ * The get global app API
+ *
+ * @inner
+ * @type {Function}
+ */
+let getAppApi;
+
+/**
+ * The get current opened pages API
+ *
+ * @inner
+ * @type {Function}
+ */
+let getCurrPagesApi;
+
+/**
+ * The native app global object
+ *
+ * @inner
+ * @type {Object}
+ */
+let appGlobal = (function getGlobal() {
     /* istanbul ignore next */
     if (typeof window === 'object' && window) {
         return window;
@@ -30,80 +53,47 @@ const envGlobal = (function getGlobal() {
 })();
 
 /**
- * The global object
+ * Setting the global object
  *
- * @type {Object}
+ * @param {Object} g the global object to set
  */
-export {envGlobal as g};
+export function setAppGlobal(g) {
+    appGlobal = g;
+}
 
 /**
- * Whether is running in Tencent wx mini program env
+ * Get app global object
  *
- * @type {boolean}
+ * @return {Object}
  */
-export const isWxEnv = (function () {
-    /* istanbul ignore next */
-    return !!(typeof wx === 'object' && wx && typeof wx.getSystemInfo === 'function');
-})();
+export function getAppGlobal() {
+    return appGlobal;
+}
 
 /**
- * Whether is running in Baidu swan mini program env
+ * Setting the native app environment variable
  *
- * @type {boolean}
+ * @param {Object} env the env object to set
+ * @param {Object=} opts the extra API options
+ * @param {Function=} opts.getApp the getAPP api
+ * @param {Function=} opts.getCurrentPages the getCurrentPages api
  */
-export const isSwanEnv = (function () {
-    /* istanbul ignore next */
-    return !!(typeof swan === 'object' && swan && typeof swan.getSystemInfo === 'function');
-})();
-
-/**
- * Whether is running in Ali ant mini program env
- *
- * @type {boolean}
- */
-export const isAntEnv = (function () {
-    /* istanbul ignore next */
-    return !!(typeof my === 'object' && my && typeof my.getSystemInfo === 'function');
-})();
-
-/**
- * Whether is running in Ali ant mini program env
- *
- * @type {boolean}
- */
-export const isToutiaoEnv = (function () {
-    /* istanbul ignore next */
-    return !!(typeof tt === 'object' && tt && typeof tt.getSystemInfo === 'function');
-})();
-
-/**
- * Native env variable
- *
- * @param {Object}
- */
-export const env = (function getEnv() {
-    /* istanbul ignore next */
-    if (isSwanEnv) {
-        return swan;
+export function setAppEnv(env, opts) {
+    appEnv = env;
+    if (opts) {
+        opts.getApp && (getAppApi = opts.getApp);
+        opts.getCurrentPages && (getCurrPagesApi = opts.getCurrentPages);
     }
+}
 
-    /* istanbul ignore next */
-    if (isWxEnv) {
-        return wx;
-    }
-
-    /* istanbul ignore next */
-    if (isAntEnv) {
-        return my;
-    }
-
-    /* istanbul ignore next */
-    if (isToutiaoEnv) {
-        return tt;
-    }
-
-    return envGlobal;
-})();
+/**
+ * Get native env variable
+ *
+ * @return {Object}
+ */
+export function getAppEnv() {
+    return appEnv;
+}
 
 /**
  * Get current app instance
@@ -111,7 +101,7 @@ export const env = (function getEnv() {
  * @return {Object}
  */
 export function getCurrApp() {
-    return getApp();
+    return getAppApi && getAppApi();
 }
 
 /**
@@ -120,6 +110,6 @@ export function getCurrApp() {
  * @return {Array}
  */
 export function getCurrPages() {
-    return getCurrentPages();
+    return getCurrPagesApi && getCurrPagesApi();
 }
 

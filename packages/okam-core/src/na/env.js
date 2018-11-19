@@ -5,7 +5,7 @@
 
 'use strict';
 
-import {env as api} from './index';
+import {getAppEnv} from './index';
 
 /**
  * The cached system env info
@@ -33,7 +33,7 @@ export function initSystemInfo(callback) {
     }
 
     systemInfo = null;
-    api.getSystemInfo({
+    getAppEnv().getSystemInfo({
         success(info) {
             systemInfo = info;
             callback && callback(null, info);

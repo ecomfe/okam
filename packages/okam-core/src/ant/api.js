@@ -3,9 +3,8 @@
  * @author sparklewhy@gmail.com
  */
 
+/* global my:false */
 'use strict';
-
-import {env} from '../na/index';
 
 export default {
 
@@ -26,6 +25,6 @@ export default {
             options.type = icon;
         }
 
-        env.showToast(options);
+        my.showToast(options);
     }
 };
