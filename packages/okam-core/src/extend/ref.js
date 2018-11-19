@@ -29,7 +29,7 @@ function queryRefInstance(value) {
         }
     }
     else {
-        let path = `.${value}`;
+        let path = `#${value}`;
         if (typeof this.selectComponent === 'function') {
             result = this.selectComponent(path);
         }
