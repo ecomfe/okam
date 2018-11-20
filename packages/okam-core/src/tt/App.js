@@ -6,5 +6,8 @@
 'use strict';
 
 import './init';
-import App from '../App';
-export default App;
+import createApp from '../App';
+import appBase from '../base/application';
+
+export default createApp(appBase);
+

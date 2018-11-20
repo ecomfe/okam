@@ -6,10 +6,11 @@
 'use strict';
 
 import './init';
-import request from './request';
-import App from '../App';
+import initRequest from './request';
+import createApp from '../App';
+import appBase from '../base/application';
 
 // init request
-request();
+initRequest();
 
-export default App;
+export default createApp(appBase);
