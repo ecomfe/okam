@@ -64,6 +64,17 @@ exports.getRequirePath = function (file, relativeFile) {
     return './' + result;
 };
 
+/**
+ * Get the full file path of the given relative file path.
+ *
+ * @param {string} relativePath the relative file path
+ * @param {string} fullPath the full file path of the relative file path relative to
+ * @return {string}
+ */
+exports.getFullPath = function (relativePath, fullPath) {
+    let result = path.resolve(path.dirname(fullPath), relativePath);
+    return result.replace(/\\/g, '/');
+};
 
 /**
  * Get file name
