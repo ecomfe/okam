@@ -5,7 +5,7 @@
 
 'use strict';
 
-import {getAppEnv, getCurrApp} from '../na/index';
+import {appEnv, getCurrApp} from '../na/index';
 import EventListener from '../util/EventListener';
 import base from './base';
 
@@ -50,7 +50,7 @@ export default {
         // call beforeMount hook
         this.beforeMount && this.beforeMount();
 
-        this.$selector = getAppEnv().createSelectorQuery();
+        this.$selector = appEnv.createSelectorQuery();
     },
 
     /**

@@ -5,95 +5,35 @@
 
 'use strict';
 
-/* global self:false */
-/* global window:false */
+// NOTICE: After build this file content will replace by the specified app env
+//  module, like the following statement
+// export * from '../quick/env';
 
-/**
- * The native app global environment object
- *
- * @inner
- * @type {Object}
- */
 let appEnv;
-
-/**
- * The get global app API
- *
- * @inner
- * @type {Function}
- */
+let appGlobal;
+let api;
 let getAppApi;
+let getPagesApi;
 
 /**
- * The get current opened pages API
+ * Setting the export env info for test purpose
  *
- * @inner
- * @type {Function}
+ * @param {Object} env the app env
  */
-let getCurrPagesApi;
-
-/**
- * The native app global object
- *
- * @inner
- * @type {Object}
- */
-let appGlobal = (function getGlobal() {
-    /* istanbul ignore next */
-    if (typeof window === 'object' && window) {
-        return window;
-    }
-
-    /* istanbul ignore next */
-    if (typeof self === 'object' && self) {
-        return self;
-    }
-
-    return Function('return this')();
-})();
-
-/**
- * Setting the global object
- *
- * @param {Object} g the global object to set
- */
-export function setAppGlobal(g) {
-    appGlobal = g;
+export function setExportInfo(env) {
+    appEnv = env.appEnv;
+    appGlobal = env.appGlobal;
+    api = env.api;
+    getAppApi = env.getCurrApp;
+    getPagesApi = env.getCurrPages();
 }
 
-/**
- * Get app global object
- *
- * @return {Object}
- */
-export function getAppGlobal() {
-    return appGlobal;
-}
-
-/**
- * Setting the native app environment variable
- *
- * @param {Object} env the env object to set
- * @param {Object=} opts the extra API options
- * @param {Function=} opts.getApp the getAPP api
- * @param {Function=} opts.getCurrentPages the getCurrentPages api
- */
-export function setAppEnv(env, opts) {
-    appEnv = env;
-    if (opts) {
-        opts.getApp && (getAppApi = opts.getApp);
-        opts.getCurrentPages && (getCurrPagesApi = opts.getCurrentPages);
-    }
-}
-
-/**
- * Get native env variable
- *
- * @return {Object}
- */
-export function getAppEnv() {
-    return appEnv;
-}
+/* eslint-disable fecs-export-on-declare */
+export {
+    appEnv,
+    appGlobal,
+    api
+};
 
 /**
  * Get current app instance
@@ -110,6 +50,5 @@ export function getCurrApp() {
  * @return {Array}
  */
 export function getCurrPages() {
-    return getCurrPagesApi && getCurrPagesApi();
+    return getPagesApi && getPagesApi();
 }
-

@@ -5,6 +5,8 @@
 
 'use strict';
 
+import {extractMethodsToOuterContext} from './methods';
+
 /**
  * Normalize the page information: add methods reference in the page context
  *
@@ -12,16 +14,5 @@
  * @return {Object}
  */
 export function normalizePage(pageInfo) {
-    let methods = pageInfo.methods;
-    /* istanbul ignore next */
-    if (methods) {
-        Object.keys(methods).forEach(k => {
-            if (pageInfo.hasOwnProperty(k)) {
-                console.warn(`the method ${k} defined in methods existed in page context`);
-            }
-            pageInfo[k] = methods[k];
-        });
-    }
-
-    return pageInfo;
+    return extractMethodsToOuterContext(pageInfo);
 }

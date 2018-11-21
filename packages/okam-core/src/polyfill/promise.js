@@ -6,11 +6,11 @@
 'use strict';
 
 import PolyfillPromise from 'promise-polyfill';
-import {getAppGlobal} from '../na/index';
+import {appGlobal} from '../na/index';
 
 let currPromise;
 if (typeof Promise !== 'function') {
-    currPromise = getAppGlobal().Promise = PolyfillPromise;
+    currPromise = appGlobal.Promise = PolyfillPromise;
 }
 else {
     currPromise = Promise;

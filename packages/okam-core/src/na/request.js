@@ -7,7 +7,7 @@
 
 /* eslint-disable no-use-before-define */
 
-import {getAppEnv} from './index';
+import {appEnv} from './index';
 import {promisify} from './api';
 
 /**
@@ -47,7 +47,7 @@ function postData(url, options) {
 }
 
 const httpApi = {
-    request: promisify(getAppEnv().request, getAppEnv()),
+    request: promisify(appEnv.request, appEnv),
     fetch: fetchData,
     get: getData,
     post: postData

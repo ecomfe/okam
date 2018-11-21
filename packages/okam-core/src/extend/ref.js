@@ -82,10 +82,13 @@ export default {
          * The instance initialization before the instance is normalized and created.
          *
          * @param {boolean} isPage whether is page component
-         * @param {Object} refData the reference information
+         * @param {Object=} options the extra init options
+         * @param {Object=} options.refs the component reference used in the
+         *        component, the reference information is defined in the template
          * @private
          */
-        $init(isPage, refData) {
+        $init(isPage, options) {
+            let refData = options && options.refs;
             if (!refData) {
                 return;
             }

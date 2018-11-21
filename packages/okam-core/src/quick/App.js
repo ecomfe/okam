@@ -5,7 +5,6 @@
 
 'use strict';
 
-import './init';
 import createApp from '../App';
 import appBase from './base/application';
 import extendApi from './api';

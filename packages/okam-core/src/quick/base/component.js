@@ -18,15 +18,30 @@ function selectElement(path) {
 
 export default {
 
+    /**
+     * Quick app init done hook
+     *
+     * @private
+     */
     onInit() {
         this.created();
     },
 
+    /**
+     * Quick app ready hook
+     *
+     * @private
+     */
     onReady() {
         this.attached();
         this.ready();
     },
 
+    /**
+     * Quick app destroy hook
+     *
+     * @private
+     */
     onDestroy() {
         this.detached();
     },
@@ -132,6 +147,21 @@ export default {
                 handler.apply(this, args);
             };
             this.$on(eventName, onceHandler);
+        },
+
+        /**
+         * Providing weixin setData API
+         *
+         * @param {Object} pathInfo the data path info to set
+         * @param {Function=} callback the callback when set data done
+         */
+        setData(pathInfo, callback) {
+            Object.keys(pathInfo).forEach(k => {
+                this.$set(k, pathInfo[k]);
+            });
+
+            // simulate the callback execution when the set data done
+            Promise.resolve().then(callback);
         }
     }
 };
