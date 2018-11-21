@@ -67,7 +67,13 @@ function parseDom(data, options) {
     parser.end(data);
     handler.parser = null;
 
-    return handler.dom;
+    let children = handler.dom;
+    let rootNode = {
+        root: true,
+        children
+    };
+    children.forEach(item => (item.parent = rootNode));
+    return rootNode;
 }
 
 module.exports = exports = {

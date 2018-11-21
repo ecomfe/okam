@@ -111,14 +111,17 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     let configInitHandler = initConfigInfo.bind(
         null, buildManager, 'config', file
     );
+    let appBaseClass = buildManager.getOutputAppBaseClass();
     let pluginOpts = {
         appType: buildManager.appType,
         config: configInitHandler
     };
-    let {framework, localPolyfill, polyfill} = buildManager.buildConf;
+    let {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
     if (file.isEntryScript) {
         Object.assign(pluginOpts, {
-            framework
+            framework,
+            registerApi: api,
+            baseClass: appBaseClass && appBaseClass.app
         });
         // polyfill using local variable is prior to global polyfill
         localPolyfill || (pluginOpts.polyfill = polyfill);
@@ -128,11 +131,18 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
         ]);
     }
     else if (file.isPageScript) {
-        Object.assign(pluginOpts, {tplRefs: file.tplRefs});
+        Object.assign(pluginOpts, {
+            tplRefs: file.tplRefs,
+            baseClass: appBaseClass && appBaseClass.page,
+            getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager)
+        });
         plugins.push([programPlugins.page, pluginOpts]);
     }
     else if (file.isComponentScript) {
-        Object.assign(pluginOpts, {tplRefs: file.tplRefs});
+        Object.assign(pluginOpts, {
+            tplRefs: file.tplRefs,
+            baseClass: appBaseClass && appBaseClass.component
+        });
         plugins.push([programPlugins.component, pluginOpts]);
     }
     else if (file.isBehavior) {

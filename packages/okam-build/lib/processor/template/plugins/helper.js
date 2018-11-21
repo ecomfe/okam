@@ -101,14 +101,14 @@ function normalizeTransformers(transformerMap) {
 function transform(transformers, element, tplOpts, options) {
     // transform element first
     let transformer = findMatchElemTransformer(transformers.element, element);
-    transformer && transformer(element, tplOpts, options);
+    transformer && transformer.call(this, element, tplOpts, options);
 
     // transform element attributes
     let {attribs: attrs} = element;
     attrs && Object.keys(attrs).forEach(k => {
         transformer = findMatchAttrTransformer(transformers.attribute, k);
         if (transformer) {
-            transformer(attrs, k, tplOpts, options, element);
+            transformer.call(this, attrs, k, tplOpts, options, element);
             if (transformer.type === 'for') {
                 element.hasForLoop = true;
             }
@@ -130,9 +130,12 @@ exports.createSyntaxPlugin = function (transformers) {
     let {element, attribute} = transformers;
 
     return {
-        tag: transform.bind(undefined, {
-            element: normalizeTransformers(element),
-            attribute: normalizeTransformers(attribute)
-        })
+        tag(...args) {
+            args.unshift({
+                element: normalizeTransformers(element),
+                attribute: normalizeTransformers(attribute)
+            });
+            return transform.apply(this, args);
+        }
     };
 };

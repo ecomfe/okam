@@ -22,6 +22,13 @@ module.exports = {
     root: process.cwd(),
 
     /**
+     * 设计稿尺寸
+     *
+     * @type {number}
+     */
+    designWidth: 750,
+
+    /**
      * 扩展的原生小程序的框架，目前只支持 `okam-core` 提供的扩展：
      * data: 支持 vue 数据操作方式及computed
      * broadcast: 支持广播事件
@@ -39,6 +46,21 @@ module.exports = {
     framework: null,
 
     /**
+     * 要注册的 API，可选，会挂载到组件、页面、App 实例上下文 `this.$api`
+     * 结构：
+     * {
+     *    'audio': '@system.audio', // 导入外部依赖
+     *    'myRequest': './common/request', // 相对模块，相对于项目源目录
+     * }
+     *
+     * key: 为对应要导出的 api 名称，value 为对应的该 API 的实现
+     * 导入后，可以 `this.$api.audio` 访问到对应的注册的 API
+     *
+     * @type {Object}
+     */
+    api: null,
+
+    /**
      * 要增加的语法 API polyfill，可选，目前框架默认支持两种:
      * `promise` (依赖 promise-polyfill)
      * `async` (依赖 regenerator-runtime)
@@ -54,6 +76,20 @@ module.exports = {
      * @type {Array}
      */
     localPolyfill: null,
+
+    /**
+     * 模块路径 resolve 选项，可选
+     * {
+     *     extensions: ['xx'], // 查找的模块文件后缀名，会跟默认查找的后缀名做合并
+     *     // 要忽略 resolve 的模块 id，可以传入正则，或者字符串数组，也可以是一个 function
+     *     // 返回 true 表示要忽略，返回 false 表示不忽略。
+     *     ignore: /^@system/ | ['@system/xx', /^@xxx/] | (moduleId, appType) => return true;
+     *     onResolve(depModId, file) {} // resolve dep 时候事件监听回调
+     * }
+     *
+     * @type {Object}
+     */
+    resolve: null,
 
     /**
      * 项目源代码位置信息
@@ -147,8 +183,24 @@ module.exports = {
                 return false;
             }
 
+            // do not output sfc file component
+            if (file.isComponent) {
+                return false;
+            }
+
             path = path.replace(/^src\//, '');
             return path;
+        },
+
+        /**
+         * The mini program app base class definition
+         *
+         * @type {?Object}
+         */
+        appBaseClass: {
+            app: 'App',
+            component: 'Component',
+            page: 'Page'
         }
     },
 
@@ -229,7 +281,6 @@ module.exports = {
 
     /**
      * 是否启用原生转换处理，可选，默认 true。
-     * 当前主要用在 swan 原生支持上适配 okam。
      * 也可以传入配置对象：
      * {
      *     js: {
@@ -310,7 +361,7 @@ module.exports = {
                     // 默认不处理非入口样式及单文件组件的样式文件
                     return false;
                 }
-                return !!file.processor || file.isComponentConfig;
+                return !!file.processor;
             },
 
             /* eslint-disable fecs-valid-jsdoc */
@@ -343,10 +394,22 @@ module.exports = {
                  * @return {string|Array.<string>}
                  */
                 function (file) {
-                    return file.isComponentConfig ? 'componentJson' : file.processor;
+                    return file.processor;
                 }
 
             ]
+        },
+        {
+            match(file) {
+                return file.isConfig;
+            },
+            processors: ['configJson']
+        },
+        {
+            match(file) {
+                return file.isComponentConfig;
+            },
+            processors: ['componentJson']
         }
     ],
 

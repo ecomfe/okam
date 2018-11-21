@@ -52,14 +52,20 @@ module.exports = {
         let {file, logger} = tplOpts;
         let refId = hash(file.path + '?' + refValue);
         let refClass = `ref-${refId}`;
-        if (classValue) {
-            classValue = refClass + ' ' + classValue;
+
+        if (isForRef) {
+            if (classValue) {
+                classValue = refClass + ' ' + classValue;
+            }
+            else {
+                classValue = refClass;
+            }
+            attrs.class = classValue;
         }
         else {
-            classValue = refClass;
+            attrs.id = refClass;
         }
 
-        attrs.class = classValue;
         delete attrs.ref;
 
         // cache ref info to file

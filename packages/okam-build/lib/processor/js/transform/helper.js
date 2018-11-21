@@ -53,6 +53,9 @@ function getPlainObjectNodeValue(node, path, t) {
             result.push(getPlainObjectNodeValue(item, path, t));
         });
     }
+    else if (t.isNullLiteral(node)) {
+        result = null;
+    }
     else if (t.isLiteral(node)) {
         result = node.value;
     }
@@ -121,6 +124,10 @@ exports.createImportDeclaration = function (varName, requireId, t) {
  * @return {?Object}
  */
 function createNode(value, t) {
+    if (t.isIdentifier(value)) {
+        return value;
+    }
+
     if (Array.isArray(value)) {
         let elements = [];
         value.forEach(item => {

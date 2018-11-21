@@ -34,7 +34,13 @@ const BUILTIN_PLUGINS = {
 };
 
 module.exports = function (file, options) {
-    let {root, config} = options;
+    let {root, designWidth, config} = options;
+
+    // init default design width
+    if (designWidth) {
+        BUILTIN_PLUGINS.px2rpx.options.designWidth = designWidth;
+    }
+
     let plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
 
     plugins = (plugins || []).map(

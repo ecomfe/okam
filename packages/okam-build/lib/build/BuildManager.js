@@ -6,22 +6,21 @@
 'use strict';
 
 /* eslint-disable fecs-min-vars-per-destructure */
-const EventEmitter = require('events');
-const resolve = require('resolve');
 const pathUtil = require('path');
-const {colors, Timer, merge, babel: babelUtil} = require('../util');
+const EventEmitter = require('events');
+const {colors, Timer, merge, babel: babelUtil, file: fileUtil} = require('../util');
 const loadProcessFiles = require('./load-process-files');
 const CacheManager = require('./CacheManager');
 const FileOutput = require('../generator/FileOutput');
 const processor = require('../processor');
 const npm = require('../processor/helper/npm');
-const {getDefaultBabelProcessor} = require('../processor/helper/processor');
+const ModuleResolver = require('./ModuleResolver');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
         super();
 
-        let {component, appType, logger} = buildConf;
+        let {component, appType, logger, resolve} = buildConf;
 
         Object.assign(this, {
             buildConf,
@@ -30,12 +29,17 @@ class BuildManager extends EventEmitter {
             componentConf: component,
             componentExtname: component.extname
         });
-        this.resolveExtnames = [
-            '.js', '.' + component.extname, '.ts'
-        ];
+
+        this.resolver = new ModuleResolver({
+            logger,
+            appType,
+            resolve,
+            extensions: [component.extname]
+        });
 
         let env = process.env.NODE_ENV;
         this.buildEnv = env;
+        this.envConfigKey = `_${appType}Env`;
         this.isDev = env === 'dev' || env === 'development';
         this.isProd = !env || env === 'prod' || env === 'production';
 
@@ -47,6 +51,12 @@ class BuildManager extends EventEmitter {
         this.cache = new CacheManager({cacheDir: buildConf.cacheDir});
     }
 
+    /**
+     * Initialize used processors
+     *
+     * @protected
+     * @param {Object} buildConf the build config
+     */
     initProcessor(buildConf) {
         // register custom processors
         processor.registerProcessor(buildConf.processors);
@@ -58,30 +68,6 @@ class BuildManager extends EventEmitter {
                 name: 'component',
                 extnames: componentConf.extname
             }]);
-        }
-
-        const appType = this.appType;
-        const nativeOpts = buildConf.native;
-        const defaultBabelProcessorName = getDefaultBabelProcessor(
-            buildConf.processors
-        );
-        if (appType === 'swan') {
-            // register native swan processor
-            if (nativeOpts !== false) {
-                require('./init-native-swan-processor')(nativeOpts, defaultBabelProcessorName);
-            }
-
-            // register wx2swan processors
-            let wx2swanOpts = buildConf.wx2swan;
-            if (wx2swanOpts) {
-                require('./init-wx2swan-processor')(wx2swanOpts, defaultBabelProcessorName);
-            }
-        }
-        else if (appType === 'ant') {
-            // register native swan processor
-            if (nativeOpts !== false) {
-                require('./init-native-ant-processor')(nativeOpts, defaultBabelProcessorName);
-            }
         }
     }
 
@@ -111,6 +97,15 @@ class BuildManager extends EventEmitter {
         this.initProcessor(buildConf);
     }
 
+    onAddNewFile(file) {
+        // replace module okam-core/na/index.js content using specified app env module
+        if (file.isNpm && file.path === 'node_modules/okam-core/src/na/index.js') {
+            let naEnvModuleId = `../${this.appType}/env`;
+            file.content = `'use strict;'\nexport * from '${naEnvModuleId}';\n`;
+            this.files.removeListener('addFile', this.addNewFileHandler);
+        }
+    }
+
     /**
      * Load the files that will be processed
      */
@@ -128,14 +123,20 @@ class BuildManager extends EventEmitter {
         this.babelConfig = babelUtil.readBabelConfig(root);
         this.waitingBuildFiles = buildFiles;
 
+        this.addNewFileHandler = this.onAddNewFile.bind(this);
+        files.on('addFile', this.addNewFileHandler);
+
         let {output} = this.buildConf;
         this.compileContext = {
             cache: this.cache,
             resolve: npm.resolve.bind(null, this),
             addFile: this.addNewFile.bind(this),
             getFileByFullPath: this.getFileByFullPath.bind(this),
+            designWidth: this.buildConf.designWidth,
             appType: this.appType,
             logger: this.logger,
+            envConfigKey: this.envConfigKey,
+            sourceDir,
             root,
             output
         };
@@ -182,29 +183,31 @@ class BuildManager extends EventEmitter {
      * @return {string}
      */
     resolve(requireModId, file) {
-        let depFile;
-        let logger = this.logger;
-        let filePath = typeof file === 'string' ? file : file.fullPath;
-        try {
-            depFile = resolve.sync(
-                requireModId,
-                {
-                    extensions: this.resolveExtnames,
-                    basedir: pathUtil.dirname(filePath)
-                }
-            );
+        return this.resolver.resolve(requireModId, file);
+    }
 
-            if (depFile === requireModId) {
-                logger.warn('resolve native module', depFile, 'in', filePath);
-                return;
-            }
-            logger.debug('resolve module', requireModId, filePath, depFile);
-        }
-        catch (ex) {
-            logger.error('resolve dep module:', requireModId, 'in', filePath, 'fail');
-        }
+    /**
+     * Get mini program native base class, e.g., App/Page/Component
+     *
+     * @return {?Object}
+     */
+    getOutputAppBaseClass() {
+        return this.buildConf.output.appBaseClass;
+    }
 
-        return depFile;
+     /**
+     * Get the app base class init options
+     *
+     * @param {Object} config the config info defined in config property
+     * @param {Object} opts the options
+     * @param {boolean=} opts.isApp whether is app instance init
+     * @param {boolean=} opts.isPage whether is page instance init
+     * @param {boolean=} opts.isComponent whether is component instance init
+     * @return {?Object}
+     */
+    getAppBaseClassInitOptions(config, opts) {
+        // do nothing, subclass should provide implementation if needed
+        return null;
     }
 
     /**
@@ -244,6 +247,12 @@ class BuildManager extends EventEmitter {
         return true;
     }
 
+    /**
+     * Start to build app
+     *
+     * @param {Timer} timer the build timer
+     * @return {boolean|Promise}
+     */
     build(timer) {
         let logger = this.logger;
 
@@ -263,6 +272,8 @@ class BuildManager extends EventEmitter {
         if (buildFail) {
             return Promise.reject('error happen');
         }
+
+        this.onBuildDone && this.onBuildDone();
 
         logger.info('process files done:', colors.gray(timer.tick()));
         return true;
@@ -382,5 +393,22 @@ class BuildManager extends EventEmitter {
     }
 
 }
+
+/**
+ * Create build manager
+ *
+ * @param {string} appType the app type to build
+ * @param {Object} buildConf the build config
+ * @return {BuildManager}
+ */
+BuildManager.create = function (appType, buildConf) {
+    let buildManagerPath = pathUtil.join(__dirname, appType, 'index.js');
+    let BuildClass = BuildManager;
+    if (fileUtil.isFileExists(buildManagerPath)) {
+        BuildClass = require(buildManagerPath);
+    }
+
+    return new BuildClass(buildConf);
+};
 
 module.exports = exports = BuildManager;

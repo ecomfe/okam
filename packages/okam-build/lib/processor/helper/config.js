@@ -35,8 +35,6 @@ function normalizeUsingComponentConfig(config, components, file, buildManager) {
     if (Object.keys(usingComponents).length) {
         config.usingComponents = usingComponents;
     }
-    // let componentInfo = initComponents(config, components, file, buildManager);
-    // componentInfo && Object.assign(config, componentInfo);
     return config;
 }
 

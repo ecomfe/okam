@@ -33,7 +33,7 @@ function processConfigInfo(file, root, owner) {
 }
 
 function processEntryScript(file, buildManager) {
-    let {root, files: allFiles, componentExtname} = buildManager;
+    let {root, files: allFiles, componentExtname, logger} = buildManager;
     let appConfig = file.config || {};
     file.config = appConfig;
 
@@ -69,6 +69,10 @@ function processEntryScript(file, buildManager) {
     );
 
     let jsonFile = processConfigInfo(file, root, file);
+    if (!jsonFile) {
+        logger.error('missing app `config` property information in', file.path);
+        return;
+    }
     jsonFile.isAppConfig = true;
     allFiles.push(jsonFile);
 
@@ -112,8 +116,6 @@ function processFile(file, processor, buildManager) {
     }
 
     if (result.isComponent) {
-        file.release = false;
-        file.isComponent = true;
         compileComponent(result, file, buildManager);
     }
     else {
@@ -163,7 +165,7 @@ function getCustomComponentTags(config) {
 function compileComponent(component, file, buildManager) {
     let tplFile = component.tpl;
     if (tplFile) {
-        // tpl compile should ahead of the script part to extract ref info in advance
+        // tpl compile should ahead of the script part to extract ref info
         compile(tplFile, buildManager);
     }
 

@@ -7,9 +7,8 @@
 
 const transformKey = require('../base/key');
 
-module.exports = function (attrs, name, tplOpts, opts) {
+module.exports = function (attrs, name, tplOpts, opts, element) {
     transformKey(attrs, name, tplOpts, Object.assign({
-        forItemDirectiveName: 'tt:for-item',
         forKeyDirectiveName: 'tt:key'
-    }, opts));
+    }, opts), element);
 };

@@ -50,7 +50,7 @@ function compileFile(buildManager, file, releaseFiles) {
     }
 
     // skip component file release
-    if (!file.isPageComponent && !file.isComponent) {
+    if (!file.isComponent) {
         releaseFiles.add(file);
     }
 

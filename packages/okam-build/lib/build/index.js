@@ -39,7 +39,7 @@ function startDevServer(buildConf, buildManager) {
  */
 function startBuild(buildConf) {
     // init build manager
-    let buildManager = new BuildManager(buildConf);
+    let buildManager = BuildManager.create(buildConf.appType, buildConf);
 
     startDevServer(buildConf, buildManager);
     let doneHandler = function () {

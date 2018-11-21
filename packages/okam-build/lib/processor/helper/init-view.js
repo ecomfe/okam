@@ -13,7 +13,7 @@ const PLUGIN_BASE_NAME = path.join(__dirname, '..', 'template/plugins');
  * Get event syntax transformation plugin
  *
  * @param {string} appType the app type to transform
- * @return {Object}
+ * @return {string}
  */
 function getEventSyntaxPlugin(appType) {
     return path.join(PLUGIN_BASE_NAME, 'event', `${appType}-event-plugin`);
@@ -24,7 +24,7 @@ function getEventSyntaxPlugin(appType) {
  *
  * @inner
  * @param {string} appType the app type to transform
- * @return {Object}
+ * @return {string}
  */
 function getTemplateSyntaxPlugin(appType) {
     return path.join(PLUGIN_BASE_NAME, `${appType}-syntax-plugin`);

@@ -1,6 +1,5 @@
 /**
  * @file transform class
- * @description
  * eg
  * 1. :class={ active: isActive }   ->    class={{[isActive ? 'active' : '']}}
  * 2. class="static" :class="{ active: isActive, 'text-danger': hasError }"  ->  class="static {{[isActive ? 'active' : '', hasError ? 'text-danger' : '']}}"
@@ -9,7 +8,6 @@
  * 5. class="static" :class="[{ active: isActive }, errorClass]" -> class="static {{[isActive ? 'active' : '', errorClass]}}
  *
  * @author sharonzd
- * @date 2018/8/15
  */
 
 'use strict';

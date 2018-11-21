@@ -128,7 +128,10 @@ const BUILTIN_PROCESSORS = {
         rext: 'js'
     },
     component: {
-        processor: getProcessorPath('component/index')
+        processor: getProcessorPath('component/sfc-parser')
+    },
+    componentGenerator: {
+        processor: getProcessorPath('component/sfc-generator')
     },
     json5: {
         processor: getProcessorPath('json/json5-parser'),
@@ -138,6 +141,12 @@ const BUILTIN_PROCESSORS = {
     },
     componentJson: {
         processor: getProcessorPath('json/component-json')
+    },
+    configJson: {
+        processor: getProcessorPath('json/config-json')
+    },
+    quickAppJson: {
+        processor: getProcessorPath('json/quick-app-json')
     },
     view: {
         processor: getProcessorPath('template/index'),

@@ -1,7 +1,6 @@
 /**
  * @file 处理 swan 时的 key
  * @author zhoudan03
- * @date 2018/9/17
  */
 
 module.exports = function (attrs, name, tplOpts) {

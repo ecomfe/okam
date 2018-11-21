@@ -67,7 +67,15 @@ function normalizePlugins(plugins, builtin, root) {
         );
     }
 
-    return plugins.map(item => getPlugin(item, builtin, root));
+    try {
+        return plugins.map(item => getPlugin(item, builtin, root));
+    }
+    catch (ex) {
+        throw new Error(
+            'Normalize plugins:' + JSON.stringify(plugins)
+            + ' error: ' + (ex.message || ex.toString())
+        );
+    }
 }
 
 module.exports = exports = normalizePlugins;

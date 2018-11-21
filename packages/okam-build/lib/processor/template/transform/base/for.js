@@ -1,60 +1,11 @@
 /**
  * @file transform for circulation
  * @author sharonzd
- * @date 2018/8/7
  */
 
 'use strict';
 
 const {PLAIN_OBJECT_REGEXP, FOR_ITEM_INDEX_REGEXP, BRACKET_REGEXP} = require('./constant');
-
-module.exports = function (attrs, name, tplOpts, opts) {
-    let {logger, file} = tplOpts;
-    let {forDirectionName, supportForAbbr = false, tripleBrace} = opts;
-    let newName = forDirectionName;
-    let newValue = attrs[name].replace(BRACKET_REGEXP, '');
-
-    newValue = transformNumberToArray(newValue);
-    newValue = transformOfToIn(newValue);
-    newValue = newValue.trim();
-
-    if (attrs.hasOwnProperty(newName)) {
-        logger.warn(`${file.path} template attribute ${name} is conflicted with ${newName}`);
-    }
-    delete attrs[name];
-
-    if (!supportForAbbr) {
-        let {forItemDirectiveName, forIndexDirectiveName} = opts;
-        let result = FOR_ITEM_INDEX_REGEXP.exec(newValue);
-        if (result) {
-            let args = result[1];
-            let arrVarName = result[2];
-            newValue = arrVarName.trim();
-
-            args = args.split(',');
-            let itemName = args[0].trim();
-            let indexName = args[1];
-            attrs[forItemDirectiveName] = itemName;
-            indexName && (attrs[forIndexDirectiveName] = indexName.trim());
-        }
-
-        if (newValue) {
-            if (PLAIN_OBJECT_REGEXP.test(newValue)) {
-                if (tripleBrace) {
-                    newValue = `{{ ${newValue} }}`;
-                }
-                else {
-                    newValue = `{${newValue}}`;
-                }
-            }
-            else {
-                newValue = `{{${newValue}}}`;
-            }
-        }
-    }
-
-    attrs[newName] = newValue;
-};
 
 /**
  * 转化数字为数组，以支持for="item in 5"语法
@@ -93,3 +44,64 @@ function transformOfToIn(newValue) {
     }
     return newValue;
 }
+
+function normalizeForItemIndex({itemName, indexName, value, attrs, opts}) {
+    let {forItemDirectiveName, forIndexDirectiveName, tripleBrace} = opts;
+    attrs[forItemDirectiveName] = itemName;
+    indexName && (attrs[forIndexDirectiveName] = indexName.trim());
+
+    if (PLAIN_OBJECT_REGEXP.test(value)) {
+        if (tripleBrace) {
+            value = `{{ ${value} }}`;
+        }
+        else {
+            value = `{${value}}`;
+        }
+    }
+    else {
+        value = `{{${value}}}`;
+    }
+
+    return value;
+}
+
+module.exports = exports = function (attrs, name, tplOpts, opts, element) {
+    let {logger, file} = tplOpts;
+    let {forDirectionName, supportForAbbr = false} = opts;
+    let newName = forDirectionName;
+    let newValue = attrs[name].replace(BRACKET_REGEXP, '');
+
+    newValue = transformNumberToArray(newValue);
+    newValue = transformOfToIn(newValue);
+    newValue = newValue.trim();
+
+    if (attrs.hasOwnProperty(newName)) {
+        logger.warn(`${file.path} template attribute ${name} is conflicted with ${newName}`);
+    }
+    delete attrs[name];
+
+    let result = FOR_ITEM_INDEX_REGEXP.exec(newValue);
+    if (result) {
+        let args = result[1];
+        let arrVarName = result[2];
+        args = args.split(',');
+
+        let itemName = args[0].trim();
+        element.forItemName = itemName;
+
+        if (!supportForAbbr) {
+            newValue = normalizeForItemIndex({
+                itemName,
+                indexName: args[1],
+                attrs,
+                value: arrVarName.trim(),
+                opts
+            });
+        }
+    }
+
+    attrs[newName] = newValue;
+};
+
+exports.transformNumberToArray = transformNumberToArray;
+exports.transformOfToIn = transformOfToIn;

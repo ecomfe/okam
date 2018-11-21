@@ -43,8 +43,10 @@ function initPartFileInfo(file, ...parts) {
  * @return {Object}
  */
 function parse(file, options) {
+    let config = options.config;
+    let parseOpts = Object.assign({}, {pad: 'line'}, config && config.parse);
     let result = compiler.parseComponent(
-        file.content.toString(), Object.assign({}, {pad: 'line'}, options && options.config)
+        file.content.toString(), parseOpts
     );
 
     let tplFile = helper.getComponentPartFile(result.template, {
@@ -71,10 +73,14 @@ function parse(file, options) {
     initPartFileInfo(file, tplFile, scriptFile, styleFiles);
 
     // fix pad line missing when lang is set in script part
-    if (scriptFile) {
+    if (scriptFile && parseOpts.pad === 'line') {
         scriptFile.content = scriptFile.content.replace(
             /^\n+/, match => match.replace(/\n/g, '//\n')
         );
+    }
+
+    if (config && config.trim) {
+        scriptFile.content = scriptFile.content.trim();
     }
 
     return {

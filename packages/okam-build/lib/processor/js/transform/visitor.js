@@ -36,7 +36,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             let key = prop.key;
             let keyName = key && key.name;
             if (!isBehavior && keyName === 'config') {
-                // extract the app/component/page config defition
+                // extract the app/component/page config definition
                 let config = getPlainObjectNodeValue(prop.value, path, t);
                 initConfig.config = config;
                 removeNode(t, path, {tail: true});
@@ -49,7 +49,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
                 initConfig.mixins = mixins;
             }
             else if (!isBehavior && hasComponents && keyName === 'components') {
-                // extract the using components information for page/compnoent
+                // extract the using components information for page/component
                 let config = componentTransformer.getUsedComponentInfo(
                     prop.value, path, t
                 );
@@ -58,6 +58,44 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             }
         }
     };
+}
+
+/**
+ * Create init call arguments
+ *
+ * @inner
+ * @param {Object} declarationPath the declaration statement path to process
+ * @param {Object} config the config property value info defined in module
+ * @param {Object} opts the transformation options
+ * @param {Object} t the babel type definition
+ * @return {Array}
+ */
+function createInitCallArgs(declarationPath, config, opts, t) {
+    let {isPage, isComponent, isApp, getInitOptions} = opts;
+    let callArgs = [declarationPath.node];
+    let initOptions;
+    if (opts.tplRefs) {
+        initOptions = {refs: opts.tplRefs};
+    }
+
+    let extraInitOpts = getInitOptions && getInitOptions(
+        config, {isPage, isComponent, isApp}
+    );
+    if (extraInitOpts) {
+        initOptions || (initOptions = {});
+        Object.assign(initOptions, extraInitOpts);
+    }
+
+    if (initOptions) {
+        // insert the `ref` information defined in template to the constructor
+        callArgs.push(
+            createSimpleObjectExpression(
+                initOptions, t
+            )
+        );
+    }
+
+    return callArgs;
 }
 
 /**
@@ -78,7 +116,7 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
             getCodeTraverseVisitors(t, config, opts)
         );
     }
-    else if (opts.isExtend) {
+    else if (opts.isExtension) {
         return;
     }
     else {
@@ -97,22 +135,16 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         createImportDeclaration(baseClassName, opts.baseId, t)
     );
 
-    let isApp = opts.isApp;
-    let callArgs = [declarationPath.node];
-    if (isApp) {
+    if (opts.isApp) {
         // insert the app extension use statements
-        appTransformer.extendAppFramework(t, path, bodyPath, baseClassName, opts);
-    }
-    else if (opts.tplRefs) {
-        // insert the `ref` information defined in template to the constructor
-        callArgs.push(
-            createSimpleObjectExpression(
-                opts.tplRefs, t
-            )
+        appTransformer.extendAppFramework(
+            t, path, bodyPath, baseClassName, opts
         );
     }
 
-    let toReplacePath = opts.needExport
+    let callArgs = createInitCallArgs(declarationPath, config.config, opts, t);
+    let needExport = opts.needExport || !opts.baseClass;
+    let toReplacePath = needExport
         ? path.get('declaration')
         : path;
     // wrap the export module using the base name
@@ -120,7 +152,7 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         t.identifier(baseClassName),
         callArgs
     );
-    if (opts.isBehavior) {
+    if (opts.isBehavior || !opts.baseClass) {
         toReplacePath.replaceWith(t.expressionStatement(
             callExpression
         ));
@@ -129,7 +161,7 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         toReplacePath.replaceWith(
             t.expressionStatement(
                 t.callExpression(
-                    t.identifier(opts.baseName),
+                    t.identifier(opts.baseClass),
                     [
                         callExpression
                     ]
@@ -153,8 +185,8 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
  */
 function getTransformOptions(options, state) {
     let transformOpts = Object.assign({}, options, state.opts);
-    transformOpts.baseId = options.extend
-        ? getFrameworkExtendId(transformOpts.appType, options.extend, true)
+    transformOpts.baseId = options.extensionName
+        ? getFrameworkExtendId(transformOpts.appType, options.extensionName, true)
         : getBaseId(transformOpts.appType, transformOpts.baseName);
     return transformOpts;
 }
@@ -168,9 +200,11 @@ function getTransformOptions(options, state) {
  * @param {boolean=} options.isPage whether is the page transformation
  * @param {boolean=} options.isComponent whether is the component transformation
  * @param {boolean=} options.isBehavior whether is the behavior transformation
- * @param {boolean=} options.isExtend whether is the extension transform, e.g., Behavior
- * @param {string=} options.extend the extension name
+ * @param {boolean=} options.isExtension whether is the extension transform, e.g., Behavior
+ * @param {string=} options.extensionName the extension name
  * @param {boolean=} options.needExport whether need to export the module definition
+ * @param {boolean=} options.noBaseClass whether has none base class to wrap the
+ *        App/Page/Component definition, optional, by default false
  * @return {Function}
  */
 function getMiniProgramVisitor(options) {

@@ -8,7 +8,9 @@
 const helper = require('okam-helper');
 
 function doMerge(target, source) {
-    if (Array.isArray(target) && Array.isArray(source)) {
+    let isTargetArr = Array.isArray(target);
+    let isSourceArr = Array.isArray(source);
+    if (isTargetArr && isSourceArr) {
         let result = [].concat(target);
         source.forEach(item => {
             if (!result.includes(item)) {
@@ -18,9 +20,9 @@ function doMerge(target, source) {
         return result;
     }
 
-    if (target && source && typeof target === 'object'
-        && typeof source === 'object'
-    ) {
+    let isTargetObj = !isTargetArr && target && typeof target === 'object';
+    let isSourceObj = !isSourceArr && source && typeof source === 'object';
+    if (isTargetObj && isSourceObj) {
         let result = Object.assign({}, target);
         Object.keys(source).forEach(k => {
             if (target.hasOwnProperty(k)) {

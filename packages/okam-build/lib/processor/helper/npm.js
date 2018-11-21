@@ -52,7 +52,7 @@ exports.resolve = function (buildManager, file, requireModId) {
         return requireModId;
     }
 
-    let {fullPath, isNpm: isNpmMod, resolvedModIds: cacheResolveModIds} = file;
+    let {isNpm: isNpmMod, resolvedModIds: cacheResolveModIds} = file;
     cacheResolveModIds || (file.resolvedModIds = cacheResolveModIds = {});
     let resolveModInfo = cacheResolveModIds[requireModId];
     if (resolveModInfo) {
@@ -60,7 +60,7 @@ exports.resolve = function (buildManager, file, requireModId) {
     }
 
     let isRelModId = requireModId.charAt(0) === '.';
-    let depFileFullPath = buildManager.resolve(requireModId, fullPath);
+    let depFileFullPath = buildManager.resolve(requireModId, file);
     if (!depFileFullPath) {
         return;
     }

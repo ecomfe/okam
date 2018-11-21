@@ -7,6 +7,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const EventEmitter = require('events');
 const Readable = require('stream').Readable;
 const {
     FILE_EXT_PROCESSOR,
@@ -157,7 +158,7 @@ function isFileExist(file) {
     return !!this._existMap[typeof file === 'string' ? file : file.fullPath];
 }
 
-class FileFactory {
+class FileFactory extends EventEmitter {
 
     /**
      * Create FileFactory instance
@@ -165,6 +166,8 @@ class FileFactory {
      * @param {Object} options create options
      */
     constructor(options) {
+        super();
+
         this._files = [];
         this._existMap = {};
 
@@ -222,6 +225,11 @@ class FileFactory {
                     f.path, this.rebaseDepDir
                 );
             }
+
+            /**
+             * @event addFile
+             */
+            this.emit('addFile', f);
         }
         return f;
     }
@@ -261,6 +269,10 @@ class FileFactory {
 
     forEach(handler) {
         this._files.forEach(handler);
+    }
+
+    some(handler) {
+        return this._files.some(handler);
     }
 
     map(handler) {

@@ -1,5 +1,5 @@
 /**
- * @file Resolve npm dependences
+ * @file Resolve npm dependencies
  * @author sparklewhy@gmail.com
  */
 
@@ -14,9 +14,9 @@
  * @param {Object} path the node path
  * @param {Object} state the transformation plugin state
  */
-function tryToResolvRequireModId(t, path, state) {
+function tryToResolveRequireModId(t, path, state) {
     let opts = state.opts || {};
-    let resolveRequrieId = opts.resolveDepRequireId;
+    let resolveRequireId = opts.resolveDepRequireId;
 
     let exportNode = path.node;
     let source = exportNode.source;
@@ -25,7 +25,7 @@ function tryToResolvRequireModId(t, path, state) {
     }
 
     let modId = source.value;
-    let newModId = resolveRequrieId(modId);
+    let newModId = resolveRequireId(modId);
     if (newModId && newModId !== modId) {
         let requireIdNode = path.get('source');
         requireIdNode.replaceWith(
@@ -39,14 +39,14 @@ module.exports = function ({types: t}) {
         visitor: {
 
             /**
-             * Resovle the `require(xxx)` statement module id
+             * Resolve the `require(xxx)` statement module id
              *
              * @param {Object} path the node path
              * @param {Object} state the transformation plugin state
              */
             CallExpression(path, state) {
                 let opts = state.opts || {};
-                let resolveRequrieId = opts.resolveDepRequireId;
+                let resolveRequireId = opts.resolveDepRequireId;
 
                 let callNode = path.node;
                 let callName = callNode.callee.name;
@@ -63,7 +63,7 @@ module.exports = function ({types: t}) {
                 }
 
                 let modId = args[0].value;
-                let newModId = resolveRequrieId(modId);
+                let newModId = resolveRequireId(modId);
                 if (newModId && newModId !== modId) {
                     let requireIdNode = path.get('arguments.0');
                     requireIdNode.replaceWith(
@@ -73,33 +73,33 @@ module.exports = function ({types: t}) {
             },
 
             /**
-             * Resovle the `import xxx from xxx` statement module id
+             * Resolve the `import xxx from xxx` statement module id
              *
              * @param {Object} path the node path
              * @param {Object} state the transformation plugin state
              */
             ImportDeclaration(path, state) {
-                tryToResolvRequireModId(t, path, state);
+                tryToResolveRequireModId(t, path, state);
             },
 
             /**
-             * Resovle the `export * from xxx ` statement module id
+             * Resolve the `export * from xxx ` statement module id
              *
              * @param {Object} path the node path
              * @param {Object} state the transformation plugin state
              */
             ExportAllDeclaration(path, state) {
-                tryToResolvRequireModId(t, path, state);
+                tryToResolveRequireModId(t, path, state);
             },
 
             /**
-             * Resovle the `export {xx} from xxx` statement module id
+             * Resolve the `export {xx} from xxx` statement module id
              *
              * @param {Object} path the node path
              * @param {Object} state the transformation plugin state
              */
             ExportNamedDeclaration(path, state) {
-                tryToResolvRequireModId(t, path, state);
+                tryToResolveRequireModId(t, path, state);
             }
         }
     };

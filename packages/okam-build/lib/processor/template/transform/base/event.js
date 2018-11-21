@@ -1,7 +1,6 @@
 /**
  * @file transform event attr
  * @author sharonzd
- * @date 2018/8/7
  */
 
 'use strict';
@@ -131,7 +130,7 @@ module.exports = function (attrs, name, tplOpts, parseEventName) {
     // use __handlerProxy(in okam-core/base/component) to agent the event handler
     attrs[eventAttrName] = '__handlerProxy';
 
-    eventType = toHyphen(eventType); // covert the camel case to dash-style
+    eventType = toHyphen(eventType); // covert the camel case to kebab-case
 
     // save the real event handler
     attrs[`data-${eventType}-event-proxy`] = handlerName;

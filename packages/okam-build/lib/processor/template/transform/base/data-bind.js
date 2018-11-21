@@ -1,7 +1,7 @@
 /**
  * @file transform data binding
- * @author sparklewhy@gmail.com  sharonzd
- * @date 2018/8/7
+ * @author sparklewhy@gmail.com
+ * @author sharonzd
  */
 
 'use strict';

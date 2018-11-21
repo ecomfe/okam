@@ -1,7 +1,6 @@
 /**
  * @file transform regexp constants
  * @author sharonzd
- * @date 2018/8/7
  */
 
 'use strict';

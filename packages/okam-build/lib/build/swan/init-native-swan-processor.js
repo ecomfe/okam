@@ -1,12 +1,12 @@
 /**
- * @file Native ant mini program support processor initialization
+ * @file Native swan mini program support processor initialization
  * @author sparklewhy@gmail.com
  */
 
 'use strict';
 
-const {registerProcessor} = require('../processor/type');
-const adapterPlugin = require('../processor/js/plugins/babel-native-ant-plugin');
+const {registerProcessor} = require('../../processor/type');
+const adapterPlugin = require('../../processor/js/plugins/babel-native-swan-plugin');
 
 /**
  * Initialize native component js processor
@@ -20,10 +20,10 @@ const adapterPlugin = require('../processor/js/plugins/babel-native-ant-plugin')
 function initJsProcessor(opts, defaultBabelProcessorName) {
     let plugins = (opts && opts.plugins) || [adapterPlugin];
     registerProcessor({
-        name: (opts && opts.processor) || defaultBabelProcessorName, // override existed processor
+        name: (opts && opts.processor) || 'babel', // override existed processor
         hook: {
             before(file, options) {
-                if (file.isAntCompScript && !adapterPlugin.isAdapterModule(file.path)) {
+                if (file.isSwanCompScript && !adapterPlugin.isAdapterModule(file.path)) {
                     options.plugins || (options.plugins = []);
                     options.plugins.push.apply(options.plugins, plugins);
                 }

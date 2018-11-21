@@ -163,6 +163,9 @@ function serializeDom(dom, opts) {
     let output = '';
     for (let i = 0, len = dom.length; i < len; i++) {
         let elem = dom[i];
+        if (elem.remove) {
+            continue;
+        }
 
         if (elem.type === 'root') {
             output += serializeDom(elem.children, opts);

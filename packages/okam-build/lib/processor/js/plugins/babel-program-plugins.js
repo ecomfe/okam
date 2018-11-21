@@ -54,9 +54,9 @@ module.exports = exports = {
      */
     behavior: getMiniProgramVisitor({
         baseName: 'Behavior',
-        extend: 'behavior',
+        extensionName: 'behavior',
         isBehavior: true,
-        isExtend: true,
+        isExtension: true,
         needExport: true
     })
 };

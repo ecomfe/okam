@@ -5,11 +5,11 @@
 
 'use strict';
 
-const {registerProcessor} = require('../processor/type');
-const wxmlPlugin = require('../processor/template/plugins/wx2swan-syntax-plugin');
-const wxssPlugin = require('../processor/css/plugins/postcss-plugin-wx2swan');
-const jsPlugin = require('../processor/js/plugins/babel-wx2swan-plugin');
-const adapterPlugin = require('../processor/js/plugins/babel-native-swan-plugin');
+const {registerProcessor} = require('../../processor/type');
+const wxmlPlugin = require('../../processor/template/plugins/wx2swan-syntax-plugin');
+const wxssPlugin = require('../../processor/css/plugins/postcss-plugin-wx2swan');
+const jsPlugin = require('../../processor/js/plugins/babel-wx2swan-plugin');
+const adapterPlugin = require('../../processor/js/plugins/babel-native-swan-plugin');
 
 /**
  * Initialize wx component js processor

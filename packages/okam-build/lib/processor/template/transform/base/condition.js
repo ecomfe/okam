@@ -1,8 +1,6 @@
 /**
  * @file transform condition syntax
- *
  * @author sharonzd
- * @date 2018/8/7
  */
 
 'use strict';
@@ -23,7 +21,7 @@
 module.exports = function (attrs, name, tplOpts, opts) {
     const {logger, file} = tplOpts;
     const {syntaxMap, wrapCondition = false} = opts;
-    const newName = syntaxMap[name];
+    const newName = syntaxMap[name] || name;
 
     if (attrs.hasOwnProperty(newName)) {
         logger.warn(`${file.path} template attribute ${name} is conflicted with ${newName}`);

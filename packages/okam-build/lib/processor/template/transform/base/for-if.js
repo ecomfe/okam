@@ -7,7 +7,6 @@
  * <view for='xx' elif='xx'>hello</view>  ->  <block elif='xxx'><view for="xxx">hello</view></block>
  * <view for='xx' else>hello</view>  ->  <block else><view for="xxx">hello</view></block>
  * @author sharonzd
- * @date 2018/9/2
  */
 
 'use strict';
