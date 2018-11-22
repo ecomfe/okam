@@ -7,6 +7,8 @@
 
 import app from '@system.app';
 
+/* eslint-disable fecs-camelcase */
+
 /**
  * The app global object
  *
@@ -19,7 +21,15 @@ export const appGlobal = Object.getPrototypeOf(global) || global;
  *
  * @type {Object}
  */
-export const appEnv = appGlobal.__appAPI = {};
+export const appEnv = appGlobal.okam_app_api = {
+
+    /**
+     * The extension okam API
+     *
+     * @type {Object}
+     */
+    okam: {}
+};
 
 /**
  * The native env api

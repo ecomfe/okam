@@ -1,5 +1,5 @@
 /**
- * @file The extend API of the quick app
+ * @file The router API of the quick app
  * @author sparklewhy@gmail.com
  */
 
@@ -7,9 +7,8 @@
 
 /* eslint-disable fecs-export-on-declare */
 
-import prompt from '@system.prompt';
 import router from '@system.router';
-import {parseQuery} from '../util/url';
+import {parseQuery} from '../../util/url';
 
 /**
  * Navigate to the specified url
@@ -44,31 +43,7 @@ function navigateTo(options) {
     });
 }
 
-/**
- * The extension API definition which signature is refer to weixin API definition
- *
- * @type {Object}
- */
 export default {
-
-    /**
-     * Show toast api
-     *
-     * @param {Object} options the options to showToast
-     */
-    showToast(options) {
-        let opts = {};
-        let {title, message, duration} = options;
-        if (title && !message) {
-            opts.message = title;
-        }
-
-        if (duration != null) {
-            opts.duration = duration ? 1 : 0;
-        }
-
-        prompt.showToast(opts);
-    },
 
     /**
      * Navigate back
@@ -113,4 +88,3 @@ export default {
      */
     redirectTo: navigateTo
 };
-
