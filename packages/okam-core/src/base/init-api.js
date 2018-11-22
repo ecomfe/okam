@@ -7,6 +7,8 @@
 
 import base from './base';
 import {promisifyApis, interceptApis} from '../na/api';
+import {api} from '../na/index';
+import * as platform from '../na/platform';
 
 /**
  * Initialize promisify APIs and interception APIs.
@@ -16,6 +18,10 @@ import {promisifyApis, interceptApis} from '../na/api';
  */
 export default function initApis() {
     if (!this.__apisInited) {
+        // ensure platform info available afterwards
+        Object.assign(api.okam, platform);
+        api.okam.initPlatformInfo();
+
         this.__apisInited = true;
 
         Object.assign(this, base);

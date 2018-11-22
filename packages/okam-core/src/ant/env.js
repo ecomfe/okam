@@ -23,7 +23,7 @@ export const appGlobal = (function getGlobal() {
     }
 
     return Function('return this')();
-})();
+})() || {};
 
 /**
  * The native env variable
@@ -38,6 +38,13 @@ export const appEnv = my;
  * @type {Object}
  */
 export const api = Object.create(my);
+
+/**
+ * The extension okam API
+ *
+ * @type {Object}
+ */
+api.okam = {};
 
 /**
  * Get current app instance
