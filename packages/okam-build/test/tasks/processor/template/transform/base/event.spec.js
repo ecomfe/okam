@@ -135,14 +135,14 @@ describe('passing on event object', function () {
             content: '<div @click="hi($event)"></div>'
         };
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result && result.ast && result.ast[0] && result.ast[0].attribs);
+        let ast = result.ast.children;
 
         const {
             bindtap: proxyFunction,
             'data-tap-event-proxy': originFunction,
             'data-tap-arguments-proxy': proxyArguments,
             'data-tap-event-object-alias': alias
-        } = result.ast[0].attribs;
+        } = ast[0].attribs;
         assert(proxyFunction && originFunction && proxyArguments && alias);
 
         const aliasArray = alias.split('_');
@@ -159,14 +159,14 @@ describe('passing on event object', function () {
         };
 
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result && result.ast && result.ast[0] && result.ast[0].attribs);
+        let ast = result.ast.children;
 
         const {
             bindtap: proxyFunction,
             'data-tap-event-proxy': originFunction,
             'data-tap-arguments-proxy': proxyArguments,
             'data-tap-event-object-alias': alias
-        } = result.ast[0].attribs;
+        } = ast[0].attribs;
         assert(proxyFunction && originFunction && proxyArguments && alias);
 
         const aliasArray = alias.split('_');
@@ -183,14 +183,14 @@ describe('passing on event object', function () {
         };
 
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result && result.ast && result.ast[0] && result.ast[0].attribs);
+        let ast = result.ast.children;
 
         const {
             bindtap: proxyFunction,
             'data-tap-event-proxy': originFunction,
             'data-tap-arguments-proxy': proxyArguments,
             'data-tap-event-object-alias': alias
-        } = result.ast[0].attribs;
+        } = ast[0].attribs;
         assert(proxyFunction && originFunction && proxyArguments && alias);
 
         const aliasArray = alias.split('_');
