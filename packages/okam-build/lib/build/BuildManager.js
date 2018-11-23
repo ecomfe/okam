@@ -15,6 +15,7 @@ const FileOutput = require('../generator/FileOutput');
 const processor = require('../processor');
 const npm = require('../processor/helper/npm');
 const ModuleResolver = require('./ModuleResolver');
+const allAppTypes = require('./app-type');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
@@ -134,6 +135,7 @@ class BuildManager extends EventEmitter {
             getFileByFullPath: this.getFileByFullPath.bind(this),
             designWidth: this.buildConf.designWidth,
             appType: this.appType,
+            allAppTypes,
             logger: this.logger,
             envConfigKey: this.envConfigKey,
             sourceDir,

@@ -69,7 +69,7 @@ function parseDom(data, options) {
 
     let children = handler.dom;
     let rootNode = {
-        root: true,
+        type: 'root',
         children
     };
     children.forEach(item => (item.parent = rootNode));

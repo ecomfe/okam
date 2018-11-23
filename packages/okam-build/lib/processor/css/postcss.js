@@ -30,11 +30,14 @@ const BUILTIN_PLUGINS = {
     },
     cssImport: {
         path: path.join(__dirname, 'plugins', 'postcss-plugin-import.js')
+    },
+    env: {
+        path: path.join(__dirname, 'plugins', 'postcss-plugin-env.js')
     }
 };
 
 module.exports = function (file, options) {
-    let {root, designWidth, config} = options;
+    let {root, appType, allAppTypes, designWidth, config} = options;
 
     // init default design width
     if (designWidth) {
@@ -44,7 +47,7 @@ module.exports = function (file, options) {
     let plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
 
     plugins = (plugins || []).map(
-        ({handler, options}) => handler(options)
+        ({handler, options}) => handler(Object.assign({allAppTypes, appType}, options))
     );
     let {css, result} = postcss(plugins)
         .process(

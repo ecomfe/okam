@@ -99,6 +99,9 @@ module.exports = exports = function (attrs, name, tplOpts, opts, element) {
             });
         }
     }
+    else if (!supportForAbbr) { // fallback to support wx native syntax
+        newValue = `{{${newValue}}}`;
+    }
 
     attrs[newName] = newValue;
 };

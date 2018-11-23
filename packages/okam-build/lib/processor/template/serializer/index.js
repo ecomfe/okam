@@ -163,7 +163,7 @@ function serializeDom(dom, opts) {
     let output = '';
     for (let i = 0, len = dom.length; i < len; i++) {
         let elem = dom[i];
-        if (elem.remove) {
+        if (elem.removed) { // ignore removed node
             continue;
         }
 

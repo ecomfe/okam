@@ -95,7 +95,7 @@ function createTransformContext() {
 
 function transformAst(ast, plugins, tplOpts) {
     let ctx = createTransformContext();
-    let children = ast.children;
+    let children = ast.children; // ignore root node, only need to transform children
 
     let childNum = children.length;
     for (let i = 0; i < childNum; i++) {
@@ -156,11 +156,12 @@ function mergeVisitors(plugins) {
  * @return {Object}
  */
 function compileTpl(file, options) {
+    let {config} = options;
+    let allowCache = !config || config.cache == null || config.cache;
     let content = file.content.toString();
     const ast = file.ast || parseDom(content);
-    file.ast = ast;
+    allowCache && (file.ast = ast);
 
-    let {config} = options;
     let plugins = mergeVisitors((config && config.plugins) || []);
 
     transformAst(
@@ -169,7 +170,7 @@ function compileTpl(file, options) {
     );
 
     // serialize by xml mode, close all elements
-    content = serializeDom(ast.children, {xmlMode: true});
+    content = serializeDom(ast, {xmlMode: true});
 
     return {
         ast,

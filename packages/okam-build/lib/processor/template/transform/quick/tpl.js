@@ -259,10 +259,10 @@ module.exports = function (element, tplOpts, opts) {
     }
 
     // add remove flag, remove <import src="xxx" /> element
-    importTplElement.remove = true;
+    importTplElement.removed = true;
 
     // add remove flag, remove <tpl is="xx" data="xx" /> element
-    element.remove = true;
+    element.removed = true;
 
     // insert inline template elements
     let children = element.parent.children;

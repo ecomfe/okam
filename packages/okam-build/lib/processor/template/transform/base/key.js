@@ -6,7 +6,7 @@
 module.exports = function (attrs, name, tplOpts, opts, element) {
     let {logger, file} = tplOpts;
     let {forKeyDirectiveName} = opts;
-    let itemName = element.forItemName;
+    let itemName = element.forItemName || 'item';
     let value = attrs[name];
 
     let keyPrefix = itemName + '.';
