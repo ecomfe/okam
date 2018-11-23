@@ -65,7 +65,7 @@ const PACKAGE_NAME_CORE = 'okam-core';
  * @type {Array}
  * @const
  */
-const PROMPT_PACKAGE_KEYS = ['template', 'script', 'style', 'redux', 'server', 'tinyimg', 'lint'];
+const PROMPT_PACKAGE_KEYS = ['template', 'script', 'style', 'redux', 'async', 'server', 'tinyimg', 'lint'];
 
 /**
  * package names map

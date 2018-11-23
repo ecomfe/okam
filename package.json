@@ -28,7 +28,6 @@
     },
     "ignore": [
       "dist/**/*.js",
-      "templates/base/**/*",
       "example/**/*.js"
     ]
   },

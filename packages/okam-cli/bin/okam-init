@@ -4,7 +4,7 @@ const program = require('commander');
 const Project = require('../src/Project');
 
 program
-  .parse(process.argv);
+    .parse(process.argv);
 
 const args = program.args
 const project = new Project({

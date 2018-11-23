@@ -115,13 +115,10 @@ export default {
 <style lang="stylus">
 .home-wrap
     box-sizing: border-box
-    padding: 100px
     height: 100vh
     background: #f0f0f0
 
     .click-tip
-        margin-top: 100px
-        padding: 20px
         text-align: center
         color: red
 
@@ -131,13 +128,10 @@ export default {
 <style lang="less">
 .home-wrap {
     box-sizing: border-box;
-    padding: 100px;
     height: 100vh;
     background: #f0f0f0;
 
     .click-tip {
-        margin-top: 100px;
-        padding: 20px;
         text-align: center;
         color: red;
     }
@@ -148,13 +142,10 @@ export default {
 <style lang="sass">
 .home-wrap {
     box-sizing: border-box;
-    padding: 100px;
     height: 100vh;
     background: #f0f0f0;
 
     .click-tip {
-        margin-top: 100px;
-        padding: 20px;
         text-align: center;
         color: red;
     }
@@ -164,14 +155,11 @@ export default {
 <style>
 .home-wrap {
     box-sizing: border-box;
-    padding: 100px;
     height: 100vh;
     background: #f0f0f0;
 }
 
 .home-wrap .click-tip {
-    margin-top: 100px;
-    padding: 20px;
     text-align: center;
     color: red;
 }
