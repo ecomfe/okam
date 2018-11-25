@@ -5,7 +5,9 @@
 
 'use strict';
 
+const path = require('path');
 const BuildManager = require('../BuildManager');
+const processor = require('../../processor');
 
 const VALIDATED_DATA_TYPES = ['public', 'protected', 'private'];
 
@@ -98,6 +100,36 @@ class BuildQuickAppManager extends BuildManager {
         Object.assign(this.compileContext, {
             getAllPageConfigFiles: this.getAllPageConfigFiles.bind(this),
             getAllUsedAPIFeatures: this.getAllUsedAPIFeatures.bind(this)
+        });
+        this.initAddCSSDependenciesProcessor();
+    }
+
+    /**
+     * Init the auto adding the css style dependencies processor
+     *
+     * @private
+     */
+    initAddCSSDependenciesProcessor() {
+        let found;
+        this.files.some(item => item.isEntryStyle && (found = item));
+        if (!found) {
+            return;
+        }
+
+        // to avoid the release path return false when the file is not compiled
+        // assume the file is compiled ever
+        found.compiled = true;
+        let outputPath = this.generator.getOutputPath(found);
+        found.compiled = false;
+
+        processor.registerProcessor({
+            addCssDependencies: {
+                options: {
+                    styleFiles: [
+                        path.join(this.root, outputPath)
+                    ]
+                }
+            }
         });
     }
 

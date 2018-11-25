@@ -99,7 +99,7 @@ function processAppSpecifiedMediaRule(allAppTypes, appType, rule) {
  *        the front of the style declaration that has the same property name
  * @param {string} toRemovePropName the property name to remove
  */
-function removeNoUseDecl(decl, toRemovePropName) {
+function removeUnUseDecl(decl, toRemovePropName) {
     let nodes = decl.parent.nodes;
     let currIdx = nodes.indexOf(decl);
 
@@ -142,7 +142,7 @@ function processAppSpecifiedDeclaration(allAppTypes, appType, decl) {
             // style property name declaration that ignore app type prefix
             // and remove the specified app type prefix of the property
             let newPropName = prop.replace(SPECIFIED_APP_PROP_DECL_REGEXP, '');
-            removeNoUseDecl(decl, newPropName);
+            removeUnUseDecl(decl, newPropName);
             decl.prop = newPropName;
         }
     }

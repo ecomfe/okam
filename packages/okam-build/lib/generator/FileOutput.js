@@ -257,6 +257,16 @@ class FileOutput {
             err => this.logger.error('build fail:', err.stack || err.toString())
         );
     }
+
+    /**
+     * Get the file output path
+     *
+     * @param {Object} file the file to get output file path
+     * @return {string}
+     */
+    getOutputPath(file) {
+        return getOutputPath.call(this, file.path, file, this.outputOpts);
+    }
 }
 
 module.exports = exports = FileOutput;

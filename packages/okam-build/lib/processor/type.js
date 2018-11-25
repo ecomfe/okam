@@ -117,6 +117,9 @@ const BUILTIN_PROCESSORS = {
         deps: 'postcss',
         order: 999
     },
+    addCssDependencies: {
+        processor: getProcessorPath('css/add-css-dependencies')
+    },
     babel: {
         processor: getProcessorPath('js/babel-parser'),
         deps: 'babel-core',

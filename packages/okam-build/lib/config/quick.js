@@ -68,7 +68,7 @@ module.exports = merge({}, baseConf, {
         pathMap: {
             projectConfig: false,
             entryScript: 'app.ux',
-            entryStyle: false,
+            entryStyle: 'app.css',
             appConfig: 'manifest.json'
         },
 
@@ -129,6 +129,13 @@ module.exports = merge({}, baseConf, {
                 return file.isEntryScript || file.isComponent;
             },
             processors: ['componentGenerator']
+        },
+        {
+            match(file) {
+                // process sfc component style
+                return file.isStyle && file.owner;
+            },
+            processors: ['addCssDependencies']
         }
     ]
 });
