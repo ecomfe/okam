@@ -49,10 +49,7 @@ function compileFile(buildManager, file, releaseFiles) {
         return;
     }
 
-    // skip component file release
-    if (!file.isComponent) {
-        releaseFiles.add(file);
-    }
+    releaseFiles.add(file);
 
     // process script deps
     file.isScript && (file.deps || []).forEach(depPath => {
