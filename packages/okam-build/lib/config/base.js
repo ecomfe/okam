@@ -212,6 +212,21 @@ module.exports = {
     component: {
 
         /**
+         * 要自动注入的全局组件定义，可选
+         * 定义结构：
+         * {
+         *     // key 为要引入的组件名，同组件定义的 `components` 属性定义
+         *     // value 为对应的组件定义的路径，相对于项目的源目录，必须 `.` 开头
+         *     // 如果是 npm 模块，则为对应的 npm 模块引用模块 id，同脚本 import 规则
+         *     MyButton: './components/MyButton',
+         *     Button: 'npm_package/dist/Button'
+         * }
+         *
+         * @type {Object}
+         */
+        global: null,
+
+        /**
          * 组件的后缀名
          *
          * @type {string}
@@ -357,7 +372,7 @@ module.exports = {
              * @return {boolean}
              */
             match(file) {
-                if (file.isStyle && (!file.isEntryStyle && !file.owner)) {
+                if (file.isStyle && !(file.isEntryStyle || file.owner)) {
                     // 默认不处理非入口样式及单文件组件的样式文件
                     return false;
                 }

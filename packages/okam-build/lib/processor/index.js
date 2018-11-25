@@ -15,6 +15,7 @@ const {getEventSyntaxPlugin} = require('./helper/init-view');
 const registerProcessor = require('./type').registerProcessor;
 const {isPromise} = require('../util').helper;
 const {toHyphen} = require('../util').string;
+const {getRequirePath} = require('../util').file;
 
 function processConfigInfo(file, root, owner) {
     let config = file.config;
@@ -162,6 +163,21 @@ function getCustomComponentTags(config) {
     return Object.keys(usingComponents).map(k => toHyphen(k));
 }
 
+function getImportComponents(file, globalComponents, allTags) {
+    let result = {};
+    globalComponents && Object.keys(globalComponents).forEach(k => {
+        if (allTags[k]) {
+            let {isNpmMod, modPath} = globalComponents[k];
+            if (!isNpmMod) {
+                modPath = getRequirePath(modPath, file.fullPath);
+            }
+
+            result[k] = modPath;
+        }
+    });
+    return Object.keys(result).length ? result : null;
+}
+
 function compileComponent(component, file, buildManager) {
     let tplFile = component.tpl;
     if (tplFile) {
@@ -180,15 +196,26 @@ function compileComponent(component, file, buildManager) {
 
         // pass the refs info defined in tpl to script
         scriptFile.tplRefs = tplFile.refs;
+
+        scriptFile.injectComponents = getImportComponents(
+            scriptFile,
+            buildManager.globalComponents,
+            tplFile.tags,
+        );
+        buildManager.logger.debug(
+            scriptFile.path,
+            'inject components',
+            scriptFile.injectComponents
+        );
         compile(scriptFile, buildManager);
 
         // transform template event syntax
-        let tags = getCustomComponentTags(scriptFile.config);
+        let customComponentTags = getCustomComponentTags(scriptFile.config);
         let tplProcessor = getBuiltinProcessor('view', {
             plugins: [
                 [
                     getEventSyntaxPlugin(buildManager.appType),
-                    {customComponentTags: tags}
+                    {customComponentTags}
                 ]
             ]
         });

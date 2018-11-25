@@ -9,6 +9,7 @@
 const pathUtil = require('path');
 const EventEmitter = require('events');
 const {colors, Timer, merge, babel: babelUtil, file: fileUtil} = require('../util');
+const {toHyphen} = require('../util').string;
 const loadProcessFiles = require('./load-process-files');
 const CacheManager = require('./CacheManager');
 const FileOutput = require('../generator/FileOutput');
@@ -53,6 +54,33 @@ class BuildManager extends EventEmitter {
     }
 
     /**
+     * Initialize the imported global component definition
+     *
+     * @private
+     * @param {Object} componentConf the component config
+     */
+    initGlobalComponents(componentConf) {
+        let {global: globalComponents} = componentConf;
+        if (!globalComponents) {
+            return;
+        }
+
+        let result = {};
+        Object.keys(globalComponents).forEach(k => {
+            let value = globalComponents[k];
+            let isRelMod = value.charAt(0) === '.';
+            if (isRelMod) {
+                value = pathUtil.join(this.sourceDir, value);
+            }
+            result[toHyphen(k)] = {
+                isNpmMod: !isRelMod,
+                modPath: value
+            };
+        });
+        this.globalComponents = result;
+    }
+
+    /**
      * Initialize used processors
      *
      * @protected
@@ -92,6 +120,19 @@ class BuildManager extends EventEmitter {
 
         rules && (rules = [].concat(baseRules, rules));
         this.rules = rules || baseRules || [];
+
+        // add APP_TYPE process env variable replacement processor
+        this.rules.push({
+            match(file) {
+                return file.isScript;
+            },
+            processors: [
+                [
+                    'replacement',
+                    {'process.env.APP_TYPE': `"${this.appType}"`}
+                ]
+            ]
+        });
 
         processors && (processors = merge({}, baseProcessors, processors));
         buildConf.processors = processors || baseProcessors;
@@ -142,6 +183,8 @@ class BuildManager extends EventEmitter {
             root,
             output
         };
+
+        this.initGlobalComponents(this.buildConf.component);
 
         this.generator = new FileOutput(this, this.buildConf.output);
     }

@@ -99,9 +99,19 @@ function normalizeTransformers(transformerMap) {
  * @param {Object} options the template transform plugin options
  */
 function transform(transformers, element, tplOpts, options) {
+    let {config} = tplOpts;
+    let onTag = config.onTag;
+    if (onTag) {
+        onTag(element.name);
+    }
+
     // transform element first
     let transformer = findMatchElemTransformer(transformers.element, element);
     transformer && transformer.call(this, element, tplOpts, options);
+
+    if (element.removed) {
+        return;
+    }
 
     // transform element attributes
     let {attribs: attrs} = element;

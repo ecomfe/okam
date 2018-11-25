@@ -5,6 +5,8 @@
 
 'use strict';
 
+const {toHyphen} = require('../../util').string;
+
 /**
  * The abbreviation of the page config item
  *
@@ -32,6 +34,20 @@ function normalizeConfig(abbrConfItems, config) {
 
 function normalizeUsingComponentConfig(config, components, file, buildManager) {
     let usingComponents = Object.assign({}, components, config.usingComponents);
+    let {injectComponents} = file;
+    if (injectComponents) {
+        let existed = {};
+        Object.keys(usingComponents).forEach(k => {
+            existed[toHyphen(k)] = true;
+        });
+
+        Object.keys(injectComponents).forEach(k => {
+            if (!existed[k]) {
+                usingComponents[k] = injectComponents[k];
+            }
+        });
+    }
+
     if (Object.keys(usingComponents).length) {
         config.usingComponents = usingComponents;
     }
