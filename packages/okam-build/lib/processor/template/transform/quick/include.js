@@ -8,6 +8,7 @@
 
 const {file: fileUtil} = require('../../../../util/index');
 const {parse: parseDom} = require('../../parser');
+const {removeEmptyTextNode} = require('../base/helper');
 
 /**
  * Get included template element
@@ -63,6 +64,7 @@ module.exports = function (element, tplOpts, opts) {
 
     // add remove flag, remove <include src="xx" /> element
     element.remove = true;
+    removeEmptyTextNode(element.prev);
 
     if (!inlineTplElement
         || !inlineTplElement.children

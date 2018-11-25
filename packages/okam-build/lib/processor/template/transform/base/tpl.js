@@ -1,5 +1,5 @@
 /**
- * @file Transfrom include/import tpl syntax
+ * @file Transform include/import tpl syntax
  * @author sparklewhy@gmail.com
  */
 

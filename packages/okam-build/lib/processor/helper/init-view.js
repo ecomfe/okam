@@ -98,9 +98,16 @@ function normalizeViewPlugins(plugins, appType) {
     });
 }
 
+function handleOnTag(file, tagName) {
+    let tags = file.tags;
+    tags || (tags = file.tags = {});
+    tags[tagName] = true;
+}
+
 /**
  * Initialize component view template transform options.
  *
+ * @param {Object} file the file to process
  * @param {Object} processOpts the process options
  * @param {Array.<string|Object>} processOpts.plugins the view processor plugins,
  *        the builtin plugins:
@@ -114,7 +121,7 @@ function normalizeViewPlugins(plugins, appType) {
  * @param {BuildManager} buildManager the build manager
  * @return {Object}
  */
-function initViewTransformOptions(processOpts, buildManager) {
+function initViewTransformOptions(file, processOpts, buildManager) {
     let isSupportRef = buildManager.isEnableRefSupport();
     let plugins = processOpts.plugins;
 
@@ -140,7 +147,8 @@ function initViewTransformOptions(processOpts, buildManager) {
         processOpts,
         {
             plugins,
-            template: templateConf
+            template: templateConf,
+            onTag: handleOnTag.bind(null, file)
         }
     );
 }

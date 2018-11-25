@@ -10,7 +10,8 @@
 
 const forIfTransformer = require('./for-if');
 const transformTplElement = require('./tpl');
-const {CONDITION_DIRECTIVES} = require('./constant');
+const transformEnvElement = require('./env');
+const {CONDITION_DIRECTIVES, ENV_ELEMENT_REGEXP} = require('./constant');
 
 function transformIncludeImportElement(element, tplOpts) {
     let {output: outputOpts} = tplOpts;
@@ -24,6 +25,12 @@ function transformIncludeImportElement(element, tplOpts) {
 }
 
 module.exports = {
+    env: {
+        match(element) {
+            return ENV_ELEMENT_REGEXP.test(element.name);
+        },
+        transform: transformEnvElement
+    },
     import: {
         match: 'import',
         transform: transformIncludeImportElement

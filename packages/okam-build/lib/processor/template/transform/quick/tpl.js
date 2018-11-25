@@ -8,6 +8,7 @@
 const {file: fileUtil} = require('../../../../util/index');
 const {parse: parseDom} = require('../../parser');
 const {PLAIN_OBJECT_REGEXP} = require('../base/constant');
+const {removeEmptyTextNode} = require('../base/helper');
 const DATA_ATTR = ':data';
 
 /**
@@ -260,9 +261,11 @@ module.exports = function (element, tplOpts, opts) {
 
     // add remove flag, remove <import src="xxx" /> element
     importTplElement.removed = true;
+    removeEmptyTextNode(importTplElement.prev);
 
     // add remove flag, remove <tpl is="xx" data="xx" /> element
     element.removed = true;
+    removeEmptyTextNode(element.prev, element.next);
 
     // insert inline template elements
     let children = element.parent.children;

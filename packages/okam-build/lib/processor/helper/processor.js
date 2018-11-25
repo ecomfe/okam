@@ -190,7 +190,7 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
     }
     else if (processorName === 'view') {
         processorOpts = initViewProcessorOptions(
-            processorOpts, buildManager
+            file, processorOpts, buildManager
         );
     }
 

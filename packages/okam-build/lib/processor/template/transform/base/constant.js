@@ -18,3 +18,5 @@ exports.FOR_ITEM_INDEX_REGEXP = /^(.+)\s+in\s+(.+)$/;
 exports.CONDITION_DIRECTIVES = ['if', 'elif', 'else-if', 'else'];
 
 exports.NOT_SUPPORT_MODIFIERS = ['prevent', 'once', 'passive'];
+
+exports.ENV_ELEMENT_REGEXP = /\-env$/;

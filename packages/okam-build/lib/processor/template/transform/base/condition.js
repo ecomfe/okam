@@ -23,7 +23,7 @@ module.exports = function (attrs, name, tplOpts, opts) {
     const {syntaxMap, wrapCondition = false} = opts;
     const newName = syntaxMap[name] || name;
 
-    if (attrs.hasOwnProperty(newName)) {
+    if (newName !== name && attrs.hasOwnProperty(newName)) {
         logger.warn(`${file.path} template attribute ${name} is conflicted with ${newName}`);
     }
 

@@ -12,7 +12,6 @@ const serializeDom = require('./serializer');
 
 function visit(ctx, node, plugins, tplOpts) {
     let type = node.type;
-
     let visitors = plugins[type];
     if (visitors) {
         for (let i = 0, len = visitors.length; i < len; i++) {
@@ -26,7 +25,7 @@ function visit(ctx, node, plugins, tplOpts) {
     }
 
     let children = node.children;
-    if (!children) {
+    if (node.removed || !children) {
         return;
     }
 
