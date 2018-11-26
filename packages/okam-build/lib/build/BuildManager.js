@@ -296,7 +296,7 @@ class BuildManager extends EventEmitter {
      * Start to build app
      *
      * @param {Timer} timer the build timer
-     * @return {boolean|Promise}
+     * @return {Promise}
      */
     build(timer) {
         let logger = this.logger;
@@ -321,7 +321,7 @@ class BuildManager extends EventEmitter {
         this.onBuildDone && this.onBuildDone();
 
         logger.info('process files done:', colors.gray(timer.tick()));
-        return true;
+        return Promise.resolve();
     }
 
     release(files) {

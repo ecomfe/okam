@@ -80,7 +80,7 @@ function processAppSpecifiedMediaRule(allAppTypes, appType, rule) {
             subNodes && subNodes.forEach(
                 sub => sub.raws.before = itemRaws.before
             );
-            itemRaws.before = index ? '\n' : '';
+            itemRaws.before = '\n';
             itemRaws.after = '\n';
         });
 

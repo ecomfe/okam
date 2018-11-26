@@ -46,18 +46,6 @@ module.exports = merge({}, baseConf, {
         }
     },
 
-    api: {
-        audio: '@system.audio'
-    },
-
-    component: {
-        template: {
-            transformTags: {
-                div: ['view']
-            }
-        }
-    },
-
     output: {
 
         /**

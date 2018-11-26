@@ -177,8 +177,6 @@ class FileOutput {
             file: getCustomPath
         } = options || {};
 
-        mkdirp.sync(outputDir);
-
         this.buildManager = buildManager;
         this.root = root;
         this.logger = logger;

@@ -92,6 +92,31 @@ module.exports = {
     resolve: null,
 
     /**
+     * 执行的脚本命令，目前提供了两个钩子来执行命令： `onBuildStart` `onBuildDone`
+     *
+     * {
+     *     onBuildStart: 'npm run init', // 构建开始要执行的命令
+     *     onBuildStart: { // 也可以是对象形式
+     *        cmd: 'node',
+     *        args: ['init.js'], // 如果提供了 args， cmd 必须是命令名称
+     *        options: {cwd: __dirname}
+     *     },
+     *     onBuildStart(opts) { // 可以是 function 形式，返回特定的要执行的脚本命令，
+     *                         // 如果多个，返回数组
+     *          return [
+     *                {
+     *                   cmd: opts.watch ? 'npm run watch' : 'npm run build',
+     *                   options: {cwd: __dirname}
+     *                }
+     *          ];
+     *     }
+     * }
+     *
+     * @type {?Object}
+     */
+    script: null,
+
+    /**
      * 项目源代码位置信息
      *
      * @type {Object}
