@@ -8,12 +8,12 @@
 
 import * as platform from '../na/platform';
 
-const api = {
+export default {
 
     /**
-     * The extend okam API
+     * The extended okam API
      */
-    okam: Object.assign({}, platform)
+    okam: Object.assign({}, platform),
 
     /**
      * Show toast api
@@ -80,5 +80,3 @@ const api = {
         return res;
     }
 };
-
-export default api;
