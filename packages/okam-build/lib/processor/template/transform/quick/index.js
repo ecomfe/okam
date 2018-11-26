@@ -19,6 +19,12 @@ module.exports = {
         },
         tpl: {
             transform: require('./tpl')
+        },
+        text: {
+            match(element) {
+                return element.children && element.children.length;
+            },
+            transform: require('./text')
         }
     }),
     attribute: merge({}, attribute, {
