@@ -1,6 +1,6 @@
 <template>
     <view class="my-counter-wrap">
-        <counter @counterChange="handleCounterChange"></counter>
+        <counter :from="from" @counterChange="handleCounterChange"></counter>
     </view>
 </template>
 
@@ -11,6 +11,10 @@ export default {
     config: { // The page config defined in page.json
         navigationBarTitleText: 'Counter',
         backgroundColor: '#fff'
+    },
+
+    data: {
+        from: 'page'
     },
 
     components: {

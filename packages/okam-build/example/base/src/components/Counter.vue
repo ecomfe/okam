@@ -1,5 +1,6 @@
 <template>
     <view class="counter-wrap">
+        <view>{{from}} - {{counterFrom}}</view>
         <view class="counter-title">Counter: {{counter}}-{{txt}}</view>
         <button plain class="counter-btn" @click="onAddCounter">增加 Counter</button>
         <button plain class="counter-btn" @click="onMinusCounter">减少 Counter</button>
@@ -10,6 +11,7 @@
 
 export default {
     props: {
+        from: String,
         txt: {
             type: String,
             default: 'abctxt'
@@ -19,6 +21,9 @@ export default {
     },
 
     computed: {
+        counterFrom() {
+            return this.from + '-computed';
+        }
     },
 
     watch: {
