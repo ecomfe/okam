@@ -7,7 +7,7 @@
 * key 为 API 名称，所有定义在 `this.$api` 下的接口都可以拦截
 * value 为拦截的 API 提供的两个钩子函数，这两个钩子函数最后一个参数为组件实例
     * `init(args, ctx)`: API 调用时候传入的参数的初始化逻辑，你可以在这个钩子里改写要传入的参数，**注意：** 传入的参数是引用，直接修改即可，如果有 API 传入多个参数，或者只支持一个非引用形式的参数，会被转成数组形式传入到钩子函数，e.g., `this.$api.xxx(2, true)`, `init` 的 `args` 参数为 `[2, true]`，这样可以直接 `args[0] = 3;` 方式来修改参数
-    * `done(err, res, ctx)`: API 调用完成的回调，可以在这个钩子对返回结果进行改写，但只支持 `同步 API` 或者 `返回 Promise 的异步 API`，第一个参数 `err` 如果不为 `null`，则表示调用失败，`res` 为调用成功返回的值，对于返回 `Promise` API ，如果你想依旧保持出错时候触发 `reject` 回调，需要在该钩子函数 `throw err`。
+    * `done(err, res, ctx)`: API 调用完成的回调，可以在这个钩子对返回结果进行改写，但只支持 `同步 API` 或者 `返回 Promise 的异步 API`(从 `0.3.2` 版本开始也支持返回非 Promise `异步 API`)，第一个参数 `err` 如果不为 `null`，则表示调用失败，`res` 为调用成功返回的值，对于返回 `Promise` API ，如果你想依旧保持出错时候触发 `reject` 回调，需要在该钩子函数 `throw err`。
 
     ```javascript
     // src/app.js
