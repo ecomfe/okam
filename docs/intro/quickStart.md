@@ -4,7 +4,7 @@
 
 * Node 安装（要求 `Node >=8 && NPM >= 3`）
 
-全局安装: `npm install okam-cli -g`
+* 全局安装: `npm install okam-cli -g`
 
 ## 创建项目
 
@@ -60,7 +60,7 @@ npm install
 
     <项目Root>/wx_dist      微信小程序
 
-    <项目Root>/ant_dist      支付宝小程序
+    <项目Root>/ant_dist     支付宝小程序
     ```
 
 * 等待开发工具编译，就可以看到预览效果

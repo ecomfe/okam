@@ -39,7 +39,7 @@ function getTemplateSyntaxPlugin(appType) {
 const BUILTIN_PLUGINS = {
     syntax: getTemplateSyntaxPlugin,
     eventSync: getEventSyntaxPlugin,
-    html: path.join(PLUGIN_BASE_NAME, 'html-plugin'),
+    tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
 };
 
@@ -116,7 +116,7 @@ function handleOnTag(file, tagName, replaceTagName) {
  * @param {Array.<string|Object>} processOpts.plugins the view processor plugins,
  *        the builtin plugins:
  *        `syntax`: transform okam template syntax to mini program template syntax
- *        `html`: transform html tags to mini program component tag
+ *        `tagTransform`: transform tags A to tag B
  *        `ref`: provide view `ref` attribute support like Vue
  *        You can also pass your custom plugin:
  *        {
@@ -135,7 +135,7 @@ function initViewTransformOptions(file, processOpts, buildManager) {
         plugins = ['syntax'];
 
         if (templateConf.transformTags) {
-            plugins.push('html');
+            plugins.push('tagTransform');
         }
     }
 

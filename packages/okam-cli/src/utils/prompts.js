@@ -120,11 +120,6 @@ let promptList = [
     },
     {
         'type': 'confirm',
-        'name': 'h5tag',
-        'message': 'Use html tag in your project?'
-    },
-    {
-        'type': 'confirm',
         'name': 'server',
         'message': 'Use Mock server in your project?'
     },

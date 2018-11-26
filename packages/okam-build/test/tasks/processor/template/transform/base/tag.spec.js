@@ -14,33 +14,37 @@ const {fakeProcessorOptions} = require('test/helper');
 const templateProcessor = require('okam/processor/template/index');
 
 const transformTags = {
-    view: ['div', 'p']
+    div: 'view',
+    p: 'view'
 };
 
 const tagsWithSpanObject = {
-    view: ['div', 'p',
-        {
-            'tag': 'span',
-            'class': 'okam-inline'
-        }]
+    div: 'view',
+    p: 'view',
+    span: {
+        'tag': 'view',
+        'class': 'okam-inline'
+    }
 };
 
 const tagsWithNavigator = {
-    view: ['div', 'p'],
-    navigator: {
-        tag: 'a',
+    div: 'view',
+    p: 'view',
+    a: {
+        tag: 'navigator',
         href: 'url'
     },
-    image: 'img'
+    img: 'image'
 };
 
 const tagsWithWrongProps = {
-    view: ['div', 'p'],
-    navigator: {
-        tag: 'a',
+    div: 'view',
+    p: 'view',
+    a: {
+        tag: 'navigator',
         href: {}
     },
-    image: 'img'
+    img: 'image'
 };
 
 describe('tag processor', function () {

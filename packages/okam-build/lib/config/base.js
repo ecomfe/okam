@@ -266,19 +266,21 @@ module.exports = {
         template: {
             /**
              * 标签转换支持
-             * key 小程序标签名
-             * value <string|Object|Array>
-             * 单个：可为：string Object：类型
-             *    取值为 string 时，表示 要被转的标签
-             *    取值为 Object 时，Object 的 key 可为：
-             *        tag: 表示需转换的 tag, 一般为 HTML tag，
-             *        class: 表示 class 需额外附加 class
-             *        其他属性: 表示 需替换的属性名
+             *
+             * @type {string|Object}
+             *
+             * `key`: 被转的标签名，类型为：`string`
+             * `value`: 根据情况可配置为：`string|Object|` 类型
+             *    取值为 `string` 时，表示转为的 `tag`
+             *    取值为 `Object` 时，`Object` 的 `key` 可为：
+             *        `tag`: 转为的 `tag`,
+             *        `class`: `class` 需额外附加 `classname`，`classname` 的样式需自行定义；
+             *        其他属性: 需替换的属性名
              *
              * eg:
              *
-             * navigator {
-             *     tag: 'a',
+             * a {
+             *     tag: 'navigator',
              *     class: 'inline',
              *     href: 'url'
              * }
@@ -286,17 +288,6 @@ module.exports = {
              * <a class="home-link" href='xxx'></a>
              * 转为:
              * <navigator class="inline" url='xxx'></navigator>
-             *
-             * 推荐配置：
-             *
-             * transformTags: {
-             *      view: ['div', 'p'],
-             *      navigator: {
-             *          tag: 'a',
-             *          href: 'url'
-             *      },
-             *      image: 'img'
-             * }
              */
             transformTags: null
         }

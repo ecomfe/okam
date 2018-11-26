@@ -12,62 +12,28 @@ const logger = require('okam/util').logger;
 const initBuildOption = require('okam/build/init-build-options');
 const swanSyntax = require('okam/processor/template/plugins/swan-syntax-plugin');
 const wxSyntax = require('okam/processor/template/plugins/wx-syntax-plugin');
-const html = require('okam/processor/template/plugins/html-plugin');
+const html = require('okam/processor/template/plugins/tag-transform-plugin');
 const ref = require('okam/processor/template/plugins/ref-plugin');
 const swanEventPlugin = require('okam/processor/template/plugins/event/swan-event-plugin');
 const wxEventPlugin = require('okam/processor/template/plugins/event/wx-event-plugin');
 const antEventPlugin = require('okam/processor/template/plugins/event/ant-event-plugin');
 
 const defaultTags = {
-    view: ['div', 'p', 'span'],
-    navigator: {
-        tag: 'a',
+    div: 'view',
+    p: 'view',
+    span: 'view',
+    a: {
+        tag: 'navigator',
         href: 'url'
     },
-    image: 'img'
+    img: 'image'
 };
 
-/**
- * 构造模板标签配置
- * 将用户的  transformTags: {
- *             view: ['div', 'p', 'span'],
- *              navigator: {
- *                  tag: 'a',
- *                  href: 'url'
- *              },
- *              image: 'img'
- *          }
- * 转化为  transformTags: {
- *              div: 'view',
- *              p:  'view',
- *              span: 'view',
- *              a: {
- *                  tag:'navigator',
- *                  url:'href'
- *              },
- *              img:'image'
- *        }
- *
- * @param {Object} tagNames 用户标签配置
- * @param {string} appType  小程序类型
- * @return {Object} 构建标签配置
- */
-function fakeTemplateTagOptions(tagNames, appType) {
-    const templateConf = {
-        component: {
-            template: {
-                transformTags: tagNames
-            }
-        }
-    };
-    const config = initBuildOption(appType, templateConf, {});
-    return config.component.template;
-}
 
 /**
  * 获取默认的swan插件配置，使用函数形式避免缓存
  *
- * @return {Object} plugins config 默认swan的syntax-plugin,html-plugin,ref-plugin
+ * @return {Object} plugins config 默认swan的syntax-plugin,tag-transform-plugin,ref-plugin
  */
 const getDefaultPlugins = function () {
     return [
@@ -96,7 +62,7 @@ const getDefaultWXPlugins = function () {
  * 构造模板解析器的配置
  *
  * @param {Object} tagNames  标签配置
- * @param {Object} myPlugins 处理器插件, 默认 swan的syntax-plugin,html-plugin,ref-plugin
+ * @param {Object} myPlugins 处理器插件, 默认 swan的syntax-plugin,tag-transform-plugin,ref-plugin
  * @param {string} appType 小程序类型
  * @return {Object} 返回配置
  */
@@ -114,7 +80,9 @@ const fakeProcessorOptions = function (tagNames, myPlugins, appType = 'swan') {
         }),
         root: path.join(__dirname, '..'),
         config: {
-            template: fakeTemplateTagOptions(tagNames || defaultTags, appType),
+            template: {
+                transformTags: tagNames || defaultTags
+            },
             plugins
         },
         output: initConfig.output

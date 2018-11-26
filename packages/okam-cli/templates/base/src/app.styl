@@ -3,14 +3,9 @@
  * @author ${author|raw}
  */
 
+<% var: size = ${px2rpx} ? 150 : 50 %>
 <% if: ${style} === 'stylus' %>
 
-<% var: size = ${px2rpx} ? 150 : 50 %>
-
-<% if: ${h5tag} %>
-.okam-inline
-    display: inline
-<% /if %>
 .page-img
     margin: 0 auto
     display: block
@@ -22,11 +17,7 @@
     width: 100%
     text-align: center
 <% else %>
-<% if: ${h5tag} %>
-.okam-inline {
-    display: inline;
-}
-<% /if %>
+
 .page-img {
     margin: 0 auto;
     display: block;

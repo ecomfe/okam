@@ -1,7 +1,7 @@
 /**
- * @file Transform HTML tag to mini program tag plugin
- * @author sharonzd sparklewhy@gmail.com
- * @date 2018/8/13
+ * @file Transform tag A to tag B plugin
+ * @author sharonzd sparklewhy@gmail.com xiaohong8023@outlook.com
+ * @date 2018/11/26
  */
 
 'use strict';
@@ -30,21 +30,10 @@ module.exports = {
         let attrs = node.attribs || {};
 
         // transform special tag, such as a->navigator
-        //
-        // eg:
-        // 用户配置项：
-        // navigator: {
-        //     tag: 'a',
-        //     href: 'url'
-        // },
-        //
-        // 被转化后的config对象
         // a: {
         //     tag: 'navigator',
         //     href: 'url'
         // };
-        //
-        // 因此：tagAttrs为{tag: 'navigator', href: 'url'}
         Object.keys(tagAttrs).forEach(key => {
             const attrVal = tagAttrs[key];
 

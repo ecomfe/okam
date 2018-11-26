@@ -7,7 +7,6 @@
 
 const path = require('path');
 const {merge, logger: defaultLogger, file: fileUtil} = require('../util');
-const initTransformTags = require('./init-transform-options');
 const normalizePolyfill = require('../polyfill/normalize');
 
 /**
@@ -142,12 +141,6 @@ function initBuildOptions(appType, options, cliOpts = {}) {
         localPolyfill || polyfill, rootDir, buildConf.logger
     );
     buildConf[localPolyfill ? 'localPolyfill' : 'polyfill'] = polyfillConf;
-
-    // 获取模板的配置并将其转化一遍
-    let templateConf = buildConf.component && buildConf.component.template;
-    if (templateConf && templateConf.transformTags) {
-        templateConf.transformTags = initTransformTags(templateConf.transformTags);
-    }
 
     return buildConf;
 }
