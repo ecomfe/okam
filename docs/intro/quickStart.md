@@ -2,63 +2,75 @@
 
 ## 准备工作
 
-* Node 安装（要求 Node >=8 && NPM >= 3）
+* Node 安装（要求 `Node >=8 && NPM >= 3`）
 
-* 下载项目模板：[okam-template](https://github.com/ecomfe/okam-template)
+全局安装: `npm install okam-cli -g`
 
-* 修改项目模板信息为自己小程序项目信息
+## 创建项目
 
-    * 文件夹名称：`okam-template` 改成自己项目名称
+Okam 的安装或更新都通过 `npm` 进行。
 
-    * 修改 `package.json` 信息: `name`、`description` `author`.
+```
+okam init my-okam-project
 
-    * 配置小程序 `appid`: `project.json5` 修改 appid 值
+cd my-okam-project
 
-    * 项目源码 `src` 可以根据自己项目开发过程中需求，自己再做修改调整
+npm install
 
-* 目前整个项目模板技术栈是预配置好的，具体可以参考项目模板 `README`，如果有需要调整参考[构建配置](build/index.md)
-
-* 安装依赖：`npm install`
+```
 
 ## 运行调试
 
 * 百度小程序运行命令
 
-    * 带 watch 开发模式：`npm run dev`
+    * `npm run dev`：           带 watch 开发模式
 
-    * 删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式：`npm run dev:clean`
+    * `npm run dev:clean`：     删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式
 
-    * 带 watch && 开发 Server 开发模式：`npm run dev:server`
+    * `npm run dev:server`：    带 watch && 开发 Server 开发模式
 
-    * 删掉构建重新构建（没有 watch && 开发 Server）：`npm run build`
+    * `npm run build`：         删掉构建重新构建（没有 watch && 开发 Server）
 
-    * 生产环境构建：`npm run prod`
+    * `npm run prod`：          生产环境构建
 
 * 微信小程序运行命令
 
-    * 微信小程序开发构建：`npm run dev:wx`
+    * `npm run dev:wx：`        微信小程序开发构建
 
-    * 微信小程序：删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式：`npm run dev:wx:clean`
+    * `npm run dev:wx:clean`：  微信小程序：删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式
 
-    * 带 watch && 开发 Server 开发模式：`npm run dev:wx:server`
+    * `npm run dev:wx:server`： 带 watch && 开发 Server 开发模式
 
-    * 微信小程序生产环境构建：`npm run prod:wx`
+    * `npm run prod:wx`：       微信小程序生产环境构建
 
 * 支付宝小程序运行命令
 
-    * 微信小程序开发构建：`npm run dev:ant`
+    * `npm run dev:ant`：       微信小程序开发构建
 
-    * 微信小程序：删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式：`npm run dev:ant:clean`
+    * `npm run dev:ant:clean`： 微信小程序：删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式
 
-    * 带 watch && 开发 Server 开发模式：`npm run dev:ant:server`
+    * `npm run dev:ant:server`：带 watch && 开发 Server 开发模式
 
-    * 微信小程序生产环境构建：`npm run prod:ant`
+    * `npm run prod:ant`：      微信小程序生产环境构建
 
 * 打开开发工具，打开项目构建目录：`开发工具` -> `打开` -> `<项目Root>/dist`
 
+    ```
+    <项目Root>/dist         百度小程序
+
+    <项目Root>/wx_dist      微信小程序
+
+    <项目Root>/ant_dist      支付宝小程序
+    ```
+
 * 等待开发工具编译，就可以看到预览效果
 
-![templateDemo](../img/template_demo.png)
+
+## 更新工具或项目包
+
+更新 cli: `okam upgrade self`
+
+更新 项目依赖:  `cd <项目Root> && okam upgrade project`，替换成自己的 Okam 项目路径
 
 ## 目录结构
 
@@ -70,7 +82,9 @@
 ├── ci.yml              // 项目 CI 配置
 ├── package.json        // 项目包配置信息
 ├── doc                 // 放置项目源图片或者其它文档目录
-├── dist                // 构建产物目录，开发工具需要选择该目录作为项目根目录方能预览
+├── dist                // 百度小程序 构建产物，开发工具得选择该构建产物目录作为项目根目录方能预览
+├── wx_dist             // 微信小程序 构建产物，开发工具得选择该构建产物目录作为项目根目录方能预览
+├── ant_dist            // 支付宝小程序 构建产物，开发工具得选择该构建产物目录作为项目根目录方能预览
 ├── .tinyimgcache       // 自动生成，图片压缩的缓存信息，不可删掉，否则会导致图片重复压缩
 ├── project.json5       // 小程序项目配置文件，除了语法使用 JS 对象形式，配置说明参考官方小程序说明
 ├── scripts             // 构建相关脚本
@@ -83,10 +97,9 @@
     ├── app.js          // 小程序入口脚本
     ├── app.styl        // 小程序入口样式
     ├── common          // 项目公共代码
-    │   ├── biz         // 项目公共业务代码
-    │   ├── css         // 项目公共基础样式
     │   ├── img         // 项目图片资源
-    │   └── tpl         // 项目公共模板文件
+    │   ├── tpl         // 项目公共模板文件
+    │   └── ...
     ├── components      // 自定义组件
     └── pages           // 小程序页面集合
         ├── home        // 首页

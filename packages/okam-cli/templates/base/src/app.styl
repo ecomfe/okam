@@ -5,12 +5,17 @@
 
 <% if: ${style} === 'stylus' %>
 
+<% var: size = ${px2rpx} ? 150 : 50 %>
+
 <% if: ${h5tag} %>
 .okam-inline
     display: inline
 <% /if %>
 .page-img
-    width: 100%
+    margin: 0 auto
+    display: block
+    width: ${size}px
+    height: ${size}px
 .page-footer
     position: absolute
     bottom: 80px
@@ -19,11 +24,14 @@
 <% else %>
 <% if: ${h5tag} %>
 .okam-inline {
-    display: inline
+    display: inline;
 }
 <% /if %>
 .page-img {
-    width: 100%
+    margin: 0 auto;
+    display: block;
+    width: ${size}px;
+    height: ${size}px;
 }
 .page-footer {
     position: absolute;

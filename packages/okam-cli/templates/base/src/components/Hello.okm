@@ -83,32 +83,20 @@ export default {
 <% target: ch-stylus %>
 <style lang="stylus">
 .hello-wrap
-    padding: 20px
-    margin: 20px 0
+    margin: 20px
 
     .hello-btn
-        margin: 0 auto
         border: none
-        border-radius: 120px
-        width: 846px
-        height: 148px
-        line-height: 148px
         text-align: center
         background: #fff
 </style>
 <% target: ch-less %>
 <style lang="less">
 .hello-wrap {
-    margin: 20px 0;
-    padding: 20px;
+    margin: 20px;
 
     .hello-btn {
-        margin: 0 auto;
         border: none;
-        border-radius: 120px;
-        width: 846px;
-        height: 148px;
-        line-height: 148px;
         text-align: center;
         background: #fff;
     }
@@ -117,16 +105,10 @@ export default {
 <% target: ch-sass %>
 <style lang="sass">
 .hello-wrap {
-    margin: 20px 0;
-    padding: 20px;
+    margin: 20px;
 
     .hello-btn {
-        margin: 0 auto;
         border: none;
-        border-radius: 120px;
-        width: 846px;
-        height: 148px;
-        line-height: 148px;
         text-align: center;
         background: #fff;
     }
@@ -135,17 +117,11 @@ export default {
 <% target: ch-css %>
 <style>
 .hello-wrap {
-    margin: 20px 0;
-    padding: 20px;
+    margin: 20px;
 }
 
 .hello-wrap .hello-btn {
-    margin: 0 auto;
     border: none;
-    border-radius: 120px;
-    width: 846px;
-    height: 148px;
-    line-height: 148px;
     text-align: center;
     background: #fff;
 }

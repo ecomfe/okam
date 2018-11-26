@@ -3,10 +3,10 @@
 const program = require('commander');
 
 program
-  .version(require('../package').version)
-  .usage('<command> [options]')
-  .command('init [projectName]', 'Init a project')
-  .alias('i')
-  // .command('build [options]', 'Build a project with options')
-  .command('upgrade [options]', 'Update packages of okam')
-  .parse(process.argv);
+    .version(require('../package').version)
+    .usage('<command> [options]')
+    .command('init [projectName]', 'Init a project')
+    .alias('i')
+    // .command('build [options]', 'Build a project with options')
+    .command('upgrade [options]', 'Update packages of okam')
+    .parse(process.argv);
