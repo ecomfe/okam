@@ -1,5 +1,22 @@
 # ChangeLog
 
+## 0.3.3 (2018-11-26)
+
+### Bug Fixes
+
+* **okam-core:** 修复微信小程序 computed 属性依赖的组件的 props 变化计算属性没有变化问题 [#10](https://github.com/ecomfe/okam/issues/10) ([a49f8f7](https://github.com/ecomfe/okam/commit/a49f8f7))
+
+## 0.3.2 (2018-11-26)
+
+### Bug Fixes
+
+* **okam-core:** 修复 `百度小程序` 在新版 `regenerator-runtime` 下 `async await` 语法支持报错问题 ([5a621b1](https://github.com/ecomfe/okam/commit/5a621b1))
+
+### Features
+
+* **okam-core:** `$interceptApis` 钩子支持对返回非 Promise 的异步 API的响应数据进行改写，即支持 `done` 钩子设置 ([35b6fea](https://github.com/ecomfe/okam/commit/35b6fea))
+
+
 ## 0.3.1 (2018-11-15)
 
 ### Bug Fixes

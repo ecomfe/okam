@@ -12,4 +12,10 @@ if (typeof regeneratorRuntime !== 'object') {
     appGlobal.regeneratorRuntime = runtime;
 }
 
+import {global} from '../na/index';
+
+if (typeof regeneratorRuntime !== 'object') {
+    global.regeneratorRuntime = runtime;
+}
+
 export default runtime;

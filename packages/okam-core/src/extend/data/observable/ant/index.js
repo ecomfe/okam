@@ -11,7 +11,20 @@ import {component as antApi, array as antArray} from './array';
 
 setObservableContext('props', true);
 
-Object.assign(observable.component.methods, antApi);
+let componentExtension = observable.component;
+let rawCreated = componentExtension.created;
+componentExtension.created = function () {
+    if (this.$rawComputed) {
+        // fix ant reference bug: `this.data.xx` operation is not allowed
+        // when page onload, otherwise it'll affect the init data state
+        // of the page when load next time.
+        // So, here create a shadow copy of data.
+        this.data = Object.assign({}, this.data);
+    }
+    rawCreated.call(this);
+};
+
+Object.assign(componentExtension.methods, antApi);
 
 let arrApis = Object.assign({}, observableArray, antArray);
 overrideArrayMethods(arrApis, true);

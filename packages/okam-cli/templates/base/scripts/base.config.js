@@ -94,19 +94,19 @@ module.exports = {
     },
     <% /if %>
 
-    dev: {
+    prod: {
         rules: [
-            <% if: ${server} %>
             {
                 match: '*.js',
                 processors: [
-                    ['replacement', {
-                        // 'https://online.com': 'https://dev.com',
-                        // 'process.env.NODE_ENV': '"production"'
-                    }]
+                    ['replacement', {'process.env.NODE_ENV': '"production"'}]
                 ]
-            },
-            <% /if %>
+            }
+        ]
+    },
+
+    dev: {
+        rules: [
             <% if: ${tinyimg} %>
             {
                 match: /\.(png|jpe?g|gif)(\?.*)?$/,
@@ -115,23 +115,34 @@ module.exports = {
                         replaceRaw: true
                     }
                 }
-            }
+            },
             <% /if %>
+            {
+                match: '*.js',
+                processors: [
+                    ['replacement', {
+                        <% if: ${server} %>
+                        // 'https://online.com': 'https://dev.com',
+                        <% /if %>
+                        'process.env.NODE_ENV': '"development"'
+                    }]
+                ]
+            }
         ]
     },
     test: {
-        <% if: ${server} %>
         rules: [
             {
                 match: '*.js',
                 processors: [
                     ['replacement', {
+                        <% if: ${server} %>
                         // 'https://online.com': 'https://test.com',
-                        // 'process.env.NODE_ENV': '"development"'
+                        <% /if %>
+                        'process.env.NODE_ENV': '"development"'
                     }]
                 ]
             }
         ]
-        <% /if %>
     }
 };
