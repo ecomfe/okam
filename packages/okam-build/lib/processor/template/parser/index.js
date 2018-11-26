@@ -17,7 +17,6 @@ const DEFAULT_OPTIONS = {
 const rawOnattribend = Parser.prototype.onattribend;
 const rawOnattribdata = Parser.prototype.onattribdata;
 const rawOnselfclosingtag = Parser.prototype.onselfclosingtag;
-const rawOnclosetag = Parser.prototype.onclosetag;
 
 class TemplateParser {
     constructor(...args) {
@@ -43,17 +42,13 @@ class TemplateParser {
         this._isSelfClosingTag = true;
         rawOnselfclosingtag.apply(this, args);
     }
-
-    onclosetag(...args) {
-        rawOnclosetag.apply(this, args);
-        this._isSelfClosingTag = false;
-    }
 }
 
 util.inherits(TemplateParser, Parser);
 
 function onElement(element) {
     element.isSelfClose = this.parser._isSelfClosingTag;
+    this.parser._isSelfClosingTag = false;
 }
 
 function parseDom(data, options) {

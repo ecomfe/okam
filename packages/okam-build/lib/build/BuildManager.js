@@ -17,6 +17,7 @@ const processor = require('../processor');
 const npm = require('../processor/helper/npm');
 const ModuleResolver = require('./ModuleResolver');
 const allAppTypes = require('./app-type');
+const cleanBuild = require('./clean-build');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
@@ -290,6 +291,24 @@ class BuildManager extends EventEmitter {
 
         logger.info('process', colors.cyan(file.path), colors.gray(timer.tick()));
         return true;
+    }
+
+    /**
+     * Clear the old build output
+     */
+    clear() {
+        let {logger, output: outputOpts} = this.buildConf;
+        let {dir: outputDir, pathMap: outputPathMap} = outputOpts;
+
+        logger.info('clean old build output...');
+
+        let projectConfig = outputPathMap.projectConfig;
+        let filter = (this.getClearFilter && this.getClearFilter())
+            || (projectConfig ? [projectConfig] : []);
+        cleanBuild({
+            outputDir,
+            filter
+        });
     }
 
     /**

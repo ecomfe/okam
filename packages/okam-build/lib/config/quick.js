@@ -121,7 +121,7 @@ module.exports = merge({}, baseConf, {
         {
             match(file) {
                 // process sfc component style
-                return file.isStyle && file.owner;
+                return file.isStyle && file.owner && file.owner.isPageComponent;
             },
             processors: ['addCssDependencies']
         }

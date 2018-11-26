@@ -33,5 +33,7 @@ module.exports = function (attrs, name, tplOpts, opts) {
     }
     attrs[newName] = value;
 
-    delete attrs[name];
+    if (newName !== name) {
+        delete attrs[name];
+    }
 };

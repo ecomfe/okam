@@ -152,6 +152,19 @@ class BuildQuickAppManager extends BuildManager {
     }
 
     /**
+     * Get the build clear filter
+     *
+     * @protected
+     * @return {Function}
+     */
+    getClearFilter() {
+        return filePath => {
+            let result = filePath.indexOf('src') !== 0;
+            return result;
+        };
+    }
+
+    /**
      * Processor the app config after build done
      */
     onBuildDone() {
