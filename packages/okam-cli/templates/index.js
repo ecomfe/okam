@@ -82,7 +82,7 @@ const PACKAGE_NAMES_MAP = {
         server: ['connect'],
         redux: ['redux'],
         pug: ['pug'],
-        async: ['regenerator-runtime'],
+        async: ['regenerator-runtime', 'promise-polyfill'],
         babel7: ['@babel/core', '@babel/preset-env'],
         babel: ['babel-core', 'babel-preset-env'],
         typescript: ['@babel/core', '@babel/preset-typescript'],
