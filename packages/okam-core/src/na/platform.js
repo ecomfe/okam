@@ -7,49 +7,9 @@
 
 /* eslint-disable fecs-camelcase */
 
-import {appEnv, appGlobal} from './index';
 import {compare} from './semver';
 
-/**
- * In quick app, sometimes, it'll destroy required module
- * which leading to the cache module info missing.
- * So, here cache the info to global.
- *
- * @inner
- * @type {Object}
- */
-const okamGlobal = appGlobal.okam_global || (appGlobal.okam_global = {});
-
-/**
- * Init platform env info.
- * If initialized ever, call it again will not work.
- * If initialized done, call it again will execute callback at once.
- *
- * @param {Function=} callback the callback to execute when initialized done.
- */
-export function initPlatformInfo(callback) {
-    let platformInfo = okamGlobal.platformInfo;
-    if (platformInfo) {
-        callback && callback(null, platformInfo);
-        return;
-    }
-
-    if (platformInfo === null) {
-        return;
-    }
-
-    okamGlobal.platformInfo = null;
-    appEnv.getSystemInfo({
-        success(info) {
-            okamGlobal.platformInfo = info;
-            callback && callback(null, info);
-        },
-        fail(err) {
-            okamGlobal.platformInfo = false;
-            callback && callback(err);
-        }
-    });
-}
+let cachedPlatformInfo;
 
 /**
  * Set cached platform env info
@@ -57,24 +17,22 @@ export function initPlatformInfo(callback) {
  * @param {Object} info the platform info to set
  */
 export function setPlatformInfo(info) {
-    okamGlobal.platformInfo = info;
+    cachedPlatformInfo = info;
 }
 
 /**
  * Get cached platform env info
  *
- * @return {Object}
+ * @return {?Object}
  */
 export function getPlatformInfo() {
-    let platformInfo = okamGlobal.platformInfo;
-    if (platformInfo === false) {
-        throw new Error('get platform info fail');
-    }
-    else if (!platformInfo) {
-        throw new Error('platform info is not set');
+    if (cachedPlatformInfo) {
+        return cachedPlatformInfo;
     }
 
-    return platformInfo;
+    if (typeof okam_platform_info === 'object' && okam_platform_info) {
+        return okam_platform_info;
+    }
 }
 
 /**

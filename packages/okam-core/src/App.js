@@ -29,15 +29,12 @@ function registerApi(apiConfig) {
  * Create the app creator factory
  *
  * @param {Object} appBase the appBase
- * @param {Object=} extendApi the extension api to register
  * @return {Function}
  */
-export default function createAppFactory(appBase, extendApi) {
+export default function createAppFactory(appBase) {
     let creator = function (appInfo) {
         return createApp(appInfo, appBase);
     };
-
-    registerApi(extendApi);
 
     creator.use = use;
     creator.registerApi = registerApi;

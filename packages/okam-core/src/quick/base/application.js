@@ -6,6 +6,7 @@
 'use strict';
 
 import initApi from '../../base/init-api';
+import {appGlobal} from '../env';
 
 export default {
 
@@ -15,7 +16,14 @@ export default {
      * @private
      */
     onCreate() {
-        initApi.call(this);
+        initApi.call(this, systemInfo => {
+            // cache platform info
+            appGlobal.okam_platform_info = systemInfo;
+            return systemInfo;
+        });
+
+        this.onLaunch && this.onLaunch();
+        this.onShow && this.onShow();
     }
 };
 

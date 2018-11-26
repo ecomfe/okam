@@ -11,6 +11,8 @@
 /* global getApp:false */
 /* global getCurrentPages:false */
 
+import globalAPI from './api';
+
 /**
  * The native app global object
  *
@@ -37,14 +39,7 @@ export const appEnv = my;
  *
  * @type {Object}
  */
-export const api = Object.create(my);
-
-/**
- * The extension okam API
- *
- * @type {Object}
- */
-api.okam = {};
+export const api = globalAPI;
 
 /**
  * Get current app instance

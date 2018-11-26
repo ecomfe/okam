@@ -7,6 +7,5 @@
 
 import createApp from '../App';
 import appBase from './base/application';
-import extendApi from './api/index';
 
-export default createApp(appBase, extendApi);
+export default createApp(appBase);

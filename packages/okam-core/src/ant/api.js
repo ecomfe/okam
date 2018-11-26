@@ -6,7 +6,14 @@
 /* global my:false */
 'use strict';
 
-export default {
+import * as platform from '../na/platform';
+
+const api = {
+
+    /**
+     * The extend okam API
+     */
+    okam: Object.assign({}, platform)
 
     /**
      * Show toast api
@@ -73,3 +80,5 @@ export default {
         return res;
     }
 };
+
+export default api;

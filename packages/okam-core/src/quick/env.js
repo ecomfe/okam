@@ -6,6 +6,7 @@
 'use strict';
 
 import app from '@system.app';
+import globalAPI from './api/index';
 
 /* eslint-disable fecs-camelcase */
 
@@ -21,22 +22,14 @@ export const appGlobal = Object.getPrototypeOf(global) || global;
  *
  * @type {Object}
  */
-export const appEnv = appGlobal.okam_app_api = {
-
-    /**
-     * The extension okam API
-     *
-     * @type {Object}
-     */
-    okam: {}
-};
+export const appEnv = appGlobal;
 
 /**
  * The native env api
  *
  * @type {Object}
  */
-export const api = appEnv;
+export const api = globalAPI;
 
 /**
  * Get current app instance
