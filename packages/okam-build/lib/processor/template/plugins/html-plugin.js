@@ -10,6 +10,7 @@ module.exports = {
     tag(node, tplOpts) {
         const tagName = node.name.toLowerCase();
         const {logger, config} = tplOpts;
+        const onTag = config.onTag;
         const tagConfig = (config.template && config.template.transformTags) || {};
         const tagAttrs = tagConfig[tagName];
 
@@ -20,7 +21,9 @@ module.exports = {
 
         // tag to mini program tag
         if (typeof tagAttrs === 'string') {
+            let oldTag = node.name;
             node.name = tagAttrs;
+            onTag && onTag(tagAttrs, oldTag);
             return;
         }
 
@@ -52,7 +55,9 @@ module.exports = {
 
             if (key === 'tag') {
                 // tag to mini program tag
+                let oldTag = node.name;
                 node.name = attrVal;
+                onTag && onTag(attrVal, oldTag);
             }
             else if (key === 'class') {
                 // add extra class name

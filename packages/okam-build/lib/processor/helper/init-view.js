@@ -98,9 +98,13 @@ function normalizeViewPlugins(plugins, appType) {
     });
 }
 
-function handleOnTag(file, tagName) {
+function handleOnTag(file, tagName, replaceTagName) {
     let tags = file.tags;
     tags || (tags = file.tags = {});
+    if (replaceTagName && tags.hasOwnProperty(replaceTagName)) {
+        delete tags[replaceTagName];
+    }
+
     tags[tagName] = true;
 }
 
