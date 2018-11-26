@@ -1,6 +1,6 @@
 {
   "name": "okam-build",
-  "version": "0.3.1",
+  "version": "0.3.2-alpha.0",
   "description": "The build tool for Okam develop framework",
   "main": "index.js",
   "keywords": [
