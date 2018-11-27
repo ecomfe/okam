@@ -22,10 +22,15 @@
   },
   "lint-staged": {
     "linters": {
-      "*.js, !dist/**/*.js, !example/**/*.js, !templates/base/**/*.js": [
+      "*.js": [
         "fecs --reporter=baidu --rule"
       ]
-    }
+    },
+    "ignore": [
+      "**/dist/**/*.js",
+      "**/example/**/*.js",
+      "**/templates/base/**/*.js"
+    ]
   },
   "config": {
     "commitizen": {

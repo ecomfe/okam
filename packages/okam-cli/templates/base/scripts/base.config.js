@@ -26,7 +26,9 @@ module.exports = {
     },
     framework: [
         'data',
-        // 'ref',
+        'watch',
+        'broadcast',
+        'ref',
         <% if: ${redux} %>
         'redux'
         <% /if %>

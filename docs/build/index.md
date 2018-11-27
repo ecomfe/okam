@@ -15,10 +15,10 @@
 * `broadcast`: 支持广播事件
 * `watch`: 提供 `watch` 属性 和 `$watch` API 支持，依赖 `data`
 * `ref`: 允许模板指定 `ref` 属性，组件实例 `$refs` 获取引用，类似 Vue
-* `redux`: 使用 `redux` 进行状态管理，要求安装依赖 `redux` 库：`npm i redux --save`
+* `redux`: 使用 `redux` 进行状态管理，要求安装依赖 `redux` 库：`npm i redux --save`, 另外，`redux` 依赖 `data` 扩展，因此需要一起配置
 ```javascript
 {
-    framework: ['data', 'watch', 'broadcast', 'ref']
+    framework: ['data', 'watch', 'broadcast', 'ref', 'redux']
 }
 ```
 
