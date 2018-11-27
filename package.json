@@ -27,8 +27,9 @@
       ]
     },
     "ignore": [
-      "dist/**/*.js",
-      "example/**/*.js"
+      "**/dist/**/*.js",
+      "**/example/**/*.js",
+      "**/templates/base/**/*.js"
     ]
   },
   "config": {
