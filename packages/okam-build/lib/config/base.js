@@ -432,7 +432,7 @@ module.exports = {
         },
         {
             match(file) {
-                return file.isConfig;
+                return file.isConfig || file.isProjectConfig;
             },
             processors: ['configJson']
         },

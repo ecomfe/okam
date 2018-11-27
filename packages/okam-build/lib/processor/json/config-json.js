@@ -26,6 +26,7 @@ function compile(file, options) {
     });
 
     let appSpecConf = obj[envConfigKey];
+    let isAppConfig = file.isAppConfig;
     appSpecConf && Object.keys(appSpecConf).forEach(k => {
         let value = appSpecConf[k];
         if (value == null) {
@@ -34,7 +35,7 @@ function compile(file, options) {
                 delete result[k];
             }
         }
-        else if (k === 'window') {
+        else if (isAppConfig && k === 'window') {
             result[k] = Object.assign({}, result[k], value);
         }
         else {
