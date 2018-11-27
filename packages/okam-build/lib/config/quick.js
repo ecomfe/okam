@@ -69,11 +69,8 @@ module.exports = merge({}, baseConf, {
          * @return {boolean|string}
          */
         file(path, file) {
-            if (file.isStyle && file.extname !== 'css' && !file.compiled) {
-                return false;
-            }
-
-            if (file.isComponentConfig) {
+            // do not output not compiled file and component config file
+            if (!file.compiled || file.isComponentConfig) {
                 return false;
             }
 

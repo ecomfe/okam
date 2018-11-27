@@ -204,12 +204,8 @@ module.exports = {
          * @return {boolean|string}
          */
         file(path, file) {
-            if (file.isStyle && file.extname !== 'css' && !file.compiled) {
-                return false;
-            }
-
-            // do not output sfc file component
-            if (file.isComponent) {
+            // do not output not compiled file and sfc file component
+            if (!file.compiled || file.isComponent) {
                 return false;
             }
 
@@ -388,7 +384,7 @@ module.exports = {
              * @return {boolean}
              */
             match(file) {
-                if (file.isStyle && !(file.isEntryStyle || file.owner)) {
+                if (file.isStyle && !file.isEntryStyle && !file.owner) {
                     // 默认不处理非入口样式及单文件组件的样式文件
                     return false;
                 }

@@ -135,10 +135,9 @@ function loadProcessFiles(options, logger) {
         ) {
             initBuildFiles.unshift(toProcessFile);
         }
-        else if (!toProcessFile.isScript
-            && !toProcessFile.isStyle
-            && !toProcessFile.isJson
-        ) {
+        else if (toProcessFile.isImg) {
+            // by default all image files will be processed and output as for
+            // we cannot analysis the used image resources correctly
             initBuildFiles.push(toProcessFile);
         }
 
