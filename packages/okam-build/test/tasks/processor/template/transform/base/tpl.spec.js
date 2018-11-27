@@ -13,6 +13,7 @@ const templateProcessor = require('okam/processor/template/index');
 describe('template reference', function () {
     it('should transform suffix of template when using import', function () {
         let file = {
+            fullPath: 'src/a/b.tpl',
             content: '<import src="../../common/tpl/footer.tpl"/>'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
@@ -21,6 +22,7 @@ describe('template reference', function () {
 
     it('should transform suffix of template when using include', function () {
         let file = {
+            fullPath: 'src/a/b.tpl',
             content: '<include :from="from" src="../../common/tpl/include.tpl"/>'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
