@@ -7,13 +7,9 @@
 'use strict';
 
 import * as platform from '../na/platform';
+import {definePropertyValue} from '../util/index';
 
-export default {
-
-    /**
-     * The extended okam API
-     */
-    okam: Object.assign({}, platform),
+const adaptedAPI = {
 
     /**
      * Show toast api
@@ -80,3 +76,16 @@ export default {
         return res;
     }
 };
+
+const api = Object.create(my);
+
+/**
+ * The extended okam API
+ */
+api.okam = Object.assign({}, platform);
+
+Object.keys(adaptedAPI).forEach(k => {
+    definePropertyValue(api, k, adaptedAPI[k]);
+});
+
+export default api;
