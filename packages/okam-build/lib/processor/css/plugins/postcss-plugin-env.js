@@ -70,7 +70,7 @@ function processAppSpecifiedMediaRule(allAppTypes, appType, rule) {
         let children = rule.parent.nodes;
         let currRuleIdx = children.indexOf(rule);
 
-        rule.nodes.forEach((item, index) => {
+        rule.nodes.forEach(item => {
             item.parent = rule.parent; // up parent
 
             let itemRaws = item.raws;
@@ -128,7 +128,7 @@ const SPECIFIED_APP_PROP_DECL_REGEXP = /^\-(\w+)\-/;
  * @param {Object} decl css style declaration
  */
 function processAppSpecifiedDeclaration(allAppTypes, appType, decl) {
-    let {prop} = decl;
+    let {prop, parent} = decl;
     let result;
     if ((result = SPECIFIED_APP_PROP_DECL_REGEXP.exec(prop))) {
         let propApp = result[1];
@@ -144,6 +144,11 @@ function processAppSpecifiedDeclaration(allAppTypes, appType, decl) {
             let newPropName = prop.replace(SPECIFIED_APP_PROP_DECL_REGEXP, '');
             removeUnUseDecl(decl, newPropName);
             decl.prop = newPropName;
+        }
+
+        // remove empty rule
+        if (!parent.nodes || !parent.nodes.length) {
+            parent.remove();
         }
     }
 }
