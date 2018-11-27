@@ -344,22 +344,6 @@ class BuildManager extends EventEmitter {
 
         // build files that need to compile
         let buildFail = this.buildDependencies(t);
-        if (!buildFail) {
-            // build the rest of files that are not processed
-            let fileList = this.files.getFileList();
-            for (let i = 0, len = fileList.length; i < len; i++) {
-                let f = fileList[i];
-                if (!f.processed && !this.compile(f, t)) {
-                    buildFail = true;
-                    break;
-                }
-            }
-        }
-
-        if (!buildFail) {
-            buildFail = this.buildDependencies(t);
-        }
-
         if (buildFail) {
             return Promise.reject('error happen');
         }
