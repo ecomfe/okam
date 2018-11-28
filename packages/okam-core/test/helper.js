@@ -10,9 +10,21 @@ import expect, {spyOn} from 'expect';
 import CoreComponent from 'core/swan/Component';
 import AntCoreComponent from 'core/ant/Component';
 import * as na from 'core/na/index';
+import * as swanEnv from 'core/swan/env';
+import * as wxEnv from 'core/wx/env';
+import * as ttEnv from 'core/tt/env';
+import * as antEnv from 'core/ant/env';
+import * as quickEnv from 'core/swan/env';
 import base from 'core/base/base';
 
 const PATH_PREFIX_REGEX = /^\w+\./;
+const appEnvMap = {
+    swan: swanEnv,
+    wx: wxEnv,
+    tt: ttEnv,
+    ant: antEnv,
+    quick: quickEnv
+};
 
 function getPropertyValue(obj, path) {
     let parts = path.split('.');
@@ -126,41 +138,14 @@ export function fakeAntComponent() {
 }
 
 export function fakeAppEnvAPIs(appType) {
-    const rawEnv = na.env;
-    const rawGetCurrApp = na.getCurrApp;
     const rawApi = base.$api;
-    const rawApp = global[appType];
 
-    global[appType] = {
-        getSystemInfo() {},
-        request() {},
-        createSelectorQuery() {
-            return {
-                select(path) {
-                    return path;
-                },
-                selectAll(path) {
-                    return [path];
-                }
-            };
-        }
-    };
+    let appEnv = appEnvMap[appType];
+    na.setExportInfo(appEnv);
 
-    global.Page = function (instance) {
-        return instance;
-    };
-
-    na.getCurrApp = function () {
-        return {};
-    };
-    na.env = global[appType];
-    base.$api = Object.create(global[appType]);
+    base.$api = appEnv.api;
 
     return () => {
-        global[appType] = rawApp;
-        global.Page = undefined;
-        na.getCurrApp = rawGetCurrApp;
         base.$api = rawApi;
-        na.env = rawEnv;
     };
 }

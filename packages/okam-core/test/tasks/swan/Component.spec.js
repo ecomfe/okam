@@ -10,7 +10,7 @@
 
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
-import MyApp from 'core/App';
+import MyApp from 'core/swan/App';
 import base from 'core/base/base';
 import component from 'core/base/component';
 import {clearBaseCache} from 'core/helper/factory';

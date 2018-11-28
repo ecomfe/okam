@@ -9,11 +9,11 @@
 //  module, like the following statement
 // export * from '../quick/env';
 
-let appEnv;
-let appGlobal;
+let appEnv = {};
+let appGlobal = {};
 let api = {request: () => {}};
-let getAppApi;
-let getPagesApi;
+let getAppApi = () => {};
+let getPagesApi = () => {};
 
 /**
  * Setting the export env info for test purpose
@@ -25,7 +25,7 @@ export function setExportInfo(env) {
     appGlobal = env.appGlobal;
     api = env.api;
     getAppApi = env.getCurrApp;
-    getPagesApi = env.getCurrPages();
+    getPagesApi = env.getCurrPages;
 }
 
 /* eslint-disable fecs-export-on-declare */

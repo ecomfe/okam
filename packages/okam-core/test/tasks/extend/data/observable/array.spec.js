@@ -9,7 +9,7 @@
 
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
-import MyApp from 'core/App';
+import MyApp from 'core/swan/App';
 import {clearBaseCache} from 'core/helper/factory';
 import observable from 'core/extend/data/observable';
 import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
