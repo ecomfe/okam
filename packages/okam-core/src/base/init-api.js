@@ -29,14 +29,14 @@ function initPlatformInfo(callback) {
  */
 export default function initApis(callback) {
     if (!this.__apisInited) {
+        this.__apisInited = true;
+
         // ensure platform info available afterwards
         initPlatformInfo((err, data) => {
             if (!err) {
                 api.okam.setPlatformInfo(callback ? callback(data) : data);
             }
         });
-
-        this.__apisInited = true;
 
         Object.assign(this, base);
 

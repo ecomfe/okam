@@ -10,7 +10,7 @@
 
 import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
-import MyApp from 'core/App';
+import MyApp from 'core/swan/App';
 import MyPage from 'core/swan/Page';
 import page from 'core/base/page';
 import component from 'core/base/component';
@@ -39,7 +39,9 @@ describe('Page', () => {
             }
         });
         Object.keys(component.methods).forEach(k => {
-            assert(page[k] === component.methods[k]);
+            if (k !== '__beforeEmit') {
+                assert(page[k] === component.methods[k]);
+            }
         });
     });
 

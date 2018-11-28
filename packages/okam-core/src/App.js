@@ -7,7 +7,6 @@
 
 /* eslint-disable fecs-export-on-declare */
 
-// import appBase from './base/application';
 import {use, createApp} from './helper/factory';
 import {definePropertyValue} from './util/index';
 import base from './base/base';

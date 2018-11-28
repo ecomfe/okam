@@ -9,19 +9,14 @@
 /* global after:false */
 
 import assert from 'assert';
-import expect, {createSpy, spyOn} from 'expect';
 import * as platform from 'core/na/platform';
 
 describe('na/platform', function () {
 
-    afterEach(() => {
-        expect.restoreSpies();
-    });
-
     it('should set system info', () => {
         const info = {b: 3};
-        platform.setSystemInfo(info);
-        assert(platform.getSystemInfo() === info);
+        platform.setPlatformInfo(info);
+        assert(platform.getPlatformInfo() === info);
     });
 
     it('should be ios', function () {
@@ -29,18 +24,17 @@ describe('na/platform', function () {
             platform: 'ios'
         };
 
-        platform.setSystemInfo(info);
+        platform.setPlatformInfo(info);
         assert.ok(platform.isIOS());
-        assert.ok(!platform.isIOS({system: 'xxx'}));
 
-        info.system = ' ios';
+        info.platform = ' ios';
         assert.ok(!platform.isIOS());
 
-        info.system = 'ios sdd';
-        assert.ok(platform.isIOS());
+        info.platform = 'ios sdd';
+        assert.ok(!platform.isIOS());
 
-        info.system = 'iOS 10.0.1';
-        assert.ok(platform.isIOS());
+        info.platform = 'iOS 10.0.1';
+        assert.ok(!platform.isIOS());
     });
 
     it('should be android', function () {
@@ -48,17 +42,16 @@ describe('na/platform', function () {
             platform: 'android'
         };
 
-        platform.setSystemInfo(info);
+        platform.setPlatformInfo(info);
         assert.ok(platform.isAndroid());
-        assert.ok(!platform.isAndroid({system: 'xxx'}));
 
-        info.system = ' android';
+        info.platform = ' android';
         assert.ok(!platform.isAndroid());
 
-        info.system = 'android sdd';
-        assert.ok(platform.isAndroid());
+        info.platform = 'android sdd';
+        assert.ok(!platform.isAndroid());
 
-        info.system = 'Android 5.0';
-        assert.ok(platform.isAndroid());
+        info.platform = 'Android 5.0';
+        assert.ok(!platform.isAndroid());
     });
 });

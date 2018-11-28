@@ -12,8 +12,12 @@
  * @return {Object}
  */
 export function parseQuery(queryStr) {
-    let parts = queryStr.split('&');
     let query = {};
+    if (!queryStr) {
+        return query;
+    }
+
+    let parts = queryStr.split('&');
     parts.forEach(item => {
         let arr = item.split('=');
         let key = decodeURIComponent(arr.shift());

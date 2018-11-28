@@ -10,7 +10,7 @@
 
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
-import MyApp from 'core/App';
+import MyApp from 'core/swan/App';
 import MyPage from 'core/swan/Page';
 import * as na from 'core/na/index';
 import {clearBaseCache} from 'core/helper/factory';
@@ -37,6 +37,7 @@ describe('behavior', function () {
         MyApp.use(observable);
         MyApp.use(reduxPlugin);
 
+        let rawGetCurrApp = na.getCurrApp;
         na.getCurrApp = function () {
             return {
                 $store: store
@@ -103,6 +104,7 @@ describe('behavior', function () {
                 args = spySetData.calls[1].arguments;
                 expect(args.slice(0, args.length - 1)).toEqual([{counter: 4}]);
 
+                na.getCurrApp = rawGetCurrApp;
                 done();
             });
         });
