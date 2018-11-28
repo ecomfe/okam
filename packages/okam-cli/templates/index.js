@@ -187,8 +187,7 @@ class BaseTemplate {
     endGuide() {
         console.log(chalk.green('The project was created successfully!'));
         console.log('# prepare');
-        console.log(`    cd ${this.params.dirName}`);
-        console.log('    npm i');
+        console.log(`    cd ${this.params.dirName} && npm i`);
         console.log('# start');
         console.log('    swan:');
         console.log('        npm run dev');
@@ -210,7 +209,6 @@ class BaseTemplate {
         console.log('        npm run dev:ant:server');
         console.log('        npm run build:ant');
         console.log('        npm run prod:ant');
-        console.log('# join your self');
     }
 
     generateDotFilesAll(fullPath) {
