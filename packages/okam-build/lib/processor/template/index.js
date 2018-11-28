@@ -7,6 +7,8 @@
 
 /* eslint-disable fecs-min-vars-per-destructure */
 /* eslint-disable fecs-prefer-destructure */
+const path = require('path');
+const {file: fileUtil} = require('../../util/index');
 const {parse: parseDom} = require('./parser');
 const serializeDom = require('./serializer');
 
@@ -155,7 +157,7 @@ function mergeVisitors(plugins) {
  * @return {Object}
  */
 function compileTpl(file, options) {
-    let {config} = options;
+    let {root, config, logger} = options;
     let allowCache = !config || config.cache == null || config.cache;
     let content = file.content.toString();
     const ast = file.ast || parseDom(content);
@@ -163,9 +165,21 @@ function compileTpl(file, options) {
 
     let plugins = mergeVisitors((config && config.plugins) || []);
 
+    let deps = [];
+    let addDep = function (filePath) {
+        let relativePath = fileUtil.relative(
+            path.join(path.dirname(file.fullPath), filePath),
+            root
+        );
+        if (!deps.includes(relativePath)) {
+            deps.push(relativePath);
+        }
+        logger.debug('find tpl dep file', relativePath);
+    };
+
     transformAst(
         ast, plugins,
-        Object.assign({}, options, {file})
+        Object.assign({}, options, {file, addDep})
     );
 
     // serialize by xml mode, close all elements
@@ -173,6 +187,7 @@ function compileTpl(file, options) {
 
     return {
         ast,
+        deps,
         content
     };
 }

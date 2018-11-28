@@ -34,35 +34,19 @@ function compileFile(buildManager, file, releaseFiles) {
         // TODO init dep map global to search file by dep effectively
         let changeFiles = buildManager.getFilesByDep(file.path);
         logger.debug(file.path, 'changeFiles:' + changeFiles.length);
+
         if (changeFiles.length) {
-            changeFiles.forEach(item => {
-                compileFile(
-                    buildManager, item, releaseFiles
-                );
-            });
+            changeFiles.forEach(
+                item => compileFile(buildManager, item, releaseFiles)
+            );
             return;
         }
     }
 
     let result = buildManager.compile(file);
-    if (!result) {
-        return;
+    if (result) {
+        buildManager.buildDependencies();
     }
-
-    releaseFiles.add(file);
-
-    // process script deps
-    file.isScript && (file.deps || []).forEach(depPath => {
-        let depFile = buildManager.getFileByPath(depPath);
-        logger.debug('process dep', file.path, depPath, !!depFile, depFile && depFile.compiled);
-        if (!depFile || !depFile.compiled) {
-            compileFile(buildManager, depPath, releaseFiles);
-        }
-    });
-
-    (file.subFiles || []).forEach(
-        subFile => releaseFiles.add(subFile)
-    );
 }
 
 function rebuildFiles(file, buildManager) {
@@ -70,14 +54,20 @@ function rebuildFiles(file, buildManager) {
     timer.start();
 
     let outputFiles = [];
+    let addReleaseFile = function (file) {
+        if (!outputFiles.includes(file)) {
+            outputFiles.push(file);
+        }
+    };
     let releaseFiles = {
         processFileNum: 0,
-        add(file) {
-            outputFiles.push(file);
-        },
+        add: addReleaseFile,
         processed: {}
     };
+
+    buildManager.on('buildFileDone', addReleaseFile);
     compileFile(buildManager, file, releaseFiles);
+    buildManager.removeListener('buildFileDone', addReleaseFile);
 
     if (outputFiles.length) {
         let logger = buildManager.logger;

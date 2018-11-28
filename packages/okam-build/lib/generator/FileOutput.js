@@ -109,12 +109,7 @@ function getComponentOutputFilePath(partFile, owner, options) {
         partFile.rext = componentPartExtname.tpl;
     }
 
-    let outputPath = getOutputPath(owner.path, partFile, options);
-    if (!outputPath) {
-        return;
-    }
-
-    return outputPath;
+    return getOutputPath(owner.path, partFile, options);
 }
 
 function mergeComponentStyleFiles(styleFiles, rootDir) {
@@ -149,17 +144,14 @@ function addFileOutputTask(allTasks, options, file) {
         return;
     }
 
-    let {outputDir} = options;
+    let {outputDir, logger} = options;
     let ownerFile = file.owner;
     let outputRelPath = isComponentFile(ownerFile)
         ? getComponentOutputFilePath(file, ownerFile, options)
         : getOutputPath(file.path, file, options);
     if (!outputRelPath) {
+        logger.debug('skip file release', file.path);
         return;
-    }
-
-    if (!file.compiled) {
-        this.logger.debug('file is not compiled:', file.path);
     }
 
     allTasks.push(

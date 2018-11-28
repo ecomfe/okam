@@ -85,8 +85,8 @@ function processComponentScript(buildManager, file, root) {
     if (jsonFile) {
         jsonFile.component = file;
         jsonFile.isComponentConfig = true;
+        compile(jsonFile, buildManager);
     }
-    compile(jsonFile, buildManager);
 }
 
 /**
@@ -118,10 +118,10 @@ function processFile(file, processor, buildManager) {
 
     if (result.isComponent) {
         compileComponent(result, file, buildManager);
+        result = {content: file.content};
     }
-    else {
-        buildManager.updateFileCompileResult(file, result);
-    }
+
+    buildManager.updateFileCompileResult(file, result);
 }
 
 /**
@@ -145,6 +145,8 @@ function compile(file, buildManager) {
     else if (file.isPageScript || file.isComponentScript) {
         processComponentScript(buildManager, file, root);
     }
+
+    buildManager.emit('buildFileDone', file);
 }
 
 /**

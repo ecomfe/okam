@@ -312,17 +312,13 @@ class BuildManager extends EventEmitter {
     }
 
     /**
-     * Start to build app
+     * Build dependencies files
      *
-     * @param {Timer} timer the build timer
-     * @return {Promise}
+     * @param {Timer} t the build timer
+     * @return {boolean}
      */
-    build(timer) {
-        let logger = this.logger;
-
-        let t = new Timer();
+    buildDependencies(t) {
         let buildFail = false;
-
         // build files that need to compile
         let waitingBuildFiles = this.waitingBuildFiles;
         while (waitingBuildFiles.length) {
@@ -333,6 +329,21 @@ class BuildManager extends EventEmitter {
             }
         }
 
+        return buildFail;
+    }
+
+    /**
+     * Start to build app
+     *
+     * @param {Timer} timer the build timer
+     * @return {Promise}
+     */
+    build(timer) {
+        let logger = this.logger;
+        let t = new Timer();
+
+        // build files that need to compile
+        let buildFail = this.buildDependencies(t);
         if (buildFail) {
             return Promise.reject('error happen');
         }

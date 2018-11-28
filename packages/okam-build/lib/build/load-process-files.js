@@ -90,9 +90,9 @@ function loadProcessFiles(options, logger) {
     exclude && exclude.forEach(addFileRule.bind(this, excludeRules));
     excludeRules.length || (excludeRules = null);
 
-    let includeRules = [];
-    addFileRule(includeRules, new RegExp(`^${sourceDir}/`));
-    include && include.forEach(addFileRule.bind(this, includeRules));
+    let sourcePathPrefix = `${sourceDir}/`;
+    let customIncludeRules = [];
+    include && include.forEach(addFileRule.bind(this, customIncludeRules));
 
     let processFiles = new FileFactory({
         root: rootDir,
@@ -108,8 +108,8 @@ function loadProcessFiles(options, logger) {
             return true;
         }
 
-        isFilter = !includeRules.some(item => item.match(file));
-        if (isFilter) {
+        let isCustomInclude = customIncludeRules.some(item => item.match(file));
+        if (!isCustomInclude && file.indexOf(sourcePathPrefix) !== 0) {
             return true;
         }
 
@@ -135,10 +135,10 @@ function loadProcessFiles(options, logger) {
         ) {
             initBuildFiles.unshift(toProcessFile);
         }
-        else if (!toProcessFile.isScript
-            && !toProcessFile.isStyle
-            && !toProcessFile.isJson
-        ) {
+        else if (toProcessFile.isImg || isCustomInclude) {
+            // by default all image files will be processed and output as for
+            // we cannot analysis the used image resources correctly
+            // add custom included files as default init process files
             initBuildFiles.push(toProcessFile);
         }
 
