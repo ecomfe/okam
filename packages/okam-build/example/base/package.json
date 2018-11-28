@@ -20,7 +20,12 @@
     "dev:tt:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch --type tt",
     "dev:tt:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean --type tt",
     "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
-    "dev:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server"
+    "dev:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server",
+    "dev:quick": "cross-env NODE_ENV=dev node  scripts/build.js --watch --type quick",
+    "dev:quick:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server --type quick",
+    "dev:quick:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch --type quick",
+    "dev:quick:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean --type quick",
+    "prod:quick": "node scripts/build.js --clean --type quick"
   },
   "keywords": [
     "example"

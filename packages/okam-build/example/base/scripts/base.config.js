@@ -74,6 +74,7 @@ module.exports = {
         'redux',
         'ref'
     ],
+    designWidth: 375,
     processors: {
         pug: {
             options: {
@@ -89,13 +90,7 @@ module.exports = {
         postcss: {
             extnames: ['styl', 'less'],
             options: {
-                plugins: {
-                    autoprefixer: {
-                    },
-                    px2rpx: {
-                        designWidth: 375
-                    }
-                }
+                plugins: ['autoprefixer', 'px2rpx', 'env']
             }
         }
     },
