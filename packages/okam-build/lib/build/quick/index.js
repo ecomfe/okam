@@ -137,7 +137,7 @@ class BuildQuickAppManager extends BuildManager {
      * @override
      */
     getAppBaseClassInitOptions(config, opts) {
-        if (!opts.isPage) {
+        if (!opts.isPage || !config) {
             return;
         }
 

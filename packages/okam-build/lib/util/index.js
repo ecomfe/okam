@@ -7,7 +7,11 @@
 
 const helper = require('okam-helper');
 
-function doMerge(target, source) {
+function doMerge(target, source, selector, doNotMergeSelectors) {
+    if (doNotMergeSelectors && doNotMergeSelectors.includes(selector)) {
+        return source;
+    }
+
     let isTargetArr = Array.isArray(target);
     let isSourceArr = Array.isArray(source);
     if (isTargetArr && isSourceArr) {
@@ -26,7 +30,10 @@ function doMerge(target, source) {
         let result = Object.assign({}, target);
         Object.keys(source).forEach(k => {
             if (target.hasOwnProperty(k)) {
-                result[k] = doMerge(target[k], source[k]);
+                let currSelector = selector ? `${selector}.${k}` : k;
+                result[k] = doMerge(
+                    target[k], source[k], currSelector, doNotMergeSelectors
+                );
             }
             else {
                 result[k] = source[k];
@@ -39,11 +46,37 @@ function doMerge(target, source) {
     return source;
 }
 
+/**
+ * Merge the given source objects to target object.
+ * Notice: it is not supported array data merge.
+ *
+ * Optional, you can pass property selector array used for controlling property
+ * merge behavior. Currently, the given property selector will be override the
+ * target object property value instead for merge if both own the property and
+ * has the same property value type. This param must be placed for the last
+ * position as the last argument.
+ *
+ * e.g,
+ * merge({a: {b: 3, c: 2}}, {a: {b: 2}}) // output: {{a: {b: 2, c: 2}}
+ * merge({a: {b: 3, c: 2}}, {a: {b: 2}}, ['a']) // output: {{a: {b: 2}}
+ *
+ * @param {Object} target the target object to merge
+ * @param {...Object} sources the source object
+ * @return {Object}
+ */
 exports.merge = function (target, ...sources) {
+    let len = sources.length;
+    let lastItem = sources[len - 1];
+    let doNotMergeSelectors;
+    if (Array.isArray(lastItem)) {
+        doNotMergeSelectors = lastItem;
+        len = len - 1;
+    }
+
     let result = target;
-    for (let i = 0, len = sources.length; i < len; i++) {
+    for (let i = 0; i < len; i++) {
         let s = sources[i];
-        s && (result = doMerge(result, s));
+        s && (result = doMerge(result, s, '', doNotMergeSelectors));
     }
     return result;
 };

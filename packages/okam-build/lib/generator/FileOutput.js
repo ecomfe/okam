@@ -69,7 +69,7 @@ function getOutputPath(filePath, file, options) {
             result = filePath;
         }
 
-        if (file.isTpl && !file.rext) {
+        if (file.isTpl && !file.rext && componentPartExtname) {
             file.rext = componentPartExtname.tpl;
         }
 
