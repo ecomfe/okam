@@ -41,8 +41,6 @@ function fakeAppEnvAPIs(envKey) {
 
 Object.keys(allAppEnvs).forEach(k => fakeAppEnvAPIs(allAppEnvs[k]));
 
-export default function reset(appType, env) {
+export default function reset(appType) {
     fakeAppEnvAPIs(allAppEnvs[appType]);
-    // env.appEnv =
-
 }
