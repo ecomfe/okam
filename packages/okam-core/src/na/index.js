@@ -11,7 +11,7 @@
 
 let appEnv;
 let appGlobal;
-let api;
+let api = {request: () => {}};
 let getAppApi;
 let getPagesApi;
 
