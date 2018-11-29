@@ -116,12 +116,16 @@ function mergeComponentStyleFiles(styleFiles, rootDir) {
         content.push(item.content);
     });
 
-    return createFile({
+    let mergeFile = createFile({
         fullPath: styleFiles[0].fullPath,
         isVirtual: true,
         isStyle: true,
         data: content.join('\n')
     }, rootDir);
+
+    mergeFile.owner = styleFiles[0].owner;
+    mergeFile.compiled = true;
+    return mergeFile;
 }
 
 function isComponentFile(f) {
