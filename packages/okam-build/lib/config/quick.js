@@ -70,7 +70,7 @@ module.exports = merge({}, baseConf, {
          */
         file(path, file) {
             // do not output not compiled file and component config file
-            if (!file.compiled || file.isComponentConfig) {
+            if (!file.allowRelease || file.isComponentConfig) {
                 return false;
             }
 

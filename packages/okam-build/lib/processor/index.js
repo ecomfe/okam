@@ -135,6 +135,8 @@ function compile(file, buildManager) {
     let processors = findMatchProcessor(file, rules, buildManager);
     logger.debug('compile file:', file.path, processors.length);
 
+    file.allowRelease = true; // add allow release flag
+
     for (let i = 0, len = processors.length; i < len; i++) {
         processFile(file, processors[i], buildManager);
     }

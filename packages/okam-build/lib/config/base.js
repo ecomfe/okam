@@ -205,7 +205,7 @@ module.exports = {
          */
         file(path, file) {
             // do not output not compiled file and sfc file component
-            if (!file.compiled || file.isComponent) {
+            if (!file.allowRelease || file.isComponent) {
                 return false;
             }
 
