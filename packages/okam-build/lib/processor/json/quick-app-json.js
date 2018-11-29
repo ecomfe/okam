@@ -374,12 +374,6 @@ function compile(file, options) {
         obj.display.pages = currDisplayPages;
     }
 
-    // remove custom data property used to declare the data type:
-    // private/protected/public
-    if (obj.hasOwnProperty('data')) {
-        delete obj.data;
-    }
-
     return {
         content: JSON.stringify(obj, null, 4)
     };

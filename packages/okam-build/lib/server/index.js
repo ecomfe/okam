@@ -77,7 +77,6 @@ function createDevServer(options) {
     let deps = serverInfo.deps;
     try {
         customRequire.ensure(type, deps, root);
-
         middlewares = normalizeMiddlewares(middlewares, root);
     }
     catch (ex) {

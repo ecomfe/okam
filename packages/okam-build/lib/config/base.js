@@ -204,7 +204,7 @@ module.exports = {
          * @return {boolean|string}
          */
         file(path, file) {
-            // do not output not compiled file and sfc file component
+            // do not output not processed file and sfc file component
             if (!file.allowRelease || file.isComponent) {
                 return false;
             }

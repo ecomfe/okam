@@ -21,7 +21,7 @@ module.exports = merge({}, baseConf, {
      * @type {Object}
      */
     resolve: {
-        ignore: /^@system/, // 忽略快应用的内部系统模块的 resolve
+        ignore: /^@(system|service)\./, // 忽略快应用的内部系统模块的 resolve
 
         /**
          * 收集需要导入声明的 API features
@@ -69,7 +69,7 @@ module.exports = merge({}, baseConf, {
          * @return {boolean|string}
          */
         file(path, file) {
-            // do not output not compiled file and component config file
+            // do not output not processed file and component config file
             if (!file.allowRelease || file.isComponentConfig) {
                 return false;
             }

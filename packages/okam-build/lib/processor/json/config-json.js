@@ -7,6 +7,17 @@
 
 const OKAM_ENV_KEY_REGEXP = /^_\w+Env$/;
 
+function filterNullPropertyConfig(conf) {
+    let result = {};
+    Object.keys(conf).forEach(k => {
+        if (conf[k] != null) {
+            result[k] = conf[k];
+        }
+    });
+
+    return result;
+}
+
 /**
  * Compile config json: remove not current app type config info
  * merge the common config with the specified app config.
@@ -36,7 +47,8 @@ function compile(file, options) {
             }
         }
         else if (isAppConfig && k === 'window') {
-            result[k] = Object.assign({}, result[k], value);
+            let windowConf = Object.assign({}, result[k], value);
+            result[k] = filterNullPropertyConfig(windowConf);
         }
         else {
             result[k] = value;
