@@ -3,11 +3,13 @@
 > 奥卡姆，一个面向小程序开发的开发框架，提供类 `Vue` 的开发体验。
 
 
-## 目前支持的端
+## 目前支持的平台
 
-- [x] 百度小程序
-- [x] 微信小程序
-- [x] 支付宝小程序
+- [x] [百度小程序](https://smartprogram.baidu.com/docs/introduction/enter_application/)
+- [x] [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/)
+- [x] [支付宝小程序](https://docs.alipay.com/mini/developer/getting-started)
+- [x] [头条小程序](https://developer.toutiao.com/docs/) `自定义组件事件监听还有问题，依赖原生修复`
+- [x] [快应用](https://www.quickapp.cn/) `初步支持，待完善`
 
 ## 主要功能特性
 

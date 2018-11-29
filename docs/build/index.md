@@ -8,17 +8,24 @@
 ### root
 `string` 项目构建的根目录，其它配置指定的路径信息，默认都是相对于该根目录
 
+### designWidth
+
+该选项从 `0.4.0` 版本开始支持。
+
+设计稿尺寸，全局配置，如果使用的 [px2rpx](advance/rpx.md) 插件指定了 `designWidth` 则会覆盖该全局配置值。
+
 ### framework
 `Array.<string>` 扩展的原生小程序的框架，目前只支持 `okam-core` 提供的扩展
 
-* `data`: 支持 `vue` 数据操作方式 及 `computed`(TODO: watch 支持暂未加上)
+* `data`: 支持 `vue` 数据操作方式 及 `computed`
 * `broadcast`: 支持广播事件
 * `watch`: 提供 `watch` 属性 和 `$watch` API 支持，依赖 `data`
 * `ref`: 允许模板指定 `ref` 属性，组件实例 `$refs` 获取引用，类似 Vue
 * `redux`: 使用 `redux` 进行状态管理，要求安装依赖 `redux` 库：`npm i redux --save`, 另外，`redux` 依赖 `data` 扩展，因此需要一起配置
+* `behavior`: mixin 支持包括页面组件和自定义组件，对于插件支持选项，可以传入数组形式：`[ ['behavior', '{useNativeBehavior: true}'] ]`，**注意** 第二个参数为插件选项代码的字符串形式
 ```javascript
 {
-    framework: ['data', 'watch', 'broadcast', 'ref', 'redux']
+    framework: ['data', 'watch', 'broadcast', 'ref', 'redux', 'behavior']
 }
 ```
 
@@ -308,18 +315,18 @@ import Promise from 'okam-core/src/polyfill/promise';
 `Array.<Object>` 构建处理规则定义，每个规则项定义主要包含两部分
 
 * `match`: `string|RegExp|function(Object):boolean` 自定义文件是否要处理，`match`也可以传要匹配的文件的 `glob pattern` 或者 `正则`。<br>
-**注意：**匹配是按源文件路径匹配，而非处理器后的路径，如果要匹配单文件组件的 `template`、`script`、`style`， 可以按如下示例判断：（其中，`file.owner`有值，代表该`file`是从单文件组件中派生出来的文件，`owner`值为原单文件组件）<br>
+**注意：**匹配是按源文件路径匹配，而非处理器后的路径，如果要匹配单文件组件的 `template`、`script`、`style`， 可以按如下示例判断：（其中，`file.owner`有值，代表该`file`是从单文件组件中派生出来的文件，`owner`值为原单文件组件）
 
-```javascript
-// 匹配单文件组件中的模板
-file.isTpl && file.owner
+    ```javascript
+    // 匹配单文件组件中的模板
+    file.isTpl && file.owner
 
-// 匹配单文件组件中的样式
-file.isStyle && file.owner
+    // 匹配单文件组件中的样式
+    file.isStyle && file.owner
 
-// 匹配单文件组件中的脚本
-file.isScript && file.owner
-```
+    // 匹配单文件组件中的脚本
+    file.isScript && file.owner
+    ```
 
 * `processors`: `Array.<Object>|Object` 处理的文件要使用的处理器列表, 可以指定预定义的处理器名称，比如 `less`，`stylus`，具体参考[预定义处理器](#预定义的处理器)，也可以指定 [processors](build/index#processors) 定义的自定义处理器名称
 ```javascript
