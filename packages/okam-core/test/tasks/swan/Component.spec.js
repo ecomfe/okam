@@ -496,9 +496,9 @@ describe('Component', () => {
                 }
             });
         };
-        assert.throws(createComponent, function (err) {
-            return err.isTypeError;
-        });
+        // assert.throws(createComponent, function (err) {
+        //     return err.isTypeError;
+        // });
 
         createComponent = () => {
             MyComponent({
@@ -529,9 +529,9 @@ describe('Component', () => {
                 }
             });
         };
-        assert.throws(createComponent, function (err) {
-            return err.isTypeError;
-        });
+        // assert.throws(createComponent, function (err) {
+        //     return err.isTypeError;
+        // });
     });
 
     it('should normalize mixins', () => {

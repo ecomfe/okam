@@ -9,10 +9,6 @@
 
 import {isPlainObject} from '../util/index';
 
-const VALIDATED_TYPES = [
-    String, Number, Boolean, Array, Object, null
-];
-
 function createPropError(msg) {
     let err = new Error(msg);
     err.isTypeError = true;
@@ -44,8 +40,14 @@ export function normalizeOkamProps(props) {
     let result = {};
     Object.keys(props).forEach(k => {
         let propValue = props[k];
-        if (VALIDATED_TYPES.indexOf(propValue) !== -1) {
-            result[k] = {type: props[k]};
+        // const VALIDATED_TYPES = [
+        //     String, Number, Boolean, Array, Object, null
+        // ];
+        // if (VALIDATED_TYPES.indexOf(propValue) !== -1)
+        // the above implementation will lead to the component properties data
+        // missing in toutiao app, amazing thing...
+        if (typeof propValue === 'function' || propValue === null) {
+            result[k] = {type: propValue};
         }
         else {
             if (!isPlainObject(propValue)) {
@@ -57,9 +59,9 @@ export function normalizeOkamProps(props) {
                 value = value();
             }
 
-            if (type !== null && VALIDATED_TYPES.indexOf(type) === -1) {
-                throw createPropError(`prop ${k} type is not supported`);
-            }
+            // if (type !== null && VALIDATED_TYPES.indexOf(type) === -1) {
+            //     throw createPropError(`prop ${k} type is not supported`);
+            // }
 
             let item = {type};
             value !== undefined && (item.default = value);
