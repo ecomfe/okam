@@ -319,7 +319,7 @@ function normalizeDebugConfig(info) {
  * @return {{content: string}}
  */
 function compile(file, options) {
-    if (!file.compileReady) {
+    if (!file.compileReady && !file.owner.processed) {
         return {content: file.content};
     }
 

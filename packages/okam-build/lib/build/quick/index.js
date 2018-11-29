@@ -167,6 +167,7 @@ class BuildQuickAppManager extends BuildManager {
     onBuildDone() {
         let appConfigFile = this.getAppConfigFile();
         if (appConfigFile) {
+            appConfigFile.owner.processed = true;
             appConfigFile.compileReady = true;
             this.compile(appConfigFile);
         }
