@@ -115,10 +115,9 @@ function processFile(file, processor, buildManager) {
         file.release = false;
         file.isComponent = true;
         compileComponent(result, file, buildManager);
+        result = {content: file.content};
     }
-    else {
-        buildManager.updateFileCompileResult(file, result);
-    }
+    buildManager.updateFileCompileResult(file, result);
 }
 
 /**
