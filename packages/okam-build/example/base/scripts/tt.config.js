@@ -1,5 +1,5 @@
 /**
- * @file Build wx mini program config
+ * @file Build toutitao mini program config
  * @author xxx
  */
 

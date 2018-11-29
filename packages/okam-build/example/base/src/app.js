@@ -51,6 +51,14 @@ export default {
 
         networkTimeout: {
             request: 30000
+        },
+
+        _quickEnv: {
+            networkTimeout: null,
+            package: 'com.okam.demo',
+            name: 'okam-quick',
+            versionCode: '1',
+            icon: '/common/img/logo.png'
         }
     },
 
