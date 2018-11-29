@@ -1,5 +1,5 @@
 /**
- * @file Build weixin mini program build config
+ * @file Build tt mini program config
  * @author ${author|raw}
  */
 
@@ -9,17 +9,12 @@ const merge = require('okam-build').merge;
 
 module.exports = merge({}, require('./base.config'), {
     output: {
-        dir: 'wx_dist',
+        dir: 'tt_dist',
         depDir: 'src/common'
     },
-
     <% if: ${async} %>
-    localPolyfill: [
-        'async',
-        'promise'
-    ],
+    polyfill: ['async'],
     <% /if %>
-
     dev: {
         processors: {
             postcss: {
