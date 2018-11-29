@@ -90,7 +90,7 @@ module.exports = {
         postcss: {
             extnames: ['styl', 'less'],
             options: {
-                plugins: ['autoprefixer', 'px2rpx', 'env']
+                plugins: [/*'autoprefixer',*/ 'px2rpx', 'env']
             }
         }
     },

@@ -1,3 +1,13 @@
 {
-    description: '小程序项目置文件' // 项目说明
+    description: '小程序项目置文件', // 项目说明
+    _ttEnv: {
+        appid: '体验appId',
+        setting: {
+            urlCheck: true,
+            es6: true,
+            postcss: true,
+            minified: true,
+            newFeature: true
+        }
+    }
 }
