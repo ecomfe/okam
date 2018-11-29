@@ -80,6 +80,7 @@ const PACKAGE_NAMES_MAP = {
     devDepsMust: [
         {
             name: 'okam-build',
+            fetchLatest: true,
             version: '0.3.2'
         },
         {
@@ -138,6 +139,7 @@ const PACKAGE_NAMES_MAP = {
         tinyimg: [
             {
                 name: 'okam-plugin-tinyimg',
+                fetchLatest: true,
                 version: '0.1.1'
             }
         ],
@@ -460,10 +462,12 @@ class BaseTemplate {
         });
         let devDeps = await Promise.all(pkgsInfo.map(async pkg => {
             let version = pkg.version;
-            try {
-                version = await getLatestVersion(pkg.name);
-            }
-            catch (e) {
+            if (pkg.fetchLatest) {
+                try {
+                    version = await getLatestVersion(pkg.name);
+                }
+                catch (e) {
+                }
             }
             let info = {
                 name: pkg.name,
