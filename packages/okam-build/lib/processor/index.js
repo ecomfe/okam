@@ -120,7 +120,6 @@ function processFile(file, processor, buildManager) {
         compileComponent(result, file, buildManager);
         result = {content: file.content};
     }
-
     buildManager.updateFileCompileResult(file, result);
 }
 

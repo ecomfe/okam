@@ -1,9 +1,11 @@
 <template>
     <view class="counter-wrap">
         <view>{{from}} - {{counterFrom}}</view>
+        <view>userInfo: {{userInfo.name}} - {{userInfo.age}}</view>
         <view class="counter-title">Counter: {{counter}}-{{txt}}</view>
         <button plain class="counter-btn" @click="onAddCounter">增加 Counter</button>
         <button plain class="counter-btn" @click="onMinusCounter">减少 Counter</button>
+        <button plain class="userinfo-btn" @click="onUpdateUserInfo">UpdateUserInfo</button>
     </view>
 </template>
 
@@ -33,7 +35,13 @@ export default {
     },
 
     $store: {
-        computed: ['counter'],
+        computed: {
+            counter: 'counter',
+            userInfo: function (state) {
+                console.log('recompute userinfo..')
+                return state.userInfo;
+            }
+        },
         actions: {
             addCounter(value = 1) {
                 console.log('add', value)
@@ -41,7 +49,41 @@ export default {
             },
             minusCounter(value = 1) {
                 return {type: 'DECREMENT', value};
+            },
+            upUserInfo(info) {
+                return Object.assign({}, info, {type: 'upUserInfo'});
+            },
+            fetchUserInfo() {
+                return (dispatch, getState) => {
+
+                    return new Promise((resolve, reject) => {
+
+                        setTimeout(() => {
+                            console.log('resolve');
+                            dispatch({type: 'upUserInfo', name: 'jack', age: 666});
+                            resolve();
+                        }, 3000);
+                    });
+
+                    return fetchTodoList(pageNo, pageSize).then(
+                        res => {
+                            dispatch({type: FETCH_TODOS, todos: res});
+                        },
+                        err => {
+                            dispatch({type: FETCH_TODOS, isFail: true, err});
+                        }
+                    );
+                };
             }
+        }
+    },
+
+    watch: {
+        userInfo: {
+            handler() {
+                console.log('userinfo change', arguments);
+            },
+            deep: true
         }
     },
 
@@ -59,6 +101,11 @@ export default {
         onMinusCounter() {
             this.minusCounter();
             this.$emit('counterChange', this.counter);
+        },
+
+        onUpdateUserInfo() {
+            // this.upUserInfo({name: 'jack', age: 34});
+            this.fetchUserInfo();
         }
     }
 };
@@ -71,7 +118,8 @@ export default {
         padding: 20px
         text-align: center
 
-    .counter-btn
+    .counter-btn,
+    .userinfo-btn
         margin: 20px 0
 
 </style>
