@@ -201,6 +201,10 @@ module.exports = {
 * `rext`: `string` 处理完输出的文件的后缀名，`可选`
 * `deps`: `Array.<string>|string` 声明处理器的 NPM 依赖的包名，`可选`
 * `options`: `Object` 处理器处理的默认选项定义，`可选`
+* `order`: `number`，当一个文件关联的默认处理器有多个时候，执行顺序，默认 0，值越小，执行优先级越高，`可选`
+* `hook`: `Object` 处理器执行的钩子，目前只提供初始化前置钩子，`可选`
+    * `hook.before(file, options):void`: 可以通过该钩子，动态修改处理器的选项定义
+
 ```javascript
 {
     // 传入对象形式，key: 为处理器的名称，其它内部定义同上面
@@ -252,7 +256,7 @@ module.exports = {
     file.isScript && file.owner
     ```
 
-* `processors`: `Array.<Object>|Object` 处理的文件要使用的处理器列表, 可以指定预定义的处理器名称，比如 `less`，`stylus`，具体参考[预定义处理器](#预定义的处理器)，也可以指定 [processors](build/index#processors) 定义的自定义处理器名称
+* `processors`: `Array.<Object>|Object` 处理的文件要使用的处理器列表, 可以指定预定义的处理器名称，比如 `less`，`stylus`，具体参考[预定义处理器](build/processors)，也可以指定 `预定义处理器` 处理器名称
 ```javascript
 {
     rules: [
@@ -295,7 +299,7 @@ module.exports = {
 }
 ```
 
-!> 默认情况下，会根据文件的扩展名确定该文件要走什么处理器， 默认处理器即如上`processors`中的第一条处理器`file.processor`，具体可以参考[预定义处理器文件扩展名定义](build/index#预定义的处理器)。<br>而且这条规则是排在第一位，无法去掉该默认规则，因此如果你只是想改写某个处理器选项，比如 `stylus`，可以直接在跟 `rules` 平级的 [processors](build/index#processors) 配置里重写 `stylus` 处理器选项。如果想给 `stylus` 样式文件增加新的处理器比如 `postcss`，可以按如下方式来配置：
+!> 默认情况下，会根据文件的扩展名确定该文件要走什么处理器， 默认处理器即如上`processors`中的第一条处理器`file.processor`，具体可以参考[预定义处理器文件扩展名定义](build/processors)。<br>而且这条规则是排在第一位，无法去掉该默认规则，因此如果你只是想改写某个处理器选项，比如 `stylus`，可以直接在跟 `rules` 平级的 [processors](build/processors) 配置里重写 `stylus` 处理器选项。如果想给 `stylus` 样式文件增加新的处理器比如 `postcss`，可以按如下方式来配置：
 
 ```javascript
 {
@@ -405,181 +409,5 @@ module.exports = {
         processors: {},
         rules: []
     }
-}
-```
-
-
-## 预定义的处理器
-
-> 预定义的处理器，有相关的依赖，如果用到了相应的处理器需要安装下面指定的依赖，比如 stylus 处理器，需要安装 `stylus` 依赖: `npm i stylus --save-dev`。
-
-* 样式相关
-
-    * less
-        * 依赖：`less`
-        * 默认扩展名：`less`
-        * 处理器选项：参考官方 [less](http://lesscss.org/usage/#programmatic-usage)
-    * stylus
-        * 依赖：`stylus`
-        * 默认扩展名：`styl`
-        * 处理器选项：参考官方 [stylus](http://stylus-lang.com/docs/js.html)
-    * sass
-        * 依赖：`node-sass`
-        * 默认扩展名：`sass`、`scss`
-        * 处理器选项：参考官方 [sass](https://github.com/sass/node-sass)
-    * postcss：css 后处理器，postcss 提供的内置插件参考[这里](#Postcss预定义插件)
-        * 依赖：`postcss`
-        * 处理器选项：参考官方 [postcss](https://postcss.org/)
-
-* 组件相关
-
-    * component：用来编译单文件组件的处理器，属于核心的处理器，不需要安装任何附加依赖
-        * 默认扩展名：依赖于构建配置的 `component.extname` 定义
-    * view：用来编译单文件组件的模板部分，转成原生小程序支持的模板语法，属于核心的处理器，不需要安装任何附加依赖
-        * 默认扩展名：`tpl`
-
-* 模板相关
-    * pug: [pug](https://github.com/pugjs/pug) 模板语法支持，为了使使用该语法的模板能继续使用 `okam` 框架扩展的模板语法，需要增加如下配置
-        * 默认扩展名：`pug`
-        ```javascript
-        {
-            processors: {
-                pug: {
-                    options: {
-                        doctype: 'xml',
-                        data: {
-                            name: 'efe-blue'
-                        }
-                    }
-                },
-                view: {
-                    // 定义小程序模板转换的文件后缀名，加上这个才能确保能使用扩展的模板语法
-                    // 默认情况下， pug 处理器的优先级高于 view
-                    extnames: ['pug', 'tpl']
-                }
-            },
-            rules: []
-        }
-        ```
-
-* 脚本相关
-
-    * babel: babel6 转译处理器，组件编译默认需要依赖该处理器 或者 使用 `babel7` 也可以
-        * 依赖：`babel-core`
-        * ~~默认扩展名：`es`、`es6`~~
-        * 处理器选项：参考官方 [babel](https://babeljs.io/docs/en/babel-core)
-        * 对于 `plugins` 选项进行了扩展支持传入 `function`，可以根据文件自定义要返回的附加的 babel 插件：
-        ```
-        {
-            processors: {
-                babel: {
-                    options: {
-                        plugins(file) {
-                            if (file.path.indexOf('src/') === 0) {
-                                return [
-                                    'external-helpers'
-                                ];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        ```
-    * babel7
-        * 依赖：`@babel/core`
-        * ~~默认扩展名：`es`、`es6`~~
-        * 处理器选项：参考官方 [babel](https://babeljs.io/docs/en/v7-migration)
-    * typescript
-        * 依赖：`@babel/core` `@babel/preset-typescript`
-        * 默认扩展名：`ts`
-        * typescript 语法：参考官方 [typescript](https://www.typescriptlang.org/)
-
-* 其它
-
-    * json5：将 `json5` 语法转成 `json`
-        * 依赖：`json5`
-        * 默认扩展名：`json5`
-    * replacement：内容替换处理器
-        * 依赖：无
-        * 处理器选项: `Object|Array` 参考下面示例
-        ```javascript
-        {
-            rules: [
-                match: '*.js',
-                processors: [
-                    {
-                        name: 'replacement',
-                        options: {
-                            'http://online.com': 'http://test.com',
-                            'http://online.com': '${devServer}'
-                        },
-                        options: [
-                            // 可以是 function
-                            function (content) {
-                                return content;
-                            },
-
-                            {
-                                match: 'xx', // 支持正则或者字符串
-                                replace: 'xx'
-                            }
-                        ]
-                    }
-                ]
-            ]
-        }
-        ```
-
-## Postcss预定义插件
-
-* autoprefixer
-    * 需要安装依赖：`npm i autoprefixer --save-dev`
-
-* px2rpx：自动将 `px` 单位转成 `rpx`
-
-```javascript
-{
-    rules: [
-        match: '*.css',
-        processors: {
-            postcss: {
-                plugins: {
-                    autoprefixer: {
-                        browsers: [
-                            'last 3 versions',
-                            'iOS >= 8',
-                            'Android >= 4.1'
-                        ]
-                    },
-                    px2rpx: {
-                        // 设计稿尺寸
-                        designWidth: 1242,
-                        // 保留的小数点单位, 默认为 2
-                        precision: 2
-                    }
-                }
-            }
-        }
-    ]
-}
-```
-
-如果使用的是 `stylus` 等预处理样式语言，可以按如下配置来配合 `postcss` 使用：
-
-```javascript
-{
-    processors: {
-        postcss: {
-            // 指定要处理的后缀，默认情况下 `stylus` 处理器执行优先级高于 `postcss`
-            extnames: ['styl', 'css'],
-            options: {
-                // ...
-            }
-        }
-    },
-    rules: [
-        // ...
-    ]
 }
 ```
