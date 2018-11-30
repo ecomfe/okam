@@ -6,8 +6,6 @@
 
 * 全局安装: `npm install okam-cli -g`
 
-**说明：** 如果不想安装 CLI 工具，想快速体验的话，可以直接 clone 项目模板脚手架代码到本地：[okam-template](https://github.com/ecomfe/okam-template)。
-
 ## 创建项目
 
 Okam 的安装或更新都通过 `npm` 进行。
@@ -95,7 +93,6 @@ npm install
 
 * 等待开发工具编译，就可以看到预览效果
 
-
 ## 更新工具或项目包
 
 更新 cli: `okam upgrade self`
@@ -141,6 +138,12 @@ npm install
         ├── ...
         └── ...
 ```
+
+## 示例项目
+
+* 基础项目：[okam-template](https://github.com/ecomfe/okam-template)。
+* 使用 `redux` 的 todo 项目：[okam-todo](https://github.com/The-only/okam-todo)。
+
 
 ## 开发规范
 

@@ -6,7 +6,7 @@
 
 如何转换，用户可根据项目情况及自身习惯，通过在配置文件中添加 `component.template.transformTags` 配置项进行定制化转换支持:
 
-配置项具体写法详见[配置定义 `component.template.transformTags` 部分](build/index#component)
+配置项具体写法[详见配置定义 component.template.transformTags 部分](build/index#component)
 
 ## 数据绑定
 
