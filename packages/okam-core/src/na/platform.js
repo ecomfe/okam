@@ -30,6 +30,7 @@ export function getPlatformInfo() {
         return cachedPlatformInfo;
     }
 
+    /* eslint-disable no-undef */
     if (typeof okam_platform_info === 'object' && okam_platform_info) {
         return okam_platform_info;
     }

@@ -5,6 +5,8 @@
 
 'use strict';
 
+/* eslint-disable fecs-camelcase */
+
 import initApi from '../../base/init-api';
 import {appGlobal} from '../env';
 
