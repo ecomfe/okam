@@ -8,7 +8,7 @@
 - [x] [百度小程序](https://smartprogram.baidu.com/docs/introduction/enter_application/)
 - [x] [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/)
 - [x] [支付宝小程序](https://docs.alipay.com/mini/developer/getting-started)
-- [x] [头条小程序](https://developer.toutiao.com/docs/) `自定义组件事件监听还有问题，依赖原生修复`
+- [x] [头条小程序](https://developer.toutiao.com/docs/)
 - [ ] [快应用](https://www.quickapp.cn/) `初步支持，待完善`
 
 ## 主要功能特性
