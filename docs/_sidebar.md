@@ -68,6 +68,8 @@
 
     * [标签转换](build/transformTag.md)
 
+    * [预定义处理器](build/processors.md)
+
     * [自定义插件](build/plugin.md)
 
     * [构建机制](build/implementation.md)

@@ -29,7 +29,7 @@ Page 组件也是被定义成单文件组件的形式，主要由三部分：`<t
 * `<style>`
     * 样式定义跟原生小程序保持一致
     * 可以根据框架提供的[语言扩展](advance/language.md)，使用 `stylus` 或者 `less` 等各种预处理语言，通过`lang="stylus"`来区分使用的预处理语言
-    * 更多进阶处理，参见：[rpx像素单位自动处理](advance/rpx.md)、[autoprefixer使用](build/index#Postcss预定义插件)
+    * 更多进阶处理，参见：[rpx像素单位自动处理](advance/rpx.md)、[autoprefixer使用](build/processors#Postcss插件)
 
 * `<script>`
     * 不需要原生 `Page({})` 方式进行包裹，只需要导出对应的页面脚本定义即可
