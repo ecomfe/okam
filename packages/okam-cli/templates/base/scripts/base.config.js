@@ -88,10 +88,13 @@ module.exports = {
         type: 'connect',
         // 需要安装 mock 中间件 npm i autoresponse --save-dev
         middlewares: [
-            // name: 'autoresponse',
-            // options: {
-
-            //}
+            // {
+            //     name: 'autoresponse',
+            //     options: {
+            //         post: true,
+            //         get: true
+            //     }
+            // }
         ]
     },
     <% /if %>

@@ -6,6 +6,14 @@ okam-cli
 > OKAM 开发框架 cli 工具
 
 
+### 支持
+
+- [x] [百度小程序](https://smartprogram.baidu.com/docs/introduction/enter_application/)
+- [x] [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/)
+- [x] [支付宝小程序](https://docs.alipay.com/mini/developer/getting-started)
+- [ ] [头条小程序](https://developer.toutiao.com/docs/)
+
+
 ## install
 
 ```
