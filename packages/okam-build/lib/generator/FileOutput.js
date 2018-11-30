@@ -136,6 +136,7 @@ function mergeComponentStyleFiles(styleFiles, rootDir) {
 
     mergeFile.owner = styleFiles[0].owner;
     mergeFile.allowRelease = true;
+    mergeFile.compiled = true;
 
     return mergeFile;
 }

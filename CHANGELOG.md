@@ -1,6 +1,13 @@
 # ChangeLog
 
-## 0.3.3 (2018-11-26)
+
+## okam-build@0.3.3 (2018-11-30)
+
+### Bug Fixes
+
+* **okam-build:** 修复组件重复构建导致组件样式没有输出问题 [#13](https://github.com/ecomfe/okam/issues/13) ([96455ea](https://github.com/ecomfe/okam/commit/96455ea))
+
+## okam-core@0.3.3 (2018-11-26)
 
 ### Bug Fixes
 
