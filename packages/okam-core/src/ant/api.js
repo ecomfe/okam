@@ -15,6 +15,7 @@ const adaptedAPI = {
      * Show toast api
      *
      * @param {Object} options the options to showToast
+     * @return {*}
      */
     showToast(options) {
         // normalize the options, fix the difference of the options between
@@ -28,7 +29,7 @@ const adaptedAPI = {
             options.type = icon;
         }
 
-        my.showToast(options);
+        return my.showToast(options);
     },
 
     /**
@@ -74,6 +75,20 @@ const adaptedAPI = {
         }
 
         return res;
+    },
+
+    /**
+     * Setting navigation bar title
+     *
+     * @param {Object} options the options
+     * @param {string} options.title the nav bar title to set
+     * @param {Function=} options.success the request success callback
+     * @param {Function=} options.fail the request fail callback
+     * @param {Function=} options.complete the request done callback whatever is
+     * @return {*}
+     */
+    setNavigationBarTitle(options) {
+        return my.setNavigationBar(options);
     }
 };
 
