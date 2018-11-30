@@ -10,7 +10,7 @@
 
 ### designWidth
 
-该选项从 `0.4.0` 版本开始支持。
+> 该选项从 `0.4.0` 版本开始支持。
 
 设计稿尺寸，全局配置，如果使用的 [px2rpx](advance/rpx.md) 插件指定了 `designWidth` 则会覆盖该全局配置值。
 
@@ -28,6 +28,44 @@
     framework: ['data', 'watch', 'broadcast', 'ref', 'redux', 'behavior']
 }
 ```
+
+### api
+
+> 该选项从 `0.4.0` 版本开始支持。
+
+`Array.<Object>` 可选，要扩展的全局 `API` 定义，可以用来增加特定平台 API 或者重写已有 API，比如用来抹平不同平台 API 差异的实现。定义的 `API` 会挂载到组件、页面、App 实例上下文 `this.$api` 下。
+
+* `key`: 为对应要导出的 api 名称
+* `value`: 为对应的该 API 的实现，可以是 NPM 模块，也可以是项目内部实现
+
+```javascript
+{
+    api: {
+        'audio': '@system.audio',
+        'hi': './common/api/wx/hi'
+    }
+}
+```
+
+```javascript
+// common/api/wx/hi.js
+export default function hi() {
+    console.log('hi');
+}
+```
+
+```javascript
+// 组件脚本
+export default {
+    methods: {
+        onClick() {
+            this.$api.hi(); // 可以在 $api 对象下直接访问到扩展的 API
+        }
+    }
+}
+```
+
+**提示** 配置修改，需要重新启动构建，`watch` 模式下不会生效。
 
 ### polyfill
 `Array.<string>` 要增加的语法 API polyfill，可选，目前框架默认支持两种:
@@ -47,6 +85,83 @@ import Promise from 'okam-core/src/polyfill/promise';
 
 * `promise`： 依赖 `promise-polyfill` 实现
 * `async`: 依赖 `regenerator-runtime` 实现
+
+### resolve
+
+> 该选项从 `0.4.0` 版本开始支持。
+
+`Object` 可选，模块路径 `resolve` 选项
+
+* `resolve.extensions`: `Array.<string>` 查找的模块文件后缀名，会跟默认查找的后缀名做合并
+* `resolve.ignore`: `RegExp|Array.<string|RegExp>|(moduleId, appType):Boolean` 要忽略 resolve 的模块 id，可以传入正则，或者数组，也可以是一个 function
+* `onResolve(depModId, file)`: `Function` resolve dep 时候事件监听回调
+
+```javascript
+// 快应用的 resolve 配置定义
+const notNeedDeclarationAPIFeatures = [
+    '@system.router',
+    '@system.app'
+];
+
+module.exports = {
+    // ...
+    resolve: {
+        ignore: /^@(system|service)\./, // 忽略快应用的内部系统模块的 resolve
+
+        /**
+         * 收集需要导入声明的 API features
+         * 默认不在 `notNeedDeclarationAPIFeatures` 该列表里且
+         * `@system.` `@service.`开头的模块
+         * 都会自动添加到项目清单的 feature 声明里
+         *
+         * @param {string} requireModId require 模块 id
+         * @param {Object} file require 该模块 id 所属的文件对象
+         */
+        onResolve(requireModId, file) {
+            if (notNeedDeclarationAPIFeatures.indexOf(requireModId) !== -1) {
+                return;
+            }
+
+            if (/^@(system|service)\./.test(requireModId)) {
+                let features = file.features || (file.features = []);
+                if (features.indexOf(requireModId) === -1) {
+                    features.push(requireModId);
+                }
+            }
+        }
+    }
+}
+```
+
+### script
+
+> 该选项从 `0.4.0` 版本开始支持。
+
+`Object` 可选，执行脚本命令配置，目前提供了两个钩子来执行命令： `onBuildStart` `onBuildDone`
+
+执行脚本命令：`cmd` `args` `options`，具体可以参考 [child_process.spawn](https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options) API 说明。
+
+```javascript
+{
+    script: {
+        onBuildStart: 'npm run init', // 构建开始要执行的命令
+        onBuildStart: { // 也可以是对象形式
+            cmd: 'node',
+            args: ['init.js'], // 如果提供了 args，cmd 必须是命令名称
+            options: {cwd: __dirname} // 选项具体参考
+        },
+        onBuildStart(opts) { // 可以是 function 形式，返回特定的要执行的脚本命令，
+                             // 如果多个，返回数组，如果不需要执行任何命令，可以不返回
+            return [
+                {
+                    cmd: opts.watch ? 'npm run watch' : 'npm run build',
+                    options: {cwd: __dirname}
+                }
+            ];
+        }
+    }
+}
+```
 
 ### source
 `Object` 项目源代码位置信息
@@ -74,199 +189,8 @@ import Promise from 'okam-core/src/polyfill/promise';
 
 * `component.extname`: `string` 组件的后缀名，默认 `okm`
 * `component.template`: `Object` 模板配置项
-* `component.template.transformTags`: `Object` 模板标签转换配置项
-
-    > `>= 0.4 版本 `
-
-    **transformTags配置方式：以 `key-value` 形式添加**
-    * `key`: 被转的标签名，类型为：`string`
-    * `value`: 根据情况可配置为：`string|Object|` 类型
-        * 取值为 `string` 时，表示转为的 `tag`
-        * 取值为 `Object` 时，`Object` 的 `key` 可为：
-            * `tag`: 转为的 `tag`,
-            * `class`: `class` 需额外附加 `classname`，`classname` 的样式需自行定义；
-            * 其他属性: 需替换的属性名
-
-    配置示例：小程序中 写 html 标签
-    ``` javascript
-    {
-        component: {
-            template: {
-                transformTags: {
-                    div: 'view',
-                    p: 'view',
-                    ul: 'view',
-                    ol: 'view',
-                    li: 'view',
-                    // span 会被转为 view 标签，若想让它拥有 inline 属性，可通过 配置 class 值如：okam-inline 进行 样式属性控制
-                    // 注：okam-inline 样式 需自行在样式文件(app.css)中定义
-                    // 最终 view 标签 class 将额外添加 okam-inline 值，而不是覆盖
-                    span: {
-                        tag: 'view',
-                        class: 'okam-inline'
-                    },
-                    h1: 'view',
-                    h2: 'view',
-                    h3: 'view',
-                    h4: 'view',
-                    h5: 'view',
-                    h6: 'view',
-                    article: 'view',
-                    section: 'view',
-                    aside: 'view',
-                    nav: 'view',
-                    header: 'view',
-                    footer: 'view',
-
-                    // Object
-                    /*
-                     * eg
-                     * <a class="home-link" href='xxx'></a>
-                     * 转为:
-                     * <navigator class="okam-inline home-link" url='xxx'></navigator>
-                     */
-                    a: {
-                        tag: 'navigator',
-                        class: 'okam-inline',
-                        href: 'url'
-                    },
-
-                    // string
-                    img: 'image'
-                }
-            }
-        }
-    }
-    ```
-
-    > `< 0.4 版本 `
-
-    建议升级更换至 0.4 以上，< 0.4 升级到 0.4及以上
-
-    **transformTags配置方式：以 `key-value` 形式添加**
-    * `key`: 要转成的标签名
-    * `value`: 根据情况可配置为：`string|Object|Array` 类型
-        * 单标签配置：`string、Object` 类型
-            * 取值为 `string` 时，表示被转的 `tag`
-            * 取值为 `Object` 时，`Object` 的 `key` 可为：
-                * `tag`: 被转的 `tag`, 一般为 `HTML` 标签，
-                * `class`: `class` 需额外附加 `classname`，`classname` 的样式需自行定义；
-                * 其他属性: 需替换的属性名
-        * 多标签配置：`Array`类型
-            * `Array` 内部可为：`string、Object`类型，即 `单标签配置项` 取值
-
-    配置示例：小程序中 写 html 标签
-    ``` javascript
-    {
-        component: {
-            template: {
-                transformTags: {
-                    // Array
-                    view: [
-                        {
-                            tag: 'span',
-                            // span 会被转为 view 标签，若想让它拥有 inline 属性，可通过 配置 class 值如：okam-inline 进行 样式属性控制
-                            // 注：okam-inline 样式 需自行在样式文件(app.css)中定义
-                            // 最终 view 标签 class 将额外添加 okam-inline 值，而不是覆盖
-                            class: 'okam-inline'
-                        },
-                        'div', 'p',
-                        'ul', 'ol', 'li',
-                        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                        'article', 'section', 'aside', 'nav', 'header', 'footer'
-                    ],
-
-                    // Object
-                    /*
-                     * eg
-                     * <a class="home-link" href='xxx'></a>
-                     * 转为:
-                     * <navigator class="okam-inline home-link" url='xxx'></navigator>
-                     */
-                    navigator: {
-                        tag: 'a',
-                        class: 'okam-inline',
-                        href: 'url'
-                    },
-
-                    // string
-                    image: 'img'
-                }
-            }
-        }
-    }
-    ```
-
-    ** `0.4 以下` 与 `0.4及以上` 之间的配置兼容切换问题 **
-
-    `0.4及以上`想继续使用之前的调用方式，或 `0.4以下升级为0.4及以上`，可使用 `okam` 提供的 `reverseTagMap` 进行转换
-
-    ``` javascript
-    const reverseTagMap = require('okam-build').reverseTagMap;
-
-    {
-        component: {
-            template: {
-                transformTags: reverseTagMap({
-                    // Array
-                    view: [
-                        {
-                            tag: 'span',
-                            // span 会被转为 view 标签，若想让它拥有 inline 属性，可通过 配置 class 值如：okam-inline 进行 样式属性控制
-                            // 注：okam-inline 样式 需自行在样式文件(app.css)中定义
-                            // 最终 view 标签 class 将额外添加 okam-inline 值，而不是覆盖
-                            class: 'okam-inline'
-                        },
-                        'div', 'p',
-                        'ul', 'ol', 'li',
-                        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                        'article', 'section', 'aside', 'nav', 'header', 'footer'
-                    ],
-
-                    // Object
-                    /*
-                     * eg
-                     * <a class="home-link" href='xxx'></a>
-                     * 转为:
-                     * <navigator class="okam-inline home-link" url='xxx'></navigator>
-                     */
-                    navigator: {
-                        tag: 'a',
-                        class: 'okam-inline',
-                        href: 'url'
-                    },
-
-                    // string
-                    image: 'img'
-                }
-            })
-        }
-    }
-    ```
-
-    **注意：** 默认不提供 标签转换支持，使用者可根据情况自定义配置。 目前转换只是模板层面转换，对于样式里存在 HTML 标签选择器是不会做相应的转换，因此样式选择器不允许使用 HTML 的标签选择器，请使用 `class` 或 内联 `style`。
-
-    ```
-    <template>
-        <ul class="project-list">
-            <li class="project-item" for="item in projectList">
-                {{item.name}}
-            </li>
-        </ul>
-    </template>
-    <script>
-    // ...
-    </script>
-    <style>
-    .project-list li { // 样式选择器包含 HTML 标签 li，不支持
-        padding: 10px 0;
-    }
-
-    .project-list .project-item { // 使用 class 选择器，支持
-        padding: 10px 0;
-    }
-    </style>
-    ```
+* `component.template.transformTags`: `Object` 模板标签转换配置项，具体可以查看[标签转换](build/transformTag)
+* `component.global`: `Object` `>=0.4 版本支持` 自定义全局注入的组件
 
 ### processors
 `Object|Array.<Object>` 自定义的构建处理器，这里定义的处理器，后续的处理规则 `rules` 里，可以直接通过处理器名称 `name` 直接引用，处理器定义包含如下选项

@@ -101,102 +101,29 @@
 
 ## reverseTagMap
 
-* 接口说明：用于构建配置项 [`component.template.transformTags`](build/index?id=component) 的转换，转为 以 tag 为 key 的值
+> 0.4 版本开始支持，为了兼容之前的标签转换配置提供的快速兼容转换 API
+
+* 接口说明：用于构建配置项 [component.template.transformTags](build/transformTag) 的转换
 
 * 接口定义：`reverseTagMap(tagsConf: Object): Object`
-    * @param {Object} tagsConf 需 reverse 的 tags 配置项
-    * @return {Object} reverse 之后的配置项
-    * @example
-    ```
-     {
-         view: ['div', 'p'],
-         navigator: {
-             tag: 'a',
-             href: 'url'
-         },
-        image: 'img'
-     }
+    * `tagsConf`: `Object` 需 reverse 的 tags 配置项
+    * 返回转换后的标签转换配置
 
-     return
-
-     {
-         div: 'view',
-         p: 'view',
-         a: {
-             tag: 'navigator',
-             href: 'url'
-         },
-         img: 'image'
-     }
-    ```
-
-* 示例：
-
-    `>= 0.4 版本` 版本之后 `xxx.config.js` 配置标签转换时若为：
-
-    ```javascript
-    {
-        component: {
-            template: {
-                transformTags: {
-                    div: 'view',
-                    p: 'view',
-                    ul: 'view',
-                    ol: 'view',
-                    li: 'view',
-                    // span 会被转为 view 标签，若想让它拥有 inline 属性，可通过 配置 class 值如：okam-inline 进行 样式属性控制
-                    // 注：okam-inline 样式 需自行在样式文件(app.css)中定义
-                    // 最终 view 标签 class 将额外添加 okam-inline 值，而不是覆盖
-                    span: {
-                        tag: 'view',
-                        class: 'okam-inline'
-                    },
-                    h1: 'view',
-                    h2: 'view',
-                    h3: 'view',
-                    h4: 'view',
-                    h5: 'view',
-                    h6: 'view',
-                    article: 'view',
-                    section: 'view',
-                    aside: 'view',
-                    nav: 'view',
-                    header: 'view',
-                    footer: 'view',
-
-                    // Object
-                    /*
-                     * eg
-                     * <a class="home-link" href='xxx'></a>
-                     * 转为:
-                     * <navigator class="okam-inline home-link" url='xxx'></navigator>
-                     */
-                    a: {
-                        tag: 'navigator',
-                        class: 'okam-inline',
-                        href: 'url'
-                    },
-
-                    // string
-                    img: 'image'
-                }
-            }
-        }
-    }
-    ```
-
-    可简写成：
+* 使用示例
 
     ```javascript
     const reverseTagMap = require('okam-build').reverseTagMap;
-    {
+
+    module.exports = {
+        // ...
         component: {
             template: {
                 transformTags: reverseTagMap({
+                    // 传入配置 key 为转换后的目标 tag，value 为要转换的源标签信息
                     view: [
                         {
                             tag: 'span',
-                            class: 'okam-inline'
+                            class: 'okam-inline' // 要附加添加的样式信息
                         },
                         'div', 'p',
                         'ul', 'ol', 'li',
@@ -216,7 +143,6 @@
         }
     }
     ```
-    ` < 0.4 版本 ` 也可以使用此方法 升级 为 `>= 0.4 版本`
 
 ## run
 

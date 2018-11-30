@@ -62,9 +62,11 @@
 
     * [特定平台代码](advance/platformSpecCode.md)
 
-* 构建配置
+* 自定义构建
 
     * [配置定义](build/index.md)
+
+    * [标签转换](build/transformTag.md)
 
     * [自定义插件](build/plugin.md)
 

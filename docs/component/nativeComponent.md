@@ -1,12 +1,14 @@
 # 原生组件对齐
 
+> TODO 目前 `okam` 还未提供相应的组件对齐实现，需要开发者自行实现。
+
 ## 组件对比
 |组件类别 | 微信小程序 | 百度小程序 | 支付宝小程序  | 头条小程序 |  快应用 |
 |---|---|---|---|---|---|
 |视图容器 | view | view | view | view | div |
 | | scroll-view | scroll-view | scroll-view | scroll-view | |
 | | swiper | swiper | swiper | swiper | |
-| |  | swiper-item | swiper-item | swiper-item | | |
+| |  | swiper-item | swiper-item | swiper-item | |
 | | movable-view | movable-view | movable-view | | |
 | | movable-area | movable-area | movable-area | | |
 | | cover-view | cover-view | cover-image | | |
@@ -60,11 +62,16 @@
 | |official-account |  | | | |
 
 ## 组件转换和兼容
-如果代码需要运用在不同平台，需要对不同平台进行转换和兼容，`okam` 提供了 [`component.template.transformTags`](build/index?id=component)配置项来支持对齐不同平台组件的实现。[组件具体示例详见](advance/platformSpecCode?id=%E7%BB%84%E4%BB%B6)
+
+如果代码需要运行在不同平台，需要对不同平台进行对齐和兼容，`okam` 提供了两个机制：
+
+* 标签转换：[component.template.transformTags](build/transformTag) 配置项
+* 组件对齐实现：[特定平台组件实现](advance/platformSpecCode#组件)
 
 ## 参考
-[微信小程序组件](https://developers.weixin.qq.com/miniprogram/dev/component/)
-[百度小程序组件](https://smartprogram.baidu.com/docs/develop/component/native/)
-[支付宝小程序组件](https://docs.alipay.com/mini/component/overview)
-[头条小程序组件](https://microapp.bytedance.com/docs/comp/)
-[快应用组件](https://doc.quickapp.cn/tutorial/widgets/list-tutorial.html)
+
+* [微信小程序组件](https://developers.weixin.qq.com/miniprogram/dev/component/)
+* [百度小程序组件](https://smartprogram.baidu.com/docs/develop/component/native/)
+* [支付宝小程序组件](https://docs.alipay.com/mini/component/overview)
+* [头条小程序组件](https://microapp.bytedance.com/docs/comp/)
+* [快应用组件](https://doc.quickapp.cn/tutorial/widgets/list-tutorial.html)
