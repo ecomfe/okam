@@ -8,15 +8,25 @@
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
 import * as na from 'core/na';
+import {fakeAppEnvAPIs} from 'test/helper';
 
 describe('na/index', function () {
+    let restoreAppEnv;
+    beforeEach('init global App', function () {
+        restoreAppEnv = fakeAppEnvAPIs('swan');
+    });
 
-    it('should be node env', () => {
-        assert(na.isSwanEnv === false);
-        assert(na.isWxEnv === false);
-        assert(na.isAntEnv === false);
-        assert(na.env === global);
-        assert(na.global === global);
+    afterEach('clear global App', function () {
+        restoreAppEnv();
+        expect.restoreSpies();
+    });
+
+    it('should have APIs', () => {
+        assert(na.appEnv && typeof na.appEnv === 'object');
+        assert(na.appGlobal && typeof na.appGlobal === 'object');
+        assert(na.api && typeof na.api === 'object');
+        assert(na.getCurrApp && typeof na.getCurrApp === 'function');
+        assert(na.getCurrPages && typeof na.getCurrPages === 'function');
     });
 
     it('getCurrPages', () => {
@@ -34,7 +44,6 @@ describe('na/index', function () {
         let spyGetCurrApp = createSpy(() => {});
         global.getApp = spyGetCurrApp;
         na.getCurrApp();
-
         expect(spyGetCurrApp).toHaveBeenCalledWith();
         global.getApp = rawGetCurrApp;
     });

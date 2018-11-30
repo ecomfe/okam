@@ -9,24 +9,29 @@
 /* eslint-disable fecs-min-vars-per-destructure */
 
 const forIfTransformer = require('./for-if');
-const {CONDITION_DIRECTIVES} = require('./constant');
+const transformTplElement = require('./tpl');
+const transformEnvElement = require('./env');
+const {CONDITION_DIRECTIVES, ENV_ELEMENT_REGEXP} = require('./constant');
 
 function transformIncludeImportElement(element, tplOpts) {
-    let {output: outputOpts} = tplOpts;
+    let {addDep, output: outputOpts} = tplOpts;
     let {attribs: attrs} = element;
     let src = attrs && attrs.src;
     let tplExtname = outputOpts.componentPartExtname.tpl;
     if (src) {
+        addDep(src);
         // change included tpl file path extname to mini program template extname
         attrs.src = src.replace(/\.\w+$/, '.' + tplExtname);
     }
 }
 
-function transformTplElement(element) {
-    element.name = 'template';
-}
-
 module.exports = {
+    env: {
+        match(element) {
+            return ENV_ELEMENT_REGEXP.test(element.name);
+        },
+        transform: transformEnvElement
+    },
     import: {
         match: 'import',
         transform: transformIncludeImportElement

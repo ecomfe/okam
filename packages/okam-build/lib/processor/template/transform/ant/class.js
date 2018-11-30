@@ -5,8 +5,10 @@
 
 'use strict';
 
-const classTransformer = require('../base/class');
+const transformClass = require('../base/class');
 
-module.exports = function (attrs, name, tplOpts) {
-    return classTransformer(attrs, name, tplOpts, true);
+module.exports = function (attrs, name, tplOpts, opts) {
+    transformClass(attrs, name, tplOpts, Object.assign({
+        arrToStr: true
+    }, opts));
 };

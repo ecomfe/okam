@@ -149,6 +149,12 @@ function analyseNativeComponent(scriptFile, options) {
     }
     scriptFile.isAnalysedComponents = true;
 
+    let {appType} = options;
+    if (appType === 'quick') {
+        // TODO: analyse quick app native component
+        return;
+    }
+
     // add native component definition files
     addComponentSameNameFiles(scriptFile, options);
 }

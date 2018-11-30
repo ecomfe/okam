@@ -19,7 +19,7 @@ describe('微信：for rendering', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
         assert.equal(result.content,
-            '<view class="hello" wx:for="{{ [1,2,3] }}" wx:key="*this"></view>');
+            '<view class="hello" wx:for="{{[1,2,3]}}" wx:key="*this"></view>');
     });
 
     it('自定义当前元素和索引名称的for转换; key为自定义项目名时转化为微信关键字*this', function () {
@@ -28,8 +28,8 @@ describe('微信：for rendering', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
         assert.equal(result.content,
-            '<view class="hello" wx:for="{{ [1,2,3] }}" wx:for-item="itemName" '
-            + 'wx:for-index="itemIndex" wx:key="*this"></view>');
+            '<view class="hello" wx:for-item="itemName" '
+            + 'wx:for-index="itemIndex" wx:for="{{[1,2,3]}}" wx:key="*this"></view>');
     });
 
     it('遍历对象数组时，key为对象的键值', function () {
@@ -38,7 +38,7 @@ describe('微信：for rendering', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
         assert.equal(result.content,
-            '<view class="hello" wx:for="{{ [{id: 0, unique: \'unique_0\'}] }}" wx:key="unique"></view>');
+            '<view class="hello" wx:for="{{[{id: 0, unique: \'unique_0\'}]}}" wx:key="unique"></view>');
     });
 
     it('for -> wx:for，key为无效的值，给出警告', function () {
@@ -47,7 +47,7 @@ describe('微信：for rendering', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
         assert.equal(result.content,
-            '<view class="hello" wx:for="{{ [1,2,3] }}" wx:key="hello.hi"></view>');
+            '<view class="hello" wx:for="{{[1,2,3]}}" wx:key="hello.hi"></view>');
     });
 
     it('有重复属性时，给出警告并保留okam语法的键值', function () {
@@ -55,7 +55,7 @@ describe('微信：for rendering', function () {
             content: '<div class="hello" wx:for="[4,5,6]" for="[1,2,3]"></div>'
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
-        assert.equal(result.content, '<view class="hello" wx:for="{{ [1,2,3] }}"></view>');
+        assert.equal(result.content, '<view class="hello" wx:for="{{[1,2,3]}}"></view>');
     });
 
     it('支持()的写法', function () {
@@ -64,7 +64,7 @@ describe('微信：for rendering', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
         assert.equal(result.content,
-            '<view class="hello" wx:for="{{ [1,2,3] }}" wx:for-item="item" wx:for-index="index"></view>');
+            '<view class="hello" wx:for-item="item" wx:for-index="index" wx:for="{{[1,2,3]}}"></view>');
     });
 
     it('支持遍历数字（转化数字为数组）', function () {
@@ -73,7 +73,7 @@ describe('微信：for rendering', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
         assert.equal(result.content,
-            '<view class="hello" wx:for="{{ [1,2,3,4,5] }}" wx:for-item="item" wx:for-index="index"></view>');
+            '<view class="hello" wx:for-item="item" wx:for-index="index" wx:for="{{[1,2,3,4,5]}}"></view>');
     });
 
     it('支持使用 of 遍历', function () {
@@ -82,6 +82,6 @@ describe('微信：for rendering', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'wx'));
         assert.equal(result.content,
-            '<view class="hello" wx:for="{{ [\'of\',2] }}" wx:for-item="item" wx:for-index="index"></view>');
+            '<view class="hello" wx:for-item="item" wx:for-index="index" wx:for="{{[\'of\',2]}}"></view>');
     });
 });

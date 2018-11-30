@@ -7,12 +7,13 @@
 
 /* eslint-disable fecs-min-vars-per-destructure */
 /* eslint-disable fecs-prefer-destructure */
+const path = require('path');
+const {file: fileUtil} = require('../../util/index');
 const {parse: parseDom} = require('./parser');
 const serializeDom = require('./serializer');
 
 function visit(ctx, node, plugins, tplOpts) {
     let type = node.type;
-
     let visitors = plugins[type];
     if (visitors) {
         for (let i = 0, len = visitors.length; i < len; i++) {
@@ -26,15 +27,21 @@ function visit(ctx, node, plugins, tplOpts) {
     }
 
     let children = node.children;
-    if (!children) {
+    if (node.removed || !children) {
         return;
     }
 
-    for (let i = 0, len = children.length; i < len; i++) {
+    let childNum = children.length;
+    for (let i = 0; i < childNum; i++) {
         let child = children[i];
         visit(ctx, child, plugins, tplOpts);
         if (ctx.isStop) {
             return;
+        }
+
+        if (ctx.isNodeChange) {
+            childNum = children.length;
+            ctx.nodeChange(false);
         }
     }
 }
@@ -42,12 +49,16 @@ function visit(ctx, node, plugins, tplOpts) {
 function createTransformContext() {
     let skip = false;
     let stop = false;
+    let nodeChange = false;
     let ctx = {
         stop() { // skip the remain nodes and exit
             stop = true;
         },
         skip() { // skip the children of the current processed node
             skip = true;
+        },
+        nodeChange(val) {
+            nodeChange = val == null ? true : !!val;
         }
     };
 
@@ -61,6 +72,12 @@ function createTransformContext() {
         isStop: {
             get() {
                 return stop;
+            }
+        },
+
+        isNodeChange: {
+            get() {
+                return nodeChange;
             }
         },
 
@@ -79,12 +96,19 @@ function createTransformContext() {
 
 function transformAst(ast, plugins, tplOpts) {
     let ctx = createTransformContext();
+    let children = ast.children; // ignore root node, only need to transform children
 
-    for (let i = 0, len = ast.length; i < len; i++) {
-        let node = ast[i];
+    let childNum = children.length;
+    for (let i = 0; i < childNum; i++) {
+        let node = children[i];
         visit(ctx, node, plugins, tplOpts);
         if (ctx.isStop) {
             return;
+        }
+
+        if (ctx.isNodeChange) {
+            childNum = children.length;
+            ctx.nodeChange(false);
         }
     }
 }
@@ -133,15 +157,29 @@ function mergeVisitors(plugins) {
  * @return {Object}
  */
 function compileTpl(file, options) {
+    let {root, config, logger} = options;
+    let allowCache = !config || config.cache == null || config.cache;
     let content = file.content.toString();
-    const ast = parseDom(content);
+    const ast = file.ast || parseDom(content);
+    allowCache && (file.ast = ast);
 
-    let {config, appType, logger, root, output} = options;
     let plugins = mergeVisitors((config && config.plugins) || []);
+
+    let deps = [];
+    let addDep = function (filePath) {
+        let relativePath = fileUtil.relative(
+            path.join(path.dirname(file.fullPath), filePath),
+            root
+        );
+        if (!deps.includes(relativePath)) {
+            deps.push(relativePath);
+        }
+        logger.debug('find tpl dep file', relativePath);
+    };
 
     transformAst(
         ast, plugins,
-        {config, appType, logger, root, output, file}
+        Object.assign({}, options, {file, addDep})
     );
 
     // serialize by xml mode, close all elements
@@ -149,6 +187,7 @@ function compileTpl(file, options) {
 
     return {
         ast,
+        deps,
         content
     };
 }

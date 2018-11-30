@@ -42,7 +42,9 @@
 
     * [Broadcast支持](component/broadcast.md)
 
-    * [原生自定义组件支持](component/native.md)
+    * [原生自定义组件支持](component/nativeSupport.md)
+
+    * [原生组件对齐](component/nativeComponent.md)
 
 * 进阶
 
@@ -58,11 +60,25 @@
 
     * [状态管理](advance/state.md)
 
-* 构建配置
+    * [特定平台代码](advance/platformSpecCode.md)
+
+* 自定义构建
 
     * [配置定义](build/index.md)
 
+    * [标签转换](build/transformTag.md)
+
+    * [预定义处理器](build/processors.md)
+
     * [自定义插件](build/plugin.md)
+
+    * [构建机制](build/implementation.md)
+
+* API
+
+    * [全局 API](api/global.md)
+
+    * [构建 API](api/build.md)
 
 * 插件列表
 

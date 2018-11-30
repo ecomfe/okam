@@ -33,21 +33,33 @@ function outputFile(file, targetPath, logger) {
     });
 }
 
+function replaceFileName(filePath, newFileName) {
+    if (!newFileName) {
+        return false;
+    }
+
+    return path.join(path.dirname(filePath), newFileName);
+}
+
 function getOutputPath(filePath, file, options) {
-    let {componentPartExtname, outputPathMap = {}, getCustomPath: getPath} = options;
+    let {
+        componentPartExtname,
+        outputPathMap = {},
+        getCustomPath: getPath
+    } = options;
 
     let result;
     if (file.isProjectConfig) {
-        result = outputPathMap.projectConfig;
+        result = replaceFileName(filePath, outputPathMap.projectConfig);
     }
     else if (file.isEntryScript) {
-        result = outputPathMap.entryScript;
+        result = replaceFileName(filePath, outputPathMap.entryScript);
     }
     else if (file.isEntryStyle) {
-        result = outputPathMap.entryStyle;
+        result = replaceFileName(filePath, outputPathMap.entryStyle);
     }
     else if (file.isAppConfig) {
-        result = outputPathMap.appConfig;
+        result = replaceFileName(filePath, outputPathMap.appConfig);
     }
     else {
         if (file.isNpm) {
@@ -57,7 +69,7 @@ function getOutputPath(filePath, file, options) {
             result = filePath;
         }
 
-        if (file.isTpl && !file.rext) {
+        if (file.isTpl && !file.rext && componentPartExtname) {
             file.rext = componentPartExtname.tpl;
         }
 
@@ -80,6 +92,10 @@ function getOutputPath(filePath, file, options) {
 
 function getComponentOutputFilePath(partFile, owner, options) {
     let {componentPartExtname} = options;
+    if (!componentPartExtname) {
+        return;
+    }
+
     if (partFile.isJson) {
         partFile.rext = componentPartExtname.config;
     }
@@ -93,12 +109,7 @@ function getComponentOutputFilePath(partFile, owner, options) {
         partFile.rext = componentPartExtname.tpl;
     }
 
-    let outputPath = getOutputPath(owner.path, partFile, options);
-    if (!outputPath) {
-        return;
-    }
-
-    return outputPath;
+    return getOutputPath(owner.path, partFile, options);
 }
 
 function mergeComponentStyleFiles(styleFiles, rootDir) {
@@ -124,12 +135,14 @@ function mergeComponentStyleFiles(styleFiles, rootDir) {
     }, rootDir);
 
     mergeFile.owner = styleFiles[0].owner;
+    mergeFile.allowRelease = true;
     mergeFile.compiled = true;
+
     return mergeFile;
 }
 
 function isComponentFile(f) {
-    return f && (f.isPageComponent || f.isComponent);
+    return f && f.isComponent;
 }
 
 function addFileOutputTask(allTasks, options, file) {
@@ -137,17 +150,14 @@ function addFileOutputTask(allTasks, options, file) {
         return;
     }
 
-    let {outputDir} = options;
+    let {outputDir, logger} = options;
     let ownerFile = file.owner;
     let outputRelPath = isComponentFile(ownerFile)
         ? getComponentOutputFilePath(file, ownerFile, options)
         : getOutputPath(file.path, file, options);
     if (!outputRelPath) {
+        logger.debug('skip file release', file.path);
         return;
-    }
-
-    if (!file.compiled) {
-        this.logger.debug('file is not compiled:', file.path);
     }
 
     allTasks.push(
@@ -165,8 +175,6 @@ class FileOutput {
             file: getCustomPath
         } = options || {};
 
-        mkdirp.sync(outputDir);
-
         this.buildManager = buildManager;
         this.root = root;
         this.logger = logger;
@@ -179,10 +187,10 @@ class FileOutput {
             logger
         };
 
-        this.initAsynTaskOutput(buildManager, this.outputOpts);
+        this.initAsyncTaskOutput(buildManager, this.outputOpts);
     }
 
-    initAsynTaskOutput(buildManager, outputOpts) {
+    initAsyncTaskOutput(buildManager, outputOpts) {
         let {logger, outputDir} = outputOpts;
         buildManager.on('asyncDone', file => {
             let outputRelPath = getOutputPath(file.path, file, outputOpts);
@@ -200,7 +208,7 @@ class FileOutput {
         });
     }
 
-    initFileOutputTask(f, taskInititer) {
+    initFileOutputTask(f, initTask) {
         if (isComponentFile(f)) {
             let styleFileArr = [];
             f.subFiles && f.subFiles.forEach(subFile => {
@@ -208,20 +216,21 @@ class FileOutput {
                     styleFileArr.push(subFile);
                 }
                 else {
-                    taskInititer(subFile);
+                    initTask(subFile);
                 }
             });
 
             let styleFile = mergeComponentStyleFiles(styleFileArr, this.root);
             if (styleFile) {
-                taskInititer(styleFile);
+                initTask(styleFile);
             }
+            initTask(f);
         }
         else {
             f.subFiles && f.subFiles.forEach(
-                subFile => taskInititer(subFile)
+                subFile => initTask(subFile)
             );
-            taskInititer(f);
+            initTask(f);
         }
     }
 
@@ -243,6 +252,16 @@ class FileOutput {
             null,
             err => this.logger.error('build fail:', err.stack || err.toString())
         );
+    }
+
+    /**
+     * Get the file output path
+     *
+     * @param {Object} file the file to get output file path
+     * @return {string}
+     */
+    getOutputPath(file) {
+        return getOutputPath.call(this, file.path, file, this.outputOpts);
     }
 }
 

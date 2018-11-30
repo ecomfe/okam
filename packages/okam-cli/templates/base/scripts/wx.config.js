@@ -32,5 +32,18 @@ module.exports = merge({}, require('./base.config'), {
                 }
             }
         }
+    },
+    prod: {
+        processors: {
+            postcss: {
+                options: {
+                    plugins: {
+                        'postcss-url': {
+                            url: 'inline'
+                        }
+                    }
+                }
+            }
+        }
     }
 });

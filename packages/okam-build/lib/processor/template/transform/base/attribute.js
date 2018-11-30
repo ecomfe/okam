@@ -8,6 +8,7 @@
 const classTransformer = require('./class');
 const styleTransformer = require('./style');
 const dataBindTransformer = require('./data-bind');
+const forKeyTransformer = require('./key');
 
 const {DATA_BIND_REGEXP, CONDITION_DIRECTIVES} = require('./constant');
 
@@ -32,7 +33,7 @@ module.exports = {
     },
     key: {
         match: ':key',
-        transform: null
+        transform: forKeyTransformer
     },
     bind: {
         match: DATA_BIND_REGEXP,

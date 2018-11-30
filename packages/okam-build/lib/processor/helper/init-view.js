@@ -10,23 +10,36 @@ const path = require('path');
 const PLUGIN_BASE_NAME = path.join(__dirname, '..', 'template/plugins');
 
 /**
+ * Get event syntax transformation plugin
+ *
+ * @param {string} appType the app type to transform
+ * @return {string}
+ */
+function getEventSyntaxPlugin(appType) {
+    return path.join(PLUGIN_BASE_NAME, 'event', `${appType}-event-plugin`);
+}
+
+/**
+ * Get template syntax transformation plugin
+ *
+ * @inner
+ * @param {string} appType the app type to transform
+ * @return {string}
+ */
+function getTemplateSyntaxPlugin(appType) {
+    return path.join(PLUGIN_BASE_NAME, `${appType}-syntax-plugin`);
+}
+
+/**
  * The builtin plugins
  *
  * @const
  * @type {Object}
  */
 const BUILTIN_PLUGINS = {
-    syntax: {
-        wx: path.join(PLUGIN_BASE_NAME, 'wx-syntax-plugin'),
-        swan: path.join(PLUGIN_BASE_NAME, 'swan-syntax-plugin'),
-        ant: path.join(PLUGIN_BASE_NAME, 'ant-syntax-plugin')
-    },
-    eventSyntax: {
-        wx: path.join(PLUGIN_BASE_NAME, 'event', 'wx-event-plugin'),
-        swan: path.join(PLUGIN_BASE_NAME, 'event', 'swan-event-plugin'),
-        ant: path.join(PLUGIN_BASE_NAME, 'event', 'ant-event-plugin')
-    },
-    html: path.join(PLUGIN_BASE_NAME, 'html-plugin'),
+    syntax: getTemplateSyntaxPlugin,
+    eventSync: getEventSyntaxPlugin,
+    tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
 };
 
@@ -67,7 +80,10 @@ function normalizeViewPlugins(plugins, appType) {
         }
         else if (typeof item === 'string') {
             let pluginPath = BUILTIN_PLUGINS[item];
-            if (pluginPath && typeof pluginPath === 'object') {
+            if (typeof pluginPath === 'function') {
+                pluginPath = pluginPath(appType);
+            }
+            else if (pluginPath && typeof pluginPath === 'object') {
                 pluginPath = pluginPath[appType];
             }
 
@@ -82,14 +98,25 @@ function normalizeViewPlugins(plugins, appType) {
     });
 }
 
+function handleOnTag(file, tagName, replaceTagName) {
+    let tags = file.tags;
+    tags || (tags = file.tags = {});
+    if (replaceTagName && tags.hasOwnProperty(replaceTagName)) {
+        delete tags[replaceTagName];
+    }
+
+    tags[tagName] = true;
+}
+
 /**
  * Initialize component view template transform options.
  *
+ * @param {Object} file the file to process
  * @param {Object} processOpts the process options
  * @param {Array.<string|Object>} processOpts.plugins the view processor plugins,
  *        the builtin plugins:
  *        `syntax`: transform okam template syntax to mini program template syntax
- *        `html`: transform html tags to mini program component tag
+ *        `tagTransform`: transform tags A to tag B
  *        `ref`: provide view `ref` attribute support like Vue
  *        You can also pass your custom plugin:
  *        {
@@ -98,7 +125,7 @@ function normalizeViewPlugins(plugins, appType) {
  * @param {BuildManager} buildManager the build manager
  * @return {Object}
  */
-function initViewTransformOptions(processOpts, buildManager) {
+function initViewTransformOptions(file, processOpts, buildManager) {
     let isSupportRef = buildManager.isEnableRefSupport();
     let plugins = processOpts.plugins;
 
@@ -108,7 +135,7 @@ function initViewTransformOptions(processOpts, buildManager) {
         plugins = ['syntax'];
 
         if (templateConf.transformTags) {
-            plugins.push('html');
+            plugins.push('tagTransform');
         }
     }
 
@@ -124,19 +151,12 @@ function initViewTransformOptions(processOpts, buildManager) {
         processOpts,
         {
             plugins,
-            template: templateConf
+            template: templateConf,
+            onTag: handleOnTag.bind(null, file)
         }
     );
 }
 
 module.exports = exports = initViewTransformOptions;
 
-/**
- * Get event syntax transformation plugin
- *
- * @param {string} appType the app type to transform
- * @return {Object}
- */
-exports.getEventSyntaxPlugin = function (appType) {
-    return BUILTIN_PLUGINS.eventSyntax[appType];
-};
+exports.getEventSyntaxPlugin = getEventSyntaxPlugin;

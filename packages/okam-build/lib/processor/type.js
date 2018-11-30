@@ -12,7 +12,7 @@ const STYLE_EXT_NAMES = ['css', 'less', 'styl', 'sass', 'scss'];
 const SCRIPT_EXT_NAMES = ['js', 'es', 'es6', 'ts', 'coffee'];
 const TEMPLATE_EXT_NAMES = ['html', 'tpl', 'etpl', 'art', 'jade', 'pug'];
 const JSON_EXT_NAMES = ['json', 'json5'];
-const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp'];
+const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg'];
 
 function getProcessorPath(type) {
     return path.join(__dirname, type);
@@ -117,6 +117,9 @@ const BUILTIN_PROCESSORS = {
         deps: 'postcss',
         order: 999
     },
+    addCssDependencies: {
+        processor: getProcessorPath('css/add-css-dependencies')
+    },
     babel: {
         processor: getProcessorPath('js/babel-parser'),
         deps: 'babel-core',
@@ -128,7 +131,10 @@ const BUILTIN_PROCESSORS = {
         rext: 'js'
     },
     component: {
-        processor: getProcessorPath('component/index')
+        processor: getProcessorPath('component/sfc-parser')
+    },
+    componentGenerator: {
+        processor: getProcessorPath('component/sfc-generator')
     },
     json5: {
         processor: getProcessorPath('json/json5-parser'),
@@ -138,6 +144,12 @@ const BUILTIN_PROCESSORS = {
     },
     componentJson: {
         processor: getProcessorPath('json/component-json')
+    },
+    configJson: {
+        processor: getProcessorPath('json/config-json')
+    },
+    quickAppJson: {
+        processor: getProcessorPath('json/quick-app-json')
     },
     view: {
         processor: getProcessorPath('template/index'),

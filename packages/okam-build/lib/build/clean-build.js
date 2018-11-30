@@ -9,18 +9,28 @@ const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 
-function normalizeOnePath(value) {
+function normalizePath(value) {
     return value.replace(/\\+/, '/');
 }
 
-function normalizeFilePaths(filePaths) {
-    if (Array.isArray(filePaths)) {
-        return filePaths.map(item => normalizeOnePath(item));
+function normalizeFilter(filter) {
+    if (typeof filter === 'string') {
+        filter = [filter];
     }
+
+    if (Array.isArray(filter)) {
+        return filePath => filter.includes(filePath);
+    }
+
+    if (typeof filter === 'function') {
+        return filter;
+    }
+
+    return () => false;
 }
 
 function removeOutputFiles(options) {
-    let {outputDir, keepFilePaths} = options;
+    let {outputDir, filter} = options;
     let files;
     try {
         files = fs.readdirSync(outputDir);
@@ -30,14 +40,14 @@ function removeOutputFiles(options) {
         return;
     }
 
-    keepFilePaths = normalizeFilePaths(keepFilePaths) || [];
+    filter = normalizeFilter(filter);
 
     for (let i = 0, len = files.length; i < len; i++) {
         let fileName = files[i];
         let fullPath = path.resolve(outputDir, fileName);
-        let relativePath = normalizeOnePath(path.relative(outputDir, fullPath));
+        let relativePath = normalizePath(path.relative(outputDir, fullPath));
 
-        if (keepFilePaths.includes(relativePath)) {
+        if (filter(relativePath)) {
             continue;
         }
 

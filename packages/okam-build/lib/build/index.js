@@ -8,7 +8,6 @@
 const BuildManager = require('./BuildManager');
 const runBuild = require('./run-build');
 const initBuildOptions = require('./init-build-options');
-const cleanBuild = require('./clean-build');
 const createWatcher = require('../watch');
 const yargsParser = require('yargs-parser');
 
@@ -35,11 +34,16 @@ function startDevServer(buildConf, buildManager) {
  * Start to build small application code to native small application code.
  *
  * @param {Object} buildConf the config to build
+ * @param {boolean} clear whether clear the old build output before start build
  * @return {Promise}
  */
-function startBuild(buildConf) {
+function startBuild(buildConf, clear) {
     // init build manager
-    let buildManager = new BuildManager(buildConf);
+    let buildManager = BuildManager.create(buildConf.appType, buildConf);
+
+    if (clear) {
+        buildManager.clear();
+    }
 
     startDevServer(buildConf, buildManager);
     let doneHandler = function () {
@@ -58,22 +62,9 @@ function main(appType, options) {
     let cliOpts = yargsParser(process.argv.slice(2));
     let buildConf = initBuildOptions(appType, options, cliOpts);
 
-    let {logger, output: outputOpts} = buildConf;
-    let {dir: outputDir, pathMap: outputPathMap} = outputOpts;
-
-    if (cliOpts.clean) {
-        logger.info('clean old build output...');
-
-        let projectConfig = outputPathMap.projectConfig;
-        let keepFilePaths = projectConfig ? [projectConfig] : [];
-        cleanBuild({
-            outputDir,
-            keepFilePaths
-        });
-    }
-
+    let {logger} = buildConf;
     try {
-        startBuild(buildConf);
+        startBuild(buildConf, cliOpts.clean);
     }
     catch (ex) {
         logger.error(ex.message || ex.toString());

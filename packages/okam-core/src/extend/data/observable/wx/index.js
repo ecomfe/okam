@@ -6,8 +6,5 @@
 'use strict';
 
 import observable from '../index';
-import initProps from '../initProps';
-
-observable.component.__initProps = initProps;
 
 export default observable;

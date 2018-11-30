@@ -7,7 +7,6 @@
 
 const path = require('path');
 const {merge, logger: defaultLogger, file: fileUtil} = require('../util');
-const initTransformTags = require('./init-transform-options');
 const normalizePolyfill = require('../polyfill/normalize');
 
 /**
@@ -17,16 +16,18 @@ const normalizePolyfill = require('../polyfill/normalize');
  * @return {Object} get default config from 'lib/config/swan'
  */
 function getDefaultBuildConfig(appType) {
-    switch (appType) {
-        case 'swan':
-            return require('../config/swan');
-        case 'wx':
-            return require('../config/wx');
-        case 'ant':
-            return require('../config/ant');
-        default:
-            throw new Error('unknown app type, currently only support `swan` for baidu mini program '
-                + 'and `wx` for weixin mini program');
+    if (appType === 'base') {
+        throw new Error('illegal app type', appType);
+    }
+
+    let defaultConfPath = path.join(
+        __dirname, '..', 'config', `${appType}.js`
+    );
+    if (fileUtil.isFileExists(defaultConfPath)) {
+        return require(defaultConfPath);
+    }
+    else {
+        return require('../config/base');
     }
 }
 
@@ -140,12 +141,6 @@ function initBuildOptions(appType, options, cliOpts = {}) {
         localPolyfill || polyfill, rootDir, buildConf.logger
     );
     buildConf[localPolyfill ? 'localPolyfill' : 'polyfill'] = polyfillConf;
-
-    // 获取模板的配置并将其转化一遍
-    let templateConf = buildConf.component && buildConf.component.template;
-    if (templateConf && templateConf.transformTags) {
-        templateConf.transformTags = initTransformTags(templateConf.transformTags);
-    }
 
     return buildConf;
 }

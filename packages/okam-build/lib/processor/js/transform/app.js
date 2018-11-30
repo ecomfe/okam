@@ -5,7 +5,11 @@
 
 'use strict';
 
-const {createImportDeclaration, getFrameworkExtendId} = require('./helper');
+const {
+    createImportDeclaration,
+    getFrameworkExtendId,
+    createSimpleObjectExpression
+} = require('./helper');
 
 /**
  * Create `App.use(xx)` using extension statement
@@ -33,6 +37,34 @@ function createFrameworkExtendCallExpression(t, calleeName, extendName, hasPlugi
             args
         )
     );
+}
+
+function registerAppExtendAPI(t, path, bodyPath, baseClassName, apis) {
+    if (!apis) {
+        return;
+    }
+
+    let registerApiConfig = {};
+    Object.keys(apis).forEach(apiName => {
+        let apiPath = apis[apiName];
+        let registerApiName = path.scope.generateUid(apiName);
+        bodyPath.insertBefore(
+            createImportDeclaration(registerApiName, apiPath, t)
+        );
+        registerApiConfig[apiName] = t.identifier(registerApiName);
+    });
+
+    let apiExpression = createSimpleObjectExpression(registerApiConfig, t);
+    let registerApiStatement = t.expressionStatement(
+        t.callExpression(
+            t.memberExpression(
+                t.identifier(baseClassName),
+                t.identifier('registerApi')
+            ),
+            [apiExpression]
+        )
+    );
+    path.insertBefore(registerApiStatement);
 }
 
 /**
@@ -75,6 +107,9 @@ exports.extendAppFramework = function (t, path, bodyPath, baseClassName, opts) {
             createImportDeclaration(extendName, extendRequireId, t)
         );
     });
+
+    // insert register api statements
+    registerAppExtendAPI(t, path, bodyPath, baseClassName, opts.registerApi);
 
     // insert using the extension statements: `App.use(xx)`
     extendList.forEach(([pluginName, pluginOptCode]) => {

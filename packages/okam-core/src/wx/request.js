@@ -37,6 +37,7 @@ let currRequestNum = 0;
  * @return {Promise}
  */
 function doRequest(reqOpts) {
+    reqOpts = Object.assign({}, reqOpts);
     if (currRequestNum >= requestMaxNum) {
         return new Promise((resolve, reject) => {
             waitingQueues.push({
@@ -87,7 +88,5 @@ export function setMaxRequestNumber(num) {
  * Initialize request
  */
 export default function init() {
-    naRequest.request = function (options) {
-        return doRequest(options);
-    };
+    naRequest.request = doRequest;
 }

@@ -15,6 +15,7 @@ const {getEventSyntaxPlugin} = require('./helper/init-view');
 const registerProcessor = require('./type').registerProcessor;
 const {isPromise} = require('../util').helper;
 const {toHyphen} = require('../util').string;
+const {getRequirePath} = require('../util').file;
 
 function processConfigInfo(file, root, owner) {
     let config = file.config;
@@ -33,7 +34,7 @@ function processConfigInfo(file, root, owner) {
 }
 
 function processEntryScript(file, buildManager) {
-    let {root, files: allFiles, componentExtname} = buildManager;
+    let {root, files: allFiles, componentExtname, logger} = buildManager;
     let appConfig = file.config || {};
     file.config = appConfig;
 
@@ -69,6 +70,10 @@ function processEntryScript(file, buildManager) {
     );
 
     let jsonFile = processConfigInfo(file, root, file);
+    if (!jsonFile) {
+        logger.error('missing app `config` property information in', file.path);
+        return;
+    }
     jsonFile.isAppConfig = true;
     allFiles.push(jsonFile);
 
@@ -80,8 +85,8 @@ function processComponentScript(buildManager, file, root) {
     if (jsonFile) {
         jsonFile.component = file;
         jsonFile.isComponentConfig = true;
+        compile(jsonFile, buildManager);
     }
-    compile(jsonFile, buildManager);
 }
 
 /**
@@ -112,8 +117,6 @@ function processFile(file, processor, buildManager) {
     }
 
     if (result.isComponent) {
-        file.release = false;
-        file.isComponent = true;
         compileComponent(result, file, buildManager);
         result = {content: file.content};
     }
@@ -131,6 +134,8 @@ function compile(file, buildManager) {
     let processors = findMatchProcessor(file, rules, buildManager);
     logger.debug('compile file:', file.path, processors.length);
 
+    file.allowRelease = true; // add allow release flag
+
     for (let i = 0, len = processors.length; i < len; i++) {
         processFile(file, processors[i], buildManager);
     }
@@ -141,6 +146,8 @@ function compile(file, buildManager) {
     else if (file.isPageScript || file.isComponentScript) {
         processComponentScript(buildManager, file, root);
     }
+
+    buildManager.emit('buildFileDone', file);
 }
 
 /**
@@ -159,10 +166,25 @@ function getCustomComponentTags(config) {
     return Object.keys(usingComponents).map(k => toHyphen(k));
 }
 
+function getImportComponents(file, globalComponents, allTags) {
+    let result = {};
+    globalComponents && Object.keys(globalComponents).forEach(k => {
+        if (allTags[k]) {
+            let {isNpmMod, modPath} = globalComponents[k];
+            if (!isNpmMod) {
+                modPath = getRequirePath(modPath, file.fullPath);
+            }
+
+            result[k] = modPath;
+        }
+    });
+    return Object.keys(result).length ? result : null;
+}
+
 function compileComponent(component, file, buildManager) {
     let tplFile = component.tpl;
     if (tplFile) {
-        // tpl compile should ahead of the script part to extract ref info in advance
+        // tpl compile should ahead of the script part to extract ref info
         compile(tplFile, buildManager);
     }
 
@@ -177,15 +199,26 @@ function compileComponent(component, file, buildManager) {
 
         // pass the refs info defined in tpl to script
         scriptFile.tplRefs = tplFile.refs;
+
+        scriptFile.injectComponents = getImportComponents(
+            scriptFile,
+            buildManager.globalComponents,
+            tplFile.tags,
+        );
+        buildManager.logger.debug(
+            scriptFile.path,
+            'inject components',
+            scriptFile.injectComponents
+        );
         compile(scriptFile, buildManager);
 
         // transform template event syntax
-        let tags = getCustomComponentTags(scriptFile.config);
+        let customComponentTags = getCustomComponentTags(scriptFile.config);
         let tplProcessor = getBuiltinProcessor('view', {
             plugins: [
                 [
                     getEventSyntaxPlugin(buildManager.appType),
-                    {customComponentTags: tags}
+                    {customComponentTags}
                 ]
             ]
         });

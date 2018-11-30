@@ -30,7 +30,7 @@ function getRequireExpressionModuleId(node, t) {
 }
 
 /**
- * Remove the binded variable declaration
+ * Remove the bind variable declaration
  *
  * @inner
  * @param {Object} t the babel type definition
@@ -76,11 +76,11 @@ function getRequiredModulePath(valuePath, moduleName, t, removeRequireDeclaratio
     }
 
     let declareNodePath = bindVar.path;
-    let parentStatmentPath = bindVar.path.getStatementParent();
+    let parentStatementPath = bindVar.path.getStatementParent();
 
     // check import statement
-    if (t.isImportDeclaration(parentStatmentPath)) {
-        let id = parentStatmentPath.node.source.value;
+    if (t.isImportDeclaration(parentStatementPath)) {
+        let id = parentStatementPath.node.source.value;
         if (removeRequireDeclaration) {
             let toRemovePath = declareNodePath;
             if (t.isImportDefaultSpecifier(declareNodePath.node)) {
@@ -191,7 +191,9 @@ exports.getUsedMixinModulePaths = function (node, path, t, opts) {
                 item.value = normalizeInternalBehavior(opts.appType, value);
             }
             else {
-                throw path.buildCodeFrameError('mixins required string literal or using exported mixin module');
+                throw path.buildCodeFrameError(
+                    'mixins required string literal or using exported mixin module'
+                );
             }
         }
 

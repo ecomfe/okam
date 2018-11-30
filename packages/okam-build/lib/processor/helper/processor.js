@@ -165,8 +165,8 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
         }
     }
 
-    if (!result._resovled && result.deps && result.deps.length) {
-        result._resovled = true;
+    if (!result._resolved && result.deps && result.deps.length) {
+        result._resolved = true;
         try {
             customRequire.ensure(processorName, result.deps, root);
         }
@@ -190,7 +190,7 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
     }
     else if (processorName === 'view') {
         processorOpts = initViewProcessorOptions(
-            processorOpts, buildManager
+            file, processorOpts, buildManager
         );
     }
 

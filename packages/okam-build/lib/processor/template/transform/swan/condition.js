@@ -9,7 +9,7 @@
 
 'use strict';
 
-const transformer = require('../base/condition');
+const transformCondition = require('../base/condition');
 
 const CONDITION_MAP = {
     'if': 's-if',
@@ -18,4 +18,8 @@ const CONDITION_MAP = {
     'else': 's-else'
 };
 
-module.exports = transformer.bind(this, CONDITION_MAP);
+module.exports = function (attrs, name, tplOpts, opts) {
+    transformCondition(attrs, name, tplOpts, Object.assign({
+        syntaxMap: CONDITION_MAP
+    }, opts));
+};

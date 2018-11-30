@@ -64,6 +64,6 @@ describe('class binding', function () {
             content: '<p class="static" :class="[{ active: isActive }, errorClass]"></p>'
         };
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view class="static {{[isActive?\'active\':\'\',errorClass]}}"></view>');
+        assert.equal(result.content, '<view class="static {{[isActive?\'active\':\'\',errorClass]}}"></view>');
     });
 });

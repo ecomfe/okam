@@ -10,8 +10,8 @@
 
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
-import MyApp from 'core/App';
-import MyPage from 'core/Page';
+import MyApp from 'core/swan/App';
+import MyPage from 'core/swan/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import behavior from 'core/extend/behavior/index';
 import createBehavior from 'core/extend/behavior/Behavior';

@@ -1,7 +1,6 @@
 /**
  * @file transform regexp constants
  * @author sharonzd
- * @date 2018/8/7
  */
 
 'use strict';
@@ -14,7 +13,10 @@ exports.EVENT_REGEXP = /^@/;
 exports.EVENT_HANDLE_REGEXP = /^(\w+)\s*(?:\((.+)?\))?$/;
 exports.VARIABLE_EVENT = /([^'])\$event([^'])/g;
 exports.PLAIN_OBJECT_REGEXP = /^{.*}$/;
+exports.FOR_ITEM_INDEX_REGEXP = /^(.+)\s+in\s+(.+)$/;
 
 exports.CONDITION_DIRECTIVES = ['if', 'elif', 'else-if', 'else'];
 
 exports.NOT_SUPPORT_MODIFIERS = ['prevent', 'once', 'passive'];
+
+exports.ENV_ELEMENT_REGEXP = /\-env$/;

@@ -8,19 +8,64 @@
 ### root
 `string` 项目构建的根目录，其它配置指定的路径信息，默认都是相对于该根目录
 
+### designWidth
+
+> 该选项从 `0.4.0` 版本开始支持。
+
+设计稿尺寸，全局配置，如果使用的 [px2rpx](advance/rpx.md) 插件指定了 `designWidth` 则会覆盖该全局配置值。
+
 ### framework
 `Array.<string>` 扩展的原生小程序的框架，目前只支持 `okam-core` 提供的扩展
 
-* `data`: 支持 `vue` 数据操作方式 及 `computed`(TODO: watch 支持暂未加上)
+* `data`: 支持 `vue` 数据操作方式 及 `computed`
 * `broadcast`: 支持广播事件
 * `watch`: 提供 `watch` 属性 和 `$watch` API 支持，依赖 `data`
 * `ref`: 允许模板指定 `ref` 属性，组件实例 `$refs` 获取引用，类似 Vue
 * `redux`: 使用 `redux` 进行状态管理，要求安装依赖 `redux` 库：`npm i redux --save`, 另外，`redux` 依赖 `data` 扩展，因此需要一起配置
+* `behavior`: mixin 支持包括页面组件和自定义组件，对于插件支持选项，可以传入数组形式：`[ ['behavior', '{useNativeBehavior: true}'] ]`，**注意** 第二个参数为插件选项代码的字符串形式
 ```javascript
 {
-    framework: ['data', 'watch', 'broadcast', 'ref', 'redux']
+    framework: ['data', 'watch', 'broadcast', 'ref', 'redux', 'behavior']
 }
 ```
+
+### api
+
+> 该选项从 `0.4.0` 版本开始支持。
+
+`Array.<Object>` 可选，要扩展的全局 `API` 定义，可以用来增加特定平台 API 或者重写已有 API，比如用来抹平不同平台 API 差异的实现。定义的 `API` 会挂载到组件、页面、App 实例上下文 `this.$api` 下。
+
+* `key`: 为对应要导出的 api 名称
+* `value`: 为对应的该 API 的实现，可以是 NPM 模块，也可以是项目内部实现
+
+```javascript
+{
+    api: {
+        'audio': '@system.audio',
+        'hi': './common/api/wx/hi'
+    }
+}
+```
+
+```javascript
+// common/api/wx/hi.js
+export default function hi() {
+    console.log('hi');
+}
+```
+
+```javascript
+// 组件脚本
+export default {
+    methods: {
+        onClick() {
+            this.$api.hi(); // 可以在 $api 对象下直接访问到扩展的 API
+        }
+    }
+}
+```
+
+**提示** 配置修改，需要重新启动构建，`watch` 模式下不会生效。
 
 ### polyfill
 `Array.<string>` 要增加的语法 API polyfill，可选，目前框架默认支持两种:
@@ -40,6 +85,83 @@ import Promise from 'okam-core/src/polyfill/promise';
 
 * `promise`： 依赖 `promise-polyfill` 实现
 * `async`: 依赖 `regenerator-runtime` 实现
+
+### resolve
+
+> 该选项从 `0.4.0` 版本开始支持。
+
+`Object` 可选，模块路径 `resolve` 选项
+
+* `resolve.extensions`: `Array.<string>` 查找的模块文件后缀名，会跟默认查找的后缀名做合并
+* `resolve.ignore`: `RegExp|Array.<string|RegExp>|(moduleId, appType):Boolean` 要忽略 resolve 的模块 id，可以传入正则，或者数组，也可以是一个 function
+* `onResolve(depModId, file)`: `Function` resolve dep 时候事件监听回调
+
+```javascript
+// 快应用的 resolve 配置定义
+const notNeedDeclarationAPIFeatures = [
+    '@system.router',
+    '@system.app'
+];
+
+module.exports = {
+    // ...
+    resolve: {
+        ignore: /^@(system|service)\./, // 忽略快应用的内部系统模块的 resolve
+
+        /**
+         * 收集需要导入声明的 API features
+         * 默认不在 `notNeedDeclarationAPIFeatures` 该列表里且
+         * `@system.` `@service.`开头的模块
+         * 都会自动添加到项目清单的 feature 声明里
+         *
+         * @param {string} requireModId require 模块 id
+         * @param {Object} file require 该模块 id 所属的文件对象
+         */
+        onResolve(requireModId, file) {
+            if (notNeedDeclarationAPIFeatures.indexOf(requireModId) !== -1) {
+                return;
+            }
+
+            if (/^@(system|service)\./.test(requireModId)) {
+                let features = file.features || (file.features = []);
+                if (features.indexOf(requireModId) === -1) {
+                    features.push(requireModId);
+                }
+            }
+        }
+    }
+}
+```
+
+### script
+
+> 该选项从 `0.4.0` 版本开始支持。
+
+`Object` 可选，执行脚本命令配置，目前提供了两个钩子来执行命令： `onBuildStart` `onBuildDone`
+
+执行脚本命令：`cmd` `args` `options`，具体可以参考 [child_process.spawn](https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options) API 说明。
+
+```javascript
+{
+    script: {
+        onBuildStart: 'npm run init', // 构建开始要执行的命令
+        onBuildStart: { // 也可以是对象形式
+            cmd: 'node',
+            args: ['init.js'], // 如果提供了 args，cmd 必须是命令名称
+            options: {cwd: __dirname} // 选项具体参考
+        },
+        onBuildStart(opts) { // 可以是 function 形式，返回特定的要执行的脚本命令，
+                             // 如果多个，返回数组，如果不需要执行任何命令，可以不返回
+            return [
+                {
+                    cmd: opts.watch ? 'npm run watch' : 'npm run build',
+                    options: {cwd: __dirname}
+                }
+            ];
+        }
+    }
+}
+```
 
 ### source
 `Object` 项目源代码位置信息
@@ -67,115 +189,8 @@ import Promise from 'okam-core/src/polyfill/promise';
 
 * `component.extname`: `string` 组件的后缀名，默认 `okm`
 * `component.template`: `Object` 模板配置项
-* `component.template.transformTags`: `Object` 模板标签转换配置项
-
-    **transformTags配置方式：以 `key-value` 形式添加**
-    * `key`: 小程序标签名
-    * `value`: 根据情况可配置为：`string|Object|Array` 类型
-        * 单标签配置：`string、Object` 类型
-            * 取值为 `string` 时，表示要被转的标签
-            * 取值为 `Object` `时，Object` 的 `key` 可为：
-                * `tag`: 需转换的 `tag`, 一般为 `HTML` 标签，
-                * `class`: `class` 需额外附加 `classname`，`classname` 的样式需自行定义；
-                * 其他属性: 需替换的属性名
-        * 多标签配置：`Array`类型
-            * `Array` 内部可为：`string、Object`类型，即 `单标签配置项` 取值
-
-    默认不提供 标签转换支持，使用者可根据情况自定义配置
-
-    配置示例：
-    ``` javascript
-    {
-        component: {
-            template: {
-                transformTags: {
-                    // Array
-                    view: [
-                        {
-                            tag: 'span',
-                            // span 会被转为 view 标签，若想让它拥有 inline 属性，可通过 配置 class 值如：okam-inline 进行 样式属性控制
-                            // 注：okam-inline 样式 需自行在样式文件(app.css)中定义
-                            // 最终 view 标签 class 将额外添加 okam-inline 值，而不是覆盖
-                            class: 'okam-inline'
-                        },
-                        'ul', 'ol', 'li',
-                        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                        'article', 'section', 'aside', 'nav', 'header', 'footer'
-                    ],
-
-                    // Object
-                    /*
-                     * eg
-                     * <a class="home-link" href='xxx'></a>
-                     * 转为:
-                     * <navigator class="okam-inline home-link" url='xxx'></navigator>
-                     */
-                    navigator: {
-                        tag: 'a',
-                        class: 'okam-inline',
-                        href: 'url'
-                    },
-
-                    // string
-                    image: 'img'
-                }
-            }
-        }
-    }
-    ```
-
-    **常用配置项推荐:**
-
-    ``` javascript
-    {
-        component: {
-            template: {
-                transformTags: {
-                    // div p 将转为 view 标签
-                    view: ['div', 'p'],
-                    // a 将标签转为 navigator 标签，href 属性 转为 url 属性
-                    navigator: {
-                        tag: 'a',
-                        href: 'url'
-                    },
-                    // img 将转为 image 标签
-                    image: 'img'
-                }
-            }
-        }
-    }
-    ```
-
-    更多标签支持，可配置为：
-
-    ``` javascript
-    {
-        component: {
-            template: {
-                transformTags: {
-                    view: [
-                        {
-                            tag: 'span',
-                            // span 会被转为 view 标签，若想让它拥有 inline 属性，可通过 配置 class 值如：okam-inline 进行 样式属性控制
-                            // 注：okam-inline 样式 需自行在样式文件(app.css)中定义
-                            // 最终 view 标签 class 将额外添加 okam-inline 值，而不是覆盖
-                            class: 'okam-inline'
-                        },
-                        'div', 'p',
-                        'ul', 'ol', 'li',
-                        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                        'article', 'section', 'aside', 'nav', 'header', 'footer'
-                    ],
-                    navigator: {
-                        tag: 'a',
-                        href: 'url'
-                    },
-                    image: 'img'
-                }
-            }
-        }
-    }
-    ```
+* `component.template.transformTags`: `Object` 模板标签转换配置项，具体可以查看[标签转换](build/transformTag)
+* `component.global`: `Object` `>=0.4 版本支持` 自定义全局注入的组件
 
 ### processors
 `Object|Array.<Object>` 自定义的构建处理器，这里定义的处理器，后续的处理规则 `rules` 里，可以直接通过处理器名称 `name` 直接引用，处理器定义包含如下选项
@@ -186,6 +201,10 @@ import Promise from 'okam-core/src/polyfill/promise';
 * `rext`: `string` 处理完输出的文件的后缀名，`可选`
 * `deps`: `Array.<string>|string` 声明处理器的 NPM 依赖的包名，`可选`
 * `options`: `Object` 处理器处理的默认选项定义，`可选`
+* `order`: `number`，当一个文件关联的默认处理器有多个时候，执行顺序，默认 0，值越小，执行优先级越高，`可选`
+* `hook`: `Object` 处理器执行的钩子，目前只提供初始化前置钩子，`可选`
+    * `hook.before(file, options):void`: 可以通过该钩子，动态修改处理器的选项定义
+
 ```javascript
 {
     // 传入对象形式，key: 为处理器的名称，其它内部定义同上面
@@ -224,20 +243,20 @@ import Promise from 'okam-core/src/polyfill/promise';
 `Array.<Object>` 构建处理规则定义，每个规则项定义主要包含两部分
 
 * `match`: `string|RegExp|function(Object):boolean` 自定义文件是否要处理，`match`也可以传要匹配的文件的 `glob pattern` 或者 `正则`。<br>
-**注意：**匹配是按源文件路径匹配，而非处理器后的路径，如果要匹配单文件组件的 `template`、`script`、`style`， 可以按如下示例判断：（其中，`file.owner`有值，代表该`file`是从单文件组件中派生出来的文件，`owner`值为原单文件组件）<br>
+**注意：**匹配是按源文件路径匹配，而非处理器后的路径，如果要匹配单文件组件的 `template`、`script`、`style`， 可以按如下示例判断：（其中，`file.owner`有值，代表该`file`是从单文件组件中派生出来的文件，`owner`值为原单文件组件）
 
-```javascript
-// 匹配单文件组件中的模板
-file.isTpl && file.owner
+    ```javascript
+    // 匹配单文件组件中的模板
+    file.isTpl && file.owner
 
-// 匹配单文件组件中的样式
-file.isStyle && file.owner
+    // 匹配单文件组件中的样式
+    file.isStyle && file.owner
 
-// 匹配单文件组件中的脚本
-file.isScript && file.owner
-```
+    // 匹配单文件组件中的脚本
+    file.isScript && file.owner
+    ```
 
-* `processors`: `Array.<Object>|Object` 处理的文件要使用的处理器列表, 可以指定预定义的处理器名称，比如 `less`，`stylus`，具体参考[预定义处理器](#预定义的处理器)，也可以指定 [processors](build/index#processors) 定义的自定义处理器名称
+* `processors`: `Array.<Object>|Object` 处理的文件要使用的处理器列表, 可以指定预定义的处理器名称，比如 `less`，`stylus`，具体参考[预定义处理器](build/processors)，也可以指定 `预定义处理器` 处理器名称
 ```javascript
 {
     rules: [
@@ -280,7 +299,7 @@ file.isScript && file.owner
 }
 ```
 
-!> 默认情况下，会根据文件的扩展名确定该文件要走什么处理器， 默认处理器即如上`processors`中的第一条处理器`file.processor`，具体可以参考[预定义处理器文件扩展名定义](build/index#预定义的处理器)。<br>而且这条规则是排在第一位，无法去掉该默认规则，因此如果你只是想改写某个处理器选项，比如 `stylus`，可以直接在跟 `rules` 平级的 [processors](build/index#processors) 配置里重写 `stylus` 处理器选项。如果想给 `stylus` 样式文件增加新的处理器比如 `postcss`，可以按如下方式来配置：
+!> 默认情况下，会根据文件的扩展名确定该文件要走什么处理器， 默认处理器即如上`processors`中的第一条处理器`file.processor`，具体可以参考[预定义处理器文件扩展名定义](build/processors)。<br>而且这条规则是排在第一位，无法去掉该默认规则，因此如果你只是想改写某个处理器选项，比如 `stylus`，可以直接在跟 `rules` 平级的 [processors](build/processors) 配置里重写 `stylus` 处理器选项。如果想给 `stylus` 样式文件增加新的处理器比如 `postcss`，可以按如下方式来配置：
 
 ```javascript
 {
@@ -390,181 +409,5 @@ file.isScript && file.owner
         processors: {},
         rules: []
     }
-}
-```
-
-
-## 预定义的处理器
-
-> 预定义的处理器，有相关的依赖，如果用到了相应的处理器需要安装下面指定的依赖，比如 stylus 处理器，需要安装 `stylus` 依赖: `npm i stylus --save-dev`。
-
-* 样式相关
-
-    * less
-        * 依赖：`less`
-        * 默认扩展名：`less`
-        * 处理器选项：参考官方 [less](http://lesscss.org/usage/#programmatic-usage)
-    * stylus
-        * 依赖：`stylus`
-        * 默认扩展名：`styl`
-        * 处理器选项：参考官方 [stylus](http://stylus-lang.com/docs/js.html)
-    * sass
-        * 依赖：`node-sass`
-        * 默认扩展名：`sass`、`scss`
-        * 处理器选项：参考官方 [sass](https://github.com/sass/node-sass)
-    * postcss：css 后处理器，postcss 提供的内置插件参考[这里](#Postcss预定义插件)
-        * 依赖：`postcss`
-        * 处理器选项：参考官方 [postcss](https://postcss.org/)
-
-* 组件相关
-
-    * component：用来编译单文件组件的处理器，属于核心的处理器，不需要安装任何附加依赖
-        * 默认扩展名：依赖于构建配置的 `component.extname` 定义
-    * view：用来编译单文件组件的模板部分，转成原生小程序支持的模板语法，属于核心的处理器，不需要安装任何附加依赖
-        * 默认扩展名：`tpl`
-
-* 模板相关
-    * pug: [pug](https://github.com/pugjs/pug) 模板语法支持，为了使使用该语法的模板能继续使用 `okam` 框架扩展的模板语法，需要增加如下配置
-        * 默认扩展名：`pug`
-        ```javascript
-        {
-            processors: {
-                pug: {
-                    options: {
-                        doctype: 'xml',
-                        data: {
-                            name: 'efe-blue'
-                        }
-                    }
-                },
-                view: {
-                    // 定义小程序模板转换的文件后缀名，加上这个才能确保能使用扩展的模板语法
-                    // 默认情况下， pug 处理器的优先级高于 view
-                    extnames: ['pug', 'tpl']
-                }
-            },
-            rules: []
-        }
-        ```
-
-* 脚本相关
-
-    * babel: babel6 转译处理器，组件编译默认需要依赖该处理器 或者 使用 `babel7` 也可以
-        * 依赖：`babel-core`
-        * ~~默认扩展名：`es`、`es6`~~
-        * 处理器选项：参考官方 [babel](https://babeljs.io/docs/en/babel-core)
-        * 对于 `plugins` 选项进行了扩展支持传入 `function`，可以根据文件自定义要返回的附加的 babel 插件：
-        ```
-        {
-            processors: {
-                babel: {
-                    options: {
-                        plugins(file) {
-                            if (file.path.indexOf('src/') === 0) {
-                                return [
-                                    'external-helpers'
-                                ];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        ```
-    * babel7
-        * 依赖：`@babel/core`
-        * ~~默认扩展名：`es`、`es6`~~
-        * 处理器选项：参考官方 [babel](https://babeljs.io/docs/en/v7-migration)
-    * typescript
-        * 依赖：`@babel/core` `@babel/preset-typescript`
-        * 默认扩展名：`ts`
-        * typescript 语法：参考官方 [typescript](https://www.typescriptlang.org/)
-
-* 其它
-
-    * json5：将 `json5` 语法转成 `json`
-        * 依赖：`json5`
-        * 默认扩展名：`json5`
-    * replacement：内容替换处理器
-        * 依赖：无
-        * 处理器选项: `Object|Array` 参考下面示例
-        ```javascript
-        {
-            rules: [
-                match: '*.js',
-                processors: [
-                    {
-                        name: 'replacement',
-                        options: {
-                            'http://online.com': 'http://test.com',
-                            'http://online.com': '${devServer}'
-                        },
-                        options: [
-                            // 可以是 function
-                            function (content) {
-                                return content;
-                            },
-
-                            {
-                                match: 'xx', // 支持正则或者字符串
-                                replace: 'xx'
-                            }
-                        ]
-                    }
-                ]
-            ]
-        }
-        ```
-
-## Postcss预定义插件
-
-* autoprefixer
-    * 需要安装依赖：`npm i autoprefixer --save-dev`
-
-* px2rpx：自动将 `px` 单位转成 `rpx`
-
-```javascript
-{
-    rules: [
-        match: '*.css',
-        processors: {
-            postcss: {
-                plugins: {
-                    autoprefixer: {
-                        browsers: [
-                            'last 3 versions',
-                            'iOS >= 8',
-                            'Android >= 4.1'
-                        ]
-                    },
-                    px2rpx: {
-                        // 设计稿尺寸
-                        designWidth: 1242,
-                        // 保留的小数点单位, 默认为 2
-                        precision: 2
-                    }
-                }
-            }
-        }
-    ]
-}
-```
-
-如果使用的是 `stylus` 等预处理样式语言，可以按如下配置来配合 `postcss` 使用：
-
-```javascript
-{
-    processors: {
-        postcss: {
-            // 指定要处理的后缀，默认情况下 `stylus` 处理器执行优先级高于 `postcss`
-            extnames: ['styl', 'css'],
-            options: {
-                // ...
-            }
-        }
-    },
-    rules: [
-        // ...
-    ]
 }
 ```

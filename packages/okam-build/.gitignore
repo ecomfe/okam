@@ -6,4 +6,5 @@ test/test.js
 wx_dist
 ant_dist
 tt_dist
+quick_dist
 node_modules

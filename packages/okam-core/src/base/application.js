@@ -5,37 +5,7 @@
 
 'use strict';
 
-import base from './base';
-import {promisifyApis, interceptApis} from '../na/api';
-
-/**
- * Initialize promisify APIs and interception APIs.
- * Return false, if initialized.
- *
- * @inner
- * @return {boolean}
- */
-function initApis() {
-    if (!this.__apisInited) {
-        this.__apisInited = true;
-
-        Object.assign(this, base);
-
-        let promiseApis = this.$promisifyApis;
-        let interceptAPis = this.$interceptApis;
-
-        promisifyApis(promiseApis, this);
-        interceptApis(interceptAPis, '$api', this);
-
-        let reqApiInterceptOpts = interceptAPis && interceptAPis.request;
-        if (reqApiInterceptOpts) {
-            interceptApis({request: reqApiInterceptOpts}, '$http', this);
-        }
-        return true;
-    }
-
-    return false;
-}
+import initApi from './init-api';
 
 export default {
 
@@ -45,7 +15,7 @@ export default {
      * @private
      */
     onLaunch() {
-        initApis.call(this);
+        initApi.call(this);
     },
 
     /**
@@ -54,7 +24,7 @@ export default {
      * @private
      */
     onShow() {
-        initApis.call(this);
+        initApi.call(this);
     }
 };
 

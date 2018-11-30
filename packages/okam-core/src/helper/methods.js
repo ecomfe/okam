@@ -77,3 +77,27 @@ export function normalizeMethods(componentInfo, extraPropMethods) {
 
     return componentInfo;
 }
+
+/**
+ * Extract method definition defined in methods property to outer component context
+ * and remove methods property.
+ *
+ * @param {Object} componentInfo the component information
+ * @return {Object}
+ */
+export function extractMethodsToOuterContext(componentInfo) {
+    let methods = componentInfo.methods;
+    /* istanbul ignore next */
+    if (methods) {
+        Object.keys(methods).forEach(k => {
+            if (componentInfo.hasOwnProperty(k)) {
+                console.warn(`the method ${k} defined in methods existed in outer context`);
+            }
+            componentInfo[k] = methods[k];
+        });
+    }
+
+    delete componentInfo.methods;
+
+    return componentInfo;
+}

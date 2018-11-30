@@ -9,8 +9,8 @@
 
 import assert from 'assert';
 import expect from 'expect';
-import MyApp from 'core/App';
-import MyPage from 'core/Page';
+import MyApp from 'core/swan/App';
+import MyPage from 'core/swan/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import ref from 'core/extend/ref';
 import component from 'core/base/component';
@@ -30,7 +30,7 @@ describe('ref plugin', function () {
         restoreAppEnv = fakeAppEnvAPIs('swan');
 
         component.selectComponent = function (path) {
-            if (path.indexOf('.notExist') === 0) {
+            if (path.indexOf('#notExist') === 0) {
                 return null;
             }
             return 'c' + path;
@@ -71,12 +71,12 @@ describe('ref plugin', function () {
             mounted() {
                 assert(this.$refs != null);
 
-                assert(this.$refs.a === '.xx-a');
-                assert(this.$refs.b === '.xx-b');
+                assert(this.$refs.a === '#xx-a');
+                assert(this.$refs.b === '#xx-b');
                 expect(this.$refs.c).toEqual(['.xx-c']);
 
             }
-        }, refInfo);
+        }, {refs: refInfo});
         page.onLoad();
         page.onReady();
 
@@ -106,13 +106,13 @@ describe('ref plugin', function () {
             mounted() {
                 assert(this.$refs != null);
 
-                assert(this.$refs.a === 'c.xx-a');
-                assert(this.$refs.b === 'c.xx-b');
-                assert(this.$refs.c === '.notExist-c');
+                assert(this.$refs.a === 'c#xx-a');
+                assert(this.$refs.b === 'c#xx-b');
+                assert(this.$refs.c === '#notExist-c');
                 expect(this.$refs.d).toEqual(['c.xx-d']);
                 expect(this.$refs.e).toEqual(['.notExist-e']);
             }
-        }, refInfo);
+        }, {refs: refInfo});
 
         assert(typeof instance.methods.$rawRefData === 'function');
         instance.created();

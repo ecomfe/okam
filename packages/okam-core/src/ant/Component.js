@@ -20,11 +20,11 @@ componentBase.methods.__beforeEmit = function (args) {
     return normalizeEventArgs(this, args);
 };
 
-export default function extendComponent(componentInfo, refComponents) {
+export default function extendComponent(componentInfo, options) {
     return createComponent(
         componentInfo,
         componentBase,
         normalizeComponent,
-        refComponents
+        options
     );
 }

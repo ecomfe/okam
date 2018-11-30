@@ -99,16 +99,26 @@ function normalizeTransformers(transformerMap) {
  * @param {Object} options the template transform plugin options
  */
 function transform(transformers, element, tplOpts, options) {
+    let {config} = tplOpts;
+    let onTag = config.onTag;
+    if (onTag) {
+        onTag(element.name);
+    }
+
     // transform element first
     let transformer = findMatchElemTransformer(transformers.element, element);
-    transformer && transformer(element, tplOpts, options);
+    transformer && transformer.call(this, element, tplOpts, options);
+
+    if (element.removed) {
+        return;
+    }
 
     // transform element attributes
     let {attribs: attrs} = element;
     attrs && Object.keys(attrs).forEach(k => {
         transformer = findMatchAttrTransformer(transformers.attribute, k);
         if (transformer) {
-            transformer(attrs, k, tplOpts, options, element);
+            transformer.call(this, attrs, k, tplOpts, options, element);
             if (transformer.type === 'for') {
                 element.hasForLoop = true;
             }
@@ -130,9 +140,12 @@ exports.createSyntaxPlugin = function (transformers) {
     let {element, attribute} = transformers;
 
     return {
-        tag: transform.bind(undefined, {
-            element: normalizeTransformers(element),
-            attribute: normalizeTransformers(attribute)
-        })
+        tag(...args) {
+            args.unshift({
+                element: normalizeTransformers(element),
+                attribute: normalizeTransformers(attribute)
+            });
+            return transform.apply(this, args);
+        }
     };
 };

@@ -19,35 +19,9 @@ module.exports = {
     component: {
         extname: '${sfcExt}',
         template: {
-            <% if: ${h5tag} %>
+            // 标签转换配置项
             transformTags: {
-                // div p 等 将转为 view 标签
-                // span 标签转为 view 且加上 okam-inline class属性
-                // .okam-inline 在 入口样式中自行编写
-                view: [
-                    {
-                        tag: 'strong',
-                        class: 'okam-inline'
-                    },
-                    {
-                        tag: 'span',
-                        class: 'okam-inline'
-                    },
-                    'div', 'p',
-                    'ul', 'ol', 'li',
-                    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                    'article', 'section', 'aside', 'nav', 'header', 'footer',
-                    'pre', 'code'
-                ],
-                // a 将标签转为 navigator 标签，href 属性 转为 url 属性
-                navigator: {
-                    tag: 'a',
-                    href: 'url'
-                },
-                // img 将转为 image 标签
-                image: 'img'
             }
-            <% /if %>
         }
     },
     framework: [
@@ -114,10 +88,13 @@ module.exports = {
         type: 'connect',
         // 需要安装 mock 中间件 npm i autoresponse --save-dev
         middlewares: [
-            // name: 'autoresponse',
-            // options: {
-
-            //}
+            // {
+            //     name: 'autoresponse',
+            //     options: {
+            //         post: true,
+            //         get: true
+            //     }
+            // }
         ]
     },
     <% /if %>

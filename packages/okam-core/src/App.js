@@ -7,19 +7,36 @@
 
 /* eslint-disable fecs-export-on-declare */
 
-import appBase from './base/application';
 import {use, createApp} from './helper/factory';
+import {definePropertyValue} from './util/index';
+import base from './base/base';
 
 /**
- * Create the app instance
+ * Register API
  *
- * @param {Object} appInfo the appInfo
- * @return {Object}
+ * @param {Object} apiConfig the api config to register
  */
-function extendApp(appInfo) {
-    return createApp(appInfo, appBase);
+function registerApi(apiConfig) {
+    let baseApi = base.$api;
+    apiConfig && Object.keys(apiConfig).forEach(k => {
+        // TODO: when in dev mode, warn the existed API will be override
+        definePropertyValue(baseApi, k, apiConfig[k]);
+    });
 }
 
-extendApp.use = use;
+/**
+ * Create the app creator factory
+ *
+ * @param {Object} appBase the appBase
+ * @return {Function}
+ */
+export default function createAppFactory(appBase) {
+    let creator = function (appInfo) {
+        return createApp(appInfo, appBase);
+    };
 
-export default extendApp;
+    creator.use = use;
+    creator.registerApi = registerApi;
+
+    return creator;
+}

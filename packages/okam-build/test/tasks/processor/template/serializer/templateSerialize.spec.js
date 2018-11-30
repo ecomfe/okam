@@ -48,6 +48,6 @@ describe('template parse and serialize tool', function () {
         let content = readTpl('boolAttribute');
         let ast = parseDom(content);
         content = serializeDom(ast, {xmlMode: true});
-        assert(content === readTpl('boolAttribute', true));
+        assert.equal(content, readTpl('boolAttribute', true));
     });
 });

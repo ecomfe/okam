@@ -21,11 +21,11 @@ module.exports = merge({}, require('./base.config'), {
         processors: {
             postcss: {
                 options: {
-                    plugins: {
-                        'postcss-url': {
+                    plugins: [
+                        ['postcss-url', {
                             url: 'inline'
-                        }
-                    }
+                        }]
+                    ]
                 }
             }
         }

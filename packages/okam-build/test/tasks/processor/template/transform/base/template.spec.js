@@ -37,7 +37,9 @@ function getTemplateProcessOptions(visitorOpts) {
         getClassRemoveVisitor(visitorOpts)()
     ];
 
-    return helper.fakeProcessorOptions({}, myPlugins);
+    let opts = helper.fakeProcessorOptions({}, myPlugins);
+    opts.config.cache = false; // disable cache
+    return opts;
 }
 
 describe('template processor', function () {
@@ -57,6 +59,9 @@ describe('template processor', function () {
 
     it('should stop the remain node process', function () {
         let result = templateProcessor(file, getTemplateProcessOptions({stop: true}));
-        assert(result.content === '<view><view class="hello2"></view></view><view class="hello3"></view>');
+        assert.equal(
+            result.content,
+            '<view><view class="hello2"></view></view><view class="hello3"></view>'
+        );
     });
 });

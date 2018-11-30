@@ -5,14 +5,7 @@
 
 'use strict';
 
-import App from '../App';
-import extendApi from './api';
-import {definePropertyValue} from '../util/index';
-import base from '../base/base';
+import createApp from '../App';
+import appBase from '../base/application';
 
-const baseApi = base.$api;
-Object.keys(extendApi).forEach(k => {
-    definePropertyValue(baseApi, k, extendApi[k]);
-});
-
-export default App;
+export default createApp(appBase);

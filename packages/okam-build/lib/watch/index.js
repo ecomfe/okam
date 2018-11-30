@@ -26,7 +26,7 @@ function getWatchFilePatterns(buildManager) {
     return watchFiles;
 }
 
-function createFileMontior(buildConf, buildManager) {
+function createFileMonitor(buildConf, buildManager) {
     let {watch, root} = buildConf;
     if (!watch) {
         return;
@@ -61,4 +61,4 @@ function createFileMontior(buildConf, buildManager) {
     return monitor;
 }
 
-module.exports = exports = createFileMontior;
+module.exports = exports = createFileMonitor;
