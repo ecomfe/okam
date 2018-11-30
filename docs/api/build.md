@@ -101,7 +101,7 @@
 
 ## reverseTagMap
 
-* 接口说明：用于构建配置项 `component.template.transformTags` 的转换，转为 以 tag 为 key 的值
+* 接口说明：用于构建配置项 [`component.template.transformTags`](build/index?id=component) 的转换，转为 以 tag 为 key 的值
 
 * 接口定义：`reverseTagMap(tagsConf: Object): Object`
     * @param {Object} tagsConf 需 reverse 的 tags 配置项
@@ -131,6 +131,7 @@
     ```
 
 * 示例：
+
     `>= 0.4 版本` 版本之后 `xxx.config.js` 配置标签转换时若为：
 
     ```javascript
