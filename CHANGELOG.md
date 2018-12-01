@@ -1,5 +1,28 @@
 # ChangeLog
 
+## 0.4.0.beta-0 (2018-11-30)
+
+### Features
+
+* **okam-core:** **`break change`** 移除 App/页面/自定义组件实例上下文的 `$global` 属性([ec03a16](https://github.com/ecomfe/okam/commit/ec03a16))
+* **okam-build:** **`break change`** 变更构建配置 `component.template.transformTags` 模板标签转换配置定义，新增构建 API `reverseTagMap` 进行兼容转换，具体可以查看文档
+* **okam-build:** 增加特定平台相关样式定义支持: 基于媒介查询方式 ([b016e30](https://github.com/ecomfe/okam/commit/b016e30))
+* **okam-build:** 增加构建配置 `script` 配置项，用于构建期间执行附加的脚本命令 ([fa7c6b4](https://github.com/ecomfe/okam/commit/fa7c6b4))
+* **okam-build:** 增加构建配置 `component.global` 支持：提供全局组件自动注入能力 及 增加使用环境变量 `process.env.APP_TYPE` 定制特定平台脚本代码支持 ([ead6620](https://github.com/ecomfe/okam/commit/ead6620))
+* **okam-build:** 支持特定平台配置能力支持 ([6be15a4](https://github.com/ecomfe/okam/commit/6be15a4))
+* **okam-build:** 增加快应用支持、 全局 `API` 扩展支持 以及新增全局构建配置 `designWidth` 支持 ([fabbc3c](https://github.com/ecomfe/okam/commit/fabbc3c))
+* **okam-build:** 增加特定平台的环境标签 Tag：`<${appType}-env>` ([c15dd06](https://github.com/ecomfe/okam/commit/c15dd06))
+* **okam-build:** 增加特定平台相关样式定义支持: 基于特定平台属性前缀方式 `-${appType}-${styleProperty}: xxx` ([d028262](https://github.com/ecomfe/okam/commit/d028262))
+* **okam-build:** 自动对快应用的文本内容加上 `<text></text>` 文本标签包裹 ([c860710](https://github.com/ecomfe/okam/commit/c860710))
+* **okam-build:** 增加头条小程序支持 ([c516b79](https://github.com/ecomfe/okam/commit/c516b79))
+* **okam-build:** 优化构建输出的资源文件：只输出依赖的资源文件，对于图片目前暂未优化，同时增加强制输出特定资源文件的能力支持 ([0097649](https://github.com/ecomfe/okam/commit/0097649))
+* **okam-core:** 增加扩展平台 API 能力支持 ([548bb9c](https://github.com/ecomfe/okam/commit/548bb9c))
+* **okam-core:** 增加快应用支持 ([e328420](https://github.com/ecomfe/okam/commit/e328420))
+* **okam-core:** 增加 `registerApi` API for App ([1380b59](https://github.com/ecomfe/okam/commit/1380b59))
+* **okam-core:** 对于 `支付宝小程序` `getSystemInfo` API 增加`SDKVersion` 属性对齐微信小程序 ([1a79383](https://github.com/ecomfe/okam/commit/1a79383))
+* **okam-core:** 对于 `支付宝小程序` 增加 `setNavigationBarTitle` API 对齐微信小程序 ([dbb9b2c](https://github.com/ecomfe/okam/commit/dbb9b2c))
+* **okam-core:** 增加头条小程序支持 ([20a15a2](https://github.com/ecomfe/okam/commit/20a15a2))
+
 
 ## okam-build@0.3.3 (2018-11-30)
 

@@ -1,10 +1,10 @@
 <!--
     感谢 使用 Okam !
-    技术交流QQ 群： `728460911`，入群备注：okam
+    Okam技术和问题交流 QQ 群： `728460911`，入群备注：okam
 
     提 ISSUE 之前，建议：
     * 更新到最新版本，看是否能解决？
-    * 看一下教程文档，看是否能解决？
+    * 看一下教程文档: https://ecomfe.github.io/okam/#/ ，看是否能解决？
     * 搜一下已有 ISSUE，看是否有帮助？
 -->
 
@@ -31,18 +31,18 @@
 
 <!-- ... -->
 
-### 问题示例 和 复现步骤
+### 复现步骤 和  问题示例
 
-<!-- ... -->
+<!-- 问题复现步骤、示例代码地址(最佳) 或 部分截屏 -->
 
 
 ### 问题环境
 <!--
-okam 相关包版本
+okam 相关包版本: 通过 `okam --version && npm ls okam-build okam-core` 查看本地 `okam-cli okam-build okam-core` 的版本
     如：
     `okam-core` 版本:
     `okam-build` 版本:
-    `okam-cli` 版本(若是 cli 问题):
+    `okam-cli` 版本(若是用 `cli` 构建的):
 -->
 
 <!--

@@ -1,6 +1,6 @@
 {
   "name": "okam-helper",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "The build helper for Okam develop framework",
   "main": "index.js",
   "keywords": [
