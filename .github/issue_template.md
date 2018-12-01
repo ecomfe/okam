@@ -31,14 +31,14 @@
 
 <!-- ... -->
 
-### 问题示例 和 复现步骤
+### 复现步骤 和  问题示例
 
-<!-- ... -->
+<!-- 问题复现步骤、示例代码地址(最佳) 或 部分截屏 -->
 
 
 ### 问题环境
 <!--
-okam 相关包版本
+okam 相关包版本: 通过 `okam --version && npm ls okam-build okam-core` 查看本地 `okam-cli okam-build okam-core` 的版本
     如：
     `okam-core` 版本:
     `okam-build` 版本:
