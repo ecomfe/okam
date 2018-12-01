@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 0.4.0.beta-1 (2018-12-01)
+
+### Bug Fixes
+
+* **okam-build:** 修复 `win7` 下构建输出文件丢失问题 [#16](https://github.com/ecomfe/okam/issues/16) ([1fbcb40](https://github.com/ecomfe/okam/commit/1fbcb40))
+
 ## 0.4.0.beta-0 (2018-11-30)
 
 ### Features

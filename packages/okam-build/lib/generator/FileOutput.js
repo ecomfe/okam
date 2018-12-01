@@ -40,8 +40,8 @@ function replaceFileName(filePath, newFileName) {
 
     let newPath = path.join(path.dirname(filePath), newFileName);
 
-    // window 下  path.json('src', 'test.js'); => 'src\test.js'
-    // mac 下  path.json('src', 'test.js'); => 'src/test.js'
+    // in window: path.join('src', 'test.js'); => 'src\test.js'
+    // in mac: path.join('src', 'test.js'); => 'src/test.js'
     newPath = newPath.replace(/\\/g, '/');
     return newPath;
 }
