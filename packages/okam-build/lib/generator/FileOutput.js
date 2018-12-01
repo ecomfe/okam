@@ -38,7 +38,12 @@ function replaceFileName(filePath, newFileName) {
         return false;
     }
 
-    return path.join(path.dirname(filePath), newFileName);
+    let newPath = path.join(path.dirname(filePath), newFileName);
+
+    // window 下  path.json('src', 'test.js'); => 'src\test.js'
+    // mac 下  path.json('src', 'test.js'); => 'src/test.js'
+    newPath = newPath.replace(/\\/g, '/');
+    return newPath;
 }
 
 function getOutputPath(filePath, file, options) {
