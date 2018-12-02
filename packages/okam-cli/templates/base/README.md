@@ -99,3 +99,11 @@ fecs: https://github.com/ecomfe/fecs
 eslint: https://github.com/ecomfe/eslint-config
 <% /if %>
 <% /if %>
+
+### 文档
+* [okam 使用教程](https://ecomfe.github.io/okam)
+* [百度小程序组件](https://smartprogram.baidu.com/docs/develop/tutorial/codedir)
+* [微信小程序组件](https://developers.weixin.qq.com/miniprogram/dev/index.html)
+* [支付宝小程序组件](https://docs.alipay.com/mini/developer/getting-started)
+* [头条小程序组件](https://microapp.bytedance.com/docs/framework/)
+

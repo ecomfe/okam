@@ -5,10 +5,23 @@ const program = require('commander');
 const chalk = require('chalk');
 const exec = require('child_process').exec;
 const ora = require('ora');
+const inquirer = require('inquirer');
 const fs = require('fs-extra');
 const getLatestVersion = require('latest-version')
 const PROJECT_CONFIG = 'scripts/build.js';
 const projectConfPath = path.join(process.cwd(), PROJECT_CONFIG);
+const pkgPath = path.join(process.cwd(), 'package.json');
+
+// 项目pakageJson;
+let projectPackageJson;
+let changeFlag = false;
+
+// 需更新的包
+const PACKAGE_NAMES = [
+    'okam-build',
+    'okam-core',
+    'okam-plugin-tinyimg'
+];
 
 function info () {
     console.log(chalk.red('command error:'));
@@ -16,6 +29,11 @@ function info () {
     console.log(`${chalk.green(' okam upgrade project')} upgrade okam project packages to the latest version`);
 }
 
+/**
+ * 更新 cli
+ *
+ * @param  {Function} cb cb
+ */
 function upgradeSelf(cb) {
     let child = exec('npm i -g okam-cli@latest');
 
@@ -31,19 +49,91 @@ function upgradeSelf(cb) {
     })
 }
 
-function upgradeProject() {
+/**
+ * 获取 最新 version
+ *
+ * @param  {string} name 包名
+ * @return {string}      version 带当前 pkg 中的前缀
+ */
+async function getCurrentLatestVersion(name) {
+    let devDeps = projectPackageJson.devDependencies || {};
+    let deps = projectPackageJson.dependencies || {};
 
-    if (!fs.existsSync(projectConfPath)) {
-        console.log(chalk.red(`
-            The project configuration file [${PROJECT_CONFIG}] could not be found.
-            Please make sure that the current directory is the root of the Okam project！`
-        ));
-        process.exit(1);
+    let pkgKey = '';
+    if (devDeps.hasOwnProperty(name)) {
+        pkgKey = 'devDependencies';
     }
 
+    if (deps.hasOwnProperty(name)) {
+        pkgKey = 'dependencies';
+    }
+
+    if (!pkgKey) {
+        return;
+    }
+
+    let oldVersion = projectPackageJson[pkgKey][name];
+    let version = oldVersion;
+    let prefix = /^[0-9*]$/.test(oldVersion[0]) ? '' : oldVersion[0];
+    try {
+        version = await getLatestVersion(name);
+        version = `${prefix}${version}`;
+    }
+    catch (e) {
+    }
+
+    projectPackageJson[pkgKey][name] = `${version}`;
+    console.log(chalk.cyan(`${name}: ${oldVersion} -> ${version}`));
+
+    if (oldVersion !== version) {
+        changeFlag = true;
+    }
+
+    return version;
+}
+
+/**
+ * 更新 package.json 的配置
+ *
+ * @return {[type]} [description]
+ */
+async function updatePkgConfig() {
+    await Promise.all(PACKAGE_NAMES.map(pkg => {
+        return getCurrentLatestVersion(pkg);
+    }));
+}
+
+/**
+ * 确定升级
+ */
+function comfireUpdate () {
+    inquirer.prompt([
+        {
+            'type': 'confirm',
+            'name': 'update',
+            'default': true,
+            'message': 'Confirm the upgrade?'
+
+        }
+    ])
+    .then(answers => {
+        if (!answers.update) {
+            return;
+        }
+
+        fs.writeJsonSync(pkgPath, projectPackageJson);
+        console.log(chalk.green('update package.json successfully!'));
+        upgradePkg();
+    });
+}
+
+/**
+ * 更新包
+ */
+function upgradePkg() {
     let child = exec('npm install');
 
-    const spinner = ora('Updating packages in the project, awaiting a moment...').start();
+    let spinner = ora('Updating okam packages, awaiting a moment...').start();
 
     child.stdout.on('data', function (data) {
         spinner.stop();
@@ -53,6 +143,31 @@ function upgradeProject() {
         spinner.stop();
         console.log(data);
     })
+}
+async function upgradeProject() {
+    if (!fs.existsSync(projectConfPath)) {
+        console.log(chalk.red(`
+            The project configuration file [${PROJECT_CONFIG}] could not be found.
+            Please make sure that the current directory is the root of the Okam project！`
+        ));
+        process.exit(1);
+    }
+
+    console.log('Update okam to the latest versions in the project.');
+
+    try {
+        projectPackageJson = require(pkgPath)
+        await updatePkgConfig();
+
+        if (!changeFlag) {
+            console.log(chalk.green('It\'s the latest version.'));
+            process.exit(1);
+        }
+        comfireUpdate();
+    }
+    catch (err) {
+        console.error(err);
+    }
 }
 
 program.parse(process.argv);
