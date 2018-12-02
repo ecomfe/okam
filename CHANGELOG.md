@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 0.4.0.beta-2 (2018-12-02)
+
+### Bug Fixes
+
+* **okam-build:** 修复预处理语言依赖的样式文件没有编译也输出的问题 ([b1b67e4](https://github.com/ecomfe/okam/commit/b1b67e4))
+
 ## 0.4.0.beta-1 (2018-12-01)
 
 ### Bug Fixes
