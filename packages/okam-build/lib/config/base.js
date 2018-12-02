@@ -204,6 +204,10 @@ module.exports = {
          * @return {boolean|string}
          */
         file(path, file) {
+            if (file.isStyle && file.extname !== 'css' && !file.compiled) {
+                return false;
+            }
+
             // do not output not processed file and sfc file component
             if (!file.allowRelease || file.isComponent) {
                 return false;
