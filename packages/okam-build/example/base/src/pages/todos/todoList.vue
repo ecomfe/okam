@@ -22,7 +22,10 @@
                 <icon size="16" class="op-btn" type="clear" @click.stop="onRemoveTodo(item.id)"/>
             </view>
         </view>
+
         <view>
+            <view><text>counter: {{counter}}</text></view>
+            <button plain class="add-counter-btn" @click="onAddCounter">Add counter</button>
             <button @click="gotoCounter">Goto Counter</button>
         </view>
     </view>
@@ -75,6 +78,7 @@ export default {
     $store: {
         computed: {
             todos: 'todos',
+            counter: 'counter',
             otherNum(state) {
                 return state.todos.length + this.myNum + this.num;
             }
@@ -84,7 +88,11 @@ export default {
             {
                 'toggle': 'toggleTodo',
                 'removeTodo': 'removeTodo',
-                'addTodo': 'addTodo'
+                'addTodo': 'addTodo',
+                addCounter(value = 1) {
+                    console.log('add', value)
+                    return {type: 'INCREMENT', value};
+                }
             }
         ]
     },
@@ -126,6 +134,10 @@ export default {
             }
 
             this.addTodo(value);
+        },
+
+        onAddCounter() {
+            this.addCounter(23);
         },
 
         gotoCounter() {
