@@ -1,5 +1,13 @@
 # ChangeLog
 
+## 0.4.0.beta-3 (2018-12-03)
+
+### Bug Fixes
+
+* **okam-build:** 修复 `less` 中使用 `@import` 导致编译文件丢失问题 ([f0aca25](https://github.com/ecomfe/okam/commit/f0aca25))
+* **okam-build:** 修复 `sass` `scss` 语法写法不统一导致编译出错问题 ([ee06ae6](https://github.com/ecomfe/okam/commit/ee06ae6))
+* **okam-core:** 优化 `redux` 数据变更检查 [#11](https://github.com/ecomfe/okam/issues/11) ([d9d7cae](https://github.com/ecomfe/okam/commit/d9d7cae))
+
 ## 0.4.0.beta-2 (2018-12-02)
 
 ### Bug Fixes
