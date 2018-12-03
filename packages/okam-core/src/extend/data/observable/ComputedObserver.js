@@ -176,6 +176,11 @@ export default class ComputedObserver {
         // so if the old === value && typeof old === 'object', it'll also need
         // to update view
         if (old !== value || (typeof old === 'object')) {
+            let needUpdate = this.shouldUpdate ? this.shouldUpdate(old, value) : true;
+            if (!needUpdate) {
+                return;
+            }
+
             ctx.data[p] = value;
             ctx.$setData({[p]: value});
             this.notifyWatcher(value, old, [p]);

@@ -5,6 +5,8 @@
 
 'use strict';
 
+import isValueEqual from './equal';
+
 /* eslint-disable fecs-prefer-destructure */
 
 function normalizeStoreComputed(stateMap) {
@@ -84,13 +86,19 @@ function normalizeStoreActions(actionMap) {
     return toAction;
 }
 
+function shouldUpdate(old, curr) {
+    return !isValueEqual(old, curr);
+}
+
 function onStoreChange() {
     let observer = this.__computedObserver;
     let upKeys = this.__storeComputedKeys;
     if (typeof upKeys === 'function') {
         this.__storeComputedKeys = upKeys = upKeys();
     }
+
     if (observer && upKeys) {
+        observer.shouldUpdate || (observer.shouldUpdate = shouldUpdate);
         upKeys.forEach(k => observer.updateComputed(k));
     }
 }
