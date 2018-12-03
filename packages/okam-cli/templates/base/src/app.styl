@@ -5,7 +5,7 @@
 
 <% var: size = ${px2rpx} ? 150 : 50 %>
 <% if: ${style} === 'stylus' %>
-
+@import './common/css/common'
 .page-img
     margin: 0 auto
     display: block
@@ -17,6 +17,12 @@
     width: 100%
     text-align: center
 <% else %>
+
+<% if: ${style} === 'css' %>
+@import './common/css/common.css';
+<% else %>
+@import './common/css/common';
+<% /if %>
 
 .page-img {
     margin: 0 auto;

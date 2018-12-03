@@ -14,8 +14,8 @@
     <% use: ch-stylus() %>
 <% elif: ${style} === 'less' %>
     <% use: ch-less() %>
-<% elif: ${style} === 'sass' %>
-    <% use: ch-sass() %>
+<% elif: ${style} === 'scss' %>
+    <% use: ch-scss() %>
 <% else %>
     <% use: ch-css() %>
 <% /if %>
@@ -102,8 +102,8 @@ export default {
     }
 }
 </style>
-<% target: ch-sass %>
-<style lang="sass">
+<% target: ch-scss %>
+<style lang="scss">
 .hello-wrap {
     margin: 20px;
 

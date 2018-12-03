@@ -92,8 +92,8 @@ let promptList = [
                 'value': 'less'
             },
             {
-                'name': 'sass',
-                'value': 'sass'
+                'name': 'scss/sass',
+                'value': 'scss'
             },
             {
                 'name': 'css',

@@ -14,8 +14,8 @@
     <% use: ph-stylus() %>
 <% elif: ${style} === 'less' %>
     <% use: ph-less() %>
-<% elif: ${style} === 'sass' %>
-    <% use: ph-sass() %>
+<% elif: ${style} === 'scss' %>
+    <% use: ph-scss() %>
 <% else %>
     <% use: ph-css() %>
 <% /if %>
@@ -138,8 +138,8 @@ export default {
 }
 
 </style>
-<% target: ph-sass %>
-<style lang="sass">
+<% target: ph-scss %>
+<style lang="scss">
 .home-wrap {
     box-sizing: border-box;
     height: 100vh;

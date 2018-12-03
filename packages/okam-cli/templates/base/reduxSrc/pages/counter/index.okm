@@ -14,8 +14,8 @@
     <% use: pc-stylus() %>
 <% elif: ${style} === 'less' %>
     <% use: pc-less() %>
-<% elif: ${style} === 'sass' %>
-    <% use: pc-sass() %>
+<% elif: ${style} === 'scss' %>
+    <% use: pc-scss() %>
 <% else %>
     <% use: pc-css() %>
 <% /if %>
@@ -98,8 +98,8 @@ export default {
     background: #fff;
 }
 </style>
-<% target: pc-sass %>
-<style lang="sass">
+<% target: pc-scss %>
+<style lang="scss">
 .my-counter-wrap {
     min-height: 100vh;
     padding: 20px;

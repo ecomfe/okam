@@ -45,7 +45,7 @@ const SCRIPT_EXT_MAP = {
  * @const
  */
 const STYLE_EXT_MAP = {
-    sass: 'scss',
+    scss: 'scss',
     less: 'less',
     stylus: 'styl',
     none: 'css'
@@ -213,7 +213,7 @@ const PACKAGE_NAMES_MAP = {
                 version: '3.8.1'
             }
         ],
-        sass: [
+        scss: [
             {
                 name: 'node-sass',
                 version: '4.10.0'

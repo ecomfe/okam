@@ -1,0 +1,13 @@
+/**
+ * @file common style
+ * @author ${author|raw}
+ */
+
+<% if: ${style} === 'stylus' %>
+.hide
+    display: none
+<% else %>
+.hide {
+    display: none;
+}
+<% /if %>

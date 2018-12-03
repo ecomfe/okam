@@ -5,13 +5,18 @@
 
 'use strict';
 
+
 const path = require('path');
 const sass = require('node-sass');
 
 module.exports = function (file, options) {
     let {config, root} = options;
 
+    // if file.exname is sass, indentedSyntax is true
+    // true values enable Sass Indented Syntax for parsing the data string or file.
+    // see https://www.npmjs.com/package/node-sass
     config = Object.assign({
+        indentedSyntax: (file.extname === 'sass'),
         data: file.content.toString(),
         file: path.basename(file.fullPath)
     }, config);
