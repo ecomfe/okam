@@ -1,5 +1,5 @@
 /**
- * @file Broadcast support test spec
+ * @file Ref support test spec
  * @author sparklewhy@gmail.com
  */
 
@@ -57,7 +57,7 @@ describe('ref plugin', function () {
     it('should support refs in page', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: 'xx-a', b: 'xx-b', c: ['xx-c']};
+        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c'};
         let page = MyPage({
             beforeCreate() {
                 assert(this.$refs == null);
@@ -73,7 +73,7 @@ describe('ref plugin', function () {
 
                 assert(this.$refs.a === '#xx-a');
                 assert(this.$refs.b === '#xx-b');
-                expect(this.$refs.c).toEqual(['.xx-c']);
+                expect(this.$refs.c).toEqual('.xx-c');
 
             }
         }, {refs: refInfo});
@@ -87,11 +87,11 @@ describe('ref plugin', function () {
         MyApp.use(ref);
 
         let refInfo = {
-            a: 'xx-a',
-            b: 'xx-b',
-            c: 'notExist-c',
-            d: ['xx-d'],
-            e: ['notExist-e']
+            a: '#xx-a',
+            b: '#xx-b',
+            c: '#notExist-c',
+            d: '.xx-d',
+            e: '.notExist-e'
         };
         let instance = MyComponent({
             beforeCreate() {
@@ -109,8 +109,8 @@ describe('ref plugin', function () {
                 assert(this.$refs.a === 'c#xx-a');
                 assert(this.$refs.b === 'c#xx-b');
                 assert(this.$refs.c === '#notExist-c');
-                expect(this.$refs.d).toEqual(['c.xx-d']);
-                expect(this.$refs.e).toEqual(['.notExist-e']);
+                expect(this.$refs.d).toEqual('c.xx-d');
+                expect(this.$refs.e).toEqual('.notExist-e');
             }
         }, {refs: refInfo});
 

@@ -9,12 +9,13 @@ import assert from 'assert';
 import expect, {spyOn} from 'expect';
 import CoreComponent from 'core/swan/Component';
 import AntCoreComponent from 'core/ant/Component';
+import WxCoreComponent from 'core/wx/Component';
 import * as na from 'core/na/index';
 import * as swanEnv from 'core/swan/env';
 import * as wxEnv from 'core/wx/env';
 import * as ttEnv from 'core/tt/env';
 import * as antEnv from 'core/ant/env';
-import * as quickEnv from 'core/swan/env';
+import * as quickEnv from 'core/quick/env';
 import base from 'core/base/base';
 
 const PATH_PREFIX_REGEX = /^\w+\./;
@@ -132,6 +133,15 @@ export function fakeAntComponent() {
     return function (...args) {
         /* eslint-disable babel/new-cap */
         let instance = AntCoreComponent(...args);
+        Object.assign(instance, instance.methods);
+        return instance;
+    };
+}
+
+export function fakeWxComponent() {
+    return function (...args) {
+        /* eslint-disable babel/new-cap */
+        let instance = WxCoreComponent(...args);
         Object.assign(instance, instance.methods);
         return instance;
     };
