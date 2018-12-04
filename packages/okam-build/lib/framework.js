@@ -35,7 +35,10 @@ const FRAMEWORK_EXTEND_PATH = {
         }
     },
     redux: 'extend/data/redux/index',
-    ref: 'extend/ref'
+    ref: {
+        default: 'extend/ref/index',
+        ant: 'extend/ref/ant/index'
+    }
 };
 
 /**
