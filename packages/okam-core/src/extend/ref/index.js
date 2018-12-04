@@ -5,38 +5,36 @@
 
 'use strict';
 
-import {normalizeExtendProp} from '../helper/methods';
+import {normalizeExtendProp} from '../../helper/methods';
 
 /**
  * Query the reference instance information by the given reference class
  *
  * @inner
- * @param {string|Array.<string>} value the reference class
+ * @param {string} selector the reference class or id selector
  * @return {?Object|Array}
  */
-function queryRefInstance(value) {
-    let isSelectAll = Array.isArray(value);
+function queryRefInstance(selector) {
+    let isSelectAll = selector.charAt(0) === '.';
     let result;
 
     if (isSelectAll) {
-        let path = `.${value[0]}`;
         if (typeof this.selectAllComponents === 'function') {
-            result = this.selectAllComponents(path);
+            result = this.selectAllComponents(selector);
         }
 
         if (!result || !result.length) {
-            result = this.$selector.selectAll(path);
+            result = this.$selector.selectAll(selector);
         }
     }
     else {
-        let path = `#${value}`;
         if (typeof this.selectComponent === 'function') {
-            result = this.selectComponent(path);
+            result = this.selectComponent(selector);
         }
 
         if (!result) {
             // if not custom component, try to query element info by selector API
-            result = this.$selector.select(path);
+            result = this.$selector.select(selector);
         }
     }
 
