@@ -12,7 +12,7 @@ import connect from './connect';
 function onShow() {
     if (this.__storeChangeHandler && !this.__unsubscribeStore) {
         this.__unsubscribeStore = this.$app.$store.subscribe(
-            this.__storeChangeHandler.bind(this)
+            this.$fireStoreChange
         );
     }
 }
@@ -47,8 +47,9 @@ export default {
         created() {
             let store = this.$app.$store;
             if (this.__storeChangeHandler) {
+                this.$fireStoreChange = this.__storeChangeHandler.bind(this);
                 this.__unsubscribeStore = store.subscribe(
-                    this.__storeChangeHandler.bind(this)
+                    this.$fireStoreChange
                 );
             }
             this.$store = store;

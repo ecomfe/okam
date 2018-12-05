@@ -1,5 +1,14 @@
 /**
  * @file Check the changed value is equal
+ *       For weixin, it'll deeply copy the assignment data to the changed property.
+ *       e.g.,
+ *       <code>
+ *       let newObj = {a: 3};
+ *       this.setData({info: newObj}, () => {
+ *          this.data.info === newObj; // false, for swan/ant here is true
+ *       });
+ *       this.data.info === newObj; // false, for swan/ant here is true
+ *       </code>
  * @author sparklewhy@gmail.com
  */
 
@@ -32,7 +41,7 @@ function isArrayValueEqual(arr1, arr2) {
     for (let i = 0; i < len; i++) {
         let item1 = arr1[i];
         let item2 = arr2[i];
-        if (item1 !== item2) {
+        if (!isValueEqual(item1, item2)) {
             return false;
         }
     }

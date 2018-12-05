@@ -165,8 +165,9 @@ export default class ComputedObserver {
      * Update computed property value
      *
      * @param {string} p the computed property name to update
+     * @param {Function=} shouldUpdate whether should update the computed property
      */
-    updateComputed(p) {
+    updateComputed(p, shouldUpdate) {
         let ctx = this.ctx;
         let old = ctx.data[p];
 
@@ -175,12 +176,10 @@ export default class ComputedObserver {
         // maybe the computed value is a reference of the dependence data,
         // so if the old === value && typeof old === 'object', it'll also need
         // to update view
-        if (old !== value || (typeof old === 'object')) {
-            let needUpdate = this.shouldUpdate ? this.shouldUpdate(old, value) : true;
-            if (!needUpdate) {
-                return;
-            }
-
+        let neeUpdate = typeof shouldUpdate === 'function'
+            ? shouldUpdate(old, value, p)
+            : (old !== value || (typeof old === 'object'));
+        if (neeUpdate) {
             ctx.data[p] = value;
             ctx.$setData({[p]: value});
             this.notifyWatcher(value, old, [p]);

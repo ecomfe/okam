@@ -5,9 +5,9 @@
 
 'use strict';
 
-import isValueEqual from './equal';
-
 /* eslint-disable fecs-prefer-destructure */
+
+import isValueEqual from './equal';
 
 function normalizeStoreComputed(stateMap) {
     let computed;
@@ -98,8 +98,7 @@ function onStoreChange() {
     }
 
     if (observer && upKeys) {
-        observer.shouldUpdate || (observer.shouldUpdate = shouldUpdate);
-        upKeys.forEach(k => observer.updateComputed(k));
+        upKeys.forEach(k => observer.updateComputed(k, shouldUpdate));
     }
 }
 
