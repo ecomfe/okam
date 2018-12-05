@@ -1,5 +1,13 @@
 # ChangeLog
 
+## 0.4.0.beta-4 (2018-12-05)
+
+### Features
+
+* **okam-core:** `redux` 状态管理扩展，增加 `$fireStoreChange` API 及 优化 `redux` 状态变更检查  ([0ad3bb0](https://github.com/ecomfe/okam/commit/0ad3bb0))
+* **okam-core:** 增加支付宝小程序 `refs` 支持  ([c9721a4](https://github.com/ecomfe/okam/commit/c9721a4))
+* **okam-build:** 增加支付宝小程序 `refs` 支持  ([44fddbe](https://github.com/ecomfe/okam/commit/44fddbe))
+
 ## 0.4.0.beta-3 (2018-12-03)
 
 ### Bug Fixes
