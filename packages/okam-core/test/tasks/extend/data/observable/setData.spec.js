@@ -7,7 +7,6 @@
 
 /* eslint-disable babel/new-cap */
 
-import assert from 'assert';
 import expect from 'expect';
 import {getSetDataPaths} from 'core/extend/data/observable/setData';
 

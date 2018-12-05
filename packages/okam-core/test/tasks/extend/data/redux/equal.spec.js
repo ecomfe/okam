@@ -25,7 +25,8 @@ describe('redux equal check', function () {
         assert(isEqual(obj, obj) === true);
 
         assert(isEqual([2, 3], [2, 3]) === true);
-        assert(isEqual([{}, 3], [{}, 3]) === false);
+        assert(isEqual([{}, 3], [{}, 3]) === true);
+        assert(isEqual([{a: {}}, 3], [{a: {}}, 3]) === false);
         assert(isEqual([{}, 3], [{}]) === false);
     });
 });

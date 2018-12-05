@@ -385,10 +385,10 @@ describe('observable array', function () {
             expect(spySetData.calls[0].arguments[0]).toEqual(
                 {
                     'a': [12, 33, 56],
-                    'obj.b': [23],
+                    'obj.b': [23, 5],
                     'obj.b[1]': 5,
                     'c.d': 56,
-                    'c.e': {a: 3},
+                    'c.e': {a: 55},
                     'c.e.a': 55
                 }
             );
