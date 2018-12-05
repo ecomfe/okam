@@ -170,6 +170,20 @@ export default {
 }
 ```
 
+## API
+
+* `$fireStoreChange()`: 如果你有多个页面引用了同一个 store，但某个页面隐藏情况下，通过另外一个页面更新了 `store`，想在重新显示之前隐藏的页面能够自动同步 `store` 数据变更，可以使用该 API。
+
+    ```javascript
+    export default {
+        config: {title: 'my page'},
+        data: {},
+        onShow() {
+            this.$fireStoreChange(); // 可以在页面重新显示时候，重新同步该 API
+        }
+    }
+    ```
+
 ## 使用注意
 
 由于 `store` 跟 `组件` 数据连接是基于 `computed` 实现的，因此定义的 `computed` 属性不能跟现有冲突，其次通过定义 `actions` 来定义组件修改 `store` 的 action，同样定义的 action 方法不能跟组件实例定义的 method 冲突。
@@ -177,3 +191,23 @@ export default {
 **不允许外部直接修改 `store` 的 state，只能通过触发的 `action` 修改。**
 
 目前实现机制，会导致每次 store 变更，computed 数据会重新计算，对于列表型数据，每次变更都会导致整个列表数据重新 `setData`，因此如果列表数据量比较大，可能会有性能问题。
+
+此外，对于 `store` `state` 变更，对于引用类型，不能直接修改原来对象，然后返回之前数据对象，必须返回一个新的数据对象，否则会导致视图状态没有得到变更。**提示：** 由于 `微信小程序` 实现机制问题，可能即便你返回的还是之前的引用对象，在 `微信小程序` 下，发现还是会自动更新视图，但是在 `百度小程序` 及 `支付宝小程序` 是不会自动变更的。
+
+```javascript
+const removeTodo = (state, {id}) => {
+    let found = findById(state, id);
+    if (found === -1) {
+        return state;
+    }
+
+    // 需要返回全新对象
+    let newArr = [].concat(state);
+    newArr.splice(found, 1);
+    return newArr;
+
+    // 错误实现: 直接返回之前的对象
+    // state.splice(found, 1);
+    // return state;
+};
+```
