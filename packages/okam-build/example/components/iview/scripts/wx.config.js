@@ -7,14 +7,14 @@
 
 const path = require('path');
 
+
 module.exports = {
     verbose: false,
     root: path.join(__dirname, '..'),
     output: {
-        dir: 'dist',
+        dir: 'wx_dist',
         depDir: 'src/common'
     },
-    wx2swan: true,
     component: {
         extname: 'vue'
     },

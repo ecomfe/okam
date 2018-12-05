@@ -8,12 +8,12 @@
     "init": "ln -s ../../../../../okam-core node_modules",
     "clean": "rm -rf dist/",
     "build": "npm run clean && cross-env NODE_ENV=dev node scripts/build.js",
-    "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
     "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
-    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
-    "dev:wx": "cross-env NODE_ENV=dev node scripts/build.js --type wx --watch",
-    "dev:wx:clean": "cross-env NODE_ENV=dev node scripts/build.js --type wx --watch --clean",
-    "dev:wx:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --type wx --watch"
+    "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
+    "dev:clean": "npm run dev -- --clean",
+    "dev:wx": "npm run dev -- --type wx",
+    "dev:wx:debug": "npm run dev:debug -- --type wx",
+    "dev:wx:clean": "npm run clean -- --type wx"
   },
   "devDependencies": {
     "cross-env": "^5.2.0"

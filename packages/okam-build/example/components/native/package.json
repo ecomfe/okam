@@ -8,9 +8,9 @@
     "init": "ln -s ../../../../../okam-core node_modules",
     "clean": "rm -rf dist/",
     "build": "npm run clean && cross-env NODE_ENV=dev node scripts/build.js",
-    "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
     "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
-    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean"
+    "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
+    "dev:clean": "npm run dev -- --clean"
   },
   "devDependencies": {
     "cross-env": "^5.2.0"

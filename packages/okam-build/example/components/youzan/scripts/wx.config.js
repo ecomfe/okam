@@ -1,5 +1,5 @@
 /**
- * @file Build swan smart program config
+ * @file Build wx mini program config
  * @author xxx
  */
 
@@ -11,13 +11,14 @@ module.exports = {
     verbose: false,
     root: path.join(__dirname, '..'),
     output: {
-        dir: 'dist',
+        dir: 'wx_dist',
         depDir: 'src/common'
     },
-    wx2swan: true,
     component: {
         extname: 'vue'
     },
-    framework: [],
-    polyfill: []
+    framework: [
+        'data',
+        'watch'
+    ]
 };
