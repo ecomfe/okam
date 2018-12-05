@@ -31,8 +31,7 @@
 
         <i-icon type="activity" size="28" color="#80848f" />
 
-
-        <!-- <i-tabs current="{{ current }}" @change="handleChange">
+        <!-- <i-tabs :current="current" @change="handleChange">
             <i-tab key="tab1" title="选项1"></i-tab>
             <i-tab key="tab2" title="选项2"></i-tab>
             <i-tab key="tab3" title="选项3"></i-tab>
@@ -40,7 +39,7 @@
 
         <i-panel title="基础用法">
             <view style="padding: 16px">
-                <i-input-number value="{{ value1 }}" min="0" max="100" bindchange="handleChange1" />
+                <i-input-number :value="value1" min="0" max="100" @change="handleChange1" />
             </view>
         </i-panel>
     </view>
@@ -53,10 +52,10 @@ import IButton from 'iview-weapp/dist/button/index';
 import IRow from 'iview-weapp/dist/row/index';
 import ICol from 'iview-weapp/dist/col/index';
 
-// import iGrid from 'iview-weapp/dist/grid/index';
-// import iGridItem from 'iview-weapp/dist/grid-item/index';
-// import iGridIcon from 'iview-weapp/dist/grid-icon/index';
-// import iGridLabel from 'iview-weapp/dist/grid-label/index';
+import IGrid from 'iview-weapp/dist/grid/index';
+import IGridItem from 'iview-weapp/dist/grid-item/index';
+import IGridIcon from 'iview-weapp/dist/grid-icon/index';
+import IGridLabel from 'iview-weapp/dist/grid-label/index';
 
 
 import IPanel from 'iview-weapp/dist/panel/index';
@@ -82,10 +81,10 @@ export default {
         // ITab,
         IIcon,
         ICard,
-        // IGrid,
-        // IGridItem,
-        // IGridIcon,
-        // IGridLabel,
+        IGrid,
+        IGridItem,
+        IGridIcon,
+        IGridLabel,
         IInputNumber,
         IPanel,
         IButton,
@@ -105,28 +104,20 @@ export default {
         handleClick() {
             console.log(1);
         },
-        handleChange (detail) {
-            this.setData({
-                current: detail.key
-            });
+        handleChange({detail}) {
+            this.current = detail.key;
         },
 
-        handleChangeScroll (detail) {
-            this.setData({
-                current_scroll: detail.key
-            });
+        handleChangeScroll(detail) {
+            this.current_scroll = detail.key;
         },
 
-        handleChange1 (detail) {
-            this.setData({
-                value1: detail.value
-            });
+        handleChange1(detail) {
+            this.value1 = detail.value;
         },
 
-        handleChange2 (detail) {
-            this.setData({
-                value2: detail.value
-            });
+        handleChange2(detail) {
+            this.value2 = detail.value;
         }
     }
 };

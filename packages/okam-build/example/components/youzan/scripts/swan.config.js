@@ -7,7 +7,6 @@
 
 const path = require('path');
 
-
 module.exports = {
     verbose: false,
     root: path.join(__dirname, '..'),

@@ -319,26 +319,38 @@ class BaseTemplate {
         console.log('# prepare');
         console.log(`    cd ${this.params.dirName} && npm i`);
         console.log('# start');
-        console.log('    swan:');
+        console.log('    swan: 百度小程序运行命令');
+        console.log('        // 带 watch 开发模式');
         console.log('        npm run dev');
+        console.log('        // 删掉构建产物（不包括项目配置文件）并重新构建且带 watch 开发模式');
         console.log('        npm run dev:clean');
+        console.log('        // 带 watch && 开发 Server 开发模式');
         console.log('        npm run dev:server');
+        console.log('        // 删掉构建重新构建（没有 watch && 开发 Server)');
         console.log('        npm run build');
+        console.log('        // 生产环境构建');
         console.log('        npm run prod');
         console.log('');
-        console.log('    wx:');
+        console.log('    wx: 微信小程序运行命令');
         console.log('        npm run dev:wx');
         console.log('        npm run dev:wx:clean');
         console.log('        npm run dev:wx:server');
         console.log('        npm run build:wx');
         console.log('        npm run prod:wx');
         console.log('');
-        console.log('    ant:');
+        console.log('    ant: 支付宝小程序运行命令');
         console.log('        npm run dev:ant');
         console.log('        npm run dev:ant:clean');
         console.log('        npm run dev:ant:server');
         console.log('        npm run build:ant');
         console.log('        npm run prod:ant');
+        console.log('');
+        console.log('    tt: 头条小程序运行命令');
+        console.log('        npm run dev:tt');
+        console.log('        npm run dev:tt:clean');
+        console.log('        npm run dev:tt:server');
+        console.log('        npm run build:tt');
+        console.log('        npm run prod:tt');
     }
 
     generateDotFilesAll(fullPath) {
