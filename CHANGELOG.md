@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 0.4.0.beta-5 (2018-12-05)
+
+### Bug Fixes
+
+* **okam-build:** 修复头条小程序升级后模板语法报错问题，之前模板对象语法允许两个花括号，现在跟微信对齐，必须三个花括号 ([ab3d3c3](https://github.com/ecomfe/okam/commit/ab3d3c3))
+* **okam-core:** 修复百度小程序从 `swan-core` `1.12` 开始会自动对自定义组件事件参数对象自动加一层包裹以对齐 `微信小程序`，即原先事件参数 `{counter: 2}` 会变成 `{type: 'counterChange', detail: {counter: 2}, counter: 2, currentTarget: {}, target: {}}`，如果碰巧你的事件参数包括 `detail` 信息，比如 `{detail: {c: 2}}` ，会导致变成 `{type: 'counterChange', detail: {detail: {c: 2}}, currentTarget: {}, target: {}}` 无法兼容原先代码。([9f82138](https://github.com/ecomfe/okam/commit/9f82138))
+
 ## 0.4.0.beta-4 (2018-12-05)
 
 ### Features
@@ -50,6 +57,13 @@
 * **okam-core:** 对于 `支付宝小程序` `getSystemInfo` API 增加`SDKVersion` 属性对齐微信小程序 ([1a79383](https://github.com/ecomfe/okam/commit/1a79383))
 * **okam-core:** 对于 `支付宝小程序` 增加 `setNavigationBarTitle` API 对齐微信小程序 ([dbb9b2c](https://github.com/ecomfe/okam/commit/dbb9b2c))
 * **okam-core:** 增加头条小程序支持 ([20a15a2](https://github.com/ecomfe/okam/commit/20a15a2))
+
+
+## okam-core@0.3.4 (2018-12-05)
+
+### Bug Fixes
+
+* **okam-core:** 修复百度小程序从 `swan-core` `1.12` 开始会自动对自定义组件事件参数对象自动加一层包裹以对齐 `微信小程序`，即原先事件参数 `{counter: 2}` 会变成 `{type: 'counterChange', detail: {counter: 2}, counter: 2, currentTarget: {}, target: {}}`，如果碰巧你的事件参数包括 `detail` 信息，比如 `{detail: {c: 2}}` ，会导致变成 `{type: 'counterChange', detail: {detail: {c: 2}}, currentTarget: {}, target: {}}` 无法兼容原先代码。([a47c63d](https://github.com/ecomfe/okam/commit/a47c63d))
 
 
 ## okam-build@0.3.3 (2018-11-30)

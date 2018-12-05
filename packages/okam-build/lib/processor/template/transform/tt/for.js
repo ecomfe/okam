@@ -11,6 +11,7 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
     transformFor(attrs, name, tplOpts, Object.assign({
         forDirectionName: 'tt:for',
         forItemDirectiveName: 'tt:for-item',
-        forIndexDirectiveName: 'tt:for-index'
+        forIndexDirectiveName: 'tt:for-index',
+        tripleBrace: true
     }, opts), element);
 };
