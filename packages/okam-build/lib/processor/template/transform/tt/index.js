@@ -29,6 +29,9 @@ module.exports = {
         },
         class: {
             transform: require('./class')
+        },
+        bind: {
+            transform: require('./data-bind')
         }
     })
 };
