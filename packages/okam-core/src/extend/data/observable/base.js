@@ -268,18 +268,6 @@ export default {
                     obj = {[obj]: value};
                 }
 
-                // shadow copy the data to set
-                Object.keys(obj).forEach(k => {
-                    let value = obj[k];
-                    if (Array.isArray(value)) {
-                        value = [].concat(value);
-                    }
-                    else if (typeof value === 'object' && value) {
-                        value = Object.assign({}, value);
-                    }
-                    obj[k] = value;
-                });
-
                 let queues = this.$upQueues;
                 let isUpdating = !!queues;
                 queues || (queues = this.$upQueues = []);
