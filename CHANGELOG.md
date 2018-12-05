@@ -59,6 +59,13 @@
 * **okam-core:** 增加头条小程序支持 ([20a15a2](https://github.com/ecomfe/okam/commit/20a15a2))
 
 
+## okam-core@0.3.4 (2018-12-05)
+
+### Bug Fixes
+
+* **okam-core:** 修复百度小程序从 `swan-core` `1.12` 开始会自动对自定义组件事件参数对象自动加一层包裹以对齐 `微信小程序`，即原先事件参数 `{counter: 2}` 会变成 `{type: 'counterChange', detail: {counter: 2}, counter: 2, currentTarget: {}, target: {}}`，如果碰巧你的事件参数包括 `detail` 信息，比如 `{detail: {c: 2}}` ，会导致变成 `{type: 'counterChange', detail: {detail: {c: 2}}, currentTarget: {}, target: {}}` 无法兼容原先代码。([a47c63d](https://github.com/ecomfe/okam/commit/a47c63d))
+
+
 ## okam-build@0.3.3 (2018-11-30)
 
 ### Bug Fixes
