@@ -19,6 +19,11 @@ module.exports = {
     component: {
         extname: 'vue'
     },
-    framework: [],
+    framework: [
+        'data',
+        'watch',
+        'broadcast',
+        'ref'
+    ],
     polyfill: []
 };

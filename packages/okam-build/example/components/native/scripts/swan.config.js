@@ -17,7 +17,12 @@ module.exports = {
     component: {
         extname: 'vue'
     },
-    framework: [],
+    framework: [
+        'data',
+        'watch',
+        'broadcast',
+        'ref'
+    ],
     polyfill: [],
     native: true // 如果不需要启用原生转换，可以设为 false，默认为 true
 };
