@@ -124,6 +124,8 @@ export default {
          * @param {Object} event the event object
          */
         __handlerProxy(event) {
+            this.__beforeEventProxy && (event = this.__beforeEventProxy(event));
+
             // get event dataSet
             const data = event.currentTarget.dataset;
             const eventType = event.type;

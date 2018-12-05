@@ -7,7 +7,7 @@
 
 import {createComponent} from './helper/factory';
 import {normalizeComponent} from './helper/component';
-import {normalizeEventArgs} from './swan/triggerEvent';
+import {normalizeEventArgs, fixEventObject} from './swan/triggerEvent';
 import componentBase from './base/component';
 
 /**
@@ -19,6 +19,14 @@ import componentBase from './base/component';
 componentBase.methods.__beforeEmit = function (args) {
     return normalizeEventArgs(this, args);
 };
+
+/**
+ * Fix swan 1.12 event arguments upgrade
+ *
+ * @param {Object} event the event object
+ * @return {Object} the new event object
+ */
+componentBase.methods.__beforeEventProxy = fixEventObject;
 
 /**
  * Create component instance

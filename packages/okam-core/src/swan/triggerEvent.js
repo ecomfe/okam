@@ -46,3 +46,20 @@ export function normalizeEventArgs(component, args) {
 
     return args;
 }
+
+/**
+ * Fix event object argument
+ *
+ * @param {Object} event the event object to fix
+ * @return {Object}
+ */
+export function fixEventObject(event) {
+    let detail = event && event.detail;
+    // fix 1.12.x event object argument upgrade which to make the event object
+    // structure like weixin
+    if (detail && detail.currentTarget && detail.target && detail.type) {
+        return detail;
+    }
+
+    return event;
+}
