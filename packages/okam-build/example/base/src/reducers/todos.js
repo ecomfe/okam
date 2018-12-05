@@ -31,8 +31,9 @@ function findById(todos, id) {
 }
 
 const addTodo = (state, {todo}) => {
-    state.unshift(todo);
-    return state;
+    let newArr = [].concat(state);
+    newArr.unshift(todo);
+    return newArr;
 };
 
 const editTodo = (state, {todo, id}) => {
@@ -41,9 +42,10 @@ const editTodo = (state, {todo, id}) => {
         return state;
     }
 
+    let newArr = [].concat(state);
     let curr = state[found];
-    Object.assign(curr, todo);
-    return state;
+    newArr[found] = Object.assign({}, curr, todo);
+    return newArr;
 };
 
 const removeTodo = (state, {id}) => {
@@ -51,8 +53,10 @@ const removeTodo = (state, {id}) => {
     if (found === -1) {
         return state;
     }
-    state.splice(found, 1);
-    return state;
+
+    let newArr = [].concat(state);
+    newArr.splice(found, 1);
+    return newArr;
 };
 
 const toggleTodo = (state, {id}) => {
@@ -61,9 +65,10 @@ const toggleTodo = (state, {id}) => {
         return state;
     }
 
+    let newArr = [].concat(state);
     let curr = state[found];
-    Object.assign(curr, {completed: !curr.completed});
-    return state;
+    newArr[found] = Object.assign({}, curr, {completed: !curr.completed});
+    return newArr;
 };
 
 const fetchTodos = (state, {isFetching, todos, isFail}) => {
