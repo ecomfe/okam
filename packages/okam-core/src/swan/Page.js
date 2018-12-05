@@ -7,7 +7,16 @@
 
 import {createPage} from '../helper/factory';
 import {normalizePage} from '../helper/page';
+import {fixEventObject} from './helper/triggerEvent';
 import pageBase from '../base/page';
+
+/**
+ * Fix swan 1.12 event arguments upgrade
+ *
+ * @param {Object} event the event object
+ * @return {Object} the new event object
+ */
+pageBase.__beforeEventProxy = fixEventObject;
 
 /**
  * Create the page instance
