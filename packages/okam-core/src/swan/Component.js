@@ -1,5 +1,6 @@
 /**
  * @file Create swan component instance
+ *       Notice: Using swan custom component, suggest swan-core version `>=1.12`
  * @author sparklewhy@gmail.com
  */
 
@@ -7,7 +8,7 @@
 
 import {createComponent} from '../helper/factory';
 import {normalizeComponent} from '../helper/component';
-import {normalizeEventArgs} from './helper/triggerEvent';
+import {normalizeEventArgs, fixEventObject} from './helper/triggerEvent';
 import componentBase from '../base/component';
 
 /**
@@ -19,6 +20,14 @@ import componentBase from '../base/component';
 componentBase.methods.__beforeEmit = function (args) {
     return normalizeEventArgs(this, args);
 };
+
+/**
+ * Fix swan 1.12 event arguments upgrade
+ *
+ * @param {Object} event the event object
+ * @return {Object} the new event object
+ */
+componentBase.methods.__beforeEventProxy = fixEventObject;
 
 /**
  * Create component instance
