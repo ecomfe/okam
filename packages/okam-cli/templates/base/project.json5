@@ -1,5 +1,15 @@
 {
     appid: '0',
     description: '${description}',
-    projectname: '${projectName}'
+    projectname: '${projectName}',
+    _ttEnv: {
+        appid: '体验appId',
+        setting: {
+            urlCheck: true,
+            es6: true,
+            postcss: true,
+            minified: true,
+            newFeature: true
+        }
+    }
 }
