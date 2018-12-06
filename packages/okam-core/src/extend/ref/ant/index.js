@@ -16,13 +16,12 @@ const REF_DATA_ATTR = 'data-okam-ref';
  *
  * @inner
  * @param {string} selector the reference class or id selector
+ * @param {boolean} isSelectAll whether is select all
  * @param {?Array|Object} componentInstances the component instances
  * @return {?Object|Array}
  */
-function queryRefInstance(selector, componentInstances) {
-    let isSelectAll = selector.charAt(0) === '.';
+function queryRefInstance(selector, isSelectAll, componentInstances) {
     let result = componentInstances;
-
     if (isSelectAll) {
         if (!result || !result.length) {
             result = this.$selector.selectAll(selector);
@@ -59,12 +58,12 @@ function initRefs() {
     pageInstance.__refComponents = refComponents;
 
     if (refInfo) {
-        if (refInfo.charAt(0) === '#') {
-            refComponents[refInfo] = this;
-        }
-        else {
+        if (refInfo.charAt(0) === '[') {
             refComponents[refInfo] /* istanbul ignore next */ || (refComponents[refInfo] = []);
             refComponents[refInfo].push(this);
+        }
+        else {
+            refComponents[refInfo] = this;
         }
     }
 
@@ -74,7 +73,12 @@ function initRefs() {
         result[id] = {
             get() {
                 let value = refs[id];
-                return queryRefInstance.call(self, value, refComponents[value]);
+                let isSelectAll = Array.isArray(value);
+                isSelectAll && (value = value[0]);
+                let key = isSelectAll ? `[]${value}` : value;
+                return queryRefInstance.call(
+                    self, value, isSelectAll, refComponents[key]
+                );
             },
             enumerable: true
         };

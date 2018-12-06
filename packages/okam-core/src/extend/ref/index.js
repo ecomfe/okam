@@ -11,13 +11,14 @@ import {normalizeExtendProp} from '../../helper/methods';
  * Query the reference instance information by the given reference class
  *
  * @inner
- * @param {string} selector the reference class or id selector
+ * @param {string|Array.<string>} selector the reference class or id selector
  * @return {?Object|Array}
  */
 function queryRefInstance(selector) {
-    let isSelectAll = selector.charAt(0) === '.';
-    let result;
+    let isSelectAll = Array.isArray(selector);
+    isSelectAll && (selector = selector[0]);
 
+    let result;
     if (isSelectAll) {
         if (typeof this.selectAllComponents === 'function') {
             result = this.selectAllComponents(selector);
