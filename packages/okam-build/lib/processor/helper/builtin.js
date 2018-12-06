@@ -182,6 +182,39 @@ function initProcessorInfo(name, info, existedProcessors) {
 }
 
 /**
+ * Override the function value for the given object
+ *
+ * @param {?Object} curr the current object
+ * @param {?Object} old the old object
+ * @return {?Object}
+ */
+function overrideObjectFunctions(curr, old) {
+    if (!old) {
+        return curr;
+    }
+
+    if (!curr && curr !== undefined) {
+        return old;
+    }
+
+    let result = {};
+    Object.keys(curr).forEach(k => {
+        let v = curr[k];
+        let oldV = old[k];
+        if (typeof v === 'function' && typeof oldV === 'function') {
+            let currV = v;
+            v = function (...args) {
+                oldV.apply(this, args);
+                currV.apply(this, args);
+            };
+        }
+        result[k] = v;
+    });
+
+    return result;
+}
+
+/**
  * Override the builtin processor definition
  *
  * @inner
@@ -201,6 +234,10 @@ function overrideProcessor(existedProcessor, extnameProcessorMap, opts) {
         if (k === 'extnames') {
             oldExtnames = existedProcessor[k];
             newExtnames = v;
+        }
+
+        if (k === 'hook') {
+            v = overrideObjectFunctions(v, existedProcessor[k]);
         }
 
         existedProcessor[k] = v;
