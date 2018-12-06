@@ -34,7 +34,6 @@ npm run dev:clean # 删除构建产物，保留 project.swan.json 并进入 watc
 
 已解决： 将 `node_modules` 替换成 `npm`
 
-
 - 用到的 `getRelationNodes` 即：behaviors、组件间关系、抽象节点 百度自定义组件不支持 等
 
 - 自定义组件样式不生效 同名的组件 有的加前缀 有的不加前缀，导致组件样式渲染失败
@@ -47,4 +46,4 @@ npm run dev:clean # 删除构建产物，保留 project.swan.json 并进入 watc
 - `relations` 不支持
 
 - event detail  微信与小程序不一致
-
+已解决：框架已做兼容处理

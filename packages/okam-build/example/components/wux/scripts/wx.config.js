@@ -19,6 +19,8 @@ module.exports = {
     },
     framework: [
         'data',
-        'watch'
-    ]
+        'watch',
+        'broadcast',
+        'ref'
+    ],
 };
