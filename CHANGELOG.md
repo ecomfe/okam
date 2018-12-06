@@ -11,7 +11,7 @@
 ### Features
 
 * **okam-build:** 构建配置 `processors` 的处理器 `hook` 选项会重载而不是覆盖，即同一个处理器定义的多个 hook 都会被调用而不是覆盖  ([f0b318a](https://github.com/ecomfe/okam/commit/f0b318a))
-* **okam-build:** 对于 `babel7` 的 `@babel/runtime` helper 代码路径进行重写：`/@babel/runtime/helpers/' 重写为 `/babel/` ([7e21c5f](https://github.com/ecomfe/okam/commit/7e21c5f))
+* **okam-build:** 对于 `babel7` 的 `@babel/runtime` helper 代码路径进行重写：`/@babel/runtime/helpers/` 重写为 `/babel/` ([7e21c5f](https://github.com/ecomfe/okam/commit/7e21c5f))
 
 ### Refactor
 
