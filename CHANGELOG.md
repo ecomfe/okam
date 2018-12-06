@@ -8,6 +8,11 @@
 * **okam-build:** 修复支付宝小程序 `canvas` 组件使用 `id` 而不是微信小程序 `canvas-id` 作为组件标识符不兼容问题，统一使用 `canvas-id` ([636570b](https://github.com/ecomfe/okam/commit/636570b))
 * **okam-core:** 修复微信小程序的 `canvas` 组件的事件参数对象没有 `currentTarget` 属性导致事件监听报错问题。([4e93787](https://github.com/ecomfe/okam/commit/4e93787))
 
+### Features
+
+* **okam-build:** 构建配置 `processors` 的处理器 `hook` 选项会重载而不是覆盖，即同一个处理器定义的多个 hook 都会被调用而不是覆盖  ([f0b318a](https://github.com/ecomfe/okam/commit/f0b318a))
+* **okam-build:** 对于 `babel7` 的 `@babel/runtime` helper 代码路径进行重写：`/@babel/runtime/helpers/' 重写为 `/babel/` ([7e21c5f](https://github.com/ecomfe/okam/commit/7e21c5f))
+
 ### Refactor
 
 * **okam-core:** 重构 `ref` 实现，原先基于 `id` 查询引用组件改成基于 `class` 避免跟开发者定义 `id` 冲突 ([86480a5](https://github.com/ecomfe/okam/commit/86480a5))
