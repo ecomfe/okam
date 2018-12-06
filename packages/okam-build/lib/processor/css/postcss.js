@@ -39,7 +39,8 @@ const BUILTIN_PLUGINS = {
 module.exports = function (file, options) {
 
     let {root, appType, allAppTypes, designWidth, config, output} = options;
-    let appTypeStylExtname = output.componentPartExtname.style;
+    let styleExtname = output.componentPartExtname
+        && output.componentPartExtname.style;
 
     // init default design width
     if (designWidth) {
@@ -52,7 +53,7 @@ module.exports = function (file, options) {
         Object.assign({
             allAppTypes,
             appType,
-            appTypeStylExtname
+            styleExtname
         },
         options)
     ));
