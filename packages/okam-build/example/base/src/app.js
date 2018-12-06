@@ -10,7 +10,9 @@ import store from './store/index';
 export default {
     // the app config defined in app.json
     config: {
-        pages: [ // The first element as the home page when app startup
+        // The first element as the home page when app startup
+        pages: [
+            'pages/component/nativeComponent',
             'pages/home/index',
             'pages/tpl/tplSyntax',
             'pages/tpl/tplReuse',

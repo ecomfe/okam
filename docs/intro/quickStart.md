@@ -97,7 +97,7 @@ npm install
 
 更新 cli: `okam upgrade self`
 
-将 项目中 okam 依赖 更新到最新:  `cd <项目Root> && okam upgrade project`，替换成自己的 Okam 项目路径
+将 项目中 okam 依赖 更新为最新版本依赖:  `cd <项目Root> && okam upgrade project`，替换成自己的 Okam 项目路径
 
 ## 目录结构
 
@@ -123,6 +123,7 @@ npm install
 │   ├── tt.config.js      // 头条小程序构建配置文件
 │   ├── init-quick-app.js // 快应用项目初始化脚本
 │   ├── quick.config.js   // 快应用构建配置文件
+│   ├── ant.config.js     // 支付宝小程序构建配置文件
 │   ├── wx.config.js      // 微信小程序构建配置文件
 │   └── swan.config.js    // 百度 Swan 小程序构建配置文件
 └── src                   // 项目源码

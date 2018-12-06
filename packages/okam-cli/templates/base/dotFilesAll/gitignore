@@ -72,10 +72,11 @@ Thumbs.db
 
 # build assets
 /output
-/dist
 /dll
+/dist
 /wx_dist
 /ant_dist
+/tt_dist
 
 # lock file
 package-lock.json

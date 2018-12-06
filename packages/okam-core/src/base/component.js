@@ -140,6 +140,11 @@ export default {
         __handlerProxy(event) {
             this.__beforeEventProxy && (event = this.__beforeEventProxy(event));
 
+            // fix: wx canvas events dont have event.currentTarget
+            // if (!event.currentTarget) {
+            //     event.currentTarget = event.target;
+            // }
+
             // get event dataSet
             const data = event.currentTarget.dataset;
             const eventType = event.type;
