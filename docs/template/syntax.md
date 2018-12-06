@@ -6,7 +6,7 @@
 
 如何转换，用户可根据项目情况及自身习惯，通过在配置文件中添加 `component.template.transformTags` 配置项进行定制化转换支持:
 
-配置项具体写法[详见配置定义 component.template.transformTags 部分](build/index#component)
+配置项具体写法，详见配置定义 [component.template.transformTags](build/index#transformTag)。
 
 ## 数据绑定
 
@@ -56,6 +56,6 @@
 * 不支持
 
 !>  不支持一次性插值语法（对应 Vue 的 `v-once` 指令）；<br>
-    不支持原始 HTML； <br>
+    不支持原始 HTML（对应 Vue 的 `v-html` 指令）； <br>
     不支持调用函数（包括Javascript对象上的函数及在JS逻辑层代码method中声明的函数）；<br>
     不支持过滤器（可通过computed 实现）；
