@@ -15,6 +15,10 @@ module.exports = {
     element: merge({}, element, {
         tpl: {
             transform: require('./tpl')
+        },
+        canvas: {
+            match: 'canvas',
+            transform: require('./canvas')
         }
     }),
     attribute: merge({}, attribute, {
