@@ -74,8 +74,8 @@ export default {
                         path: 'component/componentPage',
                     },
                     {
-                        subName: '原生组件',
-                        path: 'component/nativeComponent'
+                        subName: 'Canvas组件',
+                        path: 'component/canvas'
                     },
                     {
                         subName: '生命周期',

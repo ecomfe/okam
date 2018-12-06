@@ -18,7 +18,7 @@
 
 export default {
     config: {
-        title: 'Api test'
+        title: 'Canvas'
     },
 
     components: {
@@ -29,9 +29,8 @@ export default {
         btnText: 'Hello'
     },
 
-    onReady: function (e) {
-        // 使用 wx.createContext 获取绘图上下文 context
-        var context = wx.createCanvasContext('myCanvas')
+    mounted: function (e) {
+        let context = this.$api.createCanvasContext('myCanvas')
 
         context.stroke();
         context.setStrokeStyle('#ff0000');

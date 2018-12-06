@@ -12,7 +12,6 @@ export default {
     config: {
         // The first element as the home page when app startup
         pages: [
-            'pages/component/nativeComponent',
             'pages/home/index',
             'pages/tpl/tplSyntax',
             'pages/tpl/tplReuse',
@@ -20,6 +19,7 @@ export default {
             'pages/tpl/ref',
             'pages/typescript/ts',
             'pages/component/componentPage',
+            'pages/component/canvas',
             'pages/lifecycle/index',
             'pages/data/computed',
             'pages/data/init',
