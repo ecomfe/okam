@@ -1,6 +1,6 @@
 /**
  * @file Build mini program base config
- * @author ${author|raw}
+ * @author xxx
  */
 
 'use strict';
@@ -17,7 +17,7 @@ module.exports = {
         depDir: 'src/common'
     },
     component: {
-        extname: '${sfcExt}',
+        extname: 'vue',
         template: {
             // 标签转换配置项
             transformTags: {
@@ -27,61 +27,29 @@ module.exports = {
     framework: [
         'data',
         'watch',
-        <% if: ${redux} %>
-        'redux',
-        <% /if %>
         'broadcast',
         'ref'
     ],
     processors: {
-        <% if: ${script} === 'typescript' %>
-        babel7: {
-            extnames: ['js', 'ts']
-        },
-        <% elif: ${script} === 'babel7' %>
         babel7: {
             extnames: ['js']
         },
-        <% else %>
-        babel: {
-            extnames: ['js']
+        cssImport: {
+            extnames: ['styl']
         },
-        <% /if %>
-        <% if: ${template} === 'pug' %>
-        pug: {
-            extnames: ['pug', 'tpl'],
-            options: {
-                doctype: 'xml',
-                data: {
-                    name: 'efe'
-                }
-            }
-        },
-        // 定义小程序模板转换的文件后缀名
-        view: {
-            <% if: ${template} === 'pug' %>
-            extnames: ['pug', 'tpl']
-            <% else %>
-            extnames: ['tpl']
-            <% /if %>
-        },
-        <% /if %>
         postcss: {
-            extnames: ['${styleExt}'],
+            extnames: ['css', 'styl'],
             options: {
-                <% if: ${px2rpx} %>
                 plugins: {
                     px2rpx: {
                         // 设计稿尺寸
                         designWidth: 1242
                     }
                 }
-                <% /if %>
             }
         }
     },
 
-    <% if: ${server} %>
     // 启用开发 Server
     server: {
         port: DEV_SERVER_PORT,
@@ -97,7 +65,6 @@ module.exports = {
             // }
         ]
     },
-    <% /if %>
 
     prod: {
         rules: [
@@ -112,7 +79,6 @@ module.exports = {
 
     dev: {
         rules: [
-            <% if: ${tinyimg} %>
             {
                 match: /\.(png|jpe?g|gif)(\?.*)?$/,
                 processors: {
@@ -121,14 +87,11 @@ module.exports = {
                     }
                 }
             },
-            <% /if %>
             {
                 match: '*.js',
                 processors: [
                     ['replacement', {
-                        <% if: ${server} %>
                         // 'https://online.com': 'https://dev.com',
-                        <% /if %>
                         'process.env.NODE_ENV': '"development"'
                     }]
                 ]
@@ -141,9 +104,7 @@ module.exports = {
                 match: '*.js',
                 processors: [
                     ['replacement', {
-                        <% if: ${server} %>
                         // 'https://online.com': 'https://test.com',
-                        <% /if %>
                         'process.env.NODE_ENV': '"development"'
                     }]
                 ]

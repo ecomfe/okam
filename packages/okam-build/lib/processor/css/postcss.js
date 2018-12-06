@@ -37,7 +37,9 @@ const BUILTIN_PLUGINS = {
 };
 
 module.exports = function (file, options) {
-    let {root, appType, allAppTypes, designWidth, config} = options;
+
+    let {root, appType, allAppTypes, designWidth, config, output} = options;
+    let appTypeStylExtname = output.componentPartExtname.style;
 
     // init default design width
     if (designWidth) {
@@ -46,9 +48,14 @@ module.exports = function (file, options) {
 
     let plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
 
-    plugins = (plugins || []).map(
-        ({handler, options}) => handler(Object.assign({allAppTypes, appType}, options))
-    );
+    plugins = (plugins || []).map(({handler, options}) => handler(
+        Object.assign({
+            allAppTypes,
+            appType,
+            appTypeStylExtname
+        },
+        options)
+    ));
     let {css, result} = postcss(plugins)
         .process(
             file.content.toString(),

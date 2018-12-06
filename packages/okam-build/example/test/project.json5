@@ -1,0 +1,15 @@
+{
+    appid: '0',
+    description: 'A okam project',
+    projectname: 'test',
+    _ttEnv: {
+        appid: '体验appId',
+        setting: {
+            urlCheck: true,
+            es6: true,
+            postcss: true,
+            minified: true,
+            newFeature: true
+        }
+    }
+}

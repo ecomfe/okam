@@ -38,8 +38,9 @@ module.exports = merge({}, baseConf, {
 
     processors: {
         cssImport: {
-            processor: 'postcss', // using the existed postcss processor
-            extnames: ['ttss'],
+            // using the existed postcss processor
+            processor: 'postcss',
+            extnames: ['ttss', 'css'],
             rext: 'ttss',
             options: {
                 plugins: ['cssImport']

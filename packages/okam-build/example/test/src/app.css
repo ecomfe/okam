@@ -1,0 +1,19 @@
+/**
+ * @file The app entry style
+ * @author xxx
+ */
+
+@import './common/css/common.css';
+
+.page-img {
+    margin: 0 auto;
+    display: block;
+    width: 150px;
+    height: 150px;
+}
+.page-footer {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+    text-align: center;
+}

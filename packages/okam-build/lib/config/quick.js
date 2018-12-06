@@ -97,7 +97,8 @@ module.exports = merge({}, baseConf, {
         },
 
         cssImport: {
-            processor: 'postcss', // using the existed postcss processor
+            // using the existed postcss processor
+            processor: 'postcss',
             extnames: ['css'],
             rext: 'css',
             options: {
