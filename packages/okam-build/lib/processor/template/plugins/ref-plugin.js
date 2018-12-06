@@ -52,26 +52,20 @@ module.exports = {
         let {file, logger} = tplOpts;
         let refId = hash(file.path + '?' + refValue);
         let refClass = `ref-${refId}`;
-        let dataRefValue;
-        if (isForRef) {
-            if (classValue) {
-                classValue = refClass + ' ' + classValue;
-            }
-            else {
-                classValue = refClass;
-            }
-            attrs.class = classValue;
-            dataRefValue = `.${classValue}`;
+        if (classValue) {
+            classValue = refClass + ' ' + classValue;
         }
         else {
-            attrs.id = refClass;
-            dataRefValue = `#${refClass}`;
+            classValue = refClass;
         }
+        attrs.class = classValue;
+        let dataRefValue = `.${classValue}`;
 
-        attrs['data-okam-ref'] = dataRefValue;
+        attrs['data-okam-ref'] = isForRef ? `[]${dataRefValue}` : dataRefValue;
 
         delete attrs.ref;
 
-        initRefInfo(refValue, dataRefValue, file, logger);
+        let refInfo = isForRef ? [dataRefValue] : dataRefValue;
+        initRefInfo(refValue, refInfo, file, logger);
     }
 };

@@ -9,6 +9,7 @@ const postcss = require('postcss');
 
 module.exports = postcss.plugin('postcss-plugin-import', function (opts = {}) {
     return function (css, result) {
+
         let extname = opts.appTypeStylExtname;
 
         css.walkAtRules(rule => {

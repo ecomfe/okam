@@ -36,7 +36,7 @@ describe('ref plugin', function () {
     it('should support refs in page', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c', d: '.xx-d'};
+        let refInfo = {a: '.xx-a', b: '.xx-b', c: ['.xx-c'], d: ['.xx-d']};
         let fakeComponentA = {};
         let fakeComponentDArr = [{}];
         let page = MyPage({
@@ -53,7 +53,7 @@ describe('ref plugin', function () {
                 assert(this.$refs != null);
 
                 assert(this.$refs.a === fakeComponentA);
-                assert(this.$refs.b === '#xx-b');
+                assert(this.$refs.b === '.xx-b');
                 expect(this.$refs.c).toEqual(['.xx-c']);
                 assert(this.$refs.d === fakeComponentDArr);
 
@@ -62,7 +62,7 @@ describe('ref plugin', function () {
 
         page.__refComponents = {
             [refInfo.a]: fakeComponentA,
-            [refInfo.d]: fakeComponentDArr
+            ['[]' + refInfo.d]: fakeComponentDArr
         };
         page.onLoad();
         page.onReady();
@@ -74,10 +74,10 @@ describe('ref plugin', function () {
         MyApp.use(ref);
 
         let refInfo = {
-            a: '#xx-a',
-            b: '#xx-b',
-            d: '.xx-d',
-            e: '.notExist-e'
+            a: '.xx-a',
+            b: '.xx-b',
+            d: ['.xx-d'],
+            e: ['.notExist-e']
         };
         let fakeComponentA = {};
         let fakeComponentDArr = [{}];
@@ -95,7 +95,7 @@ describe('ref plugin', function () {
                 assert(this.$refs != null);
 
                 assert(this.$refs.a === fakeComponentA);
-                assert(this.$refs.b === '#xx-b');
+                assert(this.$refs.b === '.xx-b');
                 assert(this.$refs.d === fakeComponentDArr);
                 expect(this.$refs.e).toEqual(['.notExist-e']);
             }
@@ -104,7 +104,7 @@ describe('ref plugin', function () {
         instance.$page = {
             __refComponents: {
                 [refInfo.a]: fakeComponentA,
-                [refInfo.d]: fakeComponentDArr
+                ['[]' + refInfo.d]: fakeComponentDArr
             }
         };
 
@@ -126,7 +126,7 @@ describe('ref plugin', function () {
     it('should remove destroyed component ref in page', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c', d: '.xx-d'};
+        let refInfo = {a: '.xx-a', b: '.xx-b', c: ['.xx-c'], d: ['.xx-d']};
         let fakeComponentA = {};
         let fakeComponentDArr = [{}];
         let page = MyPage({
@@ -136,7 +136,7 @@ describe('ref plugin', function () {
 
         page.__refComponents = {
             [refInfo.a]: fakeComponentA,
-            [refInfo.d]: fakeComponentDArr
+            ['[]' + refInfo.d]: fakeComponentDArr
         };
         page.onLoad();
         page.onReady();
@@ -149,7 +149,7 @@ describe('ref plugin', function () {
     it('should remove destroyed component ref in component', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c', d: '.xx-d'};
+        let refInfo = {a: '.xx-a', b: '.xx-b', c: ['.xx-c'], d: ['.xx-d']};
         let fakeComponentA = {};
         let fakeComponentDArr = [{}];
         let instance = MyComponent({
@@ -160,11 +160,11 @@ describe('ref plugin', function () {
         instance.$page = {
             __refComponents: {
                 [refInfo.a]: fakeComponentA,
-                [refInfo.d]: fakeComponentDArr
+                ['[]' + refInfo.d]: fakeComponentDArr
             }
         };
 
-        instance.props = {'data-okam-ref': '#xx-a'};
+        instance.props = {'data-okam-ref': '.xx-a'};
         instance.$refs = {};
         instance.didMount();
         instance.didUnmount();
@@ -176,7 +176,7 @@ describe('ref plugin', function () {
     it('should remove destroyed component in ref array in component', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c', d: '.xx-d'};
+        let refInfo = {a: '.xx-a', b: '.xx-b', c: ['.xx-c'], d: ['.xx-d']};
         let fakeComponentA = {};
         let fakeComponentDArr = [];
         let instance = MyComponent({
@@ -184,25 +184,26 @@ describe('ref plugin', function () {
             }
         }, {refs: refInfo});
 
+        let multipleKey = '[]' + refInfo.d;
         instance.$page = {
             __refComponents: {
                 [refInfo.a]: fakeComponentA,
-                [refInfo.d]: fakeComponentDArr
+                [multipleKey]: fakeComponentDArr
             }
         };
 
-        instance.props = {'data-okam-ref': '.xx-d'};
+        instance.props = {'data-okam-ref': multipleKey};
         instance.didMount();
-        assert(instance.$page.__refComponents[refInfo.d].length === 1);
+        assert(instance.$page.__refComponents[multipleKey].length === 1);
 
         instance.didUnmount();
-        assert(instance.$page.__refComponents[refInfo.d].length === 0);
+        assert(instance.$page.__refComponents[multipleKey].length === 0);
     });
 
     it('should not remove any component in ref when none ref info', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c', d: '.xx-d'};
+        let refInfo = {a: '.xx-a', b: '.xx-b', c: ['.xx-c'], d: ['.xx-d']};
         let fakeComponentA = {};
         let fakeComponentDArr = [];
         let instance = MyComponent({
@@ -213,11 +214,11 @@ describe('ref plugin', function () {
         instance.$page = {
             __refComponents: {
                 [refInfo.a]: fakeComponentA,
-                [refInfo.d]: fakeComponentDArr
+                ['[]' + refInfo.d]: fakeComponentDArr
             }
         };
 
-        let refComponents = {'#xx-a': {}, '.xx-d': []};
+        let refComponents = {'.xx-a': {}, '[].xx-d': []};
         instance.didMount();
         expect(instance.$page.__refComponents).toEqual(refComponents);
 
@@ -228,7 +229,7 @@ describe('ref plugin', function () {
     it('should do nothing when ref info is destroyed', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c', d: '.xx-d'};
+        let refInfo = {a: '.xx-a', b: '.xx-b', c: ['.xx-c'], d: ['.xx-d']};
         let fakeComponentA = {};
         let fakeComponentDArr = [];
         let instance = MyComponent({
@@ -239,10 +240,10 @@ describe('ref plugin', function () {
         instance.$page = {
             __refComponents: {
                 [refInfo.a]: fakeComponentA,
-                [refInfo.d]: fakeComponentDArr
+                ['[]' + refInfo.d]: fakeComponentDArr
             }
         };
-        instance.props = {'data-okam-ref': '.xx-d'};
+        instance.props = {'data-okam-ref': '[].xx-d'};
         instance.didMount();
         instance.$page.__refComponents = null;
 
@@ -253,7 +254,7 @@ describe('ref plugin', function () {
     it('should do nothing when ref component info is destroyed', () => {
         MyApp.use(ref);
 
-        let refInfo = {a: '#xx-a', b: '#xx-b', c: '.xx-c', d: '.xx-d'};
+        let refInfo = {a: '.xx-a', b: '.xx-b', c: ['.xx-c'], d: ['.xx-d']};
         let fakeComponentA = {};
         let fakeComponentDArr = [{}];
         let instance = MyComponent({
@@ -264,14 +265,14 @@ describe('ref plugin', function () {
         instance.$page = {
             __refComponents: {
                 [refInfo.a]: fakeComponentA,
-                [refInfo.d]: fakeComponentDArr
+                ['[]' + refInfo.d]: fakeComponentDArr
             }
         };
-        instance.props = {'data-okam-ref': '.xx-d'};
+        instance.props = {'data-okam-ref': '[].xx-d'};
         instance.didMount();
-        instance.$page.__refComponents[refInfo.d].pop();
+        instance.$page.__refComponents['[]' + refInfo.d].pop();
 
         instance.didUnmount();
-        expect(instance.$page.__refComponents[refInfo.d]).toEqual([{}]);
+        expect(instance.$page.__refComponents['[]' + refInfo.d]).toEqual([{}]);
     });
 });
