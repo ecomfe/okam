@@ -97,7 +97,9 @@
 
 有任何问题或者建议，欢迎提 [issue](https://github.com/ecomfe/okam/issues/new), 发 pr。
 
-技术交流：QQ 群 `728460911`，入群备注：okam
+技术交流：
+* QQ 群 `728460911`，入群备注：okam
+* 百度同学可以加 Hi 群：`1637339`
 
 ## License
 
