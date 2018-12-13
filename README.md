@@ -91,7 +91,7 @@
 
 ## Contribution
 
-具体可以参考[文档](./CONTRIBUTING)
+具体可以参考[文档](./CONTRIBUTING.md)
 
 ## Communication
 
