@@ -60,7 +60,7 @@ describe('Swan component adapter', function () {
                 dataset: {},
                 id: undefined
             },
-            detail: {}
+            detail: undefined
         });
     });
 
