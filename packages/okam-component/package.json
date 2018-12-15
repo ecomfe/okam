@@ -1,0 +1,37 @@
+{
+  "name": "okam-components",
+  "version": "0.1.0",
+  "description": "The okam components that provide the missing components for some platforms",
+  "main": "index.js",
+  "keywords": [
+    "swan",
+    "wx",
+    "quick app",
+    "okam",
+    "baidu",
+    "wechat",
+    "alipay",
+    "toutiao",
+    "mini program",
+    "framework"
+  ],
+  "scripts": {
+    "prepublish": "npm run lint && npm test",
+    "lint": "fecs ./src index.js --reporter=baidu --rule",
+    "test:coverage": "cross-env NODE_ENV=development nyc mocha --require @babel/register \"test/tasks/**/*.spec.js\"",
+    "test": "cross-env NODE_ENV=development mocha --require @babel/register \"test/tasks/**/*.spec.js\"",
+    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require @babel/register \"test/tasks/**/*.spec.js\""
+  },
+  "license": "MIT",
+  "repository": "ecomfe/okam",
+  "bugs": {
+    "url": "https://github.com/ecomfe/okam/issues"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1"
+  }
+}
