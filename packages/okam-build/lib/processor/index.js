@@ -200,6 +200,7 @@ function compileComponent(component, file, buildManager) {
         // pass the refs info defined in tpl to script
         scriptFile.tplRefs = tplFile.refs;
 
+        // init the component used global components
         scriptFile.injectComponents = getImportComponents(
             scriptFile,
             buildManager.globalComponents,

@@ -41,6 +41,8 @@ function normalizeUsingComponentConfig(config, components, file, buildManager) {
             existed[toHyphen(k)] = true;
         });
 
+        // inject the global component declaration
+        // the inner component declaration has higher priority than the global
         Object.keys(injectComponents).forEach(k => {
             if (!existed[k]) {
                 usingComponents[k] = injectComponents[k];
