@@ -226,8 +226,12 @@ export default {
                 let queues = this.$waitingDataUpQueues;
                 /* istanbul ignore next */
                 if (queues) {
-                    queues.forEach(callback => callback.call(this));
-                    this.$waitingDataUpQueues = [];
+                    let num = queues.length;
+                    while (num > 0) {
+                        let callback = queues.shift();
+                        callback.call(this);
+                        num--;
+                    }
                 }
 
                 // call lifecycle updated hook
