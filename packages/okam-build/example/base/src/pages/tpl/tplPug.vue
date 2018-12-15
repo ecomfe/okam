@@ -79,7 +79,7 @@ export default {
         border-radius: 50%
         height: 40px
         width: 40px
-        background: no-repeat center 40% / 80% url('../../common/img/home.png') rgba(0, 0, 0, 0.2)
+        background: no-repeat center 40% / 80% url('../../common/img/template.png') rgba(0, 0, 0, 0.2)
     .tips-container
         background #f8f8f8
         padding 5px 10px
