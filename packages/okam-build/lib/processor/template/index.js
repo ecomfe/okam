@@ -7,8 +7,6 @@
 
 /* eslint-disable fecs-min-vars-per-destructure */
 /* eslint-disable fecs-prefer-destructure */
-const path = require('path');
-const {file: fileUtil} = require('../../util/index');
 const {parse: parseDom} = require('./parser');
 const serializeDom = require('./serializer');
 
@@ -167,14 +165,10 @@ function compileTpl(file, options) {
 
     let deps = [];
     let addDep = function (filePath) {
-        let relativePath = fileUtil.relative(
-            path.join(path.dirname(file.fullPath), filePath),
-            root
-        );
-        if (!deps.includes(relativePath)) {
-            deps.push(relativePath);
+        if (!deps.includes(filePath)) {
+            deps.push(filePath);
         }
-        logger.debug('find tpl dep file', relativePath);
+        logger.debug('find tpl dep file', filePath);
     };
 
     transformAst(

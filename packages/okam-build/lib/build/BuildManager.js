@@ -421,15 +421,15 @@ class BuildManager extends EventEmitter {
         ast && (file.ast = ast);
 
         deps && deps.forEach(item => {
-            let depFile;
-            if (pathUtil.isAbsolute(item)) {
-                depFile = this.files.addFile(item);
+            this.logger.debug('add dep', item);
+            if (!pathUtil.isAbsolute(item)) {
+                item = pathUtil.join(
+                    pathUtil.dirname(file.fullPath), item
+                );
+                this.logger.debug('absolute dep', item);
             }
-            else {
-                item = item.replace(/\\/g, '/');
-                depFile = this.files.getByPath(item);
-                depFile || (depFile = this.files.addFile({path: item}));
-            }
+
+            let depFile = this.files.addFile(item);
             file.addDeps(depFile.path);
             this.addNeedBuildFile(depFile);
         });

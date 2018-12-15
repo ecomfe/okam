@@ -7,7 +7,6 @@
 
 const path = require('path');
 const less = require('less');
-const relative = require('../../util').file.relative;
 
 module.exports = function (file, options) {
     let {logger, config, root} = options;
@@ -35,19 +34,7 @@ module.exports = function (file, options) {
             throw err;
         }
         processResult.content = result.css;
-
-        // normalize dep path relative to root
-        let deps = result.imports;
-        if (deps) {
-            deps = deps.map(
-                item => relative(path.join(
-                    path.dirname(file.fullPath),
-                    item
-                ), root)
-            );
-        }
-
-        processResult.deps = deps;
+        processResult.deps = result.imports;
     });
     return processResult;
 };
