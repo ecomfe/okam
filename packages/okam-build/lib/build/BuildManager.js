@@ -9,7 +9,6 @@
 const pathUtil = require('path');
 const EventEmitter = require('events');
 const {colors, Timer, merge, babel: babelUtil, file: fileUtil} = require('../util');
-const {toHyphen} = require('../util').string;
 const loadProcessFiles = require('./load-process-files');
 const CacheManager = require('./CacheManager');
 const FileOutput = require('../generator/FileOutput');
@@ -18,6 +17,7 @@ const npm = require('../processor/helper/npm');
 const ModuleResolver = require('./ModuleResolver');
 const allAppTypes = require('./app-type');
 const cleanBuild = require('./clean-build');
+const initGlobalComponents = require('./global-component');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
@@ -61,24 +61,7 @@ class BuildManager extends EventEmitter {
      * @param {Object} componentConf the component config
      */
     initGlobalComponents(componentConf) {
-        let {global: globalComponents} = componentConf;
-        if (!globalComponents) {
-            return;
-        }
-
-        let result = {};
-        Object.keys(globalComponents).forEach(k => {
-            let value = globalComponents[k];
-            let isRelMod = value.charAt(0) === '.';
-            if (isRelMod) {
-                value = pathUtil.join(this.sourceDir, value);
-            }
-            result[toHyphen(k)] = {
-                isNpmMod: !isRelMod,
-                modPath: value
-            };
-        });
-        this.globalComponents = result;
+        this.globalComponents = initGlobalComponents(this.appType, componentConf);
     }
 
     /**

@@ -87,6 +87,17 @@ module.exports = merge({}, baseConf, {
         appBaseClass: null
     },
 
+    component: {
+        template: {
+            transformTags: {
+                'button': 'o-button'
+            }
+        },
+        global: {
+            'o-button': 'okam/Button'
+        }
+    },
+
     processors: {
         component: {
             rext: 'ux',

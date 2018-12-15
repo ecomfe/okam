@@ -20,6 +20,10 @@ module.exports = {
         tpl: {
             transform: require('./tpl')
         },
+        okamButton: {
+            match: 'o-button',
+            transform: require('./button')
+        },
         text: {
             match(element) {
                 return element.children && element.children.length;
