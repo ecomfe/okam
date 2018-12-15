@@ -84,3 +84,5 @@ package-lock.json
 # tiny img source files
 doc/img/src/
 
+# mock
+/mock

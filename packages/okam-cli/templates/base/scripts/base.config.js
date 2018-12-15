@@ -81,7 +81,6 @@ module.exports = {
         }
     },
 
-    <% if: ${server} %>
     // 启用开发 Server
     server: {
         port: DEV_SERVER_PORT,
@@ -97,7 +96,6 @@ module.exports = {
             // }
         ]
     },
-    <% /if %>
 
     prod: {
         rules: [
@@ -126,9 +124,7 @@ module.exports = {
                 match: '*.js',
                 processors: [
                     ['replacement', {
-                        <% if: ${server} %>
                         // 'https://online.com': 'https://dev.com',
-                        <% /if %>
                         'process.env.NODE_ENV': '"development"'
                     }]
                 ]
@@ -141,9 +137,7 @@ module.exports = {
                 match: '*.js',
                 processors: [
                     ['replacement', {
-                        <% if: ${server} %>
                         // 'https://online.com': 'https://test.com',
-                        <% /if %>
                         'process.env.NODE_ENV': '"development"'
                     }]
                 ]

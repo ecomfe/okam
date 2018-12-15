@@ -57,7 +57,7 @@ const STYLE_EXT_MAP = {
  * @type {Array}
  * @const
  */
-const PROMPT_PACKAGE_KEYS = ['template', 'script', 'style', 'redux', 'async', 'server', 'tinyimg', 'lint'];
+const PROMPT_PACKAGE_KEYS = ['template', 'script', 'style', 'redux', 'async', 'tinyimg', 'lint'];
 
 /**
  * dev package name
@@ -98,6 +98,10 @@ const PACKAGE_NAMES_MAP = {
         {
             name: 'json5',
             version: '2.1.0'
+        },
+        {
+            name: 'connect',
+            version: '3.6.6'
         }
     ],
     devDeps: {
@@ -141,12 +145,6 @@ const PACKAGE_NAMES_MAP = {
                 name: 'okam-plugin-tinyimg',
                 fetchLatest: true,
                 version: '0.1.1'
-            }
-        ],
-        server: [
-            {
-                name: 'connect',
-                version: '3.6.6'
             }
         ],
         redux: [

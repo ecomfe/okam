@@ -120,11 +120,6 @@ let promptList = [
     },
     {
         'type': 'confirm',
-        'name': 'server',
-        'message': 'Use Mock server in your project?'
-    },
-    {
-        'type': 'confirm',
         'name': 'px2rpx',
         'message': 'Use px2rpx in your project(designWidth: 1242)?'
     },

@@ -1,6 +1,6 @@
 {
   "name": "okam-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The cli tool for Okam develop framework",
   "main": "index.js",
   "scripts": {
@@ -37,5 +37,6 @@
     "mkdirp": "^0.5.1",
     "ora": "^3.0.0",
     "semver": "^5.6.0"
-  }
+  },
+  "gitHead": "5a63fda2b06d9e374ddf722fbe608482fcb2e5be"
 }
