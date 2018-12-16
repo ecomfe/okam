@@ -158,12 +158,30 @@ function isFileExist(file) {
     return !!this._existMap[typeof file === 'string' ? file : file.fullPath];
 }
 
+function isMatchFile(file, pattern) {
+    if (file === pattern) {
+        return true;
+    }
+
+    if (pattern instanceof RegExp) {
+        return pattern.test(file);
+    }
+
+    return false;
+}
+
 class FileFactory extends EventEmitter {
 
     /**
      * Create FileFactory instance
      *
      * @param {Object} options create options
+     * @param {string} options.root the file root
+     * @param {string} options.rebaseDepDir the rebase dir of the dep file
+     * @param {string|RegExp} options.entryStyle the entry style pattern
+     * @param {string|RegExp} options.entryScript the entry script pattern
+     * @param {string|RegExp} options.projectConfig the projectConfig pattern
+     * @param {string} options.componentExtname the component extname
      */
     constructor(options) {
         super();
@@ -172,6 +190,7 @@ class FileFactory extends EventEmitter {
         this._existMap = {};
 
         let {root, rebaseDepDir} = options;
+        this.options = options;
         this.root = root;
 
         if (rebaseDepDir && !/\/$/.test(rebaseDepDir)) {
@@ -211,10 +230,10 @@ class FileFactory extends EventEmitter {
             if (file) {
                 return file;
             }
-            f = createFile({fullPath: f, path: relPath}, this.root);
+            f = this.createFile({fullPath: f, path: relPath});
         }
         else {
-            f = createFile(f, this.root);
+            f = this.createFile(f);
         }
 
         let result = isUnshift ? this.unshift(f) : this.push(f);
@@ -264,7 +283,31 @@ class FileFactory extends EventEmitter {
     }
 
     createFile(f) {
-        return createFile(f, this.root);
+        let file = createFile(f, this.root);
+        let {
+            entryScript,
+            entryStyle,
+            projectConfig,
+            componentExtname
+        } = this.options;
+
+        if (isMatchFile(file, entryScript)) {
+            file.isEntryScript = true;
+        }
+
+        if (isMatchFile(file, entryStyle)) {
+            file.isEntryStyle = true;
+        }
+
+        if (isMatchFile(file, projectConfig)) {
+            file.isProjectConfig = true;
+        }
+
+        if (file.extname === componentExtname) {
+            file.isComponent = true;
+        }
+
+        return file;
     }
 
     forEach(handler) {

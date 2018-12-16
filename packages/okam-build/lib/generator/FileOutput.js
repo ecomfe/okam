@@ -95,7 +95,7 @@ function getOutputPath(filePath, file, options) {
     return result || filePath;
 }
 
-function getComponentOutputFilePath(partFile, owner, options) {
+function getComponentPartOutputFilePath(partFile, owner, options) {
     let {componentPartExtname} = options;
     if (!componentPartExtname) {
         return;
@@ -158,7 +158,7 @@ function addFileOutputTask(allTasks, options, file) {
     let {outputDir, logger} = options;
     let ownerFile = file.owner;
     let outputRelPath = isComponentFile(ownerFile)
-        ? getComponentOutputFilePath(file, ownerFile, options)
+        ? getComponentPartOutputFilePath(file, ownerFile, options)
         : getOutputPath(file.path, file, options);
     if (!outputRelPath) {
         logger.debug('skip file release', file.path);
