@@ -1,5 +1,24 @@
 # ChangeLog
 
+## 0.4.1 (2018-12-16)
+
+### Bug Fixes
+
+* **okam-build:** 修复增量构建情况下，新增组件文件输出不该输出的文件 ([c36509f](https://github.com/ecomfe/okam/commit/c36509f))
+* **okam-core:** 修复自定义组件 `$emit` 的事件详情数据为空变成空对象问题，改成保留原始的事件详情数据 ([c5a55cb](https://github.com/ecomfe/okam/commit/c5a55cb))
+* **okam-core:** 修复内部方法错误显示 warning 信息 ([15f32a2](https://github.com/ecomfe/okam/commit/15f32a2))
+* **okam-core:** 修复 `$nextTick` 嵌套情况下，没有触发嵌套的数据修改的 `$nextTick` 回调 ([bcb2d32](https://github.com/ecomfe/okam/commit/bcb2d32))
+
+### Features
+
+* **okam-core:** 移除组件 `$selector` 属性，`ref` 扩展现在对于引用非自定义组件不再使用 `createSelectorQuery` 查询节点作为 fallback，即 `ref` 模板属性只能引用自定义组件，页面组件新增 `createSelectorAPI` 以对齐原生自定义组件提供的 `createSelectorQuery` API ([007410e](https://github.com/ecomfe/okam/commit/007410e))
+
+### Refactor
+
+* **okam-build:** 优化模板事件代理新增的模板数据属性名称长度 ([2bb0a0a](https://github.com/ecomfe/okam/commit/2bb0a0a))
+* **okam-core:** 优化模板事件代理新增的模板数据属性名称长度 ([8d44206](https://github.com/ecomfe/okam/commit/8d44206))
+* **okam-build:** 优化样式依赖路径的 `resolve` ([9aa7c75](https://github.com/ecomfe/okam/commit/9aa7c75))
+
 ## 0.4.0 (2018-12-06)
 
 ### Bug Fixes
