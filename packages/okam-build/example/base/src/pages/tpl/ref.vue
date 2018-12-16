@@ -39,10 +39,6 @@ export default {
 
         handleClick() {
             console.log(this.$refs)
-            let result = this.$selector.select('.my-btn');
-
-            console.log(result)
-            console.log(this)
         }
     }
 };
