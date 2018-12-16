@@ -149,18 +149,18 @@ export default {
             const data = event.currentTarget.dataset;
             const eventType = event.type;
 
-            if ((event.target.id !== event.currentTarget.id) && data[`${eventType}ModifierSelf`]) {
+            if ((event.target.id !== event.currentTarget.id) && data[`${eventType}Self`]) {
                 return;
             }
 
-            const realHandler = data[`${eventType}EventProxy`];
+            const realHandler = data[`${eventType}Proxy`];
 
             // get arguments in dataSet when there is real handler
             if (eventType && realHandler) {
-                let args = data[`${eventType}ArgumentsProxy`] || [event];
+                let args = data[`${eventType}Args`] || [event];
 
                 // passing on the event object when there is '$event' identifier
-                const eventObjectAlias = data[`${eventType}EventObjectAlias`];
+                const eventObjectAlias = data[`${eventType}Event`];
                 if (eventObjectAlias) {
                     args = args.map(
                         item => (item === eventObjectAlias ? event : item)
