@@ -624,17 +624,17 @@ describe('Component', () => {
             type: 'click',
             currentTarget: {
                 dataset: {
-                    clickModifierSelf: true,
-                    clickEventProxy: 'clk',
-                    clickArgumentsProxy: [eventData, 'xx'],
-                    clickEventObjectAlias: 'xx',
+                    clickSelf: true,
+                    clickProxy: 'clk',
+                    clickArgs: [eventData, 'xx'],
+                    clickEvent: 'xx',
 
-                    inputModifierSelf: false,
-                    inputEventProxy: 'input',
-                    inputArgumentsProxy: [eventData],
+                    inputSelf: false,
+                    inputProxy: 'input',
+                    inputArgs: [eventData],
 
-                    touchModifierSelf: false,
-                    touchEventProxy: 'touch'
+                    touchSelf: false,
+                    touchProxy: 'touch'
                 },
                 id: 23
             },
