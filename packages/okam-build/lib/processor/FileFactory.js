@@ -291,15 +291,16 @@ class FileFactory extends EventEmitter {
             componentExtname
         } = this.options;
 
-        if (isMatchFile(file, entryScript)) {
+        let filePath = file.path;
+        if (isMatchFile(filePath, entryScript)) {
             file.isEntryScript = true;
         }
 
-        if (isMatchFile(file, entryStyle)) {
+        if (isMatchFile(filePath, entryStyle)) {
             file.isEntryStyle = true;
         }
 
-        if (isMatchFile(file, projectConfig)) {
+        if (isMatchFile(filePath, projectConfig)) {
             file.isProjectConfig = true;
         }
 
