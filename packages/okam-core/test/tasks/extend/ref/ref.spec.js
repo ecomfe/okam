@@ -14,11 +14,13 @@ import MyPage from 'core/swan/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import ref from 'core/extend/ref';
 import component from 'core/base/component';
+import page from 'core/base/page';
 import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
 describe('ref plugin', function () {
     const rawSelectComponent = component.selectComponent;
     const rawSelectAllComponent = component.selectAllComponents;
+    const rawPageSelectComponent = page.selectComponent;
 
     let MyComponent;
     let restoreAppEnv;
@@ -29,6 +31,13 @@ describe('ref plugin', function () {
         MyComponent = fakeComponent();
         restoreAppEnv = fakeAppEnvAPIs('swan');
 
+        page.selectComponent = function (path) {
+            if (path.indexOf('.notExist') === 0) {
+                return null;
+            }
+            return 'c' + path;
+        };
+
         component.selectComponent = function (path) {
             if (path.indexOf('.notExist') === 0) {
                 return null;
@@ -38,7 +47,7 @@ describe('ref plugin', function () {
 
         component.selectAllComponents = function (path) {
             if (path.indexOf('.notExist') === 0) {
-                return null;
+                return [];
             }
             return ['c' + path];
         };
@@ -48,6 +57,7 @@ describe('ref plugin', function () {
         MyComponent = undefined;
         restoreAppEnv();
 
+        page.selectComponent = rawPageSelectComponent;
         component.selectComponent = rawSelectComponent;
         component.selectAllComponents = rawSelectAllComponent;
 
@@ -71,9 +81,9 @@ describe('ref plugin', function () {
             mounted() {
                 assert(this.$refs != null);
 
-                assert(this.$refs.a === '.xx-a');
-                assert(this.$refs.b === '.xx-b');
-                expect(this.$refs.c).toEqual(['.xx-c']);
+                assert(this.$refs.a === 'c.xx-a');
+                assert(this.$refs.b === 'c.xx-b');
+                expect(this.$refs.c).toEqual([]);
 
             }
         }, {refs: refInfo});
@@ -108,9 +118,9 @@ describe('ref plugin', function () {
 
                 assert(this.$refs.a === 'c.xx-a');
                 assert(this.$refs.b === 'c.xx-b');
-                assert(this.$refs.c === '.notExist-c');
-                expect(this.$refs.d).toEqual('c.xx-d');
-                expect(this.$refs.e).toEqual(['.notExist-e']);
+                assert(this.$refs.c == null);
+                expect(this.$refs.d).toEqual(['c.xx-d']);
+                expect(this.$refs.e).toEqual([]);
             }
         }, {refs: refInfo});
 

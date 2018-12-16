@@ -289,4 +289,15 @@ describe('Page', () => {
             expect(item.calls[0].context).toBe(page);
         });
     });
+
+    it('should provide createSelectorQuery in page context', () => {
+        let page = MyPage({});
+        page.onLoad();
+        page.onReady();
+
+        let result = page.createSelectorQuery();
+        assert(result != null);
+        assert(typeof result.select === 'function');
+        assert(typeof result.selectAll === 'function');
+    });
 });

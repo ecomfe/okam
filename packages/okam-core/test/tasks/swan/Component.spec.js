@@ -74,14 +74,6 @@ describe('Component', () => {
         component.created();
     });
 
-    it('should exist $selector extension API', () => {
-        let component = MyComponent({});
-        component.created();
-        assert(component.$selector == null);
-        component.attached();
-        assert(component.$selector && typeof component.$selector.select === 'function');
-    });
-
     it('should call beforeCreate when created', () => {
         const componentInstance = {
             beforeCreate() {},
@@ -159,8 +151,6 @@ describe('Component', () => {
         instance.attached();
         instance.ready();
 
-        assert(instance.$selector != null);
-
         instance.$listener.on('xx', () => {});
         assert(instance.$listener._listeners.xx.length === 1);
         instance.detached();
@@ -172,7 +162,6 @@ describe('Component', () => {
         expect(spyBaseDetached).toHaveBeenCalled();
         expect(spyDetached).toHaveBeenCalled();
 
-        assert(instance.$selector == null);
         expect(instance.$listener._listeners).toEqual({});
         assert(instance.$isDestroyed);
     });
