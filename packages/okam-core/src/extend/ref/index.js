@@ -23,20 +23,10 @@ function queryRefInstance(selector) {
         if (typeof this.selectAllComponents === 'function') {
             result = this.selectAllComponents(selector);
         }
-
-        if (!result || !result.length) {
-            result = this.$selector.selectAll(selector);
-        }
+        result || (result = []);
     }
-    else {
-        if (typeof this.selectComponent === 'function') {
-            result = this.selectComponent(selector);
-        }
-
-        if (!result) {
-            // if not custom component, try to query element info by selector API
-            result = this.$selector.select(selector);
-        }
+    else if (typeof this.selectComponent === 'function') {
+        result = this.selectComponent(selector);
     }
 
     return result;

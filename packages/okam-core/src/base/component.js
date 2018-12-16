@@ -5,7 +5,7 @@
 
 'use strict';
 
-import {appEnv, getCurrApp} from '../na/index';
+import {getCurrApp} from '../na/index';
 import EventListener from '../util/EventListener';
 import base from './base';
 
@@ -49,8 +49,6 @@ export default {
     attached() {
         // call beforeMount hook
         this.beforeMount && this.beforeMount();
-
-        this.$selector = appEnv.createSelectorQuery();
     },
 
     /**
@@ -73,7 +71,6 @@ export default {
         this.beforeDestroy && this.beforeDestroy();
 
         this.$listener.off();
-        this.$selector = null;
         this.$isDestroyed = true; // add destroyed flag
 
         // call destroyed hook

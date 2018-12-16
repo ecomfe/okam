@@ -45,6 +45,18 @@ export default Object.assign({}, component, {
     },
 
     methods: Object.assign(
-        {}, component.methods
+        {
+
+            /**
+             * Create selector query basing global API, this API like the
+             * createSelectorQuery defined in the native component context.
+             *
+             * @return {Object}
+             */
+            createSelectorQuery() {
+                return this.$api.createSelectorQuery();
+            }
+
+        }, component.methods
     )
 });

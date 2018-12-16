@@ -12,30 +12,6 @@ import {normalizeExtendProp} from '../../../helper/methods';
 const REF_DATA_ATTR = 'data-okam-ref';
 
 /**
- * Query the reference instance information by the given reference class
- *
- * @inner
- * @param {string} selector the reference class or id selector
- * @param {boolean} isSelectAll whether is select all
- * @param {?Array|Object} componentInstances the component instances
- * @return {?Object|Array}
- */
-function queryRefInstance(selector, isSelectAll, componentInstances) {
-    let result = componentInstances;
-    if (isSelectAll) {
-        if (!result || !result.length) {
-            result = this.$selector.selectAll(selector);
-        }
-    }
-    else if (!result) {
-        // if not custom component, try to query element info by selector API
-        result = this.$selector.select(selector);
-    }
-
-    return result;
-}
-
-/**
  * Initialize the `$refs` value
  *
  * @inner
@@ -68,7 +44,6 @@ function initRefs() {
     }
 
     let result = {};
-    const self = this;
     Object.keys(refs).forEach(id => {
         result[id] = {
             get() {
@@ -76,9 +51,9 @@ function initRefs() {
                 let isSelectAll = Array.isArray(value);
                 isSelectAll && (value = value[0]);
                 let key = isSelectAll ? `[]${value}` : value;
-                return queryRefInstance.call(
-                    self, value, isSelectAll, refComponents[key]
-                );
+                let result = refComponents[key];
+                isSelectAll && !result && (result = []);
+                return result;
             },
             enumerable: true
         };
