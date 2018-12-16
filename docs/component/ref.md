@@ -9,12 +9,12 @@
 * 如果非 `for` 循环节点引用
 
     * 基于 `selectComponent` 查询自定义组件实例，如果查询成功，返回对应的组件实例对象；
-    * 如果查询失败，则基于节点选择器 [select](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.select.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例
+    * 如果查询失败，~~则基于节点选择器 [select](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.select.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例~~ 则返回空
 
 * 如果 `for` 循环节点上下文引用
 
     * 基于 `selectAllComponents` 查询自定义组件实例，如果存在返回对应的自定义组件实例数组；
-    * 如果查询失败，则基于节点选择器 [selectorAll](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.selectAll.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例，而不是数组
+    * 如果查询失败，~~则基于节点选择器 [selectorAll](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.selectAll.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例，而不是数组~~ 则返回空数组
 
 
 ## 开启 Ref 支持
