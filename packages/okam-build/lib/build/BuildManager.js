@@ -463,7 +463,18 @@ class BuildManager extends EventEmitter {
                 this.removeAsyncTask(file);
 
                 if (!res || res.err) {
-                    this.emit('asyncError', res ? res.err : 'error');
+                    this.logger.error(
+                        `process file ${file.path} async task error:`,
+                        res && res.err
+                    );
+
+                    if (file.isImg) {
+                        // output image file even if fail
+                        this.emit('asyncDone', file);
+                    }
+                    else {
+                        this.emit('asyncError', res ? res.err : 'error');
+                    }
                 }
                 else {
                     this.updateFileCompileResult(file, res);
