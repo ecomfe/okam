@@ -15,6 +15,10 @@ module.exports = {
     element: merge({}, element, {
         tpl: {
             transform: require('./tpl')
+        },
+        filter: {
+            match: 'wxs',
+            transform: require('./wxs')
         }
     }),
     attribute: merge({}, attribute, {
