@@ -58,12 +58,20 @@ export const observableArray = {
 
     splice(observer, rawSplice, ...args) {
         let rawData = observer.rawData;
-        rawSplice.apply(rawData, args);
 
-        let result = rawSplice.apply(this, args);
-        observer.set(null, rawData);
+        if (args.length === 3 && args[1] === 1) {
+            // splice(idx, 1, newValue) is the same as arr[idx] = newValue
+            let delIdx = args[0];
+            let lastIdx = rawData.length - 1;
+            let upIdx = delIdx > lastIdx ? (lastIdx + 1) : delIdx;
+            observer.set(upIdx, args[2]);
+        }
+        else {
+            rawSplice.apply(rawData, args);
+            observer.set(null, rawData);
+        }
 
-        return result;
+        return rawSplice.apply(this, args);
     },
 
     sort(observer, rawSort, ...args) {
