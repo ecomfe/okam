@@ -7,7 +7,7 @@
 * **okam-build:** 修复 `px2rpx` 设置 `precision` 无效 ([fdbad10](https://github.com/ecomfe/okam/commit/fdbad10))
 * **okam-build:** 修复模板的 `class` 绑定的对象定义换行转换失败问题 ([6c035ae](https://github.com/ecomfe/okam/commit/6c035ae))
 
-### Refactor
+### Features
 
 * **okam-build:** 增加对 `百度小程序` 原生 `filter` 及 `微信小程序` `wxs` 脚本支持 ([e3a0e95](https://github.com/ecomfe/okam/commit/e3a0e95))
 
