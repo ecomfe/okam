@@ -66,6 +66,10 @@ export default {
 
     $store: store,
 
+    globalData: {
+        config: {}
+    },
+
     // apis which need promisify
     $promisifyApis: ['getSystemInfo', 'request'],
 
