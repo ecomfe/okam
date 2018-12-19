@@ -23,7 +23,7 @@ class Px2rpx {
      */
     constructor(opts) {
         this.designWidth = opts.designWidth || 750;
-        this.precision = opts.precision || 2;
+        this.precision = typeof opts.precision === 'undefined' ? 2 : 0;
         this.proportion = 750 / this.designWidth;
 
         if (!keepComment) {
