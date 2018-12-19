@@ -1,5 +1,12 @@
 # ChangeLog
 
+## okam-build@0.4.3 (2018-12-19)
+
+### Bug Fixes
+
+* **okam-build:** 修复入口脚本的 globalData 存在 config 导致 App 的 config 配置丢失 [#20](https://github.com/ecomfe/okam/issues/20) ([afd943e](https://github.com/ecomfe/okam/commit/afd943e))
+* **okam-build:** 优化构建异步任务，对于图片处理失败依旧正常输出图片文件 [#19](https://github.com/ecomfe/okam/issues/19) ([82a01ed](https://github.com/ecomfe/okam/commit/82a01ed))
+
 ## 0.4.1 (2018-12-16)
 
 ### Bug Fixes
