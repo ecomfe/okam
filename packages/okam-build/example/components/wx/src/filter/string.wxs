@@ -1,0 +1,10 @@
+/**
+ * @file Weixin filter
+ * @author xxx
+ */
+
+// exports.xxx is not allowed, module.exports.xxx is ok
+
+module.exports.toLowerCase = function (str) {
+    return str.toLowerCase();
+};
