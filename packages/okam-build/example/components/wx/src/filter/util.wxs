@@ -1,0 +1,16 @@
+/**
+ * @file Weixin filter
+ * @author xxx
+ */
+// using ES6 syntax is not allowed?
+var strUtil = require('./string.wxs');
+var INFO = 'hello';
+// exports.xxx is not allowed, module.exports.xxx is ok
+
+module.exports = {
+    info: INFO,
+    toUpperCase: function (str) {
+        return str.toUpperCase();
+    },
+    toLowerCase: strUtil.toLowerCase
+};

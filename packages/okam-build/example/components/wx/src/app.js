@@ -8,8 +8,7 @@
 export default {
     config: {
         pages: [
-            'pages/swanFilter',
-            'pages/index'
+            'pages/wxFilter'
         ],
         window: {
         }

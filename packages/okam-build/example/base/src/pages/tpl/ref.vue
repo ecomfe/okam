@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="stylus">
-.vant-weapp-page
+.template-ref-syntax-wrap
     margin: 20px
     padding: 20px
 </style>
