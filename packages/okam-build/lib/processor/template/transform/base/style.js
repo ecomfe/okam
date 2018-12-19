@@ -12,7 +12,7 @@
 
 'use strict';
 
-const CURLY_BRACE_HAS_REGEXP = require('./constant').CURLY_BRACE_HAS_REGEXP;
+const {CURLY_BRACE_HAS_REGEXP} = require('./constant');
 
 module.exports = function (attrs, name, tplOpts) {
     let value = attrs[name];
