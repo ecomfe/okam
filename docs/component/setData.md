@@ -84,6 +84,11 @@ this.arr.splice(0, 1, 23);
 this.arr.splice(2);
 ```
 
+* 数组操作扩展的 `API` (如果考虑对齐 `Vue` 使用方式，需要避开该方式使用)
+
+    * `setItem(idx, value)`: 如果想替换某个数组项，除了上面的 `splice` 方式，还可以使用该扩展 API: `arr.setItem(idx, newValue)`
+    * `getItem(idx)`: 如果想对数组项内容进行修改用于数组项为对象情况下，可以这么修改：`arr.getItem(idx).show = false`
+
 
 ## 计算属性
 
