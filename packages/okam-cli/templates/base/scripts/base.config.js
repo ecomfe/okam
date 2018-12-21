@@ -30,6 +30,7 @@ module.exports = {
         <% if: ${redux} %>
         'redux',
         <% /if %>
+        'behavior',
         'broadcast',
         'ref'
     ],
