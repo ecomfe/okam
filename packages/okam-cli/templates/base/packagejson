@@ -79,6 +79,6 @@
     "node": ">= 8"
   },
   "dependencies": {
-    "okam-core": "^${coreVersion}"
+    "okam-core": "${coreVersion}"
   }
 }

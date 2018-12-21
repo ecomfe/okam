@@ -30,6 +30,11 @@ class Project {
     }
 
     init() {
+        console.log(
+            'recommend: update '
+            + chalk.green('okam-cli')
+            +' to the latest'
+            + chalk.green('okam upgrade self'));
         console.log(chalk.green('Create a new okam project'));
         console.log('Need help? Go and open issue: https://github.com/ecomfe/okam');
         console.log();

@@ -14,8 +14,7 @@ module.exports = merge({}, require('./base.config'), {
     },
     <% if: ${async} %>
     localPolyfill: [
-        'async',
-        'promise'
+        'async'
     ],
     <% /if %>
     dev: {
