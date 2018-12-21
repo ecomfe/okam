@@ -43,7 +43,8 @@ module.exports = {
                 plugins: {
                     px2rpx: {
                         // 设计稿尺寸
-                        designWidth: 1242
+                        designWidth: 1242,
+                        noTrans1px: true
                     }
                 }
             }
