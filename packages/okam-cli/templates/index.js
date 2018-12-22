@@ -67,7 +67,7 @@ const PROMPT_PACKAGE_KEYS = ['template', 'script', 'style', 'redux', 'async', 't
  */
 const PACKAGE_NAME_CORE = {
     name: 'okam-core',
-    version: '0.3.3'
+    version: '*'
 };
 
 /**
@@ -81,140 +81,140 @@ const PACKAGE_NAMES_MAP = {
         {
             name: 'okam-build',
             fetchLatest: true,
-            version: '0.3.2'
+            version: '*'
         },
         {
             name: 'cross-env',
-            version: '5.2.0'
+            version: '^5.2.0'
         },
         {
             name: 'postcss',
-            version: '7.0.6'
+            version: '^7.0.6'
         },
         {
             name: 'postcss-url',
-            version: '8.0.0'
+            version: '^8.0.0'
         },
         {
             name: 'json5',
-            version: '2.1.0'
+            version: '^2.1.0'
         },
         {
             name: 'connect',
-            version: '3.6.6'
+            version: '^3.6.6'
         }
     ],
     devDeps: {
         eslint: [
             {
                 name: 'eslint',
-                version: '5.9.0'
+                version: '^5.9.0'
             },
             {
                 name: 'eslint-plugin-babel',
-                version: '5.3.0'
+                version: '^5.3.0'
             },
             {
                 name: 'babel-eslint',
-                version: '10.0.1'
+                version: '^10.0.1'
             },
             {
                 name: 'husky',
-                version: '1.2.0'
+                version: '^1.2.0'
             },
             {
                 name: 'lint-staged',
-                version: '8.1.0'
+                version: '^8.1.0'
             }
         ],
         fecs: [
             {
                 name: 'fecs',
-                version: '1.6.4'
+                version: '^1.6.4'
             },
             {
                 name: 'husky',
-                version: '1.2.0'
+                version: '^1.2.0'
             }, {
                 name: 'lint-staged',
-                version: '8.1.0'
+                version: '^8.1.0'
             }
         ],
         tinyimg: [
             {
                 name: 'okam-plugin-tinyimg',
                 fetchLatest: true,
-                version: '0.1.1'
+                version: '^0.1.1'
             }
         ],
         redux: [
             {
                 name: 'redux',
-                version: '4.0.1'
+                version: '^4.0.1'
             }
         ],
         pug: [
             {
                 name: 'pug',
-                version: '2.0.3'
+                version: '^2.0.3'
             }
         ],
         async: [
             {
                 name: 'regenerator-runtime',
-                version: '0.13.1'
+                version: '^0.13.1'
             },
             {
                 name: 'promise-polyfill',
-                version: '8.1.0'
+                version: '^8.1.0'
             }
         ],
         babel7: [
             {
                 name: '@babel/core',
-                version: '7.1.6'
+                version: '^7.1.6'
             },
             {
                 name: '@babel/preset-env',
-                version: '7.1.6'
+                version: '^7.1.6'
             }
         ],
         babel: [
             {
                 name: 'babel-core',
-                version: '6.26.3'
+                version: '^6.26.3'
             },
             {
                 name: 'babel-preset-env',
-                version: '1.7.0'
+                version: '^1.7.0'
             }
         ],
         typescript: [
             {
                 name: '@babel/core',
-                version: '7.1.6'
+                version: '^7.1.6'
             },
             {
                 name: '@babel/preset-env',
-                version: '7.1.6'
+                version: '^7.1.6'
             }
         ],
         stylus: [
             {
                 name: 'stylus',
-                version: '0.54.5'
+                version: '^0.54.5'
             }
         ],
         less: [
             {
                 name: 'less',
-                version: '3.8.1'
+                version: '^3.8.1'
             }
         ],
         scss: [
             {
                 name: 'node-sass',
-                version: '4.10.0'
+                version: '^4.10.0'
             }
         ]
     }

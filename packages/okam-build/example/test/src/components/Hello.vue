@@ -1,12 +1,6 @@
 <template>
     <view class="hello-wrap">
         <button plain class="hello-btn" @click="handleClick">Hello in {{from}}</button>
-        <view if ="xdata" for="item in list">
-            ddd
-        </view>
-        <view else>
-            xxx
-        </view>
     </view>
 </template>
 <script>
