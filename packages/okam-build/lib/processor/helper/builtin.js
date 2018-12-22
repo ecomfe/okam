@@ -166,7 +166,7 @@ function initProcessorInfo(name, info, existedProcessors) {
             info = Object.assign({}, old, info);
             info.deps = merge(deps || [], oldDeps || []);
 
-            return Object.assign({}, old, info);
+            return Object.assign({refer: processor}, old, info);
         }
     }
 

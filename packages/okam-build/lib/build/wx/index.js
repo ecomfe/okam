@@ -8,8 +8,6 @@
 const BuildManager = require('../BuildManager');
 const {getDefaultBabelProcessor} = require('../../processor/helper/processor');
 const {registerProcessor} = require('../../processor/type');
-const {resolve: resolveDep} = require('../../processor/helper/npm');
-const programPlugins = require('../../processor/js/plugins/babel-program-plugins');
 
 class BuildWxAppManager extends BuildManager {
 
@@ -23,24 +21,14 @@ class BuildWxAppManager extends BuildManager {
             buildConf.processors
         );
 
-        let self = this;
         registerProcessor({
             name: 'wxs',
             // using the existed view processor
             processor: defaultBabelProcessorName,
             extnames: ['wxs'],
             rext: 'wxs',
-            hook: {
-                before(file, options) {
-                    options.plugins = [
-                        [
-                            programPlugins.resolveDep,
-                            {
-                                resolveDepRequireId: resolveDep.bind(null, self, file)
-                            }
-                        ]
-                    ];
-                }
+            options: {
+                plugins: ['dep']
             }
         });
     }

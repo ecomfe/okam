@@ -11,6 +11,25 @@ const programPlugins = require('../js/plugins/babel-program-plugins');
 const polyfillPlugin = require('../js/plugins/babel-polyfill-plugins');
 const {normalPageConfig, normalizeComponentConfig} = require('./config');
 
+const DEP_PLUGIN_NAME = 'dep';
+
+/**
+ * The builtin babel plugins
+ *
+ * @const
+ * @type {Object}
+ */
+const BUILTIN_PLUGINS = {
+    [DEP_PLUGIN_NAME]: function (file, buildManager) {
+        return [
+            programPlugins.resolveDep,
+            {
+                resolveDepRequireId: resolveDep.bind(null, buildManager, file)
+            }
+        ];
+    }
+};
+
 /**
  * Initialize the mixin(Behavior) file
  *
@@ -79,6 +98,59 @@ function initLocalPolyfillPlugins(polyfills, plugins) {
 }
 
 /**
+ * Check whether has babel dep resolve plugin in the given plugin list
+ *
+ * @inner
+ * @param {Array} plugins the plugin list
+ * @return {boolean}
+ */
+function hasBabelDepPlugin(plugins) {
+    return plugins.some(item => {
+        let pluginItem = item;
+        if (Array.isArray(item)) {
+            pluginItem = item[0];
+        }
+
+        if (typeof pluginItem === 'string') {
+            return pluginItem === DEP_PLUGIN_NAME;
+        }
+
+        return pluginItem === programPlugins.resolveDep;
+    });
+}
+
+/**
+ * Normalize babel plugins
+ *
+ * @inner
+ * @param {Array} plugins the plugins to normalize
+ * @param {Object} file the file to process
+ * @param {BuildManager} buildManager the build manager
+ * @return {Array}
+ */
+function normalizeBabelPlugins(plugins, file, buildManager) {
+    if (typeof plugins === 'function') {
+        plugins = plugins(file);
+    }
+
+    plugins = plugins ? [].concat(plugins) : [];
+    if (!hasBabelDepPlugin(plugins)) {
+        // add npm resolve plugin
+        plugins.push(DEP_PLUGIN_NAME);
+    }
+
+    return (plugins || []).map(item => {
+        if (typeof item === 'string') {
+            let result = BUILTIN_PLUGINS[item];
+            if (typeof result === 'function') {
+                return result(file, buildManager);
+            }
+        }
+        return item;
+    });
+}
+
+/**
  * Initialize babel processor options
  *
  * @param {Object} file the file to process
@@ -92,20 +164,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     );
 
     // init plugins
-    let plugins = processorOpts.plugins;
-    if (typeof plugins === 'function') {
-        plugins = plugins(file);
-    }
-    plugins = [].concat(plugins || []);
-
-    // add npm resolve plugin
-    let depResolve = [
-        programPlugins.resolveDep,
-        {
-            resolveDepRequireId: resolveDep.bind(null, buildManager, file)
-        }
-    ];
-    plugins.push(depResolve);
+    let plugins = normalizeBabelPlugins(processorOpts.plugins, file, buildManager);
 
     // init app/page/component transform plugin
     let configInitHandler = initConfigInfo.bind(
