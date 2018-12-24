@@ -28,7 +28,8 @@ export default {
             'pages/todos/todoList',
             'pages/todos/counter',
             'pages/behavior/index',
-            'pages/broadcast/index'
+            'pages/broadcast/index',
+            'pages/filter/index'
         ],
         subPackages: [
             {

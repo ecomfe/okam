@@ -9,6 +9,7 @@ const merge = require('../../../').merge;
 module.exports = merge({}, require('./base.config'), {
     polyfill: ['async'],
     wx2swan: true,
+    framework: ['filter'],
     processors: {
         // vant: {
         //     processor: 'babel',

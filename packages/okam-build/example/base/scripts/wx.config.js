@@ -16,9 +16,13 @@ module.exports = merge({}, require('./base.config'), {
         'async',
         'promise'
     ],
-
+    framework: ['filter'],
     dev: {
         processors: {
+            babel7: {
+                extnames: 'js'
+            },
+
             postcss: {
                 options: {
                     plugins: [
@@ -26,6 +30,11 @@ module.exports = merge({}, require('./base.config'), {
                             url: 'inline'
                         }]
                     ]
+                }
+            },
+            wxs: {
+                options: {
+                    presets: ['@babel/preset-env']
                 }
             }
         }

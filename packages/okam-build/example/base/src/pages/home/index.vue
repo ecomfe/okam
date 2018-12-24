@@ -59,6 +59,10 @@ export default {
                         path: 'tpl/ref'
                     },
                     {
+                        subName: 'filter 支持',
+                        path: 'filter/index'
+                    },
+                    {
                         subName: '其他模板引擎',
                         path: 'tpl/tplPug'
                     }
