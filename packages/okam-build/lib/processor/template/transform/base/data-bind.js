@@ -41,7 +41,7 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
             let filterValue = filterOpts
                 ? transformPipeFilter(value, filterOpts, logger)
                 : value;
-            if (filterValue !== value) {
+            if (filterOpts && filterValue !== value) {
                 let filterAttrs = element._hasFilterAttrs || [];
                 element._hasFilterAttrs = filterAttrs;
                 filterAttrs.push(newName);

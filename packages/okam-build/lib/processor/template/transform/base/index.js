@@ -23,7 +23,11 @@ module.exports = {
             },
             transform(node, tplOpts, opts) {
                 let {logger, config} = tplOpts;
-                return transformTextNode(node, config.filter, logger);
+                let filterOpts = config.filter;
+                if (!filterOpts) {
+                    return;
+                }
+                return transformTextNode(node, filterOpts, logger);
             }
         }
     }
