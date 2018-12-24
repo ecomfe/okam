@@ -50,7 +50,7 @@ const BUILTIN_PLUGINS = {
     syntax: getTemplateSyntaxPlugin,
     eventSync: getEventSyntaxPlugin,
     tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
-    vPrefix: path.join(PLUGIN_BASE_NAME, 'vprefix-syntax-plugin'),
+    vuePrefix: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
 };
 
@@ -172,9 +172,9 @@ function initViewTransformOptions(file, processOpts, buildManager) {
             plugins.push('tagTransform');
         }
 
-        // vPrefix  需要在第一位，v- directives 处理成 directives 再处理
+        // vuePrefix  需要在第一位，v- directives 处理成 directives 再处理
         if (templateConf.useVuePrefix) {
-            plugins.unshift('vPrefix');
+            plugins.unshift('vuePrefix');
         }
     }
 
