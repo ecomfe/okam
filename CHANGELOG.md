@@ -1,5 +1,31 @@
 # ChangeLog
 
+## 0.4.6 (2018-12-24)
+
+- okam-build@0.4.6
+- okam-cli@0.1.4
+- okam-core@0.4.2
+- okam-helper@0.4.2
+
+### Bug Fixes
+
+* **okam-build:** 修复 `px2rpx` 设置 `precision` 无效 ([fdbad10](https://github.com/ecomfe/okam/commit/fdbad10))
+* **okam-build:** 修复构建配置对于 `entry.script` 配置的 `merge` 丢失问题 [#23](https://github.com/ecomfe/okam/issues/23) ([b2214a8](https://github.com/ecomfe/okam/commit/b2214a8))
+* **okam-build:** 修复增量构建时候，重复文件输出 ([51a8bad](https://github.com/ecomfe/okam/commit/51a8bad))
+
+### Features
+* **okam-build:** 新增 `px2rpx` 插件对于 `1px` 不转换选项 ([0fb83dd](https://github.com/ecomfe/okam/commit/0fb83dd))
+* **okam-build:** 新增 `Vue` 模板指令前缀支持，通过构建配置 `component.template.useVuePrefix` 启用 ([dc028b1](https://github.com/ecomfe/okam/commit/dc028b1))
+* **okam-build:** 新增 `微信小程序` 和 `百度小程序`，`Vue filter` 语法支持，通过组件 `filters` 选项定义过滤器，通过构建配置 `framework` 新增 `filter` 扩展项支持 ([8bba3f1](https://github.com/ecomfe/okam/commit/8bba3f1))
+
+### Performance Improvements
+
+* **okam-core:** 优化数组 slice API 操作，对于 `splice(idx, 1, newValue)` 操作转成数组索引赋值操作 ([6f30d48](https://github.com/ecomfe/okam/commit/6f30d48))
+
+### Refactor
+
+* **okam-build:** 优化下 babel 内置 `dep` 插件的配置 ([a83a305](https://github.com/ecomfe/okam/commit/a83a305))
+
 ## okam-build@0.4.5 (2018-12-19)
 
 ### Bug Fixes
