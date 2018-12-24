@@ -12,8 +12,8 @@ export default {
     config: {
         // The first element as the home page when app startup
         pages: [
-            'pages/tpl/vueSyntax',
             'pages/home/index',
+            'pages/tpl/vueSyntax',
             'pages/tpl/tplSyntax',
             'pages/tpl/tplReuse',
             'pages/tpl/tplPug',

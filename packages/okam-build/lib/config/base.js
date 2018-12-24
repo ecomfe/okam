@@ -265,6 +265,15 @@ module.exports = {
          */
         template: {
             /**
+             * vue v- 前缀支持
+             *
+             * @type {String}
+             *
+             * 可选值：'vue'
+             */
+            useVuePrefix: false,
+
+            /**
              * 标签转换支持
              *
              * @type {string|Object}

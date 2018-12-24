@@ -5,19 +5,26 @@
 
 'use strict';
 
-
+/**
+ * 直接替换的属性
+ *
+ * @type {Object}
+ * @const
+ */
 const DIRECTIVES_MAP = {
     'v-if': 'if',
     'v-else-if': 'elif',
     'v-elif': 'elif',
     'v-else': 'else',
-    'v-for': 'for',
-    // okam 暂不支持这个 转成 if
-    'v-show': 'if'
-    // 暂不支持
-    // 'v-html': 'html'
+    'v-for': 'for'
 };
 
+/**
+ * 正则匹配替换
+ *
+ * @type {Object}
+ * @const
+ */
 const DIRECTIVES_REGEXP = {
     'v-on:': {
         match: /^v-on:/,
@@ -28,6 +35,14 @@ const DIRECTIVES_REGEXP = {
         replace: ''
     }
 };
+
+/**
+ * 不支持的指令
+ *
+ * @type {Object}
+ * @const
+ */
+const DIRECTIVES_NOT_SUPPORT = ['v-html', 'v-show', 'v-model'];
 
 function getNewAttrKey(attr) {
 
@@ -60,6 +75,11 @@ module.exports = {
         let attrs = node.attribs || {};
 
         Object.keys(attrs).forEach(key => {
+
+            if (DIRECTIVES_NOT_SUPPORT.indexOf(key) >= 0) {
+                logger.error(`${file.path} template attribute ${key} not support`);
+                return;
+            }
 
             let newAttr = getNewAttrKey(key);
             if (attrs.hasOwnProperty(newAttr)) {

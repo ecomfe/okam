@@ -61,6 +61,10 @@ export default {
                     {
                         subName: '其他模板引擎',
                         path: 'tpl/tplPug'
+                    },
+                    {
+                        subName: 'v- 前缀支持',
+                        path: 'tpl/vueSyntax'
                     }
                 ]
             },

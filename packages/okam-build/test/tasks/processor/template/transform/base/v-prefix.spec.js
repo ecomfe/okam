@@ -49,4 +49,13 @@ describe('template processor: v- prefix plugin of template', function () {
         let result = templateProcessor(file, fakeProcessorOptions());
         assert.equal(result.content, '<view bindtap="__handlerProxy" data-tap-proxy="backButton" bindtouch="__handlerProxy" data-touch-proxy="touch"></view>');
     });
+
+    it('v- prefix: not support directives', function () {
+        const file = {
+            path: 'test/fakefile',
+            content: '<div v-html="backButton" v-model="data" v-show="false"></div>'
+        };
+        let result = templateProcessor(file, fakeProcessorOptions());
+        assert(result.content === '<view v-html="backButton" v-model="data" v-show="false"></view>');
+    });
 });

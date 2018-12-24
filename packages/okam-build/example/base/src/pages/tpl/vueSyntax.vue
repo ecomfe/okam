@@ -6,8 +6,8 @@
             <h3 class="content-title">在 okam 框架基础上，支持 v- 前缀</h3>
             <h3 class="content-title">Tips： vue 语法并不全部支持</h3>
             <ul class="tips-container">
-                <li class="tip-item">不支持 v-html</li>
-                <li class="tip-item">不支持 v-show</li>
+                <li class="tip-item" v-html="xxx">不支持 v-html</li>
+                <li class="tip-item" v-show="false">不支持 v-show</li>
                 <li class="tip-item">不支持过滤器</li>
                 <li class="tip-item">不支持函数</li>
             </ul>

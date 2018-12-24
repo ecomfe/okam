@@ -133,11 +133,15 @@ function initViewTransformOptions(file, processOpts, buildManager) {
     let {appType, componentConf} = buildManager;
     let templateConf = (componentConf && componentConf.template) || {};
     if (!plugins || !plugins.length) {
-        // vPrefix  需要在第一位，v- directives 处理成 directives 再处理
-        plugins = ['vPrefix', 'syntax'];
+        plugins = ['syntax'];
 
         if (templateConf.transformTags) {
             plugins.push('tagTransform');
+        }
+
+        // vPrefix  需要在第一位，v- directives 处理成 directives 再处理
+        if (templateConf.useVuePrefix) {
+            plugins.unshift('vPrefix');
         }
     }
 
