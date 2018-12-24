@@ -42,7 +42,11 @@ const DIRECTIVES_REGEXP = {
  * @type {Object}
  * @const
  */
-const DIRECTIVES_NOT_SUPPORT = ['v-html', 'v-show', 'v-model'];
+const DIRECTIVES_NOT_SUPPORT = [
+    'v-text', 'v-html', 'v-show',
+    'v-model', 'v-pre',
+    'v-cloak', 'v-once'
+];
 
 function getNewAttrKey(attr) {
 
