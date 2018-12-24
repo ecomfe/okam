@@ -10,7 +10,7 @@ const fs = require('fs');
 const logger = require('okam/util').logger;
 
 const initBuildOption = require('okam/build/init-build-options');
-const vueSyntax = require('okam/processor/template/plugins/vprefix-syntax-plugin');
+const vueSyntax = require('okam/processor/template/plugins/vue-prefix-plugin');
 const swanSyntax = require('okam/processor/template/plugins/swan-syntax-plugin');
 const wxSyntax = require('okam/processor/template/plugins/wx-syntax-plugin');
 const html = require('okam/processor/template/plugins/tag-transform-plugin');

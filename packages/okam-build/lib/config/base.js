@@ -267,9 +267,7 @@ module.exports = {
             /**
              * vue v- 前缀支持
              *
-             * @type {String}
-             *
-             * 可选值：'vue'
+             * @type {Boolean}
              */
             useVuePrefix: false,
 
