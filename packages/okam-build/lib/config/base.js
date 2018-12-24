@@ -36,6 +36,7 @@ module.exports = {
      * watch: 支持 watch 配置 和 $watch API，依赖 data 扩展需要一起配置
      * redux: 支持 redux 状态管理库，依赖 data 扩展需要一起配置
      * behavior: 支持组件包括 page 的 mixin 支持
+     * filter: 支持 Vue filter 语法，filter 定义通过组件 filters 属性定义
      * 可选。e.g., ['data', 'broadcast', 'ref']
      * 对于插件支持选项，可以传入数组形式：
      * [ ['behavior', '{useNativeBehavior: true}'] ]
