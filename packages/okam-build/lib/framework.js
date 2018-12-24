@@ -38,6 +38,10 @@ const FRAMEWORK_EXTEND_PATH = {
     ref: {
         default: 'extend/ref/index',
         ant: 'extend/ref/ant/index'
+    },
+    filter: {
+        wx: true,
+        swan: true
     }
 };
 
@@ -139,6 +143,10 @@ exports.getFrameworkExtendId = function (appType, extendName, getConstructor = f
 
     if (value == null) {
         throw new Error(`unknown ${appType} framework extension: ${extendName}`);
+    }
+
+    if (typeof value === 'boolean') {
+        return;
     }
 
     if (typeof value === 'object') {

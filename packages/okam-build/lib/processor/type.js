@@ -6,7 +6,11 @@
 'use strict';
 
 const path = require('path');
-const {getFileExtnameAssociatedProcessor, registerProcessor} = require('./helper/builtin');
+const {
+    getFileExtnameAssociatedProcessor,
+    registerProcessor,
+    updateReferProcessorInfo
+} = require('./helper/builtin');
 
 const STYLE_EXT_NAMES = ['css', 'less', 'styl', 'sass', 'scss'];
 const SCRIPT_EXT_NAMES = ['js', 'es', 'es6', 'ts', 'coffee'];
@@ -215,4 +219,8 @@ exports.isJSON = function (extname) {
 
 exports.registerProcessor = registerProcessor.bind(
     null, BUILTIN_PROCESSORS, exports.FILE_EXT_PROCESSOR
+);
+
+exports.updateReferProcessorInfo = updateReferProcessorInfo.bind(
+    null, BUILTIN_PROCESSORS
 );

@@ -38,12 +38,7 @@ function replaceFileName(filePath, newFileName) {
         return false;
     }
 
-    let newPath = path.join(path.dirname(filePath), newFileName);
-
-    // in window: path.join('src', 'test.js'); => 'src\test.js'
-    // in mac: path.join('src', 'test.js'); => 'src/test.js'
-    newPath = newPath.replace(/\\/g, '/');
-    return newPath;
+    return fileUtil.replaceFileName(filePath, newFileName);
 }
 
 function getOutputPath(filePath, file, options) {
@@ -101,8 +96,13 @@ function getComponentPartOutputFilePath(partFile, owner, options) {
         return;
     }
 
+    let filePath = owner.path;
     if (partFile.isJson) {
         partFile.rext = componentPartExtname.config;
+    }
+    else if (partFile.isFilter) {
+        partFile.rext = '';
+        filePath = partFile.path;
     }
     else if (partFile.isScript) {
         partFile.rext = componentPartExtname.script;
@@ -114,7 +114,7 @@ function getComponentPartOutputFilePath(partFile, owner, options) {
         partFile.rext = componentPartExtname.tpl;
     }
 
-    return getOutputPath(owner.path, partFile, options);
+    return getOutputPath(filePath, partFile, options);
 }
 
 function mergeComponentStyleFiles(styleFiles, rootDir) {

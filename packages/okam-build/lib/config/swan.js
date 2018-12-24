@@ -33,7 +33,8 @@ module.exports = merge({}, baseConf, {
             script: 'js',
             style: 'css',
             tpl: 'swan',
-            config: 'json'
+            config: 'json',
+            filter: 'filter.js'
         }
     },
 

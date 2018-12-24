@@ -148,6 +148,10 @@ function resolveProcessor(processor) {
  */
 function initProcessorInfo(name, info, existedProcessors) {
     let processor = info.processor;
+    if (!processor) {
+        return info;
+    }
+
     if (typeof processor === 'string') {
         // if the processor refer to the existed processor, merge the existed
         // processor info with current processor
@@ -256,6 +260,39 @@ function overrideProcessor(existedProcessor, extnameProcessorMap, opts) {
 }
 
 /**
+ * Update existed processor processor info. If the processor has been defined,
+ * it'll skip the update.
+ *
+ * @param {Object} existedProcessors the existed processors info
+ * @param {string} processorName the processor name to update
+ * @param {string} referProcessorName the refer processor
+ */
+function updateReferProcessorInfo(existedProcessors, processorName, referProcessorName) {
+    let currProcessor = existedProcessors[processorName];
+    if (!currProcessor || currProcessor.processor) {
+        return;
+    }
+
+    let referProcessorInfo = existedProcessors[referProcessorName];
+    if (!referProcessorInfo) {
+        return;
+    }
+
+    let deps = referProcessorInfo.deps;
+    deps && !Array.isArray(deps) && (deps = [deps]);
+
+    let oldDeps = currProcessor.deps;
+    oldDeps && !Array.isArray(oldDeps) && (oldDeps = [oldDeps]);
+
+    let old = Object.assign({}, currProcessor);
+    Object.assign(currProcessor, referProcessorInfo, old, {
+        refer: referProcessorName,
+        deps: merge(deps || [], oldDeps || []),
+        processor: referProcessorInfo.processor
+    });
+}
+
+/**
  * Register the custom processor
  *
  * @param {Object} existedProcessors the existed processors, the key is processor name,
@@ -299,5 +336,6 @@ function registerProcessor(existedProcessors, extnameProcessorMap, opts) {
 
 module.exports = exports = {
     getFileExtnameAssociatedProcessor,
-    registerProcessor
+    registerProcessor,
+    updateReferProcessorInfo
 };

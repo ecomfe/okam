@@ -6,8 +6,7 @@
 'use strict';
 
 const BuildManager = require('../BuildManager');
-const {getDefaultBabelProcessor} = require('../../processor/helper/processor');
-const {registerProcessor} = require('../../processor/type');
+const {updateReferProcessorInfo} = require('../../processor/type');
 
 class BuildWxAppManager extends BuildManager {
 
@@ -16,21 +15,19 @@ class BuildWxAppManager extends BuildManager {
      */
     initProcessor(buildConf) {
         super.initProcessor(buildConf);
+        updateReferProcessorInfo('wxs', this.defaultBabelProcessorName);
+    }
 
-        const defaultBabelProcessorName = getDefaultBabelProcessor(
-            buildConf.processors
-        );
+    /**
+     * @override
+     */
+    getFilterTransformOptions() {
+        let opts = super.getFilterTransformOptions();
+        if (opts) {
+            opts.format = 'commonjs';
+        }
 
-        registerProcessor({
-            name: 'wxs',
-            // using the existed view processor
-            processor: defaultBabelProcessorName,
-            extnames: ['wxs'],
-            rext: 'wxs',
-            options: {
-                plugins: ['dep']
-            }
-        });
+        return opts;
     }
 }
 

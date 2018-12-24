@@ -262,3 +262,18 @@ exports.getPlainObjectNodeValue = getPlainObjectNodeValue;
 exports.isVariableDefined = function (path, varName) {
     return path.scope.hasBinding(varName);
 };
+
+/**
+ * Generate code
+ *
+ * @param {Object} ast the code ast to generate
+ * @param {Object} options the generation options
+ * @param {boolean=} usingBabel6 whether using babel 6
+ * @return {string}
+ */
+exports.generateCode = function (ast, options, usingBabel6) {
+    let generate = usingBabel6
+        ? require('babel-generator').default
+        : require('@babel/generator').default;
+    return generate(ast, options);
+};

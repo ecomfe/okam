@@ -20,6 +20,16 @@ function getEventSyntaxPlugin(appType) {
 }
 
 /**
+ * Get filter syntax transformation plugin
+ *
+ * @param {string} appType the app type to transform
+ * @return {string}
+ */
+function getFilterSyntaxPlugin(appType) {
+    return path.join(PLUGIN_BASE_NAME, 'filter', `${appType}-filter-plugin`);
+}
+
+/**
  * Get template syntax transformation plugin
  *
  * @inner
@@ -98,6 +108,14 @@ function normalizeViewPlugins(plugins, appType) {
     });
 }
 
+/**
+ * On tag handler
+ *
+ * @inner
+ * @param {Object} file the template file
+ * @param {string} tagName the tag name to encounter
+ * @param {string=} replaceTagName the old tag name to replace
+ */
 function handleOnTag(file, tagName, replaceTagName) {
     let tags = file.tags;
     tags || (tags = file.tags = {});
@@ -106,6 +124,21 @@ function handleOnTag(file, tagName, replaceTagName) {
     }
 
     tags[tagName] = true;
+}
+
+/**
+ * On filter handler
+ *
+ * @inner
+ * @param {Object} file the template file
+ * @param {string} filterName the filter name
+ */
+function handleOnFilter(file, filterName) {
+    let usedFilters = file.filters;
+    usedFilters || (usedFilters = file.filters = []);
+    if (!usedFilters.includes(filterName)) {
+        usedFilters.push(filterName);
+    }
 }
 
 /**
@@ -146,11 +179,19 @@ function initViewTransformOptions(file, processOpts, buildManager) {
 
     processOpts.plugins = plugins;
 
+    let filterOptions = buildManager.getFilterTransformOptions();
+    if (filterOptions) {
+        filterOptions = Object.assign({
+            onFilter: handleOnFilter.bind(null, file)
+        }, filterOptions);
+    }
+
     return Object.assign(
         {},
         processOpts,
         {
             plugins,
+            filter: filterOptions,
             template: templateConf,
             onTag: handleOnTag.bind(null, file)
         }
@@ -160,3 +201,4 @@ function initViewTransformOptions(file, processOpts, buildManager) {
 module.exports = exports = initViewTransformOptions;
 
 exports.getEventSyntaxPlugin = getEventSyntaxPlugin;
+exports.getFilterSyntaxPlugin = getFilterSyntaxPlugin;

@@ -32,7 +32,8 @@ module.exports = merge({}, baseConf, {
             script: 'js',
             style: 'wxss',
             tpl: 'wxml',
-            config: 'json'
+            config: 'json',
+            filter: 'wxs'
         }
     },
 
@@ -44,6 +45,13 @@ module.exports = merge({}, baseConf, {
             rext: 'wxss',
             options: {
                 plugins: ['cssImport']
+            }
+        },
+        wxs: {
+            extnames: ['wxs'],
+            rext: 'wxs',
+            options: {
+                plugins: ['dep']
             }
         }
     }

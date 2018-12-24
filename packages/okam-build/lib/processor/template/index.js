@@ -94,21 +94,9 @@ function createTransformContext() {
 
 function transformAst(ast, plugins, tplOpts) {
     let ctx = createTransformContext();
-    let children = ast.children; // ignore root node, only need to transform children
 
-    let childNum = children.length;
-    for (let i = 0; i < childNum; i++) {
-        let node = children[i];
-        visit(ctx, node, plugins, tplOpts);
-        if (ctx.isStop) {
-            return;
-        }
-
-        if (ctx.isNodeChange) {
-            childNum = children.length;
-            ctx.nodeChange(false);
-        }
-    }
+    // visit root node
+    visit(ctx, ast, plugins, tplOpts);
 }
 
 /**
@@ -155,7 +143,7 @@ function mergeVisitors(plugins) {
  * @return {Object}
  */
 function compileTpl(file, options) {
-    let {root, config, logger} = options;
+    let {config, logger} = options;
     let allowCache = !config || config.cache == null || config.cache;
     let content = file.content.toString();
     const ast = file.ast || parseDom(content);

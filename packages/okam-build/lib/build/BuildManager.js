@@ -15,6 +15,7 @@ const CacheManager = require('./CacheManager');
 const FileOutput = require('../generator/FileOutput');
 const processor = require('../processor');
 const npm = require('../processor/helper/npm');
+const {getDefaultBabelProcessor} = require('../processor/helper/processor');
 const ModuleResolver = require('./ModuleResolver');
 const allAppTypes = require('./app-type');
 const cleanBuild = require('./clean-build');
@@ -99,6 +100,10 @@ class BuildManager extends EventEmitter {
                 extnames: componentConf.extname
             }]);
         }
+
+        this.defaultBabelProcessorName = getDefaultBabelProcessor(
+            buildConf.processors
+        );
     }
 
     /**
@@ -257,6 +262,23 @@ class BuildManager extends EventEmitter {
     }
 
     /**
+     * Get the filter transform options
+     *
+     * @return {?Object}
+     */
+    getFilterTransformOptions() {
+        let enable = this.isEnableFilterSupport();
+        if (enable) {
+            let isUsingBabel7 = this.defaultBabelProcessorName === 'babel7';
+            return {
+                format: 'es6',
+                usingBabel6: !isUsingBabel7
+            };
+        }
+        return null;
+    }
+
+    /**
      * Compile file
      *
      * @param {Object} file the file to compile
@@ -388,6 +410,10 @@ class BuildManager extends EventEmitter {
 
     isEnableRefSupport() {
         return this.isEnableFrameworkExtension('ref');
+    }
+
+    isEnableFilterSupport() {
+        return this.isEnableFrameworkExtension('filter');
     }
 
     getProcessFileCount() {

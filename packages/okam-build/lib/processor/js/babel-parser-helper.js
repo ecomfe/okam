@@ -60,5 +60,3 @@ exports.compile = function (file, options, babelVersion = 6) {
         sourceMap: sourceMapInfo
     };
 };
-
-

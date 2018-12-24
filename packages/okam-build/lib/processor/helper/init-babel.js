@@ -51,6 +51,20 @@ function initMixinFile(mixins, buildManager, file) {
 }
 
 /**
+ * Initialize filter config
+ *
+ * @param {Object} filters filter info
+ * @param {Object} buildManager the build manager
+ * @param {Object} file the file that owns the filter
+ */
+function initFilterConfig(filters, buildManager, file) {
+    if (!filters) {
+        return;
+    }
+    file.filters = filters;
+}
+
+/**
  * Initialize the app/component/page config information.
  * e.g., the `mixins` info defined in the component, the `config` defined in
  * app entry script that will be extracted to `app.json`
@@ -67,10 +81,12 @@ function initConfigInfo(buildManager, key, file, info) {
 
     if (file.isPageScript) {
         initMixinFile(info.mixins, buildManager, file);
+        initFilterConfig(info.filters, buildManager, file);
         config = normalPageConfig(config, components, file, buildManager);
     }
     else if (file.isComponentScript) {
         initMixinFile(info.mixins, buildManager, file);
+        initFilterConfig(info.filters, buildManager, file);
         config = normalizeComponentConfig(config, components, file, buildManager);
         config.component = true;
     }
@@ -175,6 +191,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
         appType: buildManager.appType,
         config: configInitHandler
     };
+    let filterOptions = buildManager.getFilterTransformOptions();
     let {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
     if (file.isEntryScript) {
         Object.assign(pluginOpts, {
@@ -195,6 +212,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
             baseClass: appBaseClass && appBaseClass.page,
             getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager)
         });
+        filterOptions && (pluginOpts.filterOptions = filterOptions);
         plugins.push([programPlugins.page, pluginOpts]);
     }
     else if (file.isComponentScript) {
@@ -202,6 +220,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
             tplRefs: file.tplRefs,
             baseClass: appBaseClass && appBaseClass.component
         });
+        filterOptions && (pluginOpts.filterOptions = filterOptions);
         plugins.push([programPlugins.component, pluginOpts]);
     }
     else if (file.isBehavior) {
