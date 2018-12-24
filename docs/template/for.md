@@ -43,13 +43,13 @@
 <view for="item in obj">{{item}}</view>
 ```
 
-## 在block上使用for
+## 在 block 上使用 for
 `block` 是虚拟标签，可以用 `for` 来循环渲染一组组件或者标签。
 ```html
 <block for="item, index in list"> <span>A</span> <span>B</span> </block>
 ```
 
-## for和if共存
+## for 和 if 共存
 支持在同一个标签中使用`for`和`if`，在`if`的属性值中可以获取`for`的索引或当前项变量。如下：
 ```html
   <view for="item,index in [false,true,false]" if="item">hello:{item}</view>
@@ -61,7 +61,7 @@
 </view>
 ```
 
-## for和 else/elif/else-if共存
+## for 和 else/elif/else-if共存
 区别于上述的 `for` 和 `if` 共存。 `for`和 `else/elif/else-if`共存时，`else/elif/else-if`的优先级高于 `for`。
 原因是，`else/elif/else-if`必须紧跟在 `if/else-if/elif` 分支后，在`for` 循环中重复 `else` 无意义且会导致解析错误。在`for` 循环中重复 `elif/else-if` 容易导致错误或者难以理解。以下是正确的使用方式
 ```html
@@ -70,7 +70,9 @@
 <view else for="item,index in listB">hello B! {{item}}</view>
 ```
 
-## 嵌套的for
+!> `for` 和 `if` 和 `else` 三者并存时，请不要 使用 `for if` 并存写法，因为 `for if` 并存 `for` 优先级高， 这种情况下会报错，请使用 `block` 标签自行包裹一层
+
+## 嵌套的 for
 
 允许嵌套使用，索引名和当前项变量名可以相同（但是从质量和可读性角度不建议这样命名）
 
