@@ -83,3 +83,7 @@
 * 插件列表
 
     * [图片压缩](plugins/imgCompress.md)
+
+* 常见问题
+
+    * [常见问题](questions/index.md)
