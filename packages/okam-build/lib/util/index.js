@@ -7,6 +7,10 @@
 
 const helper = require('okam-helper');
 
+function isPlainObject(obj) {
+    return toString.call(obj) === '[object Object]';
+}
+
 function doMerge(target, source, selector, doNotMergeSelectors) {
     if (doNotMergeSelectors && doNotMergeSelectors.includes(selector)) {
         return source;
@@ -24,8 +28,8 @@ function doMerge(target, source, selector, doNotMergeSelectors) {
         return result;
     }
 
-    let isTargetObj = !isTargetArr && target && typeof target === 'object';
-    let isSourceObj = !isSourceArr && source && typeof source === 'object';
+    let isTargetObj = !isTargetArr && isPlainObject(target);
+    let isSourceObj = !isSourceArr && isPlainObject(source);
     if (isTargetObj && isSourceObj) {
         let result = Object.assign({}, target);
         Object.keys(source).forEach(k => {
