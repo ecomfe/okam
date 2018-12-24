@@ -189,6 +189,7 @@ module.exports = {
 
 * `component.extname`: `string` 组件的后缀名，默认 `okm`
 * `component.template`: `Object` 模板配置项
+* `component.template.useVuePrefix`: `boolean` 开启使用 `v-` 指令，默认 `false`, 具体使用详见[v- 指令支持](template/vueSyntax.md)
 * `component.template.transformTags`: `Object` 模板标签转换配置项，具体可以查看[标签转换](build/transformTag)
 * `component.global`: `Object` `>=0.4 版本支持` 自定义全局注入的组件
 
