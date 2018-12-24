@@ -26,6 +26,8 @@
 
     * [模板复用](template/use.md)
 
+    * [v- 指令支持](template/vueSyntax.md)
+
 * 组件
 
     * [开发模式](component/sfc.md)

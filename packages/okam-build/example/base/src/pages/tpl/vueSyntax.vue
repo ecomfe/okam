@@ -44,18 +44,18 @@
             <h2 class="section-title">列表渲染</h2>
             <span class="text">支持两种写法：v-for="p,index in persons" 或 v-for="(p, index) in persons"</span>
             <pre class="code">
-                <code for="item in forList" :key="item">{{item}}</code>
+                <code for="item in forList">{{item}}</code>
             </pre>
             <div class="example">
-                <div v-for="item in 5" :key="item">
+                <div v-for="item in 5">
                     遍历数字5: {{item}}
                 </div>
-                <div class="hello" v-for="(item, index) of ['of', 2]" :key="item">
+                <div class="hello" v-for="(item, index) of ['of', 2]">
                     for of 遍历数组{{item}}
                 </div>
-                <view v-for="item of {a:1,b:2}" :key="item">of遍历字面量对象: hello {{index}} {{item}}</view>
-                <view v-for="item of {a,b}" :key="item">of遍历字面量对象2: hello {{index}} {{item}}</view>
-                <view v-for="item of {a2: a, b2: b}" :key="item">of遍历字面量对象3: hello {{index}} {{item}}</view>
+                <view v-for="item of {a:1,b:2}">of遍历字面量对象: hello {{index}} {{item}}</view>
+                <view v-for="item of {a,b}">of遍历字面量对象2: hello {{index}} {{item}}</view>
+                <view v-for="item of {a2: a, b2: b}">of遍历字面量对象3: hello {{index}} {{item}}</view>
             </div>
         </section>
 
@@ -63,7 +63,7 @@
             <h2 class="section-title">事件处理</h2>
             <span class="text">支持 v-on: @ 修饰符，框架不支持的 修饰符，此处也不支持，这里只是兼容 vue 语法 的写法，需自行规避</span>
             <pre class="code">
-                <code for="item in eventList" :key="item">{{item}}</code>
+                <code for="item in eventList">{{item}}</code>
             </pre>
             <div class="example">
                 <button
@@ -87,6 +87,8 @@ export default {
     },
 
     data: {
+        a: 'test-a',
+        b: 'test-b',
         title: '支持 vue 模板语法',
         myID: '#myId',
         name: 'okam',
