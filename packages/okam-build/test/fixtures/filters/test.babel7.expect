@@ -1,0 +1,9 @@
+/*Auto generated filter code by okam*/
+"use strict";
+
+export default {
+  toUpperCase(str) {
+    return str.toUpperCase();
+  }
+
+};
