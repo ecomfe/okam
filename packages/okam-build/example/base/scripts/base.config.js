@@ -18,6 +18,7 @@ module.exports = {
     component: {
         extname: 'vue',
         template: {
+            vPrefix: true,
             transformTags: {
                 div: 'view',
                 p: 'view',
