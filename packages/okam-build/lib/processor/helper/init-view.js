@@ -40,6 +40,7 @@ const BUILTIN_PLUGINS = {
     syntax: getTemplateSyntaxPlugin,
     eventSync: getEventSyntaxPlugin,
     tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
+    vPrefix: path.join(PLUGIN_BASE_NAME, 'vprefix-syntax-plugin'),
     ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
 };
 
@@ -132,7 +133,8 @@ function initViewTransformOptions(file, processOpts, buildManager) {
     let {appType, componentConf} = buildManager;
     let templateConf = (componentConf && componentConf.template) || {};
     if (!plugins || !plugins.length) {
-        plugins = ['syntax'];
+        // vPrefix  需要在第一位，v- directives 处理成 directives 再处理
+        plugins = ['vPrefix', 'syntax'];
 
         if (templateConf.transformTags) {
             plugins.push('tagTransform');
