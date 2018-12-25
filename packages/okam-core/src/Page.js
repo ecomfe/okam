@@ -16,7 +16,7 @@ import pageBase from './base/page';
  * @param {Object} event the event object
  * @return {Object} the new event object
  */
-pageBase.__beforeEventProxy = fixEventObject;
+pageBase.methods.__beforeEventProxy = fixEventObject;
 
 /**
  * Create the page instance
