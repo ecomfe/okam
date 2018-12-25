@@ -64,7 +64,7 @@ export const observableArray = {
             let delIdx = args[0];
             let lastIdx = rawData.length - 1;
             let upIdx = delIdx > lastIdx ? (lastIdx + 1) : delIdx;
-            observer.set(upIdx, args[2]);
+            observer.set(upIdx, args[2], true);
         }
         else {
             rawSplice.apply(rawData, args);
