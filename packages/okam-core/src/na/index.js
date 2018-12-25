@@ -15,8 +15,7 @@
 /* eslint-disable fecs-prefer-destructure */
 
 const envGlobal = (function getGlobal() {
-    /* istanbul ignore next */
-    if (typeof window === 'object' && window) {
+    if (typeof window === 'object' && window && window.Math === Math) {
         return window;
     }
 
@@ -25,7 +24,17 @@ const envGlobal = (function getGlobal() {
         return self;
     }
 
-    return Function('return this')();
+    try {
+        if (typeof Function === 'function') {
+            return Function('return this')();
+        }
+    }
+    catch (e) {
+
+    }
+
+    /* istanbul ignore next */
+    return (typeof global === 'object' && global) || this || {};
 })();
 
 /**
