@@ -9,6 +9,7 @@
 * 在构建配置里增加样式处理规则
 * 指定 postcss 处理器的处理选项：增加 `px2rpx` 转换插件
 * 从 `0.4` 版本开始，可以在全局配置 `designWidth` 属性，无需在插件 `px2rpx` 里配置，如果配置了会覆盖外部配置的值，之所以提取到外部，由于快应用也依赖这个信息配置，但其单位依旧保留 `px` 不需要转换。
+* 从 `0.4.6` 版本开发，支持 设置 1px 不转，即设置 `noTrans1px: true`，将开启 1px 不转，默认为：`false`
 
 ```javascript
 {
@@ -22,6 +23,8 @@
                         px2rpx: {
                             // 设计稿尺寸
                             designWidth: 1242,
+                            // 开启 1px 不转, 即有 1px 的数字不会进行转换
+                            noTrans1px: true,
                             // 保留的小数点单位, 默认为 2
                             precision: 2
                             // 保持 不转 px 的注释值，默认: px2rpx: no
@@ -47,6 +50,8 @@
                     px2rpx: {
                         // 设计稿尺寸
                         designWidth: 1242,
+                        // 开启 1px 不转
+                        noTrans1px: true,
                         // 保留的小数点单位, 默认为 2
                         precision: 2
                         // 保持 不转 px 的注释值，默认: px2rpx: no

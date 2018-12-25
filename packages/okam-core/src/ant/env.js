@@ -12,20 +12,14 @@
 /* global getCurrentPages:false */
 
 import globalAPI from './api';
+import {getGlobal} from '../util/index';
 
 /**
  * The native app global object
  *
  * @type {Object}
  */
-export const appGlobal = (function getGlobal() {
-    /* istanbul ignore next */
-    if (typeof self === 'object' && self) {
-        return self;
-    }
-
-    return Function('return this')();
-})() || {};
+export const appGlobal = getGlobal();
 
 /**
  * The native env variable

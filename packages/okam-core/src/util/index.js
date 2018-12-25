@@ -140,3 +140,30 @@ export function definePropertyValue(obj, name, value) {
 
     Object.defineProperty(obj, name, desc);
 }
+
+/**
+ * The native app global object
+ *
+ * @type {Object}
+ */
+export function getGlobal() {
+    if (typeof window === 'object' && window && window.Math === Math) {
+        return window;
+    }
+
+    /* istanbul ignore next */
+    if (typeof self === 'object' && self) {
+        return self;
+    }
+
+    try {
+        if (typeof Function === 'function') {
+            return Function('return this')();
+        }
+    }
+    catch (e) {
+
+    }
+
+    return (typeof global === 'object' && global) || this || {};
+}
