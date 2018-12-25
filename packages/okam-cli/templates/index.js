@@ -144,7 +144,7 @@ const PACKAGE_NAMES_MAP = {
             {
                 name: 'okam-plugin-tinyimg',
                 fetchLatest: true,
-                version: '^0.1.1'
+                version: '^0.1.2'
             }
         ],
         redux: [
