@@ -144,9 +144,10 @@ export function definePropertyValue(obj, name, value) {
 /**
  * The native app global object
  *
- * @type {Object}
+ * @return {Object} global object
  */
 export function getGlobal() {
+    /* global window self Function global */
     if (typeof window === 'object' && window && window.Math === Math) {
         return window;
     }
