@@ -16,6 +16,9 @@ module.exports = merge({}, require('./base.config'), {
         'async',
         'promise'
     ],
+    resolve: {
+        ignore: /^plugin:\/\//,
+    },
     framework: ['filter'],
     dev: {
         processors: {
