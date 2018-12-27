@@ -5,7 +5,7 @@
 
 'use strict';
 
-const hasProto = '__proto__' in {};
+// const hasProto = '__proto__' in {};
 
 /**
  * The default override Array APIs to proxy array data update
@@ -158,25 +158,25 @@ function getArrayItem(observer, idx) {
  * @return {Array}
  */
 export default function makeArrayObservable(arr, observer, isPage) {
-    let arrayMethods;
-    /* istanbul ignore next */
-    if (hasProto) {
-        arrayMethods = Object.create(Array.prototype);
-        /* eslint-disable no-proto */
-        arr.__proto__ = arrayMethods;
-    }
-    else {
-        arrayMethods = arr;
-    }
+    // Here, not using __proto__ implementation, there are two import reasons:
+    // First, considering __proto__ will be deprecated and is not recommended to use
+    // Second, some plugins like weixin contact plugin will change array definition,
+    // the array instance __proto__ property does not contains any like `push`
+    // `pop` API, and these API only existed in the instance context.
+    // So, like the code as the following will not work correctly,
+    // a = []; // a.__proto__.push is not defined, a.push is defined
+    // a.__proto__.push = function () {};
+    // a.push(2); // always call the native push, not the override push method
+    // Therefor, using __proto__ to proxy the array method will not work
 
     let overrideArrApis = isPage ? overridePageArrApis : overrideComponentArrApis;
     Object.keys(overrideArrApis).forEach(method => {
-        let rawMethod = arrayMethods[method];
-        arrayMethods[method] = overrideArrApis[method].bind(arr, observer, rawMethod);
+        let rawMethod = arr[method];
+        arr[method] = overrideArrApis[method].bind(arr, observer, rawMethod);
     });
 
-    arrayMethods.setItem = updateArrayItem.bind(arr, observer);
-    arrayMethods.getItem = getArrayItem.bind(arr, observer);
+    arr.setItem = updateArrayItem.bind(arr, observer);
+    arr.getItem = getArrayItem.bind(arr, observer);
 
     return arr;
 }
