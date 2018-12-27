@@ -167,5 +167,9 @@ export function getGlobal() {
         // ignore exception
     }
 
-    return result || (typeof global === 'object' && global) || this || {};
+    if (!result) {
+        result = (typeof global === 'object' && global) || this;
+    }
+
+    return result || {};
 }
