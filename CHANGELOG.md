@@ -1,177 +1,188 @@
 # ChangeLog
 
+## 2018-12-27
+### okam-core@0.4.4
+* **优化** `appGlobal` 对象初始化 ([5e9c0cf](https://github.com/ecomfe/okam/commit/5e9c0cf))
+* **Bug修复** 修复 `微信小程序` 下引入 [contact 插件](https://work.weixin.qq.com/api/doc#90000/90136/91435) 导致 `数组` 类型数据修改比如 `push` 不更新问题 ([3dd5d4b](https://github.com/ecomfe/okam/commit/3dd5d4b))
+
+### okam-build@0.4.7
+* **新功能** 新增 `支付宝小程序` 原生自定义脚本及 `Vue Filter` 语法支持 ([a2fd169](https://github.com/ecomfe/okam/commit/a2fd169))
+
+### okam-cli@0.1.5
+* **Bug修复** 修复包依赖配置 ([dc867d6](https://github.com/ecomfe/okam/commit/dc867d6))
+
 ## 2018-12-25
-### okam-core@0.4.6
-* 优化兼容小程序 `Function` 不支持情况 ([01f3290](https://github.com/ecomfe/okam/commit/01f3290))
-* 修复对象类型数组 `splice` 赋值操作不更新问题 ([8b7745d](https://github.com/ecomfe/okam/commit/8b7745d))
+
+### okam-core@0.4.3
+* **Bug修复** 修复对象类型数组 `splice` 赋值操作不更新问题 ([8b7745d](https://github.com/ecomfe/okam/commit/8b7745d))
+* **优化** 优化兼容小程序 `Function` 不支持情况 ([01f3290](https://github.com/ecomfe/okam/commit/01f3290))
 
 ### okam-core@0.3.5
-* 优化兼容小程序 `Function` 不支持情况 ([48a1612](https://github.com/ecomfe/okam/commit/48a1612))
+* **优化** 优化兼容小程序 `Function` 不支持情况 ([48a1612](https://github.com/ecomfe/okam/commit/48a1612))
 
 
 ## 2018-12-24
 
 ### okam-build@0.4.6
 
-* 修复构建配置对于 `entry.script` 配置的 `merge` 丢失问题 [#23](https://github.com/ecomfe/okam/issues/23) ([b2214a8](https://github.com/ecomfe/okam/commit/b2214a8))
-* 修复增量构建时候，重复文件输出 ([51a8bad](https://github.com/ecomfe/okam/commit/51a8bad))
-* 新增 `px2rpx` 插件对于 `1px` 不转换选项 ([0fb83dd](https://github.com/ecomfe/okam/commit/0fb83dd))
-* 新增 `Vue` 模板指令前缀支持，通过构建配置 `component.template.useVuePrefix` 启用 ([dc028b1](https://github.com/ecomfe/okam/commit/dc028b1))
-* 新增 `微信小程序` 和 `百度小程序`，`Vue filter` 语法支持，通过组件 `filters` 选项定义过滤器，通过构建配置 `framework` 新增 `filter` 扩展项支持 ([8bba3f1](https://github.com/ecomfe/okam/commit/8bba3f1))
-* 优化 babel 内置 `dep` 插件的配置 ([a83a305](https://github.com/ecomfe/okam/commit/a83a305))
+* **Bug修复** 修复构建配置对于 `entry.script` 配置的 `merge` 丢失问题 [#23](https://github.com/ecomfe/okam/issues/23) ([b2214a8](https://github.com/ecomfe/okam/commit/b2214a8))
+* **Bug修复** 修复增量构建时候，重复文件输出 ([51a8bad](https://github.com/ecomfe/okam/commit/51a8bad))
+* **新功能** 新增 `px2rpx` 插件对于 `1px` 不转换选项 ([0fb83dd](https://github.com/ecomfe/okam/commit/0fb83dd))
+* **新功能** 新增 `Vue` 模板指令前缀支持，通过构建配置 `component.template.useVuePrefix` 启用 ([dc028b1](https://github.com/ecomfe/okam/commit/dc028b1))
+* **新功能** 新增 `微信小程序` 和 `百度小程序`，`Vue filter` 语法支持，通过组件 `filters` 选项定义过滤器，通过构建配置 `framework` 新增 `filter` 扩展项支持 ([8bba3f1](https://github.com/ecomfe/okam/commit/8bba3f1))
+* **优化** 优化 babel 内置 `dep` 插件的配置 ([a83a305](https://github.com/ecomfe/okam/commit/a83a305))
 
 ### okam-core@0.4.2
 
-* 优化数组 slice API 操作，对于 `splice(idx, 1, newValue)` 操作转成数组索引赋值操作 ([6f30d48](https://github.com/ecomfe/okam/commit/6f30d48))
+* **优化** 优化数组 slice API 操作，对于 `splice(idx, 1, newValue)` 操作转成数组索引赋值操作 ([6f30d48](https://github.com/ecomfe/okam/commit/6f30d48))
 
 ### okam-cli@0.1.4
 
 * 更新模板配置
 
-
 ## 2018-12-19
 
 ### okam-build@0.4.5
 
-* 修复 `px2rpx` 设置 `precision` 无效 ([fdbad10](https://github.com/ecomfe/okam/commit/fdbad10))
-* 修复模板的 `class` 绑定的对象定义换行转换失败问题 ([6c035ae](https://github.com/ecomfe/okam/commit/6c035ae))
-* 增加对 `百度小程序` 原生 `filter` 及 `微信小程序` `wxs` 脚本支持 ([e3a0e95](https://github.com/ecomfe/okam/commit/e3a0e95))
-* 修复入口脚本的 globalData 存在 config 导致 App 的 config 配置丢失 [#20](https://github.com/ecomfe/okam/issues/20) ([afd943e](https://github.com/ecomfe/okam/commit/afd943e))
-* 优化构建异步任务，对于图片处理失败依旧正常输出图片文件 [#19](https://github.com/ecomfe/okam/issues/19) ([82a01ed](https://github.com/ecomfe/okam/commit/82a01ed))
+* **Bug修复** 修复 `px2rpx` 设置 `precision` 无效 ([fdbad10](https://github.com/ecomfe/okam/commit/fdbad10))
+* **Bug修复** 修复模板的 `class` 绑定的对象定义换行转换失败问题 ([6c035ae](https://github.com/ecomfe/okam/commit/6c035ae))
+* **Bug修复** 修复入口脚本的 globalData 存在 config 导致 App 的 config 配置丢失 [#20](https://github.com/ecomfe/okam/issues/20) ([afd943e](https://github.com/ecomfe/okam/commit/afd943e))
+* **新功能** 增加对 `百度小程序` 原生 `filter` 及 `微信小程序` `wxs` 脚本支持 ([e3a0e95](https://github.com/ecomfe/okam/commit/e3a0e95))
+* **优化** 优化构建异步任务，对于图片处理失败依旧正常输出图片文件 [#19](https://github.com/ecomfe/okam/issues/19) ([82a01ed](https://github.com/ecomfe/okam/commit/82a01ed))
 
 
 ## 2018-12-16
 
 ### okam-core@0.4.1
-* 修复自定义组件 `$emit` 的事件详情数据为空变成空对象问题，改成保留原始的事件详情数据 ([c5a55cb](https://github.com/ecomfe/okam/commit/c5a55cb))
-* 修复内部方法错误显示 warning 信息 ([15f32a2](https://github.com/ecomfe/okam/commit/15f32a2))
-* 修复 `$nextTick` 嵌套情况下，没有触发嵌套的数据修改的 `$nextTick` 回调 ([bcb2d32](https://github.com/ecomfe/okam/commit/bcb2d32))
-* 移除组件 `$selector` 属性，`ref` 扩展现在对于引用非自定义组件不再使用 `createSelectorQuery` 查询节点作为 fallback，即 `ref` 模板属性只能引用自定义组件，页面组件新增 `createSelectorAPI` 以对齐原生自定义组件提供的 `createSelectorQuery` API ([007410e](https://github.com/ecomfe/okam/commit/007410e))
-* 优化模板事件代理新增的模板数据属性名称长度 ([8d44206](https://github.com/ecomfe/okam/commit/8d44206))
+* **Bug修复** 修复自定义组件 `$emit` 的事件详情数据为空变成空对象问题，改成保留原始的事件详情数据 ([c5a55cb](https://github.com/ecomfe/okam/commit/c5a55cb))
+* **Bug修复** 修复内部方法错误显示 warning 信息 ([15f32a2](https://github.com/ecomfe/okam/commit/15f32a2))
+* **Bug修复** 修复 `$nextTick` 嵌套情况下，没有触发嵌套的数据修改的 `$nextTick` 回调 ([bcb2d32](https://github.com/ecomfe/okam/commit/bcb2d32))
+* **优化** 移除组件 `$selector` 属性，`ref` 扩展现在对于引用非自定义组件不再使用 `createSelectorQuery` 查询节点作为 fallback，即 `ref` 模板属性只能引用自定义组件，页面组件新增 `createSelectorAPI` 以对齐原生自定义组件提供的 `createSelectorQuery` API ([007410e](https://github.com/ecomfe/okam/commit/007410e))
+* **优化** 优化模板事件代理新增的模板数据属性名称长度 ([8d44206](https://github.com/ecomfe/okam/commit/8d44206))
 
 ### okam-build@0.4.4
-* 修复增量构建情况下，新增组件文件输出不该输出的文件 ([c36509f](https://github.com/ecomfe/okam/commit/c36509f))
-* 优化模板事件代理新增的模板数据属性名称长度 ([2bb0a0a](https://github.com/ecomfe/okam/commit/2bb0a0a))
-* 优化样式依赖路径的 `resolve` ([9aa7c75](https://github.com/ecomfe/okam/commit/9aa7c75))
+* **Bug修复** 修复增量构建情况下，新增组件文件输出不该输出的文件 ([c36509f](https://github.com/ecomfe/okam/commit/c36509f))
+* **优化** 优化模板事件代理新增的模板数据属性名称长度 ([2bb0a0a](https://github.com/ecomfe/okam/commit/2bb0a0a))
+* **优化** 优化样式依赖路径的 `resolve` ([9aa7c75](https://github.com/ecomfe/okam/commit/9aa7c75))
 
 
 ## 2018-12-06
 
 ### okam-core@0.4.0
-* 修复微信小程序的 `canvas` 组件的事件参数对象没有 `currentTarget` 属性导致事件监听报错问题。([4e93787](https://github.com/ecomfe/okam/commit/4e93787))
-* 重构 `ref` 实现，原先基于 `id` 查询引用组件改成基于 `class` 避免跟开发者定义 `id` 冲突 ([86480a5](https://github.com/ecomfe/okam/commit/86480a5))
+* **Bug修复** 修复微信小程序的 `canvas` 组件的事件参数对象没有 `currentTarget` 属性导致事件监听报错问题。([4e93787](https://github.com/ecomfe/okam/commit/4e93787))
+* **优化** 重构 `ref` 实现，原先基于 `id` 查询引用组件改成基于 `class` 避免跟开发者定义 `id` 冲突 ([86480a5](https://github.com/ecomfe/okam/commit/86480a5))
 
 ### okam-build@0.4.0
-* 修复使用原始 `css` 样式文件，没有处理 `import css` 问题 ([6bfb038](https://github.com/ecomfe/okam/commit/6bfb038))
-* 修复支付宝小程序 `canvas` 组件使用 `id` 而不是微信小程序 `canvas-id` 作为组件标识符不兼容问题，统一使用 `canvas-id` ([636570b](https://github.com/ecomfe/okam/commit/636570b))
-* 构建配置 `processors` 的处理器 `hook` 选项会重载而不是覆盖，即同一个处理器定义的多个 hook 都会被调用而不是覆盖  ([f0b318a](https://github.com/ecomfe/okam/commit/f0b318a))
-* 对于 `babel7` 的 `@babel/runtime` helper 代码路径进行重写：`/@babel/runtime/helpers/` 重写为 `/babel/` ([7e21c5f](https://github.com/ecomfe/okam/commit/7e21c5f))
-* 重构 `ref` 实现，原先基于 `id` 查询引用组件改成基于 `class` 避免跟开发者定义 `id` 冲突 ([e4e95b9](https://github.com/ecomfe/okam/commit/e4e95b9))
+* **Bug修复** 修复使用原始 `css` 样式文件，没有处理 `import css` 问题 ([6bfb038](https://github.com/ecomfe/okam/commit/6bfb038))
+* **Bug修复** 修复支付宝小程序 `canvas` 组件使用 `id` 而不是微信小程序 `canvas-id` 作为组件标识符不兼容问题，统一使用 `canvas-id` ([636570b](https://github.com/ecomfe/okam/commit/636570b))
+* **优化** 构建配置 `processors` 的处理器 `hook` 选项会重载而不是覆盖，即同一个处理器定义的多个 hook 都会被调用而不是覆盖  ([f0b318a](https://github.com/ecomfe/okam/commit/f0b318a))
+* **优化** 对于 `babel7` 的 `@babel/runtime` helper 代码路径进行重写：`/@babel/runtime/helpers/` 重写为 `/babel/` ([7e21c5f](https://github.com/ecomfe/okam/commit/7e21c5f))
+* **优化** 重构 `ref` 实现，原先基于 `id` 查询引用组件改成基于 `class` 避免跟开发者定义 `id` 冲突 ([e4e95b9](https://github.com/ecomfe/okam/commit/e4e95b9))
 
 
 ## 2018-12-05
 
-### okam-build@0.4.0.beta-5
-* 修复头条小程序升级后模板语法报错问题，之前模板对象语法允许两个花括号，现在跟微信对齐，必须三个花括号 ([ab3d3c3](https://github.com/ecomfe/okam/commit/ab3d3c3))
-* 增加支付宝小程序 `refs` 支持  ([44fddbe](https://github.com/ecomfe/okam/commit/44fddbe))
-
 ### okam-core@0.4.0.beta-5
-* 修复百度小程序从 `swan-core` `1.12` 开始会自动对自定义组件事件参数对象自动加一层包裹以对齐 `微信小程序`，即原先事件参数 `{counter: 2}` 会变成 `{type: 'counterChange', detail: {counter: 2}, counter: 2, currentTarget: {}, target: {}}`，如果碰巧你的事件参数包括 `detail` 信息，比如 `{detail: {c: 2}}` ，会导致变成 `{type: 'counterChange', detail: {detail: {c: 2}}, currentTarget: {}, target: {}}` 无法兼容原先代码。([9f82138](https://github.com/ecomfe/okam/commit/9f82138))
-* `redux` 状态管理扩展，增加 `$fireStoreChange` API 及 优化 `redux` 状态变更检查  ([0ad3bb0](https://github.com/ecomfe/okam/commit/0ad3bb0))
-* 增加支付宝小程序 `refs` 支持  ([c9721a4](https://github.com/ecomfe/okam/commit/c9721a4))
+* **Bug修复** 修复百度小程序从 `swan-core` `1.12` 开始会自动对自定义组件事件参数对象自动加一层包裹以对齐 `微信小程序`，即原先事件参数 `{counter: 2}` 会变成 `{type: 'counterChange', detail: {counter: 2}, counter: 2, currentTarget: {}, target: {}}`，如果碰巧你的事件参数包括 `detail` 信息，比如 `{detail: {c: 2}}` ，会导致变成 `{type: 'counterChange', detail: {detail: {c: 2}}, currentTarget: {}, target: {}}` 无法兼容原先代码。([9f82138](https://github.com/ecomfe/okam/commit/9f82138))
+* **优化** `redux` 状态管理扩展，增加 `$fireStoreChange` API 及 优化 `redux` 状态变更检查  ([0ad3bb0](https://github.com/ecomfe/okam/commit/0ad3bb0))
+* **新功能** 增加支付宝小程序 `refs` 支持  ([c9721a4](https://github.com/ecomfe/okam/commit/c9721a4))
 
 ### okam-core@0.3.4
-* 修复百度小程序从 `swan-core` `1.12` 开始会自动对自定义组件事件参数对象自动加一层包裹以对齐 `微信小程序`，即原先事件参数 `{counter: 2}` 会变成 `{type: 'counterChange', detail: {counter: 2}, counter: 2, currentTarget: {}, target: {}}`，如果碰巧你的事件参数包括 `detail` 信息，比如 `{detail: {c: 2}}` ，会导致变成 `{type: 'counterChange', detail: {detail: {c: 2}}, currentTarget: {}, target: {}}` 无法兼容原先代码。([a47c63d](https://github.com/ecomfe/okam/commit/a47c63d))
+* **Bug修复** 修复百度小程序从 `swan-core` `1.12` 开始会自动对自定义组件事件参数对象自动加一层包裹以对齐 `微信小程序`，即原先事件参数 `{counter: 2}` 会变成 `{type: 'counterChange', detail: {counter: 2}, counter: 2, currentTarget: {}, target: {}}`，如果碰巧你的事件参数包括 `detail` 信息，比如 `{detail: {c: 2}}` ，会导致变成 `{type: 'counterChange', detail: {detail: {c: 2}}, currentTarget: {}, target: {}}` 无法兼容原先代码。([a47c63d](https://github.com/ecomfe/okam/commit/a47c63d))
+
+### okam-build@0.4.0.beta-5
+* **Bug修复** 修复头条小程序升级后模板语法报错问题，之前模板对象语法允许两个花括号，现在跟微信对齐，必须三个花括号 ([ab3d3c3](https://github.com/ecomfe/okam/commit/ab3d3c3))
+* **新功能** 增加支付宝小程序 `refs` 支持  ([44fddbe](https://github.com/ecomfe/okam/commit/44fddbe))
 
 
 ## 2018-12-03
 
-### okam-build@0.4.0.beta-3
-* 修复 `less` 中使用 `@import` 导致编译文件丢失问题 ([f0aca25](https://github.com/ecomfe/okam/commit/f0aca25))
-* 修复 `sass` `scss` 语法写法不统一导致编译出错问题 ([ee06ae6](https://github.com/ecomfe/okam/commit/ee06ae6))
-
 ### okam-core@0.4.0.beta-2
-* 优化 `redux` 数据变更检查 [#11](https://github.com/ecomfe/okam/issues/11) ([d9d7cae](https://github.com/ecomfe/okam/commit/d9d7cae))
+* **优化** 优化 `redux` 数据变更检查 [#11](https://github.com/ecomfe/okam/issues/11) ([d9d7cae](https://github.com/ecomfe/okam/commit/d9d7cae))
+
+### okam-build@0.4.0.beta-3
+* **Bug修复** 修复 `less` 中使用 `@import` 导致编译文件丢失问题 ([f0aca25](https://github.com/ecomfe/okam/commit/f0aca25))
+* **Bug修复** 修复 `sass` `scss` 语法写法不统一导致编译出错问题 ([ee06ae6](https://github.com/ecomfe/okam/commit/ee06ae6))
 
 
 ## 2018-12-02
 
 ### okam-build@0.4.0.beta-2
-* 修复预处理语言依赖的样式文件没有编译也输出的问题 ([b1b67e4](https://github.com/ecomfe/okam/commit/b1b67e4))
+* **Bug修复** 修复预处理语言依赖的样式文件没有编译也输出的问题 ([b1b67e4](https://github.com/ecomfe/okam/commit/b1b67e4))
 
 
 ## 2018-12-01
 
 ### okam-build@0.4.0.beta-1
-* 修复 `win7` 下构建输出文件丢失问题 [#16](https://github.com/ecomfe/okam/issues/16) ([1fbcb40](https://github.com/ecomfe/okam/commit/1fbcb40))
+* **Bug修复** 修复 `win7` 下构建输出文件丢失问题 [#16](https://github.com/ecomfe/okam/issues/16) ([1fbcb40](https://github.com/ecomfe/okam/commit/1fbcb40))
 
 
 ## 2018-11-30
 
-### okam-build@0.4.0.beta-0
-* **`break change`** 变更构建配置 `component.template.transformTags` 模板标签转换配置定义，新增构建 API `reverseTagMap` 进行兼容转换，具体可以查看文档
-* 增加特定平台相关样式定义支持: 基于媒介查询方式 ([b016e30](https://github.com/ecomfe/okam/commit/b016e30))
-* 增加构建配置 `script` 配置项，用于构建期间执行附加的脚本命令 ([fa7c6b4](https://github.com/ecomfe/okam/commit/fa7c6b4))
-* 增加构建配置 `component.global` 支持：提供全局组件自动注入能力 及 增加使用环境变量 `process.env.APP_TYPE` 定制特定平台脚本代码支持 ([ead6620](https://github.com/ecomfe/okam/commit/ead6620))
-* 支持特定平台配置能力支持 ([6be15a4](https://github.com/ecomfe/okam/commit/6be15a4))
-* 增加快应用支持、 全局 `API` 扩展支持 以及新增全局构建配置 `designWidth` 支持 ([fabbc3c](https://github.com/ecomfe/okam/commit/fabbc3c))
-* 增加特定平台的环境标签 Tag：`<${appType}-env>` ([c15dd06](https://github.com/ecomfe/okam/commit/c15dd06))
-* 增加特定平台相关样式定义支持: 基于特定平台属性前缀方式 `-${appType}-${styleProperty}: xxx` ([d028262](https://github.com/ecomfe/okam/commit/d028262))
-* 自动对快应用的文本内容加上 `<text></text>` 文本标签包裹 ([c860710](https://github.com/ecomfe/okam/commit/c860710))
-* 增加头条小程序支持 ([c516b79](https://github.com/ecomfe/okam/commit/c516b79))
-* 优化构建输出的资源文件：只输出依赖的资源文件，对于图片目前暂未优化，同时增加强制输出特定资源文件的能力支持 ([0097649](https://github.com/ecomfe/okam/commit/0097649))
-
 ### okam-core@0.4.0.beta-0
 * **`break change`** 移除 App/页面/自定义组件实例上下文的 `$global` 属性([ec03a16](https://github.com/ecomfe/okam/commit/ec03a16))
-* 增加扩展平台 API 能力支持 ([548bb9c](https://github.com/ecomfe/okam/commit/548bb9c))
-* 增加快应用支持 ([e328420](https://github.com/ecomfe/okam/commit/e328420))
-* 增加 `registerApi` API for App ([1380b59](https://github.com/ecomfe/okam/commit/1380b59))
-* 对于 `支付宝小程序` `getSystemInfo` API 增加`SDKVersion` 属性对齐微信小程序 ([1a79383](https://github.com/ecomfe/okam/commit/1a79383))
-* 对于 `支付宝小程序` 增加 `setNavigationBarTitle` API 对齐微信小程序 ([dbb9b2c](https://github.com/ecomfe/okam/commit/dbb9b2c))
-* 增加头条小程序支持 ([20a15a2](https://github.com/ecomfe/okam/commit/20a15a2))
+* **新功能** 增加扩展平台 API 能力支持 ([548bb9c](https://github.com/ecomfe/okam/commit/548bb9c))
+* **新功能** 增加快应用支持 ([e328420](https://github.com/ecomfe/okam/commit/e328420))
+* **新功能** 增加 `registerApi` API for App ([1380b59](https://github.com/ecomfe/okam/commit/1380b59))
+* **新功能** 对于 `支付宝小程序` `getSystemInfo` API 增加`SDKVersion` 属性对齐微信小程序 ([1a79383](https://github.com/ecomfe/okam/commit/1a79383))
+* **新功能** 对于 `支付宝小程序` 增加 `setNavigationBarTitle` API 对齐微信小程序 ([dbb9b2c](https://github.com/ecomfe/okam/commit/dbb9b2c))
+* **新功能** 增加头条小程序支持 ([20a15a2](https://github.com/ecomfe/okam/commit/20a15a2))
+
+### okam-build@0.4.0.beta-0
+* **`break change`** 变更构建配置 `component.template.transformTags` 模板标签转换配置定义，新增构建 API `reverseTagMap` 进行兼容转换，具体可以查看文档
+* **新功能** 增加特定平台相关样式定义支持: 基于媒介查询方式 ([b016e30](https://github.com/ecomfe/okam/commit/b016e30))
+* **新功能** 增加构建配置 `script` 配置项，用于构建期间执行附加的脚本命令 ([fa7c6b4](https://github.com/ecomfe/okam/commit/fa7c6b4))
+* **新功能** 增加构建配置 `component.global` 支持：提供全局组件自动注入能力 及 增加使用环境变量 `process.env.APP_TYPE` 定制特定平台脚本代码支持 ([ead6620](https://github.com/ecomfe/okam/commit/ead6620))
+* **新功能** 支持特定平台配置能力支持 ([6be15a4](https://github.com/ecomfe/okam/commit/6be15a4))
+* **新功能** 增加快应用支持、 全局 `API` 扩展支持 以及新增全局构建配置 `designWidth` 支持 ([fabbc3c](https://github.com/ecomfe/okam/commit/fabbc3c))
+* **新功能** 增加特定平台的环境标签 Tag：`<${appType}-env>` ([c15dd06](https://github.com/ecomfe/okam/commit/c15dd06))
+* **新功能** 增加特定平台相关样式定义支持: 基于特定平台属性前缀方式 `-${appType}-${styleProperty}: xxx` ([d028262](https://github.com/ecomfe/okam/commit/d028262))
+* **新功能** 自动对快应用的文本内容加上 `<text></text>` 文本标签包裹 ([c860710](https://github.com/ecomfe/okam/commit/c860710))
+* **新功能** 增加头条小程序支持 ([c516b79](https://github.com/ecomfe/okam/commit/c516b79))
+* **优化** 优化构建输出的资源文件：只输出依赖的资源文件，对于图片目前暂未优化，同时增加强制输出特定资源文件的能力支持 ([0097649](https://github.com/ecomfe/okam/commit/0097649))
 
 
 ## 2018-11-30
 
 ### okam-build@0.3.3
 
-* 修复组件重复构建导致组件样式没有输出问题 [#13](https://github.com/ecomfe/okam/issues/13) ([96455ea](https://github.com/ecomfe/okam/commit/96455ea))
+* **Bug修复** 修复组件重复构建导致组件样式没有输出问题 [#13](https://github.com/ecomfe/okam/issues/13) ([96455ea](https://github.com/ecomfe/okam/commit/96455ea))
 
 
 ## 2018-11-26
 
 ### okam-core@0.3.3
 
-* 修复微信小程序 computed 属性依赖的组件的 props 变化计算属性没有变化问题 [#10](https://github.com/ecomfe/okam/issues/10) ([a49f8f7](https://github.com/ecomfe/okam/commit/a49f8f7))
+* **Bug修复** 修复微信小程序 computed 属性依赖的组件的 props 变化计算属性没有变化问题 [#10](https://github.com/ecomfe/okam/issues/10) ([a49f8f7](https://github.com/ecomfe/okam/commit/a49f8f7))
 
 
 ## 2018-11-26
 
 ### okam-core@0.3.2
 
-* 修复 `百度小程序` 在新版 `regenerator-runtime` 下 `async await` 语法支持报错问题 ([5a621b1](https://github.com/ecomfe/okam/commit/5a621b1))
-* `$interceptApis` 钩子支持对返回非 Promise 的异步 API的响应数据进行改写，即支持 `done` 钩子设置 ([35b6fea](https://github.com/ecomfe/okam/commit/35b6fea))
+* **Bug修复** 修复 `百度小程序` 在新版 `regenerator-runtime` 下 `async await` 语法支持报错问题 ([5a621b1](https://github.com/ecomfe/okam/commit/5a621b1))
+* **新功能** `$interceptApis` 钩子支持对返回非 Promise 的异步 API的响应数据进行改写，即支持 `done` 钩子设置 ([35b6fea](https://github.com/ecomfe/okam/commit/35b6fea))
 
 
 ## 2018-11-15
 
 ### okam-build@0.3.1
 
-* 修复 `支付宝小程序` 原生事件命名风格跟其它小程序不一致问题 ([2816599](https://github.com/ecomfe/okam/commit/2816599))
-* 修复 `支付宝小程序` 使用原生自定义组件事件处理出错问题 [#7](https://github.com/ecomfe/okam/issues/7) ([9bc800b](https://github.com/ecomfe/okam/commit/9bc800b))
-* 修复 `Babel7` 处理器编译问题，API 跟 `Babel6` 不一致 ([c6a4473](https://github.com/ecomfe/okam/commit/c6a4473))
-* 修复 `微信小程序` 使用 `localPolyfill` 有些代码写法没有分析到情况 [#2](https://github.com/ecomfe/okam/issues/2) ([f63bbcc](https://github.com/ecomfe/okam/commit/f63bbcc))
-* 文件构建改成按分析依赖的顺序进行构建 ([3f44454](https://github.com/ecomfe/okam/commit/3f44454))
+* **Bug修复** 修复 `支付宝小程序` 原生事件命名风格跟其它小程序不一致问题 ([2816599](https://github.com/ecomfe/okam/commit/2816599))
+* **Bug修复** 修复 `支付宝小程序` 使用原生自定义组件事件处理出错问题 [#7](https://github.com/ecomfe/okam/issues/7) ([9bc800b](https://github.com/ecomfe/okam/commit/9bc800b))
+* **Bug修复** 修复 `Babel7` 处理器编译问题，API 跟 `Babel6` 不一致 ([c6a4473](https://github.com/ecomfe/okam/commit/c6a4473))
+* **Bug修复** 修复 `微信小程序` 使用 `localPolyfill` 有些代码写法没有分析到情况 [#2](https://github.com/ecomfe/okam/issues/2) ([f63bbcc](https://github.com/ecomfe/okam/commit/f63bbcc))
+* **优化** 文件构建改成按分析依赖的顺序进行构建 ([3f44454](https://github.com/ecomfe/okam/commit/3f44454))
 
 ### okam-core@0.3.1
-* 废弃掉 `百度小程序` 使用的 `pushData` 等内部原生 API 进行 `数组` 数据操作优化的逻辑，考虑到这些接口暂未对外开放，且还有些 Bug ([c81b323](https://github.com/ecomfe/okam/commit/c81b323))
-* 增加 `支付宝小程序` 原生自定义组件的 `Okam` 框架适配器 ([0efded5](https://github.com/ecomfe/okam/commit/0efded5))
-* 增加 `支付宝小程序` `showToast` 原生 API 的适配，保持跟微信、百度小程序的 API 的统一  ([cc8fc34](https://github.com/ecomfe/okam/commit/cc8fc34))
-* 增加 `支付宝小程序` 数组数据操作优化，基于 `$spliceData` API ([20be465](https://github.com/ecomfe/okam/commit/20be465))
-* 优化原生 API 改写方式 ([a64f234](https://github.com/ecomfe/okam/commit/a64f234))
+* **新功能** 增加 `支付宝小程序` 原生自定义组件的 `Okam` 框架适配器 ([0efded5](https://github.com/ecomfe/okam/commit/0efded5))
+* **新功能** 增加 `支付宝小程序` `showToast` 原生 API 的适配，保持跟微信、百度小程序的 API 的统一  ([cc8fc34](https://github.com/ecomfe/okam/commit/cc8fc34))
+* **新功能** 增加 `支付宝小程序` 数组数据操作优化，基于 `$spliceData` API ([20be465](https://github.com/ecomfe/okam/commit/20be465))
+* **优化** 废弃掉 `百度小程序` 使用的 `pushData` 等内部原生 API 进行 `数组` 数据操作优化的逻辑，考虑到这些接口暂未对外开放，且还有些 Bug ([c81b323](https://github.com/ecomfe/okam/commit/c81b323))
+* **优化** 优化原生 API 改写方式 ([a64f234](https://github.com/ecomfe/okam/commit/a64f234))
 
 ### okam-cli@0.1.0-alpha.0
-* 增加 CLI 工具 ([3bfc69e](https://github.com/ecomfe/okam/commit/3bfc69e))
+* **新功能** 增加 CLI 工具 ([3bfc69e](https://github.com/ecomfe/okam/commit/3bfc69e))
 
 
 ## 2018-11-09
