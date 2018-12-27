@@ -102,7 +102,7 @@
 
 ## 2018-12-01
 
-### ### okam-build@0.4.0.beta-1
+### okam-build@0.4.0.beta-1
 * 修复 `win7` 下构建输出文件丢失问题 [#16](https://github.com/ecomfe/okam/issues/16) ([1fbcb40](https://github.com/ecomfe/okam/commit/1fbcb40))
 
 
