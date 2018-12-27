@@ -70,7 +70,7 @@
   "devDependencies": {
     <% var: len = ${devDeps.length} - 1 %>
     <% for: ${devDeps} as ${devDep}, ${idx} %>
-    "${devDep.name}": "^${devDep.version}"<% if: ${idx} !== ${len} %>,
+    "${devDep.name}": "${devDep.version}"<% if: ${idx} !== ${len} %>,
     <% /if %>
     <% /for %>
 
