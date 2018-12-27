@@ -2,39 +2,54 @@
 
 ## 2018-12-27
 ### okam-core@0.4.4
-* **[优化]** `appGlobal` 对象初始化 ([5e9c0cf](https://github.com/ecomfe/okam/commit/5e9c0cf))
-* **[Bug修复]** 修复 `微信小程序` 下引入 [contact 插件](https://work.weixin.qq.com/api/doc#90000/90136/91435) 导致 `数组` 类型数据修改比如 `push` 不更新问题 ([3dd5d4b](https://github.com/ecomfe/okam/commit/3dd5d4b))
+* **Bug修复**
+    * 修复 `微信小程序` 下引入 [contact 插件](https://work.weixin.qq.com/api/doc#90000/90136/91435) 导致 `数组` 类型数据修改比如 `push` 不更新问题 ([3dd5d4b](https://github.com/ecomfe/okam/commit/3dd5d4b))
+
+* **优化**
+    * `appGlobal` 对象初始化 ([5e9c0cf](https://github.com/ecomfe/okam/commit/5e9c0cf))
 
 ### okam-build@0.4.7
-* **[新功能]** 新增 `支付宝小程序` 原生自定义脚本及 `Vue Filter` 语法支持 ([a2fd169](https://github.com/ecomfe/okam/commit/a2fd169))
+* **新功能**
+    * 新增 `支付宝小程序` 原生自定义脚本及 `Vue Filter` 语法支持 ([a2fd169](https://github.com/ecomfe/okam/commit/a2fd169))
 
 ### okam-cli@0.1.5
-* **[Bug修复]** 修复包依赖配置 ([dc867d6](https://github.com/ecomfe/okam/commit/dc867d6))
+* **Bug修复**
+    * 修复包依赖配置 ([dc867d6](https://github.com/ecomfe/okam/commit/dc867d6))
 
 ## 2018-12-25
 
 ### okam-core@0.4.3
-* **[Bug修复]** 修复对象类型数组 `splice` 赋值操作不更新问题 ([8b7745d](https://github.com/ecomfe/okam/commit/8b7745d))
-* **[优化]** 优化兼容小程序 `Function` 不支持情况 ([01f3290](https://github.com/ecomfe/okam/commit/01f3290))
+* **Bug修复**
+    * 修复对象类型数组 `splice` 赋值操作不更新问题 ([8b7745d](https://github.com/ecomfe/okam/commit/8b7745d))
+
+* **优化**
+    * 优化兼容小程序 `Function` 不支持情况 ([01f3290](https://github.com/ecomfe/okam/commit/01f3290))
 
 ### okam-core@0.3.5
-* **[优化]** 优化兼容小程序 `Function` 不支持情况 ([48a1612](https://github.com/ecomfe/okam/commit/48a1612))
+* **优化**
+    * 优化兼容小程序 `Function` 不支持情况 ([48a1612](https://github.com/ecomfe/okam/commit/48a1612))
 
 
 ## 2018-12-24
 
 ### okam-build@0.4.6
 
-* **[Bug修复]** 修复构建配置对于 `entry.script` 配置的 `merge` 丢失问题 [#23](https://github.com/ecomfe/okam/issues/23) ([b2214a8](https://github.com/ecomfe/okam/commit/b2214a8))
-* **[Bug修复]** 修复增量构建时候，重复文件输出 ([51a8bad](https://github.com/ecomfe/okam/commit/51a8bad))
-* **[新功能]** 新增 `px2rpx` 插件对于 `1px` 不转换选项 ([0fb83dd](https://github.com/ecomfe/okam/commit/0fb83dd))
-* **[新功能]** 新增 `Vue` 模板指令前缀支持，通过构建配置 `component.template.useVuePrefix` 启用 ([dc028b1](https://github.com/ecomfe/okam/commit/dc028b1))
-* **[新功能]** 新增 `微信小程序` 和 `百度小程序`，`Vue filter` 语法支持，通过组件 `filters` 选项定义过滤器，通过构建配置 `framework` 新增 `filter` 扩展项支持 ([8bba3f1](https://github.com/ecomfe/okam/commit/8bba3f1))
-* **[优化]** 优化 babel 内置 `dep` 插件的配置 ([a83a305](https://github.com/ecomfe/okam/commit/a83a305))
+* **Bug修复**
+    * 修复构建配置对于 `entry.script` 配置的 `merge` 丢失问题 [#23](https://github.com/ecomfe/okam/issues/23) ([b2214a8](https://github.com/ecomfe/okam/commit/b2214a8))
+    * 修复增量构建时候，重复文件输出 ([51a8bad](https://github.com/ecomfe/okam/commit/51a8bad))
+
+* **新功能**
+    * 新增 `px2rpx` 插件对于 `1px` 不转换选项 ([0fb83dd](https://github.com/ecomfe/okam/commit/0fb83dd))
+    * 新增 `Vue` 模板指令前缀支持，通过构建配置 `component.template.useVuePrefix` 启用 ([dc028b1](https://github.com/ecomfe/okam/commit/dc028b1))
+    * 新增 `微信小程序` 和 `百度小程序`，`Vue filter` 语法支持，通过组件 `filters` 选项定义过滤器，通过构建配置 `framework` 新增 `filter` 扩展项支持 ([8bba3f1](https://github.com/ecomfe/okam/commit/8bba3f1))
+
+* **优化**
+    * 优化 babel 内置 `dep` 插件的配置 ([a83a305](https://github.com/ecomfe/okam/commit/a83a305))
 
 ### okam-core@0.4.2
 
-* **[优化]** 优化数组 slice API 操作，对于 `splice(idx, 1, newValue)` 操作转成数组索引赋值操作 ([6f30d48](https://github.com/ecomfe/okam/commit/6f30d48))
+* **优化**
+    * 优化数组 slice API 操作，对于 `splice(idx, 1, newValue)` 操作转成数组索引赋值操作 ([6f30d48](https://github.com/ecomfe/okam/commit/6f30d48))
 
 ### okam-cli@0.1.4
 
