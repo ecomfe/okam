@@ -32,7 +32,7 @@ module.exports = merge({}, require('./base.config'), {
                     ]
                 }
             },
-            wxs: {
+            filter: {
                 options: {
                     presets: ['@babel/preset-env']
                 }

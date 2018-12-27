@@ -7,4 +7,8 @@
 
 const {getFilterTransformer} = require('./filter-helper');
 
-module.exports = getFilterTransformer('filter');
+module.exports = getFilterTransformer({
+    tag: 'filter',
+    srcAttrName: 'src',
+    moduleAttrName: 'module'
+});

@@ -47,7 +47,7 @@ module.exports = merge({}, baseConf, {
                 plugins: ['cssImport']
             }
         },
-        wxs: {
+        filter: {
             extnames: ['wxs'],
             rext: 'wxs',
             options: {

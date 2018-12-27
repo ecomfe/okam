@@ -1,5 +1,5 @@
 /**
- * @file Weixin template filter transform plugin
+ * @file Ant template filter transform plugin
  * @author sparklewhy@gmail.com
  */
 
@@ -8,7 +8,7 @@
 const {getFilterTransformer} = require('./filter-helper');
 
 module.exports = getFilterTransformer({
-    tag: 'wxs',
-    srcAttrName: 'src',
-    moduleAttrName: 'module'
+    tag: 'import-sjs',
+    srcAttrName: 'from',
+    moduleAttrName: 'name'
 });

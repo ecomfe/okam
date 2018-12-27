@@ -11,6 +11,7 @@ const {fakeProcessorOptions} = require('test/helper');
 const templateProcessor = require('okam/processor/template/index');
 const wxFilterPlugin = require('okam/processor/template/plugins/filter/wx-filter-plugin');
 const swanFilterPlugin = require('okam/processor/template/plugins/filter/swan-filter-plugin');
+const antFilterPlugin = require('okam/processor/template/plugins/filter/ant-filter-plugin');
 
 describe('template filter transform', function () {
     it('should ignore not filter value', function () {
@@ -79,5 +80,23 @@ describe('template filter transform', function () {
         ]);
         result = templateProcessor(file, opts);
         assert.equal(result.content, '<wxs src="./a.wxs" module="f0"></wxs><view s="{{f0.b(a,\'str\', 2)}}">{{f0.c(str)}}</view>');
+    });
+
+    it('should convert ant filter value', function () {
+        const file = {
+            path: 'test.js',
+            content: '<view :data-attr="a|b">{{ str|d| c}}</view>'
+        };
+
+        let opts = fakeProcessorOptions(null, null, 'ant');
+        opts.config.filter = {};
+        opts.config.plugins.push([
+            antFilterPlugin, {filters: [{src: './a.filter.js', filters: ['b', 'c', 'd']}]}
+        ]);
+        let result = templateProcessor(file, opts);
+        assert.equal(
+            result.content,
+            '<import-sjs from="./a.filter.js" name="f0"></import-sjs><view data-attr="{{f0.b(a)}}">{{f0.c(f0.d(str))}}</view>'
+        );
     });
 });

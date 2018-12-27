@@ -72,7 +72,7 @@ function transformFilterInTextNode(node, tplOpts, options) {
     node.data = updateFilterCall(filters, logger, file, node.data);
 }
 
-function insertFilterModule(filterTag, root, tplOpts, options) {
+function insertFilterModule(filterTagOpts, root, tplOpts, options) {
     let {filters} = options;
     // insert filter declaration like:
     // <wxs src="../filter/util.wxs" module="util"></wxs>
@@ -80,17 +80,17 @@ function insertFilterModule(filterTag, root, tplOpts, options) {
     filters.forEach((item, index) => {
         let {src} = item;
         let name = item.name = 'f' + index;
+        let attrs = {};
+        attrs[filterTagOpts.srcAttrName] = src;
+        attrs[filterTagOpts.moduleAttrName] = name;
         let filterNode = {
             type: 'tag',
-            name: filterTag,
+            name: filterTagOpts.tag,
             children: [],
             prev: null,
             next,
             parent: root,
-            attribs: {
-                src,
-                module: name
-            }
+            attribs: attrs
         };
 
         root.children.unshift(filterNode);
@@ -98,9 +98,9 @@ function insertFilterModule(filterTag, root, tplOpts, options) {
     });
 }
 
-exports.getFilterTransformer = function (filterTag) {
+exports.getFilterTransformer = function (filterTagOpts) {
     return {
-        root: insertFilterModule.bind(null, filterTag),
+        root: insertFilterModule.bind(null, filterTagOpts),
         tag: transformFilterInAttribute,
         text: transformFilterInTextNode
     };

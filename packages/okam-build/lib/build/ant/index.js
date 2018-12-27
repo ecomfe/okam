@@ -7,6 +7,7 @@
 
 const BuildManager = require('../BuildManager');
 const initNativeAntProcessor = require('./init-native-ant-processor');
+const {updateReferProcessorInfo} = require('../../processor/type');
 
 class BuildAntAppManager extends BuildManager {
 
@@ -15,6 +16,8 @@ class BuildAntAppManager extends BuildManager {
      */
     initProcessor(buildConf) {
         super.initProcessor(buildConf);
+
+        updateReferProcessorInfo('filter', this.defaultBabelProcessorName);
 
         // register native swan processor
         let nativeOpts = buildConf.native;

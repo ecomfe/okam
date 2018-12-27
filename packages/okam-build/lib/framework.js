@@ -41,7 +41,8 @@ const FRAMEWORK_EXTEND_PATH = {
     },
     filter: {
         wx: true,
-        swan: true
+        swan: true,
+        ant: true
     }
 };
 

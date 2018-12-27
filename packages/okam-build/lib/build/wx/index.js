@@ -15,7 +15,7 @@ class BuildWxAppManager extends BuildManager {
      */
     initProcessor(buildConf) {
         super.initProcessor(buildConf);
-        updateReferProcessorInfo('wxs', this.defaultBabelProcessorName);
+        updateReferProcessorInfo('filter', this.defaultBabelProcessorName);
     }
 
     /**
