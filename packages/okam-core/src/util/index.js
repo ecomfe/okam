@@ -157,14 +157,15 @@ export function getGlobal() {
         return self;
     }
 
+    let result;
     try {
         if (typeof Function === 'function') {
-            return Function('return this')();
+            result = Function('return this')();
         }
     }
     catch (e) {
-
+        // ignore exception
     }
 
-    return (typeof global === 'object' && global) || this || {};
+    return result || (typeof global === 'object' && global) || this || {};
 }
