@@ -42,6 +42,52 @@ function createModuleIgnoreFilter(ignore) {
     });
 }
 
+function createModuleAliasConverter(alias) {
+    if (!alias) {
+        return;
+    }
+
+    let aliasMatcherList = [];
+    Object.keys(alias).forEach(k => {
+        let v = alias[k];
+        let normalize;
+        let match;
+        let len = k.length;
+        if (k.charAt(len - 1) === '$') {
+            match = k.substring(0, len - 1);
+            normalize = moduleId => v;
+        }
+        else {
+            match = moduleId => moduleId.indexOf(k) === 0;
+            normalize = moduleId => (v + moduleId.substr(k.length));
+        }
+
+        aliasMatcherList.push({match, normalize});
+    });
+
+    return moduleId => {
+        let process;
+        aliasMatcherList.some(item => {
+            let {match, normalize} = item;
+
+            if (typeof match === 'string') {
+                if (match === moduleId) {
+                    process = normalize;
+                    return true;
+                }
+            }
+            else if (match(moduleId)) {
+                process = normalize;
+                return true;
+            }
+
+            return false;
+        });
+
+        return process ? process(moduleId) : moduleId;
+    };
+}
+
 class ModuleResolver {
 
     constructor(opts) {
@@ -51,6 +97,8 @@ class ModuleResolver {
         this.onResolve = resolve && resolve.onResolve;
         this.extensions = this.initResolveExtensionNames(resolve, extensions);
         this.resolveFilter = createModuleIgnoreFilter(resolve && resolve.ignore);
+        this.resolveAlias = createModuleAliasConverter(resolve && resolve.alias);
+        this.moduleDirs = resolve && resolve.modules;
     }
 
     initResolveExtensionNames(resolve, extensions) {
@@ -78,15 +126,22 @@ class ModuleResolver {
             return;
         }
 
-        let depFile;
         let logger = this.logger;
+        if (this.resolveAlias) {
+            let newRequiredModId = this.resolveAlias(requireModId);
+            logger.debug('resolve alias', requireModId, newRequiredModId);
+            requireModId = newRequiredModId;
+        }
+
+        let depFile;
         let filePath = typeof file === 'string' ? file : file.fullPath;
         try {
             depFile = resolve.sync(
                 requireModId,
                 {
                     extensions: this.extensions,
-                    basedir: pathUtil.dirname(filePath)
+                    basedir: pathUtil.dirname(filePath),
+                    moduleDirectory: this.moduleDirs
                 }
             );
 

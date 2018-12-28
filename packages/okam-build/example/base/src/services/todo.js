@@ -3,7 +3,7 @@
  * @author xxx
  */
 
-import requester from 'okam-core/src/na/request';
+import requester from 'okam/request';
 
 export function fetchTodoList(pageNo = 1, pageSize = 10) {
     return requester.get('http://localhost:9090/api/todoList', {

@@ -84,7 +84,7 @@ exports.resolve = function (buildManager, file, requireModId) {
             ? file.resolvePath
             : file.path;
         resolveModId = getRequirePath(
-            depFile.resolvePath,
+            depFile.resolvePath || depFile.path,
             rebaseRelPath
         );
     }

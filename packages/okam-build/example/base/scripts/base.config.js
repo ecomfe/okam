@@ -76,6 +76,13 @@ module.exports = {
         'ref'
     ],
     designWidth: 375,
+    resolve: {
+        alias: {
+            'okam$': 'okam-core/src/na',
+            'okam/': 'okam-core/src/na/',
+        },
+        // modules: ['node_modules', path.join(__dirname, '../src/common')]
+    },
     processors: {
         pug: {
             options: {
