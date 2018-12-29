@@ -1,5 +1,16 @@
 # ChangeLog
 
+## 2018-12-29
+### okam-core@0.4.5
+* **新功能**
+    * 增加 `okam-core` 对外暴露 API，及新增 `platform` 相关 API，移除自动初始化平台信息逻辑 ([5a8e862](https://github.com/ecomfe/okam/commit/5a8e862))
+
+### okam-build@0.4.8
+* **新功能**
+    * 构建配置 `output.depDir` 支持对象形式，以配置不同模块依赖目录，默认只对 `node_modules` 目录进行处理 ([a2fd169](https://github.com/ecomfe/okam/commit/a2fd169))
+    * 增加微信原生插件支持 ([e508cc7](https://github.com/ecomfe/okam/commit/e508cc7))
+    * 新增构建配置 `resolve.alias` 和 `resolve.modules` 支持 ([08de455](https://github.com/ecomfe/okam/commit/08de455))
+
 ## 2018-12-27
 ### okam-core@0.4.4
 * **Bug修复**
