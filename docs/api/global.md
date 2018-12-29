@@ -1,6 +1,6 @@
 # 全局 API
 
-## `okam-core` API
+## okam-core API
 
 ### API 访问
 

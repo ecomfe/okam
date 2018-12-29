@@ -42,6 +42,8 @@
 
     * [Mixins支持](component/mixins.md)
 
+    * [Filter支持](component/filter.md)
+
     * [Broadcast支持](component/broadcast.md)
 
     * [原生自定义组件支持](component/nativeSupport.md)
