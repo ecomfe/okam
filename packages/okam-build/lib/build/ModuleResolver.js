@@ -7,6 +7,7 @@
 
 const resolve = require('resolve');
 const pathUtil = require('path');
+const {file: fileUtil} = require('../util');
 
 function addResolveExtension(result, extensionName) {
     if (!extensionName.startsWith('.')) {
@@ -98,7 +99,35 @@ class ModuleResolver {
         this.extensions = this.initResolveExtensionNames(resolve, extensions);
         this.resolveFilter = createModuleIgnoreFilter(resolve && resolve.ignore);
         this.resolveAlias = createModuleAliasConverter(resolve && resolve.alias);
-        this.moduleDirs = resolve && resolve.modules;
+        this.initModuleResolvePathInfo(resolve && resolve.modules);
+    }
+
+    initModuleResolvePathInfo(moduleDirs) {
+        if (!moduleDirs) {
+            return;
+        }
+
+        if (!Array.isArray(moduleDirs)) {
+            moduleDirs = [moduleDirs];
+        }
+
+        let resolvePaths = [];
+        let resolveModuleDirs = [];
+        moduleDirs.forEach(item => {
+            if (typeof item !== 'string') {
+                return;
+            }
+
+            if (pathUtil.isAbsolute(item)) {
+                resolvePaths.push(item);
+            }
+            else {
+                resolveModuleDirs.push(item);
+            }
+        });
+
+        this.moduleDirs = resolveModuleDirs;
+        this.modulePaths = resolvePaths.length ? resolvePaths : null;
     }
 
     initResolveExtensionNames(resolve, extensions) {
@@ -141,7 +170,8 @@ class ModuleResolver {
                 {
                     extensions: this.extensions,
                     basedir: pathUtil.dirname(filePath),
-                    moduleDirectory: this.moduleDirs
+                    moduleDirectory: this.moduleDirs,
+                    paths: this.modulePaths
                 }
             );
 

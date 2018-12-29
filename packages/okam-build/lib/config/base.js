@@ -82,6 +82,8 @@ module.exports = {
      * 模块路径 resolve 选项，可选
      * {
      *     extensions: ['xx'], // 查找的模块文件后缀名，会跟默认查找的后缀名做合并
+     *     alias: {'common/': 'src/common/'}, // 模块别名设置，同 webpack#resolve.alias
+     *     modules: ['node_modules', 'dep'], // 模块查找目录，如果传入绝对路径不会递归查找
      *     // 要忽略 resolve 的模块 id，可以传入正则，或者字符串数组，也可以是一个 function
      *     // 返回 true 表示要忽略，返回 false 表示不忽略。
      *     ignore: /^@system/ | ['@system/xx', /^@xxx/] | (moduleId, appType) => return true;
@@ -191,6 +193,12 @@ module.exports = {
 
         /**
          * 输出的 NPM 依赖文件存放的目录
+         * 也支持设置成对象形式：
+         * {
+         *    node_modules: 'src/dep', // 依赖文件路径前缀为 node_modules/ 挪到 src/dep 下
+         *    bower_components: 'src/dep' // 依赖文件路径前缀为 bower_components/ 挪到 src/dep 下
+         * }
+         * 如果设置为字符串，默认为将依赖文件路径前缀为 node_modules/ 挪到 src/dep 下
          *
          * @type {string}
          */

@@ -72,6 +72,10 @@ function initDirFiles(dir, cache) {
     return cacheDirFiles;
 }
 
+function isFileInSourceDir(filePath, sourceDir) {
+    return filePath.indexOf(sourceDir + '/') === 0;
+}
+
 /**
  * Add component same name files
  *
@@ -82,12 +86,12 @@ function initDirFiles(dir, cache) {
 function addComponentSameNameFiles(scriptFile, options) {
     const {dirname: currDir, path: relPath} = scriptFile;
     const scriptFileName = getFileName(relPath);
-    const {cache, addFile, getFileByFullPath} = options;
+    const {cache, addFile, sourceDir, getFileByFullPath} = options;
     let cacheDirFiles = cache.getDirFileListInfo(currDir);
 
     let jsonFile;
     let toAddFiles = [];
-    if (scriptFile.isNpm) {
+    if (!isFileInSourceDir(scriptFile.path, sourceDir)) {
         if (!cacheDirFiles) {
             cacheDirFiles = initDirFiles(currDir, cache);
         }

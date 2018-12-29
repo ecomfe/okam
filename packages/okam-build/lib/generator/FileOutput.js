@@ -62,12 +62,7 @@ function getOutputPath(filePath, file, options) {
         result = replaceFileName(filePath, outputPathMap.appConfig);
     }
     else {
-        if (file.isNpm) {
-            result = file.resolvePath || filePath;
-        }
-        else {
-            result = filePath;
-        }
+        result = file.resolvePath || filePath;
 
         if (file.isTpl && !file.rext && componentPartExtname) {
             file.rext = componentPartExtname.tpl;

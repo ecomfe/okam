@@ -11,32 +11,33 @@ const DEP_DIR_NAME_REGEXP = new RegExp(DEP_DIR_NAME, 'g');
 const NEW_DEP_DIR_NAME = 'npm';
 
 /**
- * Check whether is npm module file
+ * Default dependence module directory name
  *
- * @param {string} modulePath the module relative path
- * @return {boolean}
+ * @const
+ * @type {string}
  */
-exports.isNpmModuleFile = function (modulePath) {
-    return modulePath.indexOf(DEP_DIR_NAME) === 0;
-};
+exports.DEFAULT_DEP_DIR_NAME = DEP_DIR_NAME;
 
 /**
  * Resolve npm module new path to output
  *
  * @param {string} oldPath the old module path
+ * @param {string} moduleDir the current module dir
  * @param {string} rebaseDepDir the dep directory to rebase
  * @return {string}
  */
-exports.resolveNpmModuleNewPath = function (oldPath, rebaseDepDir) {
-    let newPath = rebaseDepDir + oldPath.substr(DEP_DIR_NAME.length + 1);
-    // replace all `node_modles` to `npm` to fix weixin cannot find the module
+exports.resolveDepModuleNewPath = function (oldPath, moduleDir, rebaseDepDir) {
+    let newPath = rebaseDepDir + oldPath.substr(moduleDir.length);
+    // console.log('old', oldPath, newPath, moduleDir, rebaseDepDir)
+
+    // replace all `node_modules` to `npm` to fix weixin cannot find the module
     // if the module path exists `node_module` dir name
     let result = newPath.replace(
         DEP_DIR_NAME_REGEXP, NEW_DEP_DIR_NAME
     );
 
     // remove `src` to fix toutiao cannot init correctly
-    return result.replace('/src/', '/')
+    return result.replace(/\\/g, '/').replace('/src/', '/')
         .replace('/okam-core/', '/okam/')
         .replace('/@babel/runtime/helpers/', '/babel/');
 };
@@ -54,7 +55,7 @@ exports.resolve = function (buildManager, file, requireModId) {
         return requireModId;
     }
 
-    let {isNpm: isNpmMod, resolvedModIds: cacheResolveModIds} = file;
+    let {resolvedModIds: cacheResolveModIds} = file;
     cacheResolveModIds || (file.resolvedModIds = cacheResolveModIds = {});
     let resolveModInfo = cacheResolveModIds[requireModId];
     if (resolveModInfo) {
@@ -80,9 +81,7 @@ exports.resolve = function (buildManager, file, requireModId) {
 
     let resolveModId = requireModId;
     if (!isRelModId) {
-        let rebaseRelPath = isNpmMod
-            ? file.resolvePath
-            : file.path;
+        let rebaseRelPath = file.resolvePath || file.path;
         resolveModId = getRequirePath(
             depFile.resolvePath || depFile.path,
             rebaseRelPath
