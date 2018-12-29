@@ -27,3 +27,5 @@
             err => console.error(err)
         );
         ```
+
+!> 如果接口请求想在页面组件外部实现，可以参考 `okam-core` 提供的 [API](api/global)。
