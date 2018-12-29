@@ -6,7 +6,6 @@
 /* global my:false */
 'use strict';
 
-import * as platform from '../na/platform';
 import {definePropertyValue} from '../util/index';
 
 const adaptedAPI = {
@@ -93,11 +92,6 @@ const adaptedAPI = {
 };
 
 const api = Object.create(my);
-
-/**
- * The extended okam API
- */
-api.okam = Object.assign({}, platform);
 
 Object.keys(adaptedAPI).forEach(k => {
     definePropertyValue(api, k, adaptedAPI[k]);

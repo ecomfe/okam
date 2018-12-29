@@ -5,9 +5,4 @@
 
 /* global swan:false */
 
-import * as platform from '../na/platform';
-
-const api = Object.create(swan);
-api.okam = Object.assign({}, platform);
-
-export default api;
+export default Object.create(swan);
