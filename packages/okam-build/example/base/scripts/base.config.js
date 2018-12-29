@@ -80,10 +80,9 @@ module.exports = {
     ],
     designWidth: 375,
     resolve: {
-        alias: {
-            'okam$': 'okam-core/src/na',
-            'okam/': 'okam-core/src/na/',
-        },
+        // alias: {
+        //     'okam/': 'okam-core/src/na/',
+        // },
         modules: ['node_modules', path.join(__dirname, '../dep')]
     },
     processors: {

@@ -92,7 +92,11 @@ module.exports = {
      *
      * @type {Object}
      */
-    resolve: null,
+    resolve: {
+        alias: {
+            'okam$': 'okam-core/src/index'
+        }
+    },
 
     /**
      * 执行的脚本命令，目前提供了两个钩子来执行命令： `onBuildStart` `onBuildDone`
