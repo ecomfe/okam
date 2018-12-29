@@ -8,8 +8,8 @@
 export default {
     config: {
         pages: [
-            'pages/filter',
-            'pages/index'
+            'pages/index',
+            'pages/filter'
         ],
         window: {
         }

@@ -13,7 +13,10 @@ module.exports = {
     root: path.join(__dirname, '..'),
     output: {
         dir: 'dist',
-        depDir: 'src/common'
+        depDir: {
+            node_modules: 'src/common',
+            dep: 'src/common'
+        }
     },
     component: {
         extname: 'vue',
@@ -81,7 +84,7 @@ module.exports = {
             'okam$': 'okam-core/src/na',
             'okam/': 'okam-core/src/na/',
         },
-        // modules: ['node_modules', path.join(__dirname, '../src/common')]
+        modules: ['node_modules', path.join(__dirname, '../dep')]
     },
     processors: {
         pug: {

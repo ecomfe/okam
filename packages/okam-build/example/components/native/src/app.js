@@ -8,8 +8,9 @@
 export default {
     config: {
         pages: [
+            'pages/index',
             'pages/swanFilter',
-            'pages/index'
+
         ],
         window: {
         }
