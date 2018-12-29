@@ -1,9 +1,12 @@
 # ChangeLog
 
 ## 2018-12-29
-### okam-core@0.4.5
+### okam-core@0.4.6
 * **新功能**
     * 增加 `okam-core` 对外暴露 API，及新增 `platform` 相关 API，移除自动初始化平台信息逻辑 ([5a8e862](https://github.com/ecomfe/okam/commit/5a8e862))
+
+* **优化**
+    * 移除 `$api.okam` 里定义的 platform 扩展 API，改成通过[全局 API](https://ecomfe.github.io/okam/#/api/global) 方式暴露 ([67185c3](https://github.com/ecomfe/okam/commit/67185c3))
 
 ### okam-build@0.4.8
 * **新功能**
