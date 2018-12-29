@@ -8,7 +8,6 @@
 /* eslint-disable fecs-camelcase */
 
 import initApi from '../../base/init-api';
-import {appGlobal} from '../env';
 
 export default {
 
@@ -18,11 +17,7 @@ export default {
      * @private
      */
     onCreate() {
-        initApi.call(this, systemInfo => {
-            // cache platform info
-            appGlobal.okam_platform_info = systemInfo;
-            return systemInfo;
-        });
+        initApi.call(this);
 
         this.onLaunch && this.onLaunch();
         this.onShow && this.onShow();

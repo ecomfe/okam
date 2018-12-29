@@ -7,36 +7,16 @@
 
 import base from './base';
 import {promisifyApis, interceptApis} from '../na/api';
-import {api} from '../na/index';
-
-function initPlatformInfo(callback) {
-    api.getSystemInfo({
-        success(info) {
-            callback && callback(null, info);
-        },
-        fail(err) {
-            callback && callback(err);
-        }
-    });
-}
 
 /**
  * Initialize promisify APIs and interception APIs.
  * Return false, if initialized.
  *
- * @param {Function=} callback init system info callback
  * @return {boolean}
  */
-export default function initApis(callback) {
+export default function initApis() {
     if (!this.__apisInited) {
         this.__apisInited = true;
-
-        // ensure platform info available afterwards
-        initPlatformInfo((err, data) => {
-            if (!err) {
-                api.okam.setPlatformInfo(callback ? callback(data) : data);
-            }
-        });
 
         Object.assign(this, base);
 
