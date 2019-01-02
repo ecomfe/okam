@@ -1,7 +1,8 @@
 # v- 指令支持
 
-`okam` 从 `0.4.6` 版本开始支持 `v-` 指令语法。
-支持方式: 需手动将构建配置项 `component.template.useVuePrefix` 设置为: `true`, 默认不开启。
+`okam` 从 `0.4.6` 版本开始支持 `v-` 指令语法，默认不开启。
+
+**支持方式**: 需手动将构建配置项 `component.template.useVuePrefix` 设置为: `true`, 默认为 `false` 不开启。
 
 ## 动态属性
 支持 `v-bind` 及缩写 `:`
