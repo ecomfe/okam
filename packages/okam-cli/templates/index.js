@@ -512,7 +512,6 @@ class BaseTemplate {
             fs.copy(fullPath, projectFilePath);
             return;
         }
-        debugger;
         // 后缀替换
         if (this.extnameMap[extname]) {
             projectFilePath = projectFilePath.replace(extname, `.${this.extnameMap[extname]}`);
