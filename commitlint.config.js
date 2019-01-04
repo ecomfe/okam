@@ -132,8 +132,15 @@ function getPackages(context) {
         let stat = fs.statSync(fullPath);
         let isDir = stat.isDirectory();
         if (isDir) {
-            let packageInfo = require(path.join(fullPath, 'package.json'));
-            packages.push(packageInfo.name);
+            try {
+                let packageInfo = require(path.join(fullPath, 'package.json'));
+                packages.push(packageInfo.name);
+            }
+            catch (ex) {
+                console.log(
+                    colors.red('get package info fail: ' + fullPath)
+                );
+            }
         }
     }
 

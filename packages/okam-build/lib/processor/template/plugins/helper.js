@@ -12,8 +12,8 @@
  *
  * @inner
  * @param {Array} transformers the transformers
- * @param {string} value the element name or attribute name to match
- * @param {string|Object} matchItem the element or attribute name item to match
+ * @param {string} value the element name or attribute name or text node data to match
+ * @param {string|Object} matchItem the element or attribute name or text node item to match
  * @return {?Object}
  */
 function findMatchTransformer(transformers, value, matchItem) {
@@ -126,6 +126,20 @@ function transform(transformers, element, tplOpts, options) {
     });
 }
 
+/**
+ * Transform text node
+ *
+ * @inner
+ * @param {Object} transformer the text node transformers
+ * @param {Object} textNode the text node to process
+ * @param {Object} tplOpts the template transform options
+ * @param {Object} options the template transform plugin options
+ */
+function transformTextNode(transformer, textNode, tplOpts, options) {
+    let handler = findMatchTransformer(transformer, textNode.data, textNode);
+    handler && handler.call(this, textNode, tplOpts, options);
+}
+
 exports.normalizeTransformers = normalizeTransformers;
 
 exports.transform = transform;
@@ -137,7 +151,7 @@ exports.transform = transform;
  * @return {Object}
  */
 exports.createSyntaxPlugin = function (transformers) {
-    let {element, attribute} = transformers;
+    let {element, attribute, text} = transformers;
 
     return {
         tag(...args) {
@@ -146,6 +160,15 @@ exports.createSyntaxPlugin = function (transformers) {
                 attribute: normalizeTransformers(attribute)
             });
             return transform.apply(this, args);
+        },
+
+        text(...args) {
+            if (!text) {
+                return;
+            }
+
+            args.unshift(normalizeTransformers(text));
+            return transformTextNode.apply(this, args);
         }
     };
 };

@@ -100,6 +100,8 @@ export default {
 
 ```
 
+!> 对于小程序平台，自定义组件要想通过外部控制样式，需要使用原生小程序提供的 [externalClasses](https://smartprogram.baidu.com/docs/develop/framework/custom-component_temp/) 来实现，目前 `百度小程序` 在实现上可能会存在样式抖动现象，使用时候如果有存在这种现象，只能暂且换种方式实现，待官方优化。
+
 ## 组件配置
 
 原生小程序 需在 `.json` 中设置 `component: true`，okam 无需在额外设置，也不需要声明依赖的自定义组件，即不需要配置 `usingComponents`。

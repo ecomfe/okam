@@ -17,6 +17,8 @@ module.exports = merge({}, require('./base.config'), {
         'promise'
     ],
 
+    framework: ['filter'],
+
     processors: {
         babel7: {
             extnames: 'js',

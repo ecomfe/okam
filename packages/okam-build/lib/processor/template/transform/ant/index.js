@@ -9,7 +9,7 @@
 /* eslint-disable fecs-min-vars-per-destructure */
 
 const {merge} = require('../../../../util');
-const {element, attribute} = require('../base');
+const {element, attribute, text} = require('../base');
 
 module.exports = {
     element: merge({}, element, {
@@ -19,6 +19,10 @@ module.exports = {
         canvas: {
             match: 'canvas',
             transform: require('./canvas')
+        },
+        filter: {
+            match: 'import-sjs',
+            transform: require('./filter')
         }
     }),
     attribute: merge({}, attribute, {
@@ -34,5 +38,6 @@ module.exports = {
         class: {
             transform: require('./class')
         }
-    })
+    }),
+    text
 };

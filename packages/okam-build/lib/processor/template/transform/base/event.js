@@ -133,19 +133,19 @@ module.exports = function (attrs, name, tplOpts, parseEventName) {
     eventType = toHyphen(eventType); // covert the camel case to kebab-case
 
     // save the real event handler
-    attrs[`data-${eventType}-event-proxy`] = handlerName;
+    attrs[`data-${eventType}-proxy`] = handlerName;
 
     // save all arguments in dataSet
     if (handlerArgs && handlerArgs.length > 0) {
-        attrs[`data-${eventType}-arguments-proxy`] = `{{[${handlerArgs}]}}`;
+        attrs[`data-${eventType}-args`] = `{{[${handlerArgs}]}}`;
 
         if (eventObjectAlias) {
-            attrs[`data-${eventType}-event-object-alias`] = eventObjectAlias;
+            attrs[`data-${eventType}-event`] = eventObjectAlias;
         }
     }
 
     if (eventModifiers.includes('self')) {
-        attrs[`data-${eventType}-modifier-self`] = true;
+        attrs[`data-${eventType}-self`] = true;
     }
 
     delete attrs[name];

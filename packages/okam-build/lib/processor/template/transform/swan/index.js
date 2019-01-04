@@ -9,10 +9,15 @@
 /* eslint-disable fecs-min-vars-per-destructure */
 
 const {merge} = require('../../../../util');
-const {element, attribute} = require('../base');
+const {element, attribute, text} = require('../base');
 
 module.exports = {
-    element,
+    element: merge({}, element, {
+        filter: {
+            match: 'filter',
+            transform: require('./filter')
+        }
+    }),
     attribute: merge({}, attribute, {
         if: {
             transform: require('./condition')
@@ -26,5 +31,6 @@ module.exports = {
         bind: {
             transform: require('./data-bind')
         }
-    })
+    }),
+    text
 };

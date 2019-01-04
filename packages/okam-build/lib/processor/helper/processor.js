@@ -165,6 +165,7 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
         }
     }
 
+    let referProcessorName = result.refer;
     if (!result._resolved && result.deps && result.deps.length) {
         result._resolved = true;
         try {
@@ -183,7 +184,8 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
     }
 
     // init babel transform extra options
-    if (hasBabelProcessor(processorName)) {
+    let isUsingBabelProcessor = hasBabelProcessor(referProcessorName || processorName);
+    if (isUsingBabelProcessor) {
         processorOpts = initBabelProcessorOptions(
             file, processorOpts, buildManager
         );

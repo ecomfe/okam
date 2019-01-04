@@ -31,6 +31,8 @@ export default {
 };
 ```
 
+!> 为了实现数据操作响应式，对于用到的 `data` 根属性，必须预先声明好，动态添加的根数据属性或者动态添加的对象属性，是不支持响应式变更。如果想动态添加对象属性，可以参考下面对象操作说明。
+
 ## 基本操作
 
 原生小程序通过 `setData` `getData` API 来修改、获取数据，`setData` API 会引起视图层的自动更新；
@@ -50,6 +52,28 @@ okam 提供 `this.xxx` 方式直接访问数据，以及直接赋值来进行数
 ## 对象操作
 
 修改对象数据，可以直接按 JS 操作对象方式进行直接修改，e.g., `this.obj.name = 'xxx'`，等价于原生 `this.setData('obj.name', 'xxx')`。
+
+**注意：** 对于动态的对象属性，为了支持响应式，可以使用如下方式：
+
+```javascript
+export default {
+    data: {
+        obj: {
+            a: 1
+        }
+    },
+
+    methods: {
+        onClick() {
+            // 动态添加响应式属性
+            this.obj = Object.assign({}, this.obj, {
+                b: 2,
+                c: 'str'
+            });
+        }
+    }
+}
+```
 
 ## 数组操作
 
@@ -83,6 +107,11 @@ this.arr.splice(0, 1, 23);
 ```javascript
 this.arr.splice(2);
 ```
+
+* 数组操作扩展的 `API` (如果考虑对齐 `Vue` 使用方式，需要避开该方式使用)
+
+    * `setItem(idx, value)`: 如果想替换某个数组项，除了上面的 `splice` 方式，还可以使用该扩展 API: `arr.setItem(idx, newValue)`
+    * `getItem(idx)`: 如果想对数组项内容进行修改用于数组项为对象情况下，可以这么修改：`arr.getItem(idx).show = false`
 
 
 ## 计算属性

@@ -6,6 +6,7 @@
 @import './common/css/common.css';
 
 .page-img {
+    padding: 1px 40px;
     margin: 0 auto;
     display: block;
     width: 150px;
@@ -14,6 +15,56 @@
 .page-footer {
     position: absolute;
     bottom: 80px;
+    border: 1px solid #ccc;
     width: 100%;
     text-align: center;
+}
+
+/* just for test px2rpx */
+
+ @media screen and (max-width: 500px) {
+    .test-no-tans {
+        width: 200px;
+        border: 1px solid #f00;
+        /* px2rpx: no */
+
+    }
+}
+.test-no-tans {
+    border: 2px solid #f00;
+    /* px2rpx: no */
+
+    margin: 100px/* px2rpx: no */ 300px;
+    padding: 80px 200px;
+    height: 200px;
+    /* px2rpx: no */
+    width: 100px/* px2rpx: no */;
+}
+@keyframes testKeyframes {
+    0% {
+        width: 10px;/*px2rpx: no*/
+        transform: scale(1);
+    }
+    20% {
+        width: 20px; /* px2rpx: no*/
+        transform: scale(0.9);
+    }
+    40% {
+        width: 30px /*px2rpx: no */;
+        transform: scale(1);
+        border: 2px solid #f00;
+    }
+    60% {
+        width: 40px; /* px2rpx: no */
+        transform: scale(1);
+    }
+    80% {
+        width: 50px;
+        transform: scale(0.9);/* invalid note */
+    }
+    100% {
+        width: 200px;
+        border: 1px solid #f00;
+        transform: scale(1);
+    }
 }

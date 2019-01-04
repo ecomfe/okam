@@ -28,6 +28,15 @@ describe('style binding', function () {
             '<view style="height:10px;color:{{colorStyle}};font-size:{{fontStyle + \'px\'}}"></view>');
     });
 
+    it('should support new line for object style binding syntax', function () {
+        const file = {
+            content: '<div style="height:10px" :style="{ color: colorStyle, \r\nfontSize: fontStyle + \'px\' }"></div>'
+        };
+        const result = templateProcessor(file, fakeProcessorOptions());
+        assert.equal(result.content,
+            '<view style="height:10px;color:{{colorStyle}};font-size:{{fontStyle + \'px\'}}"></view>');
+    });
+
     // 和对象语法走的同一个代码分支。转化的时候应避免内部[]被转化
     it('should transform style-data-binding with array that has object（数组语法）', function () {
         const file = {

@@ -14,6 +14,7 @@ const CacheManager = require('./CacheManager');
 const FileOutput = require('../generator/FileOutput');
 const processor = require('../processor');
 const npm = require('../processor/helper/npm');
+const {getDefaultBabelProcessor} = require('../processor/helper/processor');
 const ModuleResolver = require('./ModuleResolver');
 const allAppTypes = require('./app-type');
 const cleanBuild = require('./clean-build');
@@ -82,6 +83,10 @@ class BuildManager extends EventEmitter {
                 extnames: componentConf.extname
             }]);
         }
+
+        this.defaultBabelProcessorName = getDefaultBabelProcessor(
+            buildConf.processors
+        );
     }
 
     /**
@@ -125,7 +130,7 @@ class BuildManager extends EventEmitter {
 
     onAddNewFile(file) {
         // replace module okam-core/na/index.js content using specified app env module
-        if (file.isNpm && file.path === 'node_modules/okam-core/src/na/index.js') {
+        if (file.path === 'node_modules/okam-core/src/na/index.js') {
             let naEnvModuleId = `../${this.appType}/env`;
             file.content = `'use strict;'\nexport * from '${naEnvModuleId}';\n`;
             this.files.removeListener('addFile', this.addNewFileHandler);
@@ -236,6 +241,23 @@ class BuildManager extends EventEmitter {
      */
     getAppBaseClassInitOptions(config, opts) {
         // do nothing, subclass should provide implementation if needed
+        return null;
+    }
+
+    /**
+     * Get the filter transform options
+     *
+     * @return {?Object}
+     */
+    getFilterTransformOptions() {
+        let enable = this.isEnableFilterSupport();
+        if (enable) {
+            let isUsingBabel7 = this.defaultBabelProcessorName === 'babel7';
+            return {
+                format: 'es6',
+                usingBabel6: !isUsingBabel7
+            };
+        }
         return null;
     }
 
@@ -373,6 +395,10 @@ class BuildManager extends EventEmitter {
         return this.isEnableFrameworkExtension('ref');
     }
 
+    isEnableFilterSupport() {
+        return this.isEnableFrameworkExtension('filter');
+    }
+
     getProcessFileCount() {
         return this.files ? this.files.length : 0;
     }
@@ -404,15 +430,15 @@ class BuildManager extends EventEmitter {
         ast && (file.ast = ast);
 
         deps && deps.forEach(item => {
-            let depFile;
-            if (pathUtil.isAbsolute(item)) {
-                depFile = this.files.addFile(item);
+            this.logger.debug('add dep', item);
+            if (!pathUtil.isAbsolute(item)) {
+                item = pathUtil.join(
+                    pathUtil.dirname(file.fullPath), item
+                );
+                this.logger.debug('absolute dep', item);
             }
-            else {
-                item = item.replace(/\\/g, '/');
-                depFile = this.files.getByPath(item);
-                depFile || (depFile = this.files.addFile({path: item}));
-            }
+
+            let depFile = this.files.addFile(item);
             file.addDeps(depFile.path);
             this.addNeedBuildFile(depFile);
         });
@@ -446,7 +472,18 @@ class BuildManager extends EventEmitter {
                 this.removeAsyncTask(file);
 
                 if (!res || res.err) {
-                    this.emit('asyncError', res ? res.err : 'error');
+                    this.logger.error(
+                        `process file ${file.path} async task error:`,
+                        res && res.err
+                    );
+
+                    if (file.isImg) {
+                        // output image file even if fail
+                        this.emit('asyncDone', file);
+                    }
+                    else {
+                        this.emit('asyncError', res ? res.err : 'error');
+                    }
                 }
                 else {
                     this.updateFileCompileResult(file, res);

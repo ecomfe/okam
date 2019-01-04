@@ -17,6 +17,8 @@ module.exports = {
         depDir: 'src/common'
     },
     component: {
+        // vue v- 前缀支持, 默认为 false
+        // useVuePrefix: true,
         extname: '${sfcExt}',
         template: {
             // 标签转换配置项
@@ -30,6 +32,7 @@ module.exports = {
         <% if: ${redux} %>
         'redux',
         <% /if %>
+        'behavior',
         'broadcast',
         'ref'
     ],
@@ -73,7 +76,9 @@ module.exports = {
                 plugins: {
                     px2rpx: {
                         // 设计稿尺寸
-                        designWidth: 1242
+                        designWidth: 1242,
+                        // 开启 1px 不转
+                        noTrans1px: true
                     }
                 }
                 <% /if %>

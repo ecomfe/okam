@@ -32,7 +32,8 @@ module.exports = merge({}, baseConf, {
             script: 'js',
             style: 'acss',
             tpl: 'axml',
-            config: 'json'
+            config: 'json',
+            filter: 'sjs'
         }
     },
 
@@ -44,6 +45,13 @@ module.exports = merge({}, baseConf, {
             rext: 'acss',
             options: {
                 plugins: ['cssImport']
+            }
+        },
+        filter: {
+            extnames: ['sjs'],
+            rext: 'sjs',
+            options: {
+                plugins: ['dep']
             }
         }
     }

@@ -10,4 +10,5 @@ const args = program.args
 const project = new Project({
     dirName: args[0]
 });
+
 project.create();

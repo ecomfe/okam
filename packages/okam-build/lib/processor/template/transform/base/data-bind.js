@@ -7,6 +7,7 @@
 'use strict';
 
 const {PLAIN_OBJECT_REGEXP, DATA_BIND_REGEXP} = require('./constant');
+const {transformPipeFilter} = require('./filter');
 
 /**
  * Transform data binding syntax
@@ -17,9 +18,10 @@ const {PLAIN_OBJECT_REGEXP, DATA_BIND_REGEXP} = require('./constant');
  * @param {Object=} opts the transformation plugin options
  * @param {boolean=} opts.tripleBrace whether wrap the object data using triple
  *        brace, e.g., :obj='{a: 3}' => obj="{{{a: 3}}}", if tripleBrace is true
+ * @param {Object} element the node to process
  */
-module.exports = function (attrs, name, tplOpts, opts) {
-    let {logger, file} = tplOpts;
+module.exports = function (attrs, name, tplOpts, opts, element) {
+    let {logger, file, config} = tplOpts;
     let tripleBrace = opts && opts.tripleBrace;
     let newName = name.replace(DATA_BIND_REGEXP, '');
     let value = attrs[name];
@@ -35,7 +37,16 @@ module.exports = function (attrs, name, tplOpts, opts) {
             }
         }
         else {
-            value = `{{${value}}}`;
+            let filterOpts = config.filter;
+            let filterValue = filterOpts
+                ? transformPipeFilter(value, filterOpts, logger)
+                : value;
+            if (filterOpts && filterValue !== value) {
+                let filterAttrs = element._hasFilterAttrs || [];
+                element._hasFilterAttrs = filterAttrs;
+                filterAttrs.push(newName);
+            }
+            value = `{{${filterValue}}}`;
         }
     }
 

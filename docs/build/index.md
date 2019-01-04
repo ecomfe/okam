@@ -2,6 +2,24 @@
 
 ## 构建配置项
 
+构建配置项，在 `script/*.config.js` 文件中进行配置
+
+以 `okam-cli` 构建的项目目录为例
+
+```
+.
+└─ scripts                // 构建相关脚本
+    ├── build.js          // 构建入口脚本
+    ├── build.sh          // CI 脚本
+    ├── base.config.js    // 基础公共构建配置文件
+    ├── tt.config.js      // 头条小程序构建配置文件
+    ├── init-quick-app.js // 快应用项目初始化脚本
+    ├── quick.config.js   // 快应用构建配置文件
+    ├── ant.config.js     // 支付宝小程序构建配置文件
+    ├── wx.config.js      // 微信小程序构建配置文件
+    └── swan.config.js    // 百度 Swan 小程序构建配置文件
+```
+
 ### verbose
 `boolean` 是否打印详细的构建信息，默认 false，该选项设为 true，等价于 logLevel 设为 `info`
 
@@ -94,10 +112,12 @@ import Promise from 'okam-core/src/polyfill/promise';
 
 * `resolve.extensions`: `Array.<string>` 查找的模块文件后缀名，会跟默认查找的后缀名做合并
 * `resolve.ignore`: `RegExp|Array.<string|RegExp>|(moduleId, appType):Boolean` 要忽略 resolve 的模块 id，可以传入正则，或者数组，也可以是一个 function
-* `onResolve(depModId, file)`: `Function` resolve dep 时候事件监听回调
+* `resolve.onResolve(depModId, file)`: `Function` resolve dep 时候事件监听回调
+* `resolve.alias`: 设置引用的模块的别名设置，具体设置同 [webpack.alias](https://webpack.js.org/configuration/resolve/#resolve-alias)，默认 `{'okam$': 'okam-core/src/index'}` `0.4.8 版本开始支持`
+* `resolve.modules`: 设置递归查找模块的目录，默认 `node_modules` `0.4.8 版本开始支持`
 
 ```javascript
-// 快应用的 resolve 配置定义
+// resolve 配置示例
 const notNeedDeclarationAPIFeatures = [
     '@system.router',
     '@system.app'
@@ -107,6 +127,19 @@ module.exports = {
     // ...
     resolve: {
         ignore: /^@(system|service)\./, // 忽略快应用的内部系统模块的 resolve
+
+        // 模块别名配置
+        // import {api} from 'okam';
+        // 等价于 import {api} from 'okam-core/src/index';
+        // import util form 'common/util';
+        // 等价于 import util from 'src/common/util';
+        alias: {
+            'okam$': 'okam-core/src/index', // 默认构建配置别名设置
+            'common/': 'src/common/',
+        },
+
+        // 模块查找目录，如果提供的是绝对路径，则不会递归查找，未设置，默认 node_modules
+        modules: ['node_modules', path.join(__dirname, '../src/common')],
 
         /**
          * 收集需要导入声明的 API features
@@ -181,14 +214,54 @@ module.exports = {
 `Object` 项目构建输出配置信息
 
 * `output.dir`: `string` 输出的目标目录
-* `output.depDir`: `string` 输出的 NPM 依赖文件存放的目录，相对于项目根目录
+* `output.depDir`:
+    * `string` 输出的 NPM 依赖文件存放的目录，相对于项目根目录，默认 `node_modules` 目录下文件
+    * `Object` 配置多个依赖目录存放的目录 `0.4.8 版本开始支持`
 * `output.file`: `function(string, Object): boolean|string` 自定义输出文件路径，如果该文件不输出，返回 `false`
+
+```javascript
+
+{
+    output: {
+        dir: 'dist',
+        depDir: {
+            node_modules: 'src/dep', // 将依赖文件路径前缀为 `node_modules/` 移到 `src/dep` 下
+            bower_components: 'src/dep' // 将依赖文件路径前缀为 `bower_components/` 移到 `src/dep` 下
+        },
+
+        /**
+         * 自定义输出文件路径。
+         * 如果该文件不输出，返回 `false`。
+         *
+         * @param {string} path 要输出的文件相对路径
+         * @param {Object} file 要输出的文件对象
+         * @return {boolean|string}
+         */
+        file(path, file) {
+            if (file.isStyle && file.extname !== 'css' && !file.compiled) {
+                return false;
+            }
+
+            // 不输出未处理的过的文件 和 单文件组件，即 .vue 文件
+            if (!file.allowRelease || file.isComponent) {
+                return false;
+            }
+
+            // 将所有文件的 src 路径前缀去掉
+            path = path.replace(/^src\//, '');
+            return path;
+        }
+    }
+}
+
+```
 
 ### component
 `Object` 单文件组件的配置
 
 * `component.extname`: `string` 组件的后缀名，默认 `okm`
 * `component.template`: `Object` 模板配置项
+* `component.template.useVuePrefix`: `boolean` `>= 0.4.6版本支持` 开启使用 `v-` 指令，默认 `false`, 具体使用详见[v- 指令支持](template/vueSyntax.md)
 * `component.template.transformTags`: `Object` 模板标签转换配置项，具体可以查看[标签转换](build/transformTag)
 * `component.global`: `Object` `>=0.4 版本支持` 自定义全局注入的组件
 

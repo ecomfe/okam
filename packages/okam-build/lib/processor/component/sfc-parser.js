@@ -74,7 +74,8 @@ function parse(file, options) {
 
     // fix pad line missing when lang is set in script part
     if (scriptFile && parseOpts.pad === 'line') {
-        scriptFile.content = scriptFile.content.replace(
+        let content = scriptFile.content.toString();
+        scriptFile.content = content.replace(
             /^\n+/, match => match.replace(/\n/g, '//\n')
         );
     }

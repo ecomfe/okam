@@ -676,7 +676,7 @@ describe('observable', function () {
         instance.setData = spySetData;
 
         instance.created();
-        instance.$notifySetDataDone();
+        instance.__notifySetDataDone();
         expect(spyUpdated).toNotHaveBeenCalled();
     });
 
@@ -844,12 +844,12 @@ describe('observable', function () {
         instance.setData = spySetData;
 
         instance.created();
-        instance.$waitingDataUpQueues = null;
+        instance.__upDoneCallbackQueue = null;
 
         let spyFunc1 = createSpy(() => {});
         instance.$nextTick(spyFunc1);
 
-        instance.$waitingDataUpQueues = [];
+        instance.__upDoneCallbackQueue = [];
         instance.a = 6;
 
         let spyFunc2 = createSpy(() => {});

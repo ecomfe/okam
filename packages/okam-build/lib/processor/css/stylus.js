@@ -10,7 +10,7 @@ const stylus = require('stylus');
 module.exports = function (file, options) {
     let config = options.config;
     config = Object.assign({
-        filename: file.path
+        filename: file.fullPath
     }, config);
 
     // init the paths to search

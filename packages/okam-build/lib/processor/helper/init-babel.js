@@ -11,6 +11,25 @@ const programPlugins = require('../js/plugins/babel-program-plugins');
 const polyfillPlugin = require('../js/plugins/babel-polyfill-plugins');
 const {normalPageConfig, normalizeComponentConfig} = require('./config');
 
+const DEP_PLUGIN_NAME = 'dep';
+
+/**
+ * The builtin babel plugins
+ *
+ * @const
+ * @type {Object}
+ */
+const BUILTIN_PLUGINS = {
+    [DEP_PLUGIN_NAME]: function (file, buildManager) {
+        return [
+            programPlugins.resolveDep,
+            {
+                resolveDepRequireId: resolveDep.bind(null, buildManager, file)
+            }
+        ];
+    }
+};
+
 /**
  * Initialize the mixin(Behavior) file
  *
@@ -32,6 +51,20 @@ function initMixinFile(mixins, buildManager, file) {
 }
 
 /**
+ * Initialize filter config
+ *
+ * @param {Object} filters filter info
+ * @param {Object} buildManager the build manager
+ * @param {Object} file the file that owns the filter
+ */
+function initFilterConfig(filters, buildManager, file) {
+    if (!filters) {
+        return;
+    }
+    file.filters = filters;
+}
+
+/**
  * Initialize the app/component/page config information.
  * e.g., the `mixins` info defined in the component, the `config` defined in
  * app entry script that will be extracted to `app.json`
@@ -48,10 +81,12 @@ function initConfigInfo(buildManager, key, file, info) {
 
     if (file.isPageScript) {
         initMixinFile(info.mixins, buildManager, file);
+        initFilterConfig(info.filters, buildManager, file);
         config = normalPageConfig(config, components, file, buildManager);
     }
     else if (file.isComponentScript) {
         initMixinFile(info.mixins, buildManager, file);
+        initFilterConfig(info.filters, buildManager, file);
         config = normalizeComponentConfig(config, components, file, buildManager);
         config.component = true;
     }
@@ -79,6 +114,59 @@ function initLocalPolyfillPlugins(polyfills, plugins) {
 }
 
 /**
+ * Check whether has babel dep resolve plugin in the given plugin list
+ *
+ * @inner
+ * @param {Array} plugins the plugin list
+ * @return {boolean}
+ */
+function hasBabelDepPlugin(plugins) {
+    return plugins.some(item => {
+        let pluginItem = item;
+        if (Array.isArray(item)) {
+            pluginItem = item[0];
+        }
+
+        if (typeof pluginItem === 'string') {
+            return pluginItem === DEP_PLUGIN_NAME;
+        }
+
+        return pluginItem === programPlugins.resolveDep;
+    });
+}
+
+/**
+ * Normalize babel plugins
+ *
+ * @inner
+ * @param {Array} plugins the plugins to normalize
+ * @param {Object} file the file to process
+ * @param {BuildManager} buildManager the build manager
+ * @return {Array}
+ */
+function normalizeBabelPlugins(plugins, file, buildManager) {
+    if (typeof plugins === 'function') {
+        plugins = plugins(file);
+    }
+
+    plugins = plugins ? [].concat(plugins) : [];
+    if (!hasBabelDepPlugin(plugins)) {
+        // add npm resolve plugin
+        plugins.push(DEP_PLUGIN_NAME);
+    }
+
+    return (plugins || []).map(item => {
+        if (typeof item === 'string') {
+            let result = BUILTIN_PLUGINS[item];
+            if (typeof result === 'function') {
+                return result(file, buildManager);
+            }
+        }
+        return item;
+    });
+}
+
+/**
  * Initialize babel processor options
  *
  * @param {Object} file the file to process
@@ -92,20 +180,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     );
 
     // init plugins
-    let plugins = processorOpts.plugins;
-    if (typeof plugins === 'function') {
-        plugins = plugins(file);
-    }
-    plugins = [].concat(plugins || []);
-
-    // add npm resolve plugin
-    let depResolve = [
-        programPlugins.resolveDep,
-        {
-            resolveDepRequireId: resolveDep.bind(null, buildManager, file)
-        }
-    ];
-    plugins.push(depResolve);
+    let plugins = normalizeBabelPlugins(processorOpts.plugins, file, buildManager);
 
     // init app/page/component transform plugin
     let configInitHandler = initConfigInfo.bind(
@@ -116,6 +191,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
         appType: buildManager.appType,
         config: configInitHandler
     };
+    let filterOptions = buildManager.getFilterTransformOptions();
     let {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
     if (file.isEntryScript) {
         Object.assign(pluginOpts, {
@@ -136,6 +212,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
             baseClass: appBaseClass && appBaseClass.page,
             getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager)
         });
+        filterOptions && (pluginOpts.filterOptions = filterOptions);
         plugins.push([programPlugins.page, pluginOpts]);
     }
     else if (file.isComponentScript) {
@@ -143,6 +220,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
             tplRefs: file.tplRefs,
             baseClass: appBaseClass && appBaseClass.component
         });
+        filterOptions && (pluginOpts.filterOptions = filterOptions);
         plugins.push([programPlugins.component, pluginOpts]);
     }
     else if (file.isBehavior) {

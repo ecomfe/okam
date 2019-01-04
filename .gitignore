@@ -75,5 +75,7 @@ Thumbs.db
 /dist
 /dll
 packages/okam-build/example/dist
-
+packages/okam-component/example/quick/build
+packages/okam-component/example/quick/dist
+packages/okam-component/example/quick/package-lock.json
 

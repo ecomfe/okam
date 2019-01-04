@@ -18,7 +18,7 @@ describe('事件类型转化', function () {
         };
         let result = templateProcessor(file, fakeProcessorOptions());
         assert(result.content
-            === '<view bindtouchstart="__handlerProxy" data-touchstart-event-proxy="handleClick"></view>');
+            === '<view bindtouchstart="__handlerProxy" data-touchstart-proxy="handleClick"></view>');
     });
 
     it('should transform event-binding syntax @ to bind syntax（click会转发为tap）', function () {
@@ -26,7 +26,7 @@ describe('事件类型转化', function () {
             content: '<div @click=" handleClick "></div>'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+        assert(result.content === '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 });
 
@@ -36,7 +36,7 @@ describe('修饰符', function () {
             content: '<div @click.stop=" handleClick "></div>'
         };
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert.equal(result.content, '<view catchtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+        assert.equal(result.content, '<view catchtap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 
     it('should transform event-binding modifier .capture to capture-bind syntax', function () {
@@ -45,7 +45,7 @@ describe('修饰符', function () {
         };
         const result = templateProcessor(file, fakeProcessorOptions());
         assert.equal(result.content,
-            '<view capture-bind:tap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+            '<view capture-bind:tap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 
     it('should transform event-binding modifier .capture.stop to capture-catchtap syntax', function () {
@@ -54,7 +54,7 @@ describe('修饰符', function () {
         };
         const result = templateProcessor(file, fakeProcessorOptions());
         assert.equal(result.content,
-            '<view capture-catch:tap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+            '<view capture-catch:tap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 
     it('should transform event-binding modifier .self', function () {
@@ -63,7 +63,7 @@ describe('修饰符', function () {
         };
         const result = templateProcessor(file, fakeProcessorOptions());
         assert(result.content === '<view bindtap="__handlerProxy" '
-            + 'data-tap-event-proxy="handleClick" data-tap-modifier-self></view>');
+            + 'data-tap-proxy="handleClick" data-tap-self></view>');
     });
 
     it('should transform event-binding with modifier .capture .stop .self', function () {
@@ -72,7 +72,7 @@ describe('修饰符', function () {
         };
         const result = templateProcessor(file, fakeProcessorOptions());
         assert(result.content === '<view capture-catch:tap="__handlerProxy" '
-            + 'data-tap-event-proxy="handleClick" data-tap-modifier-self></view>');
+            + 'data-tap-proxy="handleClick" data-tap-self></view>');
     });
 });
 
@@ -82,7 +82,7 @@ describe('事件代理及传参', function () {
             content: '<div @click="handleClick"></div>'
         };
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+        assert(result.content === '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 
     it('should transform event handler with brace', function () {
@@ -90,7 +90,7 @@ describe('事件代理及传参', function () {
             content: '<div @click=" handleClick "></div>'
         };
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+        assert(result.content === '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 
     it('should transform event handler with empty bracket', function () {
@@ -98,7 +98,7 @@ describe('事件代理及传参', function () {
             content: '<div @click="handleClick ()"></div>'
         };
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+        assert(result.content === '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 
     it('should transform event handler with arguments', function () {
@@ -107,8 +107,8 @@ describe('事件代理及传参', function () {
         };
 
         const result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick" '
-            + 'data-tap-arguments-proxy="{{[(a ? 1 : 0), \'a & b\', b, [1,2,3], {a:1,b:2}]}}"></view>');
+        assert(result.content === '<view bindtap="__handlerProxy" data-tap-proxy="handleClick" '
+            + 'data-tap-args="{{[(a ? 1 : 0), \'a & b\', b, [1,2,3], {a:1,b:2}]}}"></view>');
     });
 
     it('should transform more event with arguments', function () {
@@ -119,11 +119,11 @@ describe('事件代理及传参', function () {
 
         const result = templateProcessor(file, fakeProcessorOptions());
         assert(result.content === '<view bindtap="__handlerProxy" '
-            + 'data-tap-event-proxy="handleClick" '
-            + 'data-tap-arguments-proxy="{{[(a ? 1 : 0), \'a & b\', b, [1,2,3], {a:1,b:2}]}}" '
+            + 'data-tap-proxy="handleClick" '
+            + 'data-tap-args="{{[(a ? 1 : 0), \'a & b\', b, [1,2,3], {a:1,b:2}]}}" '
             + 'bindtouchmove="__handlerProxy" '
-            + 'data-touchmove-event-proxy="handleMove" '
-            + 'data-touchmove-arguments-proxy="{{[1]}}"></view>');
+            + 'data-touchmove-proxy="handleMove" '
+            + 'data-touchmove-args="{{[1]}}"></view>');
     });
 
 
@@ -139,9 +139,9 @@ describe('passing on event object', function () {
 
         const {
             bindtap: proxyFunction,
-            'data-tap-event-proxy': originFunction,
-            'data-tap-arguments-proxy': proxyArguments,
-            'data-tap-event-object-alias': alias
+            'data-tap-proxy': originFunction,
+            'data-tap-args': proxyArguments,
+            'data-tap-event': alias
         } = ast[0].attribs;
         assert(proxyFunction && originFunction && proxyArguments && alias);
 
@@ -163,9 +163,9 @@ describe('passing on event object', function () {
 
         const {
             bindtap: proxyFunction,
-            'data-tap-event-proxy': originFunction,
-            'data-tap-arguments-proxy': proxyArguments,
-            'data-tap-event-object-alias': alias
+            'data-tap-proxy': originFunction,
+            'data-tap-args': proxyArguments,
+            'data-tap-event': alias
         } = ast[0].attribs;
         assert(proxyFunction && originFunction && proxyArguments && alias);
 
@@ -187,9 +187,9 @@ describe('passing on event object', function () {
 
         const {
             bindtap: proxyFunction,
-            'data-tap-event-proxy': originFunction,
-            'data-tap-arguments-proxy': proxyArguments,
-            'data-tap-event-object-alias': alias
+            'data-tap-proxy': originFunction,
+            'data-tap-args': proxyArguments,
+            'data-tap-event': alias
         } = ast[0].attribs;
         assert(proxyFunction && originFunction && proxyArguments && alias);
 
@@ -211,9 +211,9 @@ describe('show log', function () {
             + '<div @click.prevent=" handleClick "></div>'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>'
-            + '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>'
-            + '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+        assert(result.content === '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>'
+            + '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>'
+            + '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 
     it('有重复属性时，给出警告并保留okam语法的键值', function () {
@@ -222,7 +222,7 @@ describe('show log', function () {
             content: '<div bindtap="hi" @click=" handleClick "></div>'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></view>');
+        assert(result.content === '<view bindtap="__handlerProxy" data-tap-proxy="handleClick"></view>');
     });
 });
 
@@ -235,7 +235,7 @@ describe('event transform', function () {
         let result = templateProcessor(file, fakeProcessorOptions(null, [
             getTemplateEventPlugin('wx')
         ]));
-        assert(result.content === '<button bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></button>');
+        assert(result.content === '<button bindtap="__handlerProxy" data-tap-proxy="handleClick"></button>');
     });
 
     it('should not transform wx click event to tap for custom component', function () {
@@ -251,7 +251,7 @@ describe('event transform', function () {
                 }
             ]
         ]));
-        assert(result.content === '<hello bindclick="__handlerProxy" data-click-event-proxy="handleClick"></hello>');
+        assert(result.content === '<hello bindclick="__handlerProxy" data-click-proxy="handleClick"></hello>');
     });
 
     it('should transform swan click event to tap', function () {
@@ -262,7 +262,7 @@ describe('event transform', function () {
         let result = templateProcessor(file, fakeProcessorOptions(null, [
             getTemplateEventPlugin('swan')
         ]));
-        assert(result.content === '<button bindtap="__handlerProxy" data-tap-event-proxy="handleClick"></button>');
+        assert(result.content === '<button bindtap="__handlerProxy" data-tap-proxy="handleClick"></button>');
     });
 
     it('should not transform swan click event to tap for custom component', function () {
@@ -278,7 +278,7 @@ describe('event transform', function () {
                 }
             ]
         ]));
-        assert(result.content === '<hello bindclick="__handlerProxy" data-click-event-proxy="handleClick"></hello>');
+        assert(result.content === '<hello bindclick="__handlerProxy" data-click-proxy="handleClick"></hello>');
     });
 
     it('should transform ant click event to tap', function () {
@@ -289,7 +289,7 @@ describe('event transform', function () {
         let result = templateProcessor(file, fakeProcessorOptions(null, [
             getTemplateEventPlugin('ant')
         ]));
-        assert(result.content === '<button onTap="__handlerProxy" data-tap-event-proxy="handleClick"></button>');
+        assert(result.content === '<button onTap="__handlerProxy" data-tap-proxy="handleClick"></button>');
     });
 
     it('should not transform swan click event to tap for custom component', function () {
@@ -305,6 +305,6 @@ describe('event transform', function () {
                 }
             ]
         ]));
-        assert(result.content === '<hello onClick="__handlerProxy" data-click-event-proxy="handleClick"></hello>');
+        assert(result.content === '<hello onClick="__handlerProxy" data-click-proxy="handleClick"></hello>');
     });
 });

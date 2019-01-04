@@ -149,7 +149,15 @@ let promptList = [
     }
 ];
 
+let promptUpdateCli = {
+    'type': 'confirm',
+    'name': 'cli',
+    'default': true,
+    'message': 'update okam-cli now ?'
+};
+
 module.exports = {
+    promptUpdateCli,
     promptList,
     setPromptsValue
 };

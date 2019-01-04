@@ -23,8 +23,10 @@ class Px2rpx {
      */
     constructor(opts) {
         this.designWidth = opts.designWidth || 750;
-        this.precision = opts.precision || 2;
+        this.precision = typeof opts.precision === 'undefined' ? 2 : opts.precision;
         this.proportion = 750 / this.designWidth;
+        // 1px 不转
+        this.noTrans1px = !!opts.noTrans1px;
 
         if (!keepComment) {
             keepComment = opts.keepComment || 'px2rpx\\s*?\\:\\s*?no';
@@ -37,6 +39,9 @@ class Px2rpx {
         const pxGlobalRegExp = new RegExp(pxRegExp.source, 'g');
 
         return value.replace(pxGlobalRegExp, ($0, $1) => {
+            if (+$1 === 1 && this.noTrans1px) {
+                return $0;
+            }
             let num = this.proportion * parseInt($1, 10);
             num = num.toFixed(this.precision);
             num = parseInt(num, 10) === +num ? parseInt(num, 10) : num;

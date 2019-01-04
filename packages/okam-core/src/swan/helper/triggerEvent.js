@@ -40,7 +40,7 @@ export function normalizeEventArgs(component, args) {
             dataset,
             id: component.id
         },
-        detail: eventData
+        detail: args[1]
     };
     args[1] = eventObj;
 

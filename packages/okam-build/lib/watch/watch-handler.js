@@ -55,7 +55,8 @@ function rebuildFiles(file, buildManager) {
 
     let outputFiles = [];
     let addReleaseFile = function (file) {
-        if (!outputFiles.includes(file)) {
+        // skip sub file and repeated file
+        if (!file.owner && !outputFiles.includes(file)) {
             outputFiles.push(file);
         }
     };

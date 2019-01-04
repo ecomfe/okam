@@ -26,6 +26,14 @@ describe('class binding', function () {
         assert(result.content === '<view class="{{[isActive?\'active\':\'\']}}"></view>');
     });
 
+    it('should support new line in class-data-binding for object syntax', function () {
+        const file = {
+            content: '<p :class="{ active: isActive,\nhide: true }"></p>'
+        };
+        const result = templateProcessor(file, fakeProcessorOptions());
+        assert.equal(result.content, '<view class="{{[isActive?\'active\':\'\',true?\'hide\':\'\']}}"></view>');
+    });
+
     it('should transform class-data-binding with static class', function () {
         const file = {
             content: '<p class="static" :class="{ active: isActive }"></p>'

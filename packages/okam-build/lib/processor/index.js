@@ -11,11 +11,11 @@
 const path = require('path');
 const {createFile} = require('./FileFactory');
 const {findMatchProcessor, getBuiltinProcessor} = require('./helper/processor');
-const {getEventSyntaxPlugin} = require('./helper/init-view');
+const {getEventSyntaxPlugin, getFilterSyntaxPlugin} = require('./helper/init-view');
 const registerProcessor = require('./type').registerProcessor;
 const {isPromise} = require('../util').helper;
 const {toHyphen} = require('../util').string;
-const {getRequirePath} = require('../util').file;
+const {relative, replaceFileName, getFileName, getRequirePath} = require('../util').file;
 
 function processConfigInfo(file, root, owner) {
     let config = file.config;
@@ -31,6 +31,34 @@ function processConfigInfo(file, root, owner) {
     jsonFile.isConfig = true;
     owner && owner.addSubFile(jsonFile);
     return jsonFile;
+}
+
+function processFilterInfo(file, owner, buildManager) {
+    let filters = file.filters;
+    if (!filters) {
+        return;
+    }
+
+    let {code} = filters;
+    let {root, buildConf} = buildManager;
+    let outputConf = buildConf.output;
+    let componentPartExtname = outputConf
+        ? outputConf.componentPartExtname : {};
+    let filterExt = componentPartExtname.filter || 'js';
+    let fullPath = owner.fullPath;
+    fullPath = replaceFileName(
+        fullPath, getFileName(fullPath) + `.${filterExt}`
+    );
+
+    let filterFile = createFile({
+        isVirtual: true,
+        data: code,
+        fullPath
+    }, root);
+    filterFile.isFilter = true;
+    filters.file = filterFile;
+    owner.addSubFile(filterFile);
+    return filterFile;
 }
 
 function processEntryScript(file, buildManager) {
@@ -80,13 +108,16 @@ function processEntryScript(file, buildManager) {
     buildManager.addNeedBuildFile(jsonFile);
 }
 
-function processComponentScript(buildManager, file, root) {
+function processComponentScript(buildManager, file) {
+    let {root} = buildManager;
     let jsonFile = processConfigInfo(file, root, file.owner);
     if (jsonFile) {
         jsonFile.component = file;
         jsonFile.isComponentConfig = true;
         compile(jsonFile, buildManager);
     }
+    let filterFile = processFilterInfo(file, file.owner, buildManager);
+    filterFile && buildManager.addNeedBuildFile(filterFile);
 }
 
 /**
@@ -130,7 +161,7 @@ function processFile(file, processor, buildManager) {
  * @param {BuildManager} buildManager the build manager
  */
 function compile(file, buildManager) {
-    let {logger, root, rules} = buildManager;
+    let {logger, rules} = buildManager;
     let processors = findMatchProcessor(file, rules, buildManager);
     logger.debug('compile file:', file.path, processors.length);
 
@@ -144,7 +175,7 @@ function compile(file, buildManager) {
         processEntryScript(file, buildManager);
     }
     else if (file.isPageScript || file.isComponentScript) {
-        processComponentScript(buildManager, file, root);
+        processComponentScript(buildManager, file);
     }
 
     buildManager.emit('buildFileDone', file);
@@ -181,6 +212,40 @@ function getImportComponents(file, globalComponents, allTags) {
     return Object.keys(result).length ? result : null;
 }
 
+/**
+ * Get need to import filter modules
+ *
+ * @inner
+ * @param {Array.<string>} usedFilters the used filter names
+ * @param {Object} scriptFile the script file to declare the local filter
+ * @param {BuildManager} buildManager the build manager
+ * @return {?Array.<Object>}
+ */
+function getImportFilterModules(usedFilters, scriptFile, buildManager) {
+    if (!usedFilters) {
+        return;
+    }
+
+    let filterModules = [];
+    let {file: filterFile, filterNames: definedFilters} = scriptFile.filters || {};
+    let usedFilterFile;
+    definedFilters && usedFilters.forEach(item => {
+        if (definedFilters.includes(item)) {
+            usedFilterFile = filterFile;
+        }
+    });
+
+    if (usedFilterFile) {
+        let src = relative(usedFilterFile.path, scriptFile.dirname);
+        if (src.charAt(0) !== '.') {
+            src = './' + src;
+        }
+        filterModules.push({src, filters: definedFilters});
+    }
+
+    return filterModules;
+}
+
 function compileComponent(component, file, buildManager) {
     let tplFile = component.tpl;
     if (tplFile) {
@@ -200,6 +265,7 @@ function compileComponent(component, file, buildManager) {
         // pass the refs info defined in tpl to script
         scriptFile.tplRefs = tplFile.refs;
 
+        // init global components used by the component
         scriptFile.injectComponents = getImportComponents(
             scriptFile,
             buildManager.globalComponents,
@@ -212,15 +278,29 @@ function compileComponent(component, file, buildManager) {
         );
         compile(scriptFile, buildManager);
 
-        // transform template event syntax
+        // init tpl transform plugins
         let customComponentTags = getCustomComponentTags(scriptFile.config);
-        let tplProcessor = getBuiltinProcessor('view', {
-            plugins: [
-                [
-                    getEventSyntaxPlugin(buildManager.appType),
-                    {customComponentTags}
-                ]
+        let tplPlugins = [
+            [
+                getEventSyntaxPlugin(buildManager.appType),
+                {customComponentTags}
             ]
+        ];
+
+        let enableFilter = buildManager.isEnableFilterSupport();
+        if (enableFilter) {
+            let filterModules = getImportFilterModules(
+                tplFile.filters, scriptFile, buildManager
+            );
+            filterModules && tplPlugins.push([
+                getFilterSyntaxPlugin(buildManager.appType),
+                {filters: filterModules}
+            ]);
+        }
+
+        // transform template event/filter syntax
+        let tplProcessor = getBuiltinProcessor('view', {
+            plugins: tplPlugins
         });
         processFile(tplFile, tplProcessor, buildManager);
     }

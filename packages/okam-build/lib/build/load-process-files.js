@@ -51,18 +51,6 @@ function addFileRule(allRules, rule) {
     }
 }
 
-function isMatchFile(file, pattern) {
-    if (file === pattern) {
-        return true;
-    }
-
-    if (pattern instanceof RegExp) {
-        return pattern.test(file);
-    }
-
-    return false;
-}
-
 function resolvePath(file, rootDir) {
     if (typeof file === 'string') {
         return relative(path.resolve(rootDir, file), rootDir);
@@ -96,7 +84,11 @@ function loadProcessFiles(options, logger) {
 
     let processFiles = new FileFactory({
         root: rootDir,
-        rebaseDepDir: (options.output || {}).depDir
+        rebaseDepDir: (options.output || {}).depDir,
+        entryStyle,
+        entryScript,
+        projectConfig,
+        componentExtname
     });
     let filterFiles = function (file, isDir, fullPath) {
         if (isDir && file === sourceDir) {
@@ -120,12 +112,6 @@ function loadProcessFiles(options, logger) {
         let toProcessFile = processFiles.createFile({
             path: file,
             fullPath
-        });
-        Object.assign(toProcessFile, {
-            isEntryScript: isMatchFile(file, entryScript),
-            isEntryStyle: isMatchFile(file, entryStyle),
-            isProjectConfig: isMatchFile(file, projectConfig),
-            isComponent: toProcessFile.extname === componentExtname
         });
 
         // ensure the entry app script can be compiled at first

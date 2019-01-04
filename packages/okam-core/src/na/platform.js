@@ -8,8 +8,44 @@
 /* eslint-disable fecs-camelcase */
 
 import {compare} from './semver';
+import {api, appGlobal} from './index';
 
-let cachedPlatformInfo;
+/**
+ * Init platform info
+ *
+ * @inner
+ * @param {Function} callback the callback to execute when platform info get done
+ */
+function initPlatformInfo(callback) {
+    api.getSystemInfo({
+        success(info) {
+            callback && callback(null, info);
+        },
+        fail(err) {
+            callback && callback(err);
+        }
+    });
+}
+
+/**
+ * Ensure the platform info is ready and accessible
+ *
+ * @param {Function} callback the callback to execute when platform info ready
+ */
+export function ensure(callback) {
+    if (appGlobal.okamPlatformInfo) {
+        callback(appGlobal.okamPlatformInfo);
+    }
+    else {
+        initPlatformInfo((err, res) => {
+            if (!err) {
+                // cache platform info
+                appGlobal.okamPlatformInfo = res;
+                callback(res);
+            }
+        });
+    }
+}
 
 /**
  * Set cached platform env info
@@ -17,7 +53,7 @@ let cachedPlatformInfo;
  * @param {Object} info the platform info to set
  */
 export function setPlatformInfo(info) {
-    cachedPlatformInfo = info;
+    appGlobal.okamPlatformInfo = info;
 }
 
 /**
@@ -26,14 +62,7 @@ export function setPlatformInfo(info) {
  * @return {?Object}
  */
 export function getPlatformInfo() {
-    if (cachedPlatformInfo) {
-        return cachedPlatformInfo;
-    }
-
-    /* eslint-disable no-undef */
-    if (typeof okam_platform_info === 'object' && okam_platform_info) {
-        return okam_platform_info;
-    }
+    return appGlobal.okamPlatformInfo;
 }
 
 /**

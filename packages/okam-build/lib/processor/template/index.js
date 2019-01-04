@@ -7,8 +7,6 @@
 
 /* eslint-disable fecs-min-vars-per-destructure */
 /* eslint-disable fecs-prefer-destructure */
-const path = require('path');
-const {file: fileUtil} = require('../../util/index');
 const {parse: parseDom} = require('./parser');
 const serializeDom = require('./serializer');
 
@@ -96,21 +94,9 @@ function createTransformContext() {
 
 function transformAst(ast, plugins, tplOpts) {
     let ctx = createTransformContext();
-    let children = ast.children; // ignore root node, only need to transform children
 
-    let childNum = children.length;
-    for (let i = 0; i < childNum; i++) {
-        let node = children[i];
-        visit(ctx, node, plugins, tplOpts);
-        if (ctx.isStop) {
-            return;
-        }
-
-        if (ctx.isNodeChange) {
-            childNum = children.length;
-            ctx.nodeChange(false);
-        }
-    }
+    // visit root node
+    visit(ctx, ast, plugins, tplOpts);
 }
 
 /**
@@ -157,7 +143,7 @@ function mergeVisitors(plugins) {
  * @return {Object}
  */
 function compileTpl(file, options) {
-    let {root, config, logger} = options;
+    let {config, logger} = options;
     let allowCache = !config || config.cache == null || config.cache;
     let content = file.content.toString();
     const ast = file.ast || parseDom(content);
@@ -167,14 +153,10 @@ function compileTpl(file, options) {
 
     let deps = [];
     let addDep = function (filePath) {
-        let relativePath = fileUtil.relative(
-            path.join(path.dirname(file.fullPath), filePath),
-            root
-        );
-        if (!deps.includes(relativePath)) {
-            deps.push(relativePath);
+        if (!deps.includes(filePath)) {
+            deps.push(filePath);
         }
-        logger.debug('find tpl dep file', relativePath);
+        logger.debug('find tpl dep file', filePath);
     };
 
     transformAst(

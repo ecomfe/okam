@@ -8,8 +8,6 @@ const ora = require('ora');
 const inquirer = require('inquirer');
 const fs = require('fs-extra');
 const getLatestVersion = require('latest-version')
-const PROJECT_CONFIG = 'scripts/build.js';
-const projectConfPath = path.join(process.cwd(), PROJECT_CONFIG);
 const pkgPath = path.join(process.cwd(), 'package.json');
 
 // 项目pakageJson;
@@ -41,49 +39,36 @@ function upgradeSelf(cb) {
 
     child.stdout.on('data', function (data) {
         console.log(data);
-        spinner.stop()
-    })
+        spinner.stop();
+    });
+
     child.stderr.on('data', function (data) {
         console.log(data);
         spinner.stop();
-    })
+    });
 }
 
 /**
  * 获取 最新 version
  *
- * @param  {string} name 包名
+ * @param {Object} okamPkgs {depType, name}
  * @return {string}      version 带当前 pkg 中的前缀
  */
-async function getCurrentLatestVersion(name) {
-    let devDeps = projectPackageJson.devDependencies || {};
-    let deps = projectPackageJson.dependencies || {};
-
-    let pkgKey = '';
-    if (devDeps.hasOwnProperty(name)) {
-        pkgKey = 'devDependencies';
-    }
-
-    if (deps.hasOwnProperty(name)) {
-        pkgKey = 'dependencies';
-    }
-
-    if (!pkgKey) {
-        return;
-    }
-
-    let oldVersion = projectPackageJson[pkgKey][name];
+async function getCurrentLatestVersion(depInfo) {
+    let {depType, pkgName} = depInfo;
+    let oldVersion = projectPackageJson[depType][pkgName];
     let version = oldVersion;
     let prefix = /^[0-9*]$/.test(oldVersion[0]) ? '' : oldVersion[0];
     try {
-        version = await getLatestVersion(name);
+        version = await getLatestVersion(pkgName);
         version = `${prefix}${version}`;
     }
     catch (e) {
+        console.log(chalk.grey(`encounter error while getting latest version of ${pkgName}`));
     }
 
-    projectPackageJson[pkgKey][name] = `${version}`;
-    console.log(chalk.cyan(`${name}: ${oldVersion} -> ${version}`));
+    projectPackageJson[depType][pkgName] = `${version}`;
+    console.log(chalk.cyan(`${pkgName}: ${oldVersion} -> ${version}`));
 
     if (oldVersion !== version) {
         changeFlag = true;
@@ -95,11 +80,11 @@ async function getCurrentLatestVersion(name) {
 /**
  * 更新 package.json 的配置
  *
- * @return {[type]} [description]
+ * @param {Array} okamPkgs [{depType, name}]
  */
-async function updatePkgConfig() {
-    await Promise.all(PACKAGE_NAMES.map(pkg => {
-        return getCurrentLatestVersion(pkg);
+async function updatePkgConfig(okamPkgs) {
+    await Promise.all(okamPkgs.map(pkgInfo => {
+        return getCurrentLatestVersion(pkgInfo);
     }));
 }
 
@@ -144,11 +129,42 @@ function upgradePkg() {
         console.log(data);
     })
 }
+
+/**
+ * 获取需要更新的 okam 相关包
+ *
+ * @return {Array} arr
+ */
+function getOkamPkg() {
+    let devDeps = projectPackageJson.devDependencies || {};
+    let deps = projectPackageJson.dependencies || {};
+    let result = [];
+
+    PACKAGE_NAMES.forEach(pkg => {
+
+        if (devDeps.hasOwnProperty(pkg)) {
+            result.push({
+                depType: 'devDependencies',
+                pkgName: pkg
+            });
+        }
+
+        if (deps.hasOwnProperty(pkg)) {
+            result.push({
+                depType: 'dependencies',
+                pkgName: pkg
+            });
+        }
+    });
+
+    return result;
+}
+
 async function upgradeProject() {
-    if (!fs.existsSync(projectConfPath)) {
+    if (!fs.existsSync(pkgPath)) {
         console.log(chalk.red(`
-            The project configuration file [${PROJECT_CONFIG}] could not be found.
-            Please make sure that the current directory is the root of the Okam project！`
+            Can't find [package.json] file.
+            Please make sure that the current directory have package.json file！`
         ));
         process.exit(1);
     }
@@ -156,13 +172,22 @@ async function upgradeProject() {
     console.log('Update okam to the latest versions in the project.');
 
     try {
-        projectPackageJson = require(pkgPath)
-        await updatePkgConfig();
+        projectPackageJson = require(pkgPath);
 
-        if (!changeFlag) {
-            console.log(chalk.green('It\'s the latest version.'));
+        let okamPkgs = getOkamPkg();
+
+        if (!okamPkgs.length) {
+            console.log(chalk.yellow('No packages of okam in the package.json!'));
             process.exit(1);
         }
+
+        await updatePkgConfig(okamPkgs);
+
+        if (!changeFlag) {
+            console.log(chalk.green('No need to update version.'));
+            process.exit(1);
+        }
+
         comfireUpdate();
     }
     catch (err) {

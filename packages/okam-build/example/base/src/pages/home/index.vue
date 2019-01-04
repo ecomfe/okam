@@ -59,8 +59,16 @@ export default {
                         path: 'tpl/ref'
                     },
                     {
+                        subName: 'filter 支持',
+                        path: 'filter/index'
+                    },
+                    {
                         subName: '其他模板引擎',
                         path: 'tpl/tplPug'
+                    },
+                    {
+                        subName: 'v- 前缀支持',
+                        path: 'tpl/vueSyntax'
                     }
                 ]
             },
@@ -115,6 +123,21 @@ export default {
                     {
                         subName: 'redux状态管理',
                         path: 'todos/todoList'
+                    }
+                ]
+            },
+            {
+                icon: '../../common/img/more.png',
+                name: '其他',
+                open: false,
+                list: [
+                    {
+                        subName: '单文件引入',
+                        path: 'sfc/index'
+                    },
+                    {
+                        subName: '单文件分开引入',
+                        path: 'sfc/separate'
                     }
                 ]
             }

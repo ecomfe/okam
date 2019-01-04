@@ -117,7 +117,12 @@ class BuildQuickAppManager extends BuildManager {
         }
 
         found.allowRelease = true;
+
+        // avoid the file output path return `false`, here we make an assumption
+        // that the file has been compiled
+        found.compiled = true;
         let outputPath = this.generator.getOutputPath(found);
+        found.compiled = false; // reset compiled info
 
         processor.registerProcessor({
             addCssDependencies: {

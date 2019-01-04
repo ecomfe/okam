@@ -32,8 +32,13 @@ module.exports = merge({}, baseConf, {
             script: 'js',
             style: 'wxss',
             tpl: 'wxml',
-            config: 'json'
+            config: 'json',
+            filter: 'wxs'
         }
+    },
+
+    resolve: {
+        ignore: /^plugin:\/\//
     },
 
     processors: {
@@ -44,6 +49,13 @@ module.exports = merge({}, baseConf, {
             rext: 'wxss',
             options: {
                 plugins: ['cssImport']
+            }
+        },
+        filter: {
+            extnames: ['wxs'],
+            rext: 'wxs',
+            options: {
+                plugins: ['dep']
             }
         }
     }

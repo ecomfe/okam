@@ -10,15 +10,19 @@ const merge = require('../../../').merge;
 module.exports = merge({}, require('./base.config'), {
     output: {
         dir: 'wx_dist',
-        depDir: 'src/common'
+        // depDir: 'src/common'
     },
     localPolyfill: [
         'async',
         'promise'
     ],
-
+    framework: ['filter'],
     dev: {
         processors: {
+            babel7: {
+                extnames: 'js'
+            },
+
             postcss: {
                 options: {
                     plugins: [
@@ -26,6 +30,11 @@ module.exports = merge({}, require('./base.config'), {
                             url: 'inline'
                         }]
                     ]
+                }
+            },
+            filter: {
+                options: {
+                    presets: ['@babel/preset-env']
                 }
             }
         }

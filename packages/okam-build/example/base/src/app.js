@@ -6,6 +6,7 @@
 'use strict';
 
 import store from './store/index';
+import a from 'a';
 
 export default {
     // the app config defined in app.json
@@ -13,6 +14,7 @@ export default {
         // The first element as the home page when app startup
         pages: [
             'pages/home/index',
+            'pages/tpl/vueSyntax',
             'pages/tpl/tplSyntax',
             'pages/tpl/tplReuse',
             'pages/tpl/tplPug',
@@ -28,7 +30,10 @@ export default {
             'pages/todos/todoList',
             'pages/todos/counter',
             'pages/behavior/index',
-            'pages/broadcast/index'
+            'pages/broadcast/index',
+            'pages/filter/index',
+            'pages/sfc/index',
+            'pages/sfc/separate'
         ],
         subPackages: [
             {
@@ -65,6 +70,10 @@ export default {
     },
 
     $store: store,
+
+    globalData: {
+        config: {}
+    },
 
     // apis which need promisify
     $promisifyApis: ['getSystemInfo', 'request'],

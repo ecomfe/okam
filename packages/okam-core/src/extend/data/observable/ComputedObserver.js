@@ -132,7 +132,7 @@ export default class ComputedObserver {
             result[k] = this.initDeps(k);
         });
 
-        this.ctx.$setData(result);
+        this.ctx.__setViewData(result);
     }
 
     /**
@@ -181,7 +181,7 @@ export default class ComputedObserver {
             : (old !== value || (typeof old === 'object'));
         if (neeUpdate) {
             ctx.data[p] = value;
-            ctx.$setData({[p]: value});
+            ctx.__setViewData({[p]: value});
             this.notifyWatcher(value, old, [p]);
         }
     }

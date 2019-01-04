@@ -28,7 +28,7 @@ const componentTransformer = require('./component');
  * @return {Object}
  */
 function getCodeTraverseVisitors(t, initConfig, opts) {
-    let {isPage, isComponent, isBehavior} = opts;
+    let {isPage, isComponent, isBehavior, filterOptions} = opts;
     let hasComponents = isPage || isComponent;
     return {
         ObjectProperty(path) {
@@ -40,6 +40,9 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
                 let config = getPlainObjectNodeValue(prop.value, path, t);
                 initConfig.config = config;
                 removeNode(t, path, {tail: true});
+
+                // skip children traverse
+                path.skip();
             }
             else if (keyName === 'mixins') {
                 // extract the mixins information for page/component
@@ -47,6 +50,8 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
                     prop.value, path, t, opts
                 );
                 initConfig.mixins = mixins;
+
+                path.skip();
             }
             else if (!isBehavior && hasComponents && keyName === 'components') {
                 // extract the using components information for page/component
@@ -55,6 +60,23 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
                 );
                 initConfig.components = config;
                 removeNode(t, path, {tail: true});
+
+                path.skip();
+            }
+            else if (filterOptions && !isBehavior && keyName === 'filters') {
+                const {getExportFilterNames, generateCode} = require('./filter');
+                let filterNames = getExportFilterNames(prop.value, t);
+                let code = generateCode(prop.value, t, filterOptions);
+                initConfig.filters = {
+                    code,
+                    filterNames
+                };
+                removeNode(t, path, {tail: true});
+
+                path.skip();
+            }
+            else {
+                path.skip();
             }
         }
     };

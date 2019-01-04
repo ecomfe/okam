@@ -26,6 +26,8 @@
 
     * [模板复用](template/use.md)
 
+    * [v- 指令支持](template/vueSyntax.md)
+
 * 组件
 
     * [开发模式](component/sfc.md)
@@ -39,6 +41,8 @@
     * [Ref支持](component/ref.md)
 
     * [Mixins支持](component/mixins.md)
+
+    * [Filter支持](component/filter.md)
 
     * [Broadcast支持](component/broadcast.md)
 
@@ -83,3 +87,7 @@
 * 插件列表
 
     * [图片压缩](plugins/imgCompress.md)
+
+* 常见问题
+
+    * [常见问题](questions/index.md)

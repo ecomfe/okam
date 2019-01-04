@@ -19,7 +19,7 @@ const {
 } = require('./type');
 const relative = require('../util').file.relative;
 
-const {isNpmModuleFile, resolveNpmModuleNewPath} = require('./helper/npm');
+const {DEFAULT_DEP_DIR_NAME, resolveDepModuleNewPath} = require('./helper/npm');
 
 function loadFileContent() {
     if (this._data) {
@@ -158,12 +158,30 @@ function isFileExist(file) {
     return !!this._existMap[typeof file === 'string' ? file : file.fullPath];
 }
 
+function isMatchFile(file, pattern) {
+    if (file === pattern) {
+        return true;
+    }
+
+    if (pattern instanceof RegExp) {
+        return pattern.test(file);
+    }
+
+    return false;
+}
+
 class FileFactory extends EventEmitter {
 
     /**
      * Create FileFactory instance
      *
      * @param {Object} options create options
+     * @param {string} options.root the file root
+     * @param {string} options.rebaseDepDir the rebase dir of the dep file
+     * @param {string|RegExp} options.entryStyle the entry style pattern
+     * @param {string|RegExp} options.entryScript the entry script pattern
+     * @param {string|RegExp} options.projectConfig the projectConfig pattern
+     * @param {string} options.componentExtname the component extname
      */
     constructor(options) {
         super();
@@ -172,13 +190,11 @@ class FileFactory extends EventEmitter {
         this._existMap = {};
 
         let {root, rebaseDepDir} = options;
+        this.options = options;
         this.root = root;
 
-        if (rebaseDepDir && !/\/$/.test(rebaseDepDir)) {
-            rebaseDepDir += '/';
-        }
+        this.initRebaseDepDirConfig(rebaseDepDir);
 
-        this.rebaseDepDir = rebaseDepDir;
         Object.defineProperties(this, {
             length: {
                 get() {
@@ -188,12 +204,54 @@ class FileFactory extends EventEmitter {
         });
     }
 
+    initRebaseDepDirConfig(rebaseDepDir) {
+        let result;
+        if (rebaseDepDir && typeof rebaseDepDir === 'string') {
+            rebaseDepDir = {
+                [DEFAULT_DEP_DIR_NAME]: rebaseDepDir
+            };
+        }
+
+        if (rebaseDepDir && typeof rebaseDepDir === 'object') {
+            result = {};
+            Object.keys(rebaseDepDir).forEach(originalDir => {
+                let newDir = rebaseDepDir[originalDir];
+                originalDir = this.getRelativePath(path.join(this.root, originalDir)) + '/';
+                newDir = this.getRelativePath(path.join(this.root, newDir)) + '/';
+                result[originalDir] = newDir;
+            });
+        }
+        this.rebaseDepDirMap = result;
+    }
+
     getFileList() {
         return this._files;
     }
 
     getRelativePath(fullPath) {
         return relative(fullPath, this.root);
+    }
+
+    resolveFileNewPath(filePath) {
+        let rebaseDir = this.rebaseDepDirMap;
+        if (!rebaseDir) {
+            return;
+        }
+
+        let result;
+        Object.keys(rebaseDir).some(originalDir => {
+            let newDir = rebaseDir[originalDir];
+            if (filePath.indexOf(originalDir) === 0) {
+                result = resolveDepModuleNewPath(
+                    filePath, originalDir, newDir
+                );
+                return true;
+            }
+
+            return false;
+        });
+
+        return result;
     }
 
     /**
@@ -211,19 +269,17 @@ class FileFactory extends EventEmitter {
             if (file) {
                 return file;
             }
-            f = createFile({fullPath: f, path: relPath}, this.root);
+            f = this.createFile({fullPath: f, path: relPath});
         }
         else {
-            f = createFile(f, this.root);
+            f = this.createFile(f);
         }
 
         let result = isUnshift ? this.unshift(f) : this.push(f);
-        if (result && isNpmModuleFile(f.path)) {
-            f.isNpm = true;
-            if (this.rebaseDepDir) {
-                f.resolvePath = resolveNpmModuleNewPath(
-                    f.path, this.rebaseDepDir
-                );
+        if (result) {
+            let newPath = this.resolveFileNewPath(f.path);
+            if (newPath) {
+                f.resolvePath = newPath;
             }
 
             /**
@@ -231,6 +287,7 @@ class FileFactory extends EventEmitter {
              */
             this.emit('addFile', f);
         }
+
         return f;
     }
 
@@ -264,7 +321,32 @@ class FileFactory extends EventEmitter {
     }
 
     createFile(f) {
-        return createFile(f, this.root);
+        let file = createFile(f, this.root);
+        let {
+            entryScript,
+            entryStyle,
+            projectConfig,
+            componentExtname
+        } = this.options;
+
+        let filePath = file.path;
+        if (isMatchFile(filePath, entryScript)) {
+            file.isEntryScript = true;
+        }
+
+        if (isMatchFile(filePath, entryStyle)) {
+            file.isEntryStyle = true;
+        }
+
+        if (isMatchFile(filePath, projectConfig)) {
+            file.isProjectConfig = true;
+        }
+
+        if (file.extname === componentExtname) {
+            file.isComponent = true;
+        }
+
+        return file;
     }
 
     forEach(handler) {

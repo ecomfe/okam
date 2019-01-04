@@ -12,6 +12,8 @@
         <view><button @click="onUnshift2">Unshift2</button></view>
         <view><button @click="onSplice">Splice</button></view>
         <view><button @click="onSplice2">Splice2</button></view>
+        <view><button @click="onSplice3">Splice3</button></view>
+        <view><button @click="onSplice4">Splice4</button></view>
     </view>
 </template>
 <script>
@@ -95,6 +97,16 @@ export default {
         onSplice2() {
             this.arr.splice(1, 1, 56, 33);
             console.log('splice2', this.arr, this.arr.length, this.data.arr, this.data.arr.length);
+        },
+
+        onSplice3() {
+            this.arr.splice(1, 1, 48);
+            console.log('splice3', this.arr, this.arr.length, this.data.arr, this.data.arr.length);
+        },
+
+        onSplice4() {
+            this.arr.splice(6, 1, 9);
+            console.log('splice4', this.arr, this.arr.length, this.data.arr, this.data.arr.length);
         }
     }
 };

@@ -9,13 +9,14 @@
 * 如果非 `for` 循环节点引用
 
     * 基于 `selectComponent` 查询自定义组件实例，如果查询成功，返回对应的组件实例对象；
-    * 如果查询失败，则基于节点选择器 [select](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.select.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例
+    * 如果查询失败，~~则基于节点选择器 [select](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.select.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例~~ 则返回空
 
 * 如果 `for` 循环节点上下文引用
 
     * 基于 `selectAllComponents` 查询自定义组件实例，如果存在返回对应的自定义组件实例数组；
-    * 如果查询失败，则基于节点选择器 [selectorAll](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.selectAll.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例，而不是数组
+    * 如果查询失败，~~则基于节点选择器 [selectorAll](https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.selectAll.html) API 查询，注意该接口不管是否存在对应的节点，都会返回一个 `NodeRef` 对象实例，而不是数组~~ 则返回空数组
 
+* 由于小程序底层实现机制，因此是没法拿到非自定义组件的节点实例，要想查询节点的信息，可以通过 `this.createSelectorQuery()`，具体后续操作同[原生 API](https://smartprogram.baidu.com/docs/develop/api/show_query/#createSelectorQuery/)，可以参考后面示例
 
 ## 开启 Ref 支持
 
@@ -63,8 +64,17 @@ export default {
     mounted() {
         console.log(this.$refs['my-btn']); // 返回对应的元素节点信息
         console.log(this.$refs.myComponent); // 返回对应的自定义组件实例
-        console.log(this.$refs.forBtn); // 返回元素节点引用对象
-        console.log(this.$refs.forSimpleComponent); // 返回自定义组件实例的数组
+        console.log(this.$refs.forBtn); // undefined
+        console.log(this.$refs.forSimpleComponent); // 空数组
+
+        // 非自定义组件节点的查询操作
+        let query = this.createSelectorQuery();
+        query.select('.my-btn').boundingClientRect();
+        query.selectViewport().scrollOffset();
+        query.exec(function (res) {
+            res[0].top       // button 节点的上边界坐标
+            res[1].scrollTop // 显示区域的竖直滚动位置
+        });
     }
 };
 </script>

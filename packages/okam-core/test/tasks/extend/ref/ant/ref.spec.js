@@ -53,8 +53,8 @@ describe('ref plugin', function () {
                 assert(this.$refs != null);
 
                 assert(this.$refs.a === fakeComponentA);
-                assert(this.$refs.b === '.xx-b');
-                expect(this.$refs.c).toEqual(['.xx-c']);
+                assert(this.$refs.b === undefined);
+                expect(this.$refs.c).toEqual([]);
                 assert(this.$refs.d === fakeComponentDArr);
 
             }
@@ -95,9 +95,9 @@ describe('ref plugin', function () {
                 assert(this.$refs != null);
 
                 assert(this.$refs.a === fakeComponentA);
-                assert(this.$refs.b === '.xx-b');
+                assert(this.$refs.b === undefined);
                 assert(this.$refs.d === fakeComponentDArr);
-                expect(this.$refs.e).toEqual(['.notExist-e']);
+                expect(this.$refs.e).toEqual([]);
             }
         }, {refs: refInfo});
 

@@ -10,6 +10,7 @@ const fs = require('fs');
 const logger = require('okam/util').logger;
 
 const initBuildOption = require('okam/build/init-build-options');
+const vueSyntax = require('okam/processor/template/plugins/vue-prefix-plugin');
 const swanSyntax = require('okam/processor/template/plugins/swan-syntax-plugin');
 const wxSyntax = require('okam/processor/template/plugins/wx-syntax-plugin');
 const html = require('okam/processor/template/plugins/tag-transform-plugin');
@@ -37,6 +38,7 @@ const defaultTags = {
  */
 const getDefaultPlugins = function () {
     return [
+        vueSyntax,
         swanSyntax,
         swanEventPlugin,
         html,
@@ -51,6 +53,7 @@ const getDefaultPlugins = function () {
  */
 const getDefaultWXPlugins = function () {
     return [
+        vueSyntax,
         wxSyntax,
         wxEventPlugin,
         html,

@@ -157,12 +157,12 @@ export default {
          * @private
          */
         created() {
-            this.$waitingDataUpQueues = [];
+            this.__waitingSetDataQueue = [];
             this.__dataUpTaskNum = 0;
 
             // init nextTick callback
-            this.__nextTickCallback = this.$notifySetDataDone.bind(this);
-            this.__executeDataUpdate = this.$executeDataUpdate.bind(this);
+            this.__nextTickCallback = this.__notifySetDataDone.bind(this);
+            this.__executeDataUpdate = this.__doDataUpdate.bind(this);
 
             this.$dataListener = new EventListener();
             this.__propsObserver = makePropsObservable(this);
@@ -182,8 +182,8 @@ export default {
          * @private
          */
         detached() {
-            this.$upQueues = null;
-            this.$waitingDataUpQueues = null;
+            this.__setDataQueue = null;
+            this.__upDoneCallbackQueue = null;
 
             this.$dataListener.dispose();
             this.$dataListener = null;
@@ -201,10 +201,12 @@ export default {
              * @param {Function} callback the callback to execute
              */
             $nextTick(callback) {
-                let queues = this.$waitingDataUpQueues;
-                if (queues) {
-                    queues.push(callback);
+                let queues = this.__upDoneCallbackQueue;
+                if (!queues) {
+                    queues = this.__upDoneCallbackQueue = [];
                 }
+
+                queues.push(callback);
             },
 
             /**
@@ -212,7 +214,7 @@ export default {
              *
              * @private
              */
-            $notifySetDataDone() {
+            __notifySetDataDone() {
                 if (this.$isDestroyed || this.__dataUpTaskNum === 0) {
                     return;
                 }
@@ -223,11 +225,15 @@ export default {
                 }
 
                 this.__dataUpTaskNum = 0;
-                let queues = this.$waitingDataUpQueues;
+                let queues = this.__upDoneCallbackQueue;
                 /* istanbul ignore next */
                 if (queues) {
-                    queues.forEach(callback => callback.call(this));
-                    this.$waitingDataUpQueues = [];
+                    let num = queues.length;
+                    while (num > 0) {
+                        let callback = queues.shift();
+                        callback.call(this);
+                        num--;
+                    }
                 }
 
                 // call lifecycle updated hook
@@ -239,19 +245,38 @@ export default {
              *
              * @private
              */
-            $executeDataUpdate() {
+            __doDataUpdate() {
                 if (this.$isDestroyed) {
                     return;
                 }
 
-                let queues = this.$upQueues;
-                /* istanbul ignore next */
-                if (queues) {
-                    // TODO optimize value update: merge operations
-                    // call lifecycle beforeUpdate hook
-                    this.beforeUpdate && this.beforeUpdate();
-                    this.setData(getSetDataPaths(queues), this.__nextTickCallback);
-                    this.$upQueues = null;
+                let queues = this.__setDataQueue;
+                this.__setDataQueue = null;
+                if (!queues || !queues.length) {
+                    return;
+                }
+
+                // call lifecycle beforeUpdate hook
+                this.beforeUpdate && this.beforeUpdate();
+                this.setData(getSetDataPaths(queues), this.__nextTickCallback);
+            },
+
+            /**
+             * Set the view data. It'll not update the view immediately, it's deferred
+             * to execute when enter the next event loop.
+             *
+             * @private
+             * @param {Object} obj the data to set
+             */
+            __setViewData(obj) {
+                let queues = this.__setDataQueue;
+                let isUpdating = !!queues;
+                queues || (queues = this.__setDataQueue = []);
+                queues.push(obj);
+
+                if (!isUpdating) {
+                    this.__dataUpTaskNum++;
+                    nextTick(this.__executeDataUpdate);
                 }
             },
 
@@ -264,19 +289,13 @@ export default {
              * @param {*=} value the new value to set, optional
              */
             $setData(obj, value) {
+                console.warn('cannot call this API directly, it is private and will be deprecated in future');
+
                 if (typeof obj === 'string') {
                     obj = {[obj]: value};
                 }
 
-                let queues = this.$upQueues;
-                let isUpdating = !!queues;
-                queues || (queues = this.$upQueues = []);
-                queues.push(obj);
-
-                if (!isUpdating) {
-                    this.__dataUpTaskNum++;
-                    nextTick(this.__executeDataUpdate);
-                }
+                this.__setViewData(obj);
             }
         }
     }

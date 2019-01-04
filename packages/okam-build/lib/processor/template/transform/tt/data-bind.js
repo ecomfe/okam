@@ -9,8 +9,8 @@
 
 const transformDataBind = require('../base/data-bind');
 
-module.exports = function (attrs, name, tplOpts, opts) {
+module.exports = function (attrs, name, tplOpts, opts, element) {
     transformDataBind(attrs, name, tplOpts, Object.assign({
         tripleBrace: true
-    }, opts));
+    }, opts), element);
 };

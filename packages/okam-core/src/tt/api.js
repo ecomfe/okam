@@ -5,9 +5,4 @@
 
 /* global tt:false */
 
-import * as platform from '../na/platform';
-
-const api = Object.create(tt);
-api.okam = Object.assign({}, platform);
-
-export default api;
+export default Object.create(tt);

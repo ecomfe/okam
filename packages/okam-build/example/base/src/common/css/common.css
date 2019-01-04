@@ -1,0 +1,9 @@
+/**
+ * @file common style
+ * @author xxx
+ */
+
+.hide {
+    width: 200px;
+    display: none;
+}

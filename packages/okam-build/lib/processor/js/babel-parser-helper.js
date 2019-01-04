@@ -20,7 +20,11 @@ exports.compile = function (file, options, babelVersion = 6) {
 
     let isBabel6 = babelVersion <= 6;
     let babel = isBabel6 ? require('babel-core') : require('@babel/core');
-    let config = Object.assign({babelrc: false, ast: true}, options.config, {filename: file.path});
+    let config = Object.assign(
+        {babelrc: false, ast: true},
+        options.config,
+        {filename: file.path}
+    );
 
     // transform code
     let result;
@@ -56,5 +60,3 @@ exports.compile = function (file, options, babelVersion = 6) {
         sourceMap: sourceMapInfo
     };
 };
-
-

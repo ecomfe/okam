@@ -9,12 +9,16 @@
 /* eslint-disable fecs-min-vars-per-destructure */
 
 const {merge} = require('../../../../util');
-const {element, attribute} = require('../base');
+const {element, attribute, text} = require('../base');
 
 module.exports = {
     element: merge({}, element, {
         tpl: {
             transform: require('./tpl')
+        },
+        filter: {
+            match: 'wxs',
+            transform: require('./wxs')
         }
     }),
     attribute: merge({}, attribute, {
@@ -30,5 +34,6 @@ module.exports = {
         bind: {
             transform: require('./data-bind')
         }
-    })
+    }),
+    text
 };

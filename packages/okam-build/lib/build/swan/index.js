@@ -8,7 +8,6 @@
 const BuildManager = require('../BuildManager');
 const initNativeSwanProcessor = require('./init-native-swan-processor');
 const initWx2SwanProcessor = require('./init-wx2swan-processor');
-const {getDefaultBabelProcessor} = require('../../processor/helper/processor');
 
 class BuildSwanAppManager extends BuildManager {
 
@@ -19,9 +18,7 @@ class BuildSwanAppManager extends BuildManager {
         super.initProcessor(buildConf);
 
         const nativeOpts = buildConf.native;
-        const defaultBabelProcessorName = getDefaultBabelProcessor(
-            buildConf.processors
-        );
+        const defaultBabelProcessorName = this.defaultBabelProcessorName;
 
         // register native swan processor
         if (nativeOpts !== false) {

@@ -1,5 +1,7 @@
 <template>
     <view class="template-ref-syntax-wrap">
+        <text class="f-title" if="flag">hello</text>
+        <view for="tabs" :key="index">arritem: {{item.name}}</view>
         <view>
             <button class="my-btn" @click="updateArray">change ref components</button>
             <button class="my-btn" ref="myBtn" @click="handleClick">test button</button>
@@ -29,7 +31,25 @@ export default {
     },
 
     data: {
-        arr: [1, 2]
+        arr: [1, 2],
+        tabs: [{name: 'a1'}]
+    },
+
+    computed: {
+        flag() {
+            return true;
+        }
+    },
+
+    mounted() {
+        let query = this.$api.createSelectorQuery().in(this);
+        query.selectAll('.f-title').boundingClientRect().exec(
+            (res) => {
+                console.log('query res', res);
+            }
+        );
+
+        this.tabs.push({name: 'a2'});
     },
 
     methods: {
@@ -39,17 +59,13 @@ export default {
 
         handleClick() {
             console.log(this.$refs)
-            let result = this.$selector.select('.my-btn');
-
-            console.log(result)
-            console.log(this)
         }
     }
 };
 </script>
 
 <style lang="stylus">
-.vant-weapp-page
+.template-ref-syntax-wrap
     margin: 20px
     padding: 20px
 </style>

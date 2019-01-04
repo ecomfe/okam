@@ -1,8 +1,8 @@
 {
   "name": "okam-core",
-  "version": "0.4.0",
+  "version": "0.4.6",
   "description": "The extension for small program framework",
-  "main": "index.js",
+  "main": "src/index.js",
   "keywords": [
     "swan",
     "wx",

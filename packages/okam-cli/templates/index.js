@@ -67,7 +67,7 @@ const PROMPT_PACKAGE_KEYS = ['template', 'script', 'style', 'redux', 'async', 't
  */
 const PACKAGE_NAME_CORE = {
     name: 'okam-core',
-    version: '0.3.3'
+    version: '*'
 };
 
 /**
@@ -81,7 +81,7 @@ const PACKAGE_NAMES_MAP = {
         {
             name: 'okam-build',
             fetchLatest: true,
-            version: '0.3.2'
+            version: '*'
         },
         {
             name: 'cross-env',
@@ -144,7 +144,7 @@ const PACKAGE_NAMES_MAP = {
             {
                 name: 'okam-plugin-tinyimg',
                 fetchLatest: true,
-                version: '0.1.1'
+                version: '0.1.2'
             }
         ],
         redux: [
@@ -255,6 +255,12 @@ class BaseTemplate {
                 sfcExt
             }
         );
+
+        this.extnameMap = {
+            '.okm': sfcExt,
+            '.js': scriptExt,
+            '.styl': styleExt
+        };
     }
 
     async create() {
@@ -432,7 +438,7 @@ class BaseTemplate {
                 {},
                 this.params,
                 {
-                    coreVersion,
+                    coreVersion: coreVersion === '*' ? coreVersion : `^${coreVersion}`,
                     devDeps: devDepsInfo
                 }
             )
@@ -481,7 +487,7 @@ class BaseTemplate {
             }
             let info = {
                 name: pkg.name,
-                version
+                version: version === '*' ? version : `^${version}`
             };
             return info;
         }));
@@ -506,15 +512,9 @@ class BaseTemplate {
             fs.copy(fullPath, projectFilePath);
             return;
         }
-
-        if (extname === '.okm') {
-            projectFilePath = projectFilePath.replace(extname, '.' + this.params.sfcExt);
-        }
-        if (extname === '.js') {
-            projectFilePath = projectFilePath.replace(extname, '.' + this.params.scriptExt);
-        }
-        if (extname === '.styl') {
-            projectFilePath = projectFilePath.replace(extname, '.' + this.params.styleExt);
+        // 后缀替换
+        if (this.extnameMap[extname]) {
+            projectFilePath = projectFilePath.replace(extname, `.${this.extnameMap[extname]}`);
         }
 
         this.creater.etplEngine.renderTplToFile(

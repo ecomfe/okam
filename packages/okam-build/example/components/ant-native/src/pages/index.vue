@@ -124,7 +124,7 @@ export default {
     },
 
     mounted() {
-        this.$selector
+        this.createSelectorQuery()
             .select('#area')
             .boundingClientRect()
             .exec((res) => {

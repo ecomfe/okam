@@ -6,6 +6,7 @@
 'use strict';
 
 /* eslint-disable babel/new-cap */
+/* global before:false */
 
 import assert from 'assert';
 import expect, {createSpy} from 'expect';
@@ -13,10 +14,15 @@ import MyApp from 'core/swan/App';
 import {clearBaseCache} from 'core/helper/factory';
 import observable from 'core/extend/data/observable';
 import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
+import {resetObservableArray} from './helper';
 
 describe('observable array', function () {
     let MyComponent;
     let restoreAppEnv;
+
+    before('init observable array', function () {
+        resetObservableArray();
+    });
 
     beforeEach('init global App', function () {
         clearBaseCache();
@@ -275,6 +281,38 @@ describe('observable array', function () {
             assert(spySetData.calls.length === 1);
             expect(spySetData.calls[0].arguments[0]).toEqual(
                 {a: [7, 23, 5]}
+            );
+            done();
+        });
+    });
+
+    it('should using array index to update when splice call has three args', function (done) {
+        MyApp.use(observable);
+        let instance = MyComponent({
+            data: {
+                a: [67, 12]
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.created();
+        let result = instance.a.splice(1, 1, 23);
+        expect(result).toEqual([12]);
+        expect(instance.a).toEqual([67, 23]);
+        expect(instance.a).toEqual(instance.data.a);
+
+        result = instance.a.splice(6, 1, 54);
+        expect(result).toEqual([]);
+        expect(instance.a).toEqual([67, 23, 54]);
+        expect(instance.a).toEqual(instance.data.a);
+
+        setTimeout(() => {
+            expect(spySetData).toHaveBeenCalled();
+            assert(spySetData.calls.length === 1);
+            expect(spySetData.calls[0].arguments[0]).toEqual(
+                {'a[1]': 23, 'a[2]': 54}
             );
             done();
         });

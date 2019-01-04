@@ -77,14 +77,32 @@ exports.getFullPath = function (relativePath, fullPath) {
 };
 
 /**
- * Get file name
+ * Get file name without extname info
  *
  * @param {string} filePath the file path
+ * @param {boolean=} withExtname wether return the extname info, optional,
+ *        by default false
  * @return {string}
  */
-exports.getFileName = function (filePath) {
+exports.getFileName = function (filePath, withExtname = false) {
     let baseName = path.basename(filePath);
+    if (withExtname) {
+        return baseName;
+    }
+
     let lastDotIdx = baseName.lastIndexOf('.');
     return lastDotIdx === -1
         ? baseName : baseName.substring(0, lastDotIdx);
+};
+
+/**
+ * Replace file name of the given file path
+ *
+ * @param {string} filePath the file path to replace
+ * @param {string} newFileName the new file name including extname info
+ * @return {string}
+ */
+exports.replaceFileName = function (filePath, newFileName) {
+    let newPath = path.join(path.dirname(filePath), newFileName);
+    return newPath.replace(/\\/g, '/');
 };

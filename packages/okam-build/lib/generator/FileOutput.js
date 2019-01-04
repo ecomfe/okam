@@ -38,12 +38,7 @@ function replaceFileName(filePath, newFileName) {
         return false;
     }
 
-    let newPath = path.join(path.dirname(filePath), newFileName);
-
-    // in window: path.join('src', 'test.js'); => 'src\test.js'
-    // in mac: path.join('src', 'test.js'); => 'src/test.js'
-    newPath = newPath.replace(/\\/g, '/');
-    return newPath;
+    return fileUtil.replaceFileName(filePath, newFileName);
 }
 
 function getOutputPath(filePath, file, options) {
@@ -67,12 +62,7 @@ function getOutputPath(filePath, file, options) {
         result = replaceFileName(filePath, outputPathMap.appConfig);
     }
     else {
-        if (file.isNpm) {
-            result = file.resolvePath || filePath;
-        }
-        else {
-            result = filePath;
-        }
+        result = file.resolvePath || filePath;
 
         if (file.isTpl && !file.rext && componentPartExtname) {
             file.rext = componentPartExtname.tpl;
@@ -95,14 +85,19 @@ function getOutputPath(filePath, file, options) {
     return result || filePath;
 }
 
-function getComponentOutputFilePath(partFile, owner, options) {
+function getComponentPartOutputFilePath(partFile, owner, options) {
     let {componentPartExtname} = options;
     if (!componentPartExtname) {
         return;
     }
 
+    let filePath = owner.path;
     if (partFile.isJson) {
         partFile.rext = componentPartExtname.config;
+    }
+    else if (partFile.isFilter) {
+        partFile.rext = '';
+        filePath = partFile.path;
     }
     else if (partFile.isScript) {
         partFile.rext = componentPartExtname.script;
@@ -114,7 +109,7 @@ function getComponentOutputFilePath(partFile, owner, options) {
         partFile.rext = componentPartExtname.tpl;
     }
 
-    return getOutputPath(owner.path, partFile, options);
+    return getOutputPath(filePath, partFile, options);
 }
 
 function mergeComponentStyleFiles(styleFiles, rootDir) {
@@ -158,7 +153,7 @@ function addFileOutputTask(allTasks, options, file) {
     let {outputDir, logger} = options;
     let ownerFile = file.owner;
     let outputRelPath = isComponentFile(ownerFile)
-        ? getComponentOutputFilePath(file, ownerFile, options)
+        ? getComponentPartOutputFilePath(file, ownerFile, options)
         : getOutputPath(file.path, file, options);
     if (!outputRelPath) {
         logger.debug('skip file release', file.path);
