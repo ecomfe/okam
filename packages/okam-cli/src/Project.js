@@ -7,11 +7,12 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const semver = require('semver');
+const execSync = require('child_process').execSync;
+const ora = require('ora');
 const Etpl = require('./utils/etpl');
 const isEmptyDir = require('./utils').isEmptyDir;
 const BaseTemplate = require('../templates/index');
-
-const {promptList, setPromptsValue} = require('./utils/prompts');
+const {promptUpdateCli, promptList, setPromptsValue} = require('./utils/prompts');
 
 class Project {
     constructor(options) {
@@ -30,17 +31,53 @@ class Project {
     }
 
     init() {
-        console.log(
-            'recommend: update '
-            + chalk.green('okam-cli')
-            +' to the latest'
-            + chalk.green('okam upgrade self'));
-        console.log(chalk.green('Create a new okam project'));
         console.log('Need help? Go and open issue: https://github.com/ecomfe/okam');
-        console.log();
     }
 
-    create() {
+    async needUpdateCli() {
+        let localVersion = execSync('okam --version');
+        localVersion = localVersion && localVersion.toString().trim();
+
+        try {
+            // 网不通情况下，等 3s，不更新;
+            let remoteVersion = execSync('npm view okam-cli version', {
+                timeout: 3000
+            });
+            remoteVersion = remoteVersion && remoteVersion.toString().trim();
+            if (remoteVersion && (localVersion !== remoteVersion)) {
+                console.log(chalk.cyan(`okam-cli(local: ${localVersion} -> latest: ${remoteVersion})`));
+                let result =  await inquirer.prompt(promptUpdateCli);
+
+                return !!result.cli;
+            }
+        }
+        catch (e) {
+        }
+
+        return false;
+    }
+
+    async create() {
+
+        let needUpdate = await this.needUpdateCli();
+
+        if (needUpdate) {
+            const spinner = ora('Upgrading the okam-cli version to the latest version...').start();
+
+            try {
+                let result = execSync('npm i -g okam-cli@latest');
+                console.log(result.toString());
+            }
+            catch (e) {
+                console.log(chalk.grey('encounter error while upgrading okam-cli'));
+                console.log(chalk.grey('you can upgrad by yourself: okam update self'));
+            }
+
+            spinner.stop();
+        }
+
+        console.log(chalk.green('Create a new okam project'));
+
         this.ask().then(answers => {
             const date = new Date();
             this.conf = Object.assign(this.conf, answers);

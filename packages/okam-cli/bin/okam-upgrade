@@ -39,12 +39,13 @@ function upgradeSelf(cb) {
 
     child.stdout.on('data', function (data) {
         console.log(data);
-        spinner.stop()
-    })
+        spinner.stop();
+    });
+
     child.stderr.on('data', function (data) {
         console.log(data);
         spinner.stop();
-    })
+    });
 }
 
 /**

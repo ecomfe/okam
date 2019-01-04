@@ -17,6 +17,8 @@ module.exports = {
         depDir: 'src/common'
     },
     component: {
+        // vue v- 前缀支持, 默认为 false
+        // useVuePrefix: true,
         extname: '${sfcExt}',
         template: {
             // 标签转换配置项

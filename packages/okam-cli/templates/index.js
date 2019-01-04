@@ -226,6 +226,12 @@ class BaseTemplate {
         this.params = params;
         this.helper = helper;
 
+        this.extnameMap = {
+            '.okm': params.sfcExt,
+            '.js': params.scriptExt,
+            '.styl': params.styleExt
+        };
+
         // current project path
         this.projectPath = path.join(process.cwd(), this.params.dirName);
 
@@ -507,14 +513,9 @@ class BaseTemplate {
             return;
         }
 
-        if (extname === '.okm') {
-            projectFilePath = projectFilePath.replace(extname, '.' + this.params.sfcExt);
-        }
-        if (extname === '.js') {
-            projectFilePath = projectFilePath.replace(extname, '.' + this.params.scriptExt);
-        }
-        if (extname === '.styl') {
-            projectFilePath = projectFilePath.replace(extname, '.' + this.params.styleExt);
+        // 后缀替换
+        if (this.extnameMap[extname]) {
+            projectFilePath = projectFilePath.replace(extname, `.${this.extnameMap[extname]}`);
         }
 
         this.creater.etplEngine.renderTplToFile(
