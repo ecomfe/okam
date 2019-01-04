@@ -31,7 +31,9 @@ export default {
             'pages/todos/counter',
             'pages/behavior/index',
             'pages/broadcast/index',
-            'pages/filter/index'
+            'pages/filter/index',
+            'pages/sfc/index',
+            'pages/sfc/separate'
         ],
         subPackages: [
             {

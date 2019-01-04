@@ -125,6 +125,21 @@ export default {
                         path: 'todos/todoList'
                     }
                 ]
+            },
+            {
+                icon: '../../common/img/more.png',
+                name: '其他',
+                open: false,
+                list: [
+                    {
+                        subName: '单文件引入',
+                        path: 'sfc/index'
+                    },
+                    {
+                        subName: '单文件分开引入',
+                        path: 'sfc/separate'
+                    }
+                ]
             }
         ]
     },

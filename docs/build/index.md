@@ -2,6 +2,24 @@
 
 ## 构建配置项
 
+构建配置项，在 `script/*.config.js` 文件中进行配置
+
+以 `okam-cli` 构建的项目目录为例
+
+```
+.
+└─ scripts                // 构建相关脚本
+    ├── build.js          // 构建入口脚本
+    ├── build.sh          // CI 脚本
+    ├── base.config.js    // 基础公共构建配置文件
+    ├── tt.config.js      // 头条小程序构建配置文件
+    ├── init-quick-app.js // 快应用项目初始化脚本
+    ├── quick.config.js   // 快应用构建配置文件
+    ├── ant.config.js     // 支付宝小程序构建配置文件
+    ├── wx.config.js      // 微信小程序构建配置文件
+    └── swan.config.js    // 百度 Swan 小程序构建配置文件
+```
+
 ### verbose
 `boolean` 是否打印详细的构建信息，默认 false，该选项设为 true，等价于 logLevel 设为 `info`
 
