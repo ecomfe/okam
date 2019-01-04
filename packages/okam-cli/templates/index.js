@@ -226,12 +226,6 @@ class BaseTemplate {
         this.params = params;
         this.helper = helper;
 
-        this.extnameMap = {
-            '.okm': params.sfcExt,
-            '.js': params.scriptExt,
-            '.styl': params.styleExt
-        };
-
         // current project path
         this.projectPath = path.join(process.cwd(), this.params.dirName);
 
@@ -261,6 +255,12 @@ class BaseTemplate {
                 sfcExt
             }
         );
+
+        this.extnameMap = {
+            '.okm': sfcExt,
+            '.js': scriptExt,
+            '.styl': styleExt
+        };
     }
 
     async create() {
@@ -512,7 +512,7 @@ class BaseTemplate {
             fs.copy(fullPath, projectFilePath);
             return;
         }
-
+        debugger;
         // 后缀替换
         if (this.extnameMap[extname]) {
             projectFilePath = projectFilePath.replace(extname, `.${this.extnameMap[extname]}`);
