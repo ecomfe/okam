@@ -230,7 +230,7 @@ export default class Observer {
             this.setContextData(this.rawData);
         }
 
-        this.ctx.$setData({[selector]: val});
+        this.ctx.__setViewData({[selector]: val});
         this.notifyWatcher(val, oldVal, paths);
     }
 
