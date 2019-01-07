@@ -1,8 +1,8 @@
-# 自定义插件
+# 自定义处理器
 
-## 插件定义
+## 处理器定义
 
-* 一个简单的自定义插件示例
+* 一个简单的自定义处理器示例
 
     ```javascript
     function compile(file, options) {
@@ -19,7 +19,7 @@
     module.exports = exports = compile;
     ```
 
-## 插件使用
+## 处理器使用
 
 * 在构建配置里注册处理器
 
@@ -27,7 +27,7 @@
 {
     processors: {
         myPlugin: {
-            processor: './tools/myPlugin' // 如果发布到 NPM，可以直接指定包名，前提得先安装该插件 NPM 包
+            processor: './tools/myPlugin' // 如果发布到 NPM，可以直接指定包名，前提得先安装该处理器 NPM 包
         }
     },
 
@@ -40,6 +40,6 @@
 }
 ```
 
-## 第三方插件
+## 第三方处理器
 
-具体可以查看[插件列表章节](plugins/imgCompress)
+具体可以查看[处理器列表章节](plugins/imgCompress)

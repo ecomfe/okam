@@ -99,8 +99,9 @@ module.exports = {
         },
         postcss: {
             extnames: ['styl', 'less'],
+            // 引入 cssImport 用于处理 预处理语言里 引了 css 需要做依赖后缀处理
             options: {
-                plugins: [/*'autoprefixer',*/ 'px2rpx', 'env']
+                plugins: ['cssImport', /*'autoprefixer',*/ 'px2rpx', 'env']
             }
         }
     },

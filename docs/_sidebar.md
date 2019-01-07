@@ -72,9 +72,9 @@
 
     * [标签转换](build/transformTag.md)
 
-    * [预定义处理器](build/processors.md)
+    * [内置处理器](build/processors.md)
 
-    * [自定义插件](build/plugin.md)
+    * [自定义处理器](build/plugin.md)
 
     * [构建机制](build/implementation.md)
 
@@ -84,7 +84,7 @@
 
     * [构建 API](api/build.md)
 
-* 插件列表
+* 处理器列表
 
     * [图片压缩](plugins/imgCompress.md)
 
