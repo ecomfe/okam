@@ -21,6 +21,15 @@
     * 默认扩展名：`无`
     * 处理器选项：参考官方 [postcss](https://postcss.org/)
 
+* `cssImport`: `css` 依赖处理器，用于开发小程序构建时 预处理语言中引入 `css` 样式的场景处理，一般不需要配置, 为保持一致性，也不推荐混写
+    ```x.config.js
+    processors: {
+        cssImport: {
+            extnames: ['styl']
+        }
+    }
+    ```
+
 ## 组件相关
 
 * `component`：用来编译单文件组件的处理器，属于核心的处理器，不需要安装任何附加依赖
@@ -144,8 +153,6 @@
         }
     }
     ```
-
-* `cssImport`: `css` 依赖处理，用于开发小程序构建时 预处理语言中引入 `css` 样式的场景处理，一般不需要配置
 
 * `autoprefixer`
     * 需要安装依赖：`npm i autoprefixer --save-dev`
