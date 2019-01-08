@@ -1,5 +1,5 @@
 {
-  "name": "okam-components",
+  "name": "okam-component",
   "version": "0.1.0",
   "description": "The okam components that provide the missing components for some platforms",
   "main": "index.js",
