@@ -48,28 +48,28 @@
 <script>
 
 
-import IButton from 'iview-weapp/dist/button/index';
-import IRow from 'iview-weapp/dist/row/index';
-import ICol from 'iview-weapp/dist/col/index';
+import IButton from 'iview-weapp/dist/button';
+import IRow from 'iview-weapp/dist/row';
+import ICol from 'iview-weapp/dist/col';
 
-import IGrid from 'iview-weapp/dist/grid/index';
-import IGridItem from 'iview-weapp/dist/grid-item/index';
-import IGridIcon from 'iview-weapp/dist/grid-icon/index';
-import IGridLabel from 'iview-weapp/dist/grid-label/index';
-
-
-import IPanel from 'iview-weapp/dist/panel/index';
-
-import ICard from 'iview-weapp/dist/card/index';
-
-import IIcon from 'iview-weapp/dist/icon/index';
+import IGrid from 'iview-weapp/dist/grid';
+import IGridItem from 'iview-weapp/dist/grid-item';
+import IGridIcon from 'iview-weapp/dist/grid-icon';
+import IGridLabel from 'iview-weapp/dist/grid-label';
 
 
-import ITabs from 'iview-weapp/dist/tabs/index';
-import ITab from 'iview-weapp/dist/tab/index';
+import IPanel from 'iview-weapp/dist/panel';
+
+import ICard from 'iview-weapp/dist/card';
+
+import IIcon from 'iview-weapp/dist/icon';
 
 
-import IInputNumber from 'iview-weapp/dist/input-number/index';
+import ITabs from 'iview-weapp/dist/tabs';
+import ITab from 'iview-weapp/dist/tab';
+
+
+import IInputNumber from 'iview-weapp/dist/input-number';
 
 export default {
     config: {

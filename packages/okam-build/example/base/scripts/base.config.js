@@ -97,6 +97,9 @@ module.exports = {
         view: { // 定义小程序模板转换的文件后缀名
             extnames: ['pug', 'tpl']
         },
+        cssImport: {
+            extnames: ['styl']
+        },
         postcss: {
             extnames: ['styl', 'less'],
             options: {
