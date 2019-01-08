@@ -1,6 +1,9 @@
 node_modules/
 coverage/
 test/
+demo/
+example/
+examples/
 .idea/
 npm-debug.log
 Thumbs.db
@@ -9,8 +12,7 @@ Thumbs.db
 *.swp
 *.bat
 yarn.lock
-.nyc_output
-.babelrc
-.fecsignore
 .fecsrc
+.fecsignore
+.nyc_output
 .babelrc.js

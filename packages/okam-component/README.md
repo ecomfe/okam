@@ -1,11 +1,11 @@
-okam-core
+okam-component
 ======
-[![NPM Version](https://img.shields.io/npm/v/okam-build.svg?style=flat)](https://npmjs.org/package/okam-core)
+[![NPM Version](https://img.shields.io/npm/v/okam-component.svg?style=flat)](https://npmjs.org/package/okam-component)
 
-> OKAM 核心运行时框架
+> OKAM 平台对齐组件库
 
 ## Usage
 
 ```
-npm i okam-core --save
+npm i okam-component --save
 ```
