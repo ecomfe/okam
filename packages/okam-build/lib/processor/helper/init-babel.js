@@ -218,7 +218,8 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     else if (file.isComponentScript) {
         Object.assign(pluginOpts, {
             tplRefs: file.tplRefs,
-            baseClass: appBaseClass && appBaseClass.component
+            baseClass: appBaseClass && appBaseClass.component,
+            getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager)
         });
         filterOptions && (pluginOpts.filterOptions = filterOptions);
         plugins.push([programPlugins.component, pluginOpts]);

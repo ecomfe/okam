@@ -16,7 +16,8 @@ const DIRECTIVES_MAP = {
     'v-else-if': 'elif',
     'v-elif': 'elif',
     'v-else': 'else',
-    'v-for': 'for'
+    'v-for': 'for',
+    'v-model': 'model'
 };
 
 /**
@@ -43,10 +44,23 @@ const DIRECTIVES_REGEXP = {
  * @const
  */
 const DIRECTIVES_NOT_SUPPORT = [
-    'v-text', 'v-html', 'v-show',
-    'v-model', 'v-pre',
+    'v-text', 'v-html',
+    'v-show', 'v-pre',
     'v-cloak', 'v-once'
 ];
+
+/**
+ * 选择性支持的指令
+ *
+ * @type {Object}
+ * @const
+ */
+const DIRECTIVES_CHOOSE_SUPPORT = {
+    'v-model': {
+        replace: 'model',
+        framwork: 'model'
+    }
+};
 
 function getNewAttrKey(attr) {
 
@@ -75,13 +89,22 @@ function getNewAttrKey(attr) {
 
 module.exports = {
     tag(node, tplOpts) {
-        const {logger, file} = tplOpts;
+        const {logger, file, config} = tplOpts;
+        const framwork = config.framework;
+
         let attrs = node.attribs || {};
 
         Object.keys(attrs).forEach(key => {
 
             if (DIRECTIVES_NOT_SUPPORT.indexOf(key) >= 0) {
                 logger.error(`${file.path} template attribute ${key} not support`);
+                return;
+            }
+
+            let maySupportAttr = DIRECTIVES_CHOOSE_SUPPORT[key];
+            if (maySupportAttr && framwork.indexOf(maySupportAttr.framwork) < 0) {
+                logger.error(`${file.path} template attribute ${key} not support`);
+                logger.warn(`you need to add 「${maySupportAttr.framwork}」 on framwork config`);
                 return;
             }
 
