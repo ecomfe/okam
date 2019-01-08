@@ -24,6 +24,13 @@ module.exports = merge({}, baseConf, {
         ignore: /^@(system|service)\./, // 忽略快应用的内部系统模块的 resolve
 
         /**
+         * 增加 resolve 查找的后缀名
+         *
+         * @type {Array.<string>}
+         */
+        extensions: ['ux'],
+
+        /**
          * 收集需要导入声明的 API features
          * 默认不在 `notNeedDeclarationAPIFeatures` 该列表里且
          * `@system.` `@service.`开头的模块
@@ -74,7 +81,7 @@ module.exports = merge({}, baseConf, {
             }
 
             // do not output not processed file and component config file
-            if (!file.allowRelease || file.isComponentConfig) {
+            if (!file.allowRelease) {
                 return false;
             }
 
@@ -94,12 +101,23 @@ module.exports = merge({}, baseConf, {
             }
         },
         global: {
-            'o-button': 'okam/Button'
+            'o-button': 'okam/button/index'
         }
     },
 
     processors: {
+
+        // okam component parser
         component: {
+            rext: 'ux',
+            options: {
+                parse: {pad: 'space'},
+                trim: true
+            }
+        },
+
+        // native quick component parser
+        quickComponent: {
             rext: 'ux',
             options: {
                 parse: {pad: 'space'},
@@ -127,9 +145,9 @@ module.exports = merge({}, baseConf, {
         },
         {
             match(file) {
-                return file.isEntryScript || file.isComponent;
+                return file.isEntryScript || file.isComponent || file.isNativeComponent;
             },
-            processors: ['componentGenerator']
+            processors: ['quickComponentGenerator']
         },
         {
             match(file) {

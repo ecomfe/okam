@@ -40,7 +40,7 @@ module.exports = {
      * @param {Object} tplOpts the template transform options
      * @param {Object=} options the plugin options, optional
      */
-    tag(element, tplOpts) {
+    tag(element, tplOpts, options) {
         let attrs = element.attribs;
         let refValue = attrs && attrs.ref;
         if (!refValue) {
@@ -48,20 +48,35 @@ module.exports = {
         }
 
         let isForRef = isRefInForContext(element);
-        let classValue = attrs.class;
+
         let {file, logger} = tplOpts;
         let refId = hash(file.path + '?' + refValue);
-        let refClass = `ref-${refId}`;
-        if (classValue) {
-            classValue = refClass + ' ' + classValue;
+
+        let {useId} = options || {};
+        let refIdentifier = `ref-${refId}`;
+        let dataRefValue;
+        if (useId) {
+            let idValue = attrs.id;
+            if (idValue) {
+                logger.warn('id value', idValue, 'is conflicted with ref in tpl', file.path);
+            }
+            attrs.id = refIdentifier;
+
+            dataRefValue = `#${refIdentifier}`;
         }
         else {
-            classValue = refClass;
-        }
-        attrs.class = classValue;
-        let dataRefValue = `.${classValue}`;
+            let classValue = attrs.class;
+            if (classValue) {
+                classValue = refIdentifier + ' ' + classValue;
+            }
+            else {
+                classValue = refIdentifier;
+            }
+            attrs.class = classValue;
 
-        attrs['data-okam-ref'] = isForRef ? `[]${dataRefValue}` : dataRefValue;
+            dataRefValue = `.${refIdentifier}`;
+            attrs['data-okam-ref'] = isForRef ? `[]${dataRefValue}` : dataRefValue;
+        }
 
         delete attrs.ref;
 

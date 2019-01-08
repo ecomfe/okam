@@ -145,7 +145,8 @@ module.exports = {
         exclude: [],
 
         /**
-         * 要 include 的文件
+         * 要 include 的文件，支持 glob pattern，相对于 root，如果是正则，只支持
+         * root 下文件 或者 source 下文件 的 match
          *
          * @type {Array.<string|RegExp>}
          */

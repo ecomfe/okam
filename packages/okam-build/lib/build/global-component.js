@@ -8,16 +8,17 @@
 const pathUtil = require('path');
 const {toHyphen} = require('../util').string;
 
-const BUILTIN_COMPONENTS_PACKAGE_ROOT = 'okam-components/src/';
+const BUILTIN_COMPONENTS_PACKAGE_ROOT = 'okam-component/src/';
 
 /**
  * Initialize the imported global component definition
  *
  * @param {string} appType the app type to build
  * @param {Object} componentConf the component config
+ * @param {string} sourceDir the source root directory
  * @return {Object}
  */
-function initGlobalComponents(appType, componentConf) {
+function initGlobalComponents(appType, componentConf, sourceDir) {
     let {global: globalComponents} = componentConf;
     if (!globalComponents) {
         return;
@@ -26,10 +27,10 @@ function initGlobalComponents(appType, componentConf) {
     let result = {};
     Object.keys(globalComponents).forEach(k => {
         let value = globalComponents[k];
-        value = value.replace(/^okam\//, BUILTIN_COMPONENTS_PACKAGE_ROOT + appType);
+        value = value.replace(/^okam\//, BUILTIN_COMPONENTS_PACKAGE_ROOT + appType + '/');
         let isRelMod = value.charAt(0) === '.';
         if (isRelMod) {
-            value = pathUtil.join(this.sourceDir, value);
+            value = pathUtil.join(sourceDir, value);
         }
         result[toHyphen(k)] = {
             isNpmMod: !isRelMod,

@@ -31,10 +31,10 @@ function initPartFileInfo(file, ...parts) {
  * Parse the single file component.
  * Return the component file info:
  * {
- *     template: Object,
+ *     tpl: Object,
  *     script: Object,
  *     styles: Array.<Object>,
- *     customBolcks: Array.<string>
+ *     customBlocks: Array
  * }
  *
  * @param {Object} file the file to process
@@ -48,6 +48,8 @@ function parse(file, options) {
     let result = compiler.parseComponent(
         file.content.toString(), parseOpts
     );
+
+    let {customBlocks} = result;
 
     let tplFile = helper.getComponentPartFile(result.template, {
         isTemplate: true,
@@ -81,11 +83,13 @@ function parse(file, options) {
     }
 
     if (config && config.trim) {
-        scriptFile.content = scriptFile.content.trim();
+        let content = scriptFile.content.toString();
+        scriptFile.content = content.trim();
     }
 
     return {
-        isComponent: true,
+        isSfcComponent: true,
+        customBlocks,
         tpl: tplFile,
         script: scriptFile,
         styles: styleFiles

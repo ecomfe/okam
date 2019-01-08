@@ -62,7 +62,9 @@ class BuildManager extends EventEmitter {
      * @param {Object} componentConf the component config
      */
     initGlobalComponents(componentConf) {
-        this.globalComponents = initGlobalComponents(this.appType, componentConf);
+        this.globalComponents = initGlobalComponents(
+            this.appType, componentConf, this.sourceDir
+        );
     }
 
     /**
@@ -129,11 +131,15 @@ class BuildManager extends EventEmitter {
     }
 
     onAddNewFile(file) {
+        if (this.envFileUpdated) {
+            return;
+        }
+
         // replace module okam-core/na/index.js content using specified app env module
         if (file.path === 'node_modules/okam-core/src/na/index.js') {
             let naEnvModuleId = `../${this.appType}/env`;
             file.content = `'use strict;'\nexport * from '${naEnvModuleId}';\n`;
-            this.files.removeListener('addFile', this.addNewFileHandler);
+            this.envFileUpdated = true;
         }
     }
 
@@ -232,6 +238,7 @@ class BuildManager extends EventEmitter {
      /**
      * Get the app base class init options
      *
+     * @param {Object} file the file to process
      * @param {Object} config the config info defined in config property
      * @param {Object} opts the options
      * @param {boolean=} opts.isApp whether is app instance init
@@ -239,7 +246,7 @@ class BuildManager extends EventEmitter {
      * @param {boolean=} opts.isComponent whether is component instance init
      * @return {?Object}
      */
-    getAppBaseClassInitOptions(config, opts) {
+    getAppBaseClassInitOptions(file, config, opts) {
         // do nothing, subclass should provide implementation if needed
         return null;
     }
@@ -393,6 +400,10 @@ class BuildManager extends EventEmitter {
 
     isEnableRefSupport() {
         return this.isEnableFrameworkExtension('ref');
+    }
+
+    isEnableMixinSupport() {
+        return this.isEnableFrameworkExtension('behavior');
     }
 
     isEnableFilterSupport() {

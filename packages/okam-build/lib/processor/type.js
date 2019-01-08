@@ -137,8 +137,12 @@ const BUILTIN_PROCESSORS = {
     component: {
         processor: getProcessorPath('component/sfc-parser')
     },
-    componentGenerator: {
-        processor: getProcessorPath('component/sfc-generator')
+    quickComponentGenerator: {
+        processor: getProcessorPath('component/ux-generator')
+    },
+    quickComponent: {
+        processor: getProcessorPath('component/ux-parser'),
+        extnames: ['ux']
     },
     json5: {
         processor: getProcessorPath('json/json5-parser'),
