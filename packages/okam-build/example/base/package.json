@@ -15,7 +15,7 @@
     "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
     "dev:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server",
     "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
-    "prod": "node --inspect-brk scripts/build.js --clean",
+    "prod": "node scripts/build.js --clean",
     "dev:wx": "npm run dev -- --type wx",
     "dev:wx:clean": "npm run dev:clean -- --type wx",
     "dev:wx:server": "npm run dev:server -- --type wx",

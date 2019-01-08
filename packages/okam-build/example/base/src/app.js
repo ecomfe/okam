@@ -13,7 +13,6 @@ export default {
     config: {
         // The first element as the home page when app startup
         pages: [
-            'pages/data/model',
             'pages/home/index',
             'pages/tpl/vueSyntax',
             'pages/tpl/tplSyntax',
@@ -28,6 +27,7 @@ export default {
             'pages/data/init',
             'pages/data/array',
             'pages/data/watch',
+            'pages/data/model',
             'pages/todos/todoList',
             'pages/todos/counter',
             'pages/behavior/index',

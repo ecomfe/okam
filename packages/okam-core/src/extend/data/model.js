@@ -1,6 +1,6 @@
 /**
  * @file model support
- * @author dengxiaohong01
+ * @author xiaohong8023@outlook.com
  */
 
 'use strict';
@@ -13,7 +13,8 @@ export default {
          *
          * @param {boolean} isPage whether is page component
          * @param {Object=} options the extra init options
-         * @param {boolean=} options.model support model
+         * @param {boolean=} options.isSupportModel support model
+         * @param {boolean=} options.isSupportObserve support data observe
          * @private
          */
         $init(isPage, options) {
