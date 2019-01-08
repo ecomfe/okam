@@ -1,6 +1,6 @@
 /**
- * @file Postcss plugin for quick app
- * @author xiaohong8023@outlook.com
+ * @file Postcss plugin to fix css rules for quick app
+ * @author sparklewhy@gmail.com
  */
 
 'use strict';
