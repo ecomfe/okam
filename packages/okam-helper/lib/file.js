@@ -57,7 +57,7 @@ exports.relative = function (fullPath, rootDir) {
 
 exports.getRequirePath = function (file, relativeFile) {
     let result = exports.relative(file, path.dirname(relativeFile));
-    result = result.replace(/\.js$/, '');
+    result = result.replace(/\.\w+$/, '');
     if (/^\./.test(result)) {
         return result;
     }
