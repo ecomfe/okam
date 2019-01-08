@@ -9,7 +9,6 @@
 const pathUtil = require('path');
 const EventEmitter = require('events');
 const {colors, Timer, merge, babel: babelUtil, file: fileUtil} = require('../util');
-const {toHyphen} = require('../util').string;
 const loadProcessFiles = require('./load-process-files');
 const CacheManager = require('./CacheManager');
 const FileOutput = require('../generator/FileOutput');
@@ -19,6 +18,7 @@ const {getDefaultBabelProcessor} = require('../processor/helper/processor');
 const ModuleResolver = require('./ModuleResolver');
 const allAppTypes = require('./app-type');
 const cleanBuild = require('./clean-build');
+const initGlobalComponents = require('./global-component');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
@@ -62,24 +62,9 @@ class BuildManager extends EventEmitter {
      * @param {Object} componentConf the component config
      */
     initGlobalComponents(componentConf) {
-        let {global: globalComponents} = componentConf;
-        if (!globalComponents) {
-            return;
-        }
-
-        let result = {};
-        Object.keys(globalComponents).forEach(k => {
-            let value = globalComponents[k];
-            let isRelMod = value.charAt(0) === '.';
-            if (isRelMod) {
-                value = pathUtil.join(this.sourceDir, value);
-            }
-            result[toHyphen(k)] = {
-                isNpmMod: !isRelMod,
-                modPath: value
-            };
-        });
-        this.globalComponents = result;
+        this.globalComponents = initGlobalComponents(
+            this.appType, componentConf, this.sourceDir
+        );
     }
 
     /**
@@ -146,11 +131,15 @@ class BuildManager extends EventEmitter {
     }
 
     onAddNewFile(file) {
+        if (this.envFileUpdated) {
+            return;
+        }
+
         // replace module okam-core/na/index.js content using specified app env module
         if (file.path === 'node_modules/okam-core/src/na/index.js') {
             let naEnvModuleId = `../${this.appType}/env`;
             file.content = `'use strict;'\nexport * from '${naEnvModuleId}';\n`;
-            this.files.removeListener('addFile', this.addNewFileHandler);
+            this.envFileUpdated = true;
         }
     }
 
@@ -249,6 +238,7 @@ class BuildManager extends EventEmitter {
      /**
      * Get the app base class init options
      *
+     * @param {Object} file the file to process
      * @param {Object} config the config info defined in config property
      * @param {Object} opts the options
      * @param {boolean=} opts.isApp whether is app instance init
@@ -256,7 +246,7 @@ class BuildManager extends EventEmitter {
      * @param {boolean=} opts.isComponent whether is component instance init
      * @return {?Object}
      */
-    getAppBaseClassInitOptions(config, opts) {
+    getAppBaseClassInitOptions(file, config, opts) {
         // do nothing, subclass should provide implementation if needed
         return null;
     }
@@ -275,6 +265,15 @@ class BuildManager extends EventEmitter {
                 usingBabel6: !isUsingBabel7
             };
         }
+        return null;
+    }
+
+    /**
+     * Get the module path resolve to keep path extnames
+     *
+     * @return {?Array.<string>}
+     */
+    getModulePathKeepExtnames() {
         return null;
     }
 
@@ -410,6 +409,10 @@ class BuildManager extends EventEmitter {
 
     isEnableRefSupport() {
         return this.isEnableFrameworkExtension('ref');
+    }
+
+    isEnableMixinSupport() {
+        return this.isEnableFrameworkExtension('behavior');
     }
 
     isEnableFilterSupport() {

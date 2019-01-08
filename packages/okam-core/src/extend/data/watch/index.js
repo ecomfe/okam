@@ -6,7 +6,7 @@
 
 'use strict';
 
-import {normalizeExtendProp} from '../../helper/methods';
+import {normalizeExtendProp} from '../../../helper/methods';
 
 function toDataGetter(path) {
     let parts = path.split('.');

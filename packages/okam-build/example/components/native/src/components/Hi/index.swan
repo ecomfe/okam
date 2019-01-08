@@ -1,0 +1,7 @@
+<view class="hi-wrap">
+    <view>
+        <text class="hi-title">
+            HI...
+        </text>
+    </view>
+</view>

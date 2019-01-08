@@ -6,15 +6,7 @@
 'use strict';
 
 import base from '../../base/base';
-
-function selectElement(path) {
-    if (path && path.charAt(0) === '#') {
-        path = path.substr(1);
-    }
-
-    // only support id selector
-    return this.$element(path);
-}
+import {setDataByPath} from '../../helper/data';
 
 export default {
 
@@ -92,11 +84,6 @@ export default {
     attached() {
         // call beforeMount hook
         this.beforeMount && this.beforeMount();
-
-        this.$selector = {
-            select: selectElement.bind(this),
-            selectAll: selectElement.bind(this)
-        };
     },
 
     /**
@@ -118,7 +105,6 @@ export default {
         // call beforeDestroy hook
         this.beforeDestroy && this.beforeDestroy();
 
-        this.$selector = null;
         this.$isDestroyed = true; // add destroyed flag
 
         // call destroyed hook
@@ -165,9 +151,7 @@ export default {
          * @param {Function=} callback the callback when set data done
          */
         setData(pathInfo, callback) {
-            Object.keys(pathInfo).forEach(k => {
-                this.$set(k, pathInfo[k]);
-            });
+            setDataByPath(this, pathInfo);
 
             // simulate the callback execution when the set data done
             Promise.resolve().then(callback);

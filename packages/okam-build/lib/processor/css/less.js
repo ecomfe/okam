@@ -13,9 +13,10 @@ module.exports = function (file, options) {
 
     // init config
     config = Object.assign({
-        filename: path.basename(file.fullPath),
+        filename: file.path,
         syncImport: true,
         relativeUrls: true
+        // rewriteUrls: 'all'
     }, config);
 
     // init the paths info for less find

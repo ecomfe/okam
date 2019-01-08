@@ -40,6 +40,8 @@ function getTemplateSyntaxPlugin(appType) {
     return path.join(PLUGIN_BASE_NAME, `${appType}-syntax-plugin`);
 }
 
+const REF_PLUGIN_PATH = path.join(PLUGIN_BASE_NAME, 'ref-plugin');
+
 /**
  * The builtin plugins
  *
@@ -51,23 +53,30 @@ const BUILTIN_PLUGINS = {
     eventSync: getEventSyntaxPlugin,
     tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
     vuePrefix: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
-    ref: path.join(PLUGIN_BASE_NAME, 'ref-plugin')
+    ref: {
+        quick: [
+            REF_PLUGIN_PATH, {useId: true}
+        ],
+        default: [REF_PLUGIN_PATH]
+    }
 };
 
 /**
  * Add ref plugin
  *
  * @inner
+ * @param {string} appType the app type to transform
  * @param {Array.<Object>} plugins the existed plugins
  * @return {Array.<Object>}
  */
-function addRefPlugin(plugins) {
-    let refPlugin = require(BUILTIN_PLUGINS.ref);
+function addRefPlugin(appType, plugins) {
+    let refPluginInfo = BUILTIN_PLUGINS.ref[appType] || BUILTIN_PLUGINS.ref.default;
+    let refPlugin = require(refPluginInfo[0]);
     let hasRefPlugin = plugins.some(
         item => (refPlugin === (Array.isArray(item) ? item[0] : item))
     );
     if (!hasRefPlugin) {
-        plugins.push(refPlugin);
+        plugins.push([refPlugin, refPluginInfo[1]]);
     }
 
     return plugins;
@@ -82,20 +91,26 @@ function addRefPlugin(plugins) {
  * @return {Array.<Object>}
  */
 function normalizeViewPlugins(plugins, appType) {
-    return plugins.map(item => {
-        let pluginItem = item;
+    return plugins.map(pluginInfo => {
+        let pluginItem = pluginInfo;
         let pluginOptions;
-        if (Array.isArray(item)) {
-            pluginItem = item[0];
-            pluginOptions = item[1];
+        if (Array.isArray(pluginInfo)) {
+            pluginItem = pluginInfo[0];
+            pluginOptions = pluginInfo[1];
         }
-        else if (typeof item === 'string') {
-            let pluginPath = BUILTIN_PLUGINS[item];
+
+        if (typeof pluginItem === 'string') {
+            let pluginPath = BUILTIN_PLUGINS[pluginItem];
             if (typeof pluginPath === 'function') {
                 pluginPath = pluginPath(appType);
             }
             else if (pluginPath && typeof pluginPath === 'object') {
-                pluginPath = pluginPath[appType];
+                pluginPath = pluginPath[appType] || pluginPath.default;
+            }
+
+            if (pluginPath && Array.isArray(pluginPath)) {
+                pluginOptions = pluginPath[1];
+                pluginPath = pluginPath[0];
             }
 
             pluginPath && (pluginItem = pluginPath);
@@ -180,7 +195,7 @@ function initViewTransformOptions(file, processOpts, buildManager) {
 
     plugins = normalizeViewPlugins(plugins, appType);
     if (isSupportRef) {
-        plugins = addRefPlugin(plugins);
+        plugins = addRefPlugin(appType, plugins);
     }
 
     processOpts.plugins = plugins;

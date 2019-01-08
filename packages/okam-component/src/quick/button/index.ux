@@ -1,0 +1,150 @@
+<template>
+    <div class="button-wrap {{className}}" onclick="handleClick">
+        <div class="button">
+            <div class="button-loading" if="loading"></div>
+            <text class="button-text">
+                <slot></slot>
+            </text>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+    props: {
+        plain: {
+            type: Boolean,
+            default: false
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        loading: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'default'
+        },
+        type: {
+            type: String,
+            default: 'default'
+        }
+
+        // not supported currently
+        // formType: {
+        //     type: String
+        // },
+        // openType: {
+        //     type: String
+        // },
+        // hoverClass: {
+        //     type: String,
+        //     default: 'button-hover' // when setting none, no hover style
+        // },
+        // hoverStopPropagation: {
+        //     type: Boolean,
+        //     default: false
+        // },
+        // hoverStartTime: {
+        //     type: Number,
+        //     default: 20
+        // },
+        // hoverStayTime: {
+        //     type: Number,
+        //     default: 70
+        // },
+
+        // /* open-type="getUserInfo" properties */
+        // lang: {
+        //     type: String,
+        //     default: 'en'
+        // },
+        // bindgetuserinfo: {
+        //     type: Function
+        // },
+
+        // /* open-type="contact" properties */
+        // sessionFrom: {
+        //     type: String
+        // },
+        // sendMessageTitle: { // by default, using page title
+        //     type: String
+        // },
+        // sendMessagePath: { // by default current share path
+        //     type: String
+        // },
+        // sendMessageImg: {
+        //     type: String
+        // },
+        // showMessageCard: {
+        //     type: Boolean,
+        //     default: false
+        // },
+        // bindcontact: {
+        //     type: Function
+        // },
+
+        // /* open-type="getPhoneNumber" properties */
+        // bindgetphonenumber: {
+        //     type: Function
+        // },
+
+        // /* open-type="launchApp" properties */
+        // appParameter: {
+        //     type: String
+        // },
+        // binderror: {
+        //     type: Function
+        // },
+
+        // /* open-type="openSetting" properties */
+        // bindopensetting: {
+        //     type: Function
+        // }
+    },
+
+    data: {
+        className: ''
+    },
+
+    onInit() {
+        this.updateStyle();
+    },
+
+    updateStyle() {
+        let type = this.type;
+        let style = `button-${type}`;
+        let wrapStyle = `button-wrap-${type}`;
+
+        if (this.plain) {
+            style += '-plain';
+            wrapStyle += '-plain';
+        }
+
+        if (this.disabled) {
+            style += '-disabled';
+        }
+        else {
+            style += ' button-normal';
+        }
+
+        if (this.size === 'mini') {
+            style += ' button-size-mini';
+        }
+        else {
+            style += ' button-size-default';
+        }
+
+        this.className = style;
+    },
+
+    handleClick(e) {
+        // do nothing
+    }
+};
+</script>
+<style lang="less">
+@import './index.less';
+</style>

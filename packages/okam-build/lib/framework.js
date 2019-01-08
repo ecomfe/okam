@@ -20,14 +20,25 @@ const FRAMEWORK_EXTEND_PATH = {
         ant: 'extend/data/observable/ant/index',
         wx: 'extend/data/observable/wx/index',
         tt: 'extend/data/observable/tt/index',
+        quick: 'extend/data/observable/quick/index',
         default: 'extend/data/observable/index'
     },
-    watch: 'extend/data/watch',
-    broadcast: 'extend/broadcast',
+    watch: {
+        default: 'extend/data/watch/index',
+        quick: 'extend/data/watch/quick/index'
+    },
+    broadcast: {
+        default: 'extend/broadcast/index',
+        quick: 'extend/broadcast/quick/index'
+    },
     behavior: {
         ant: {
-            base: 'extend/behavior/index',
+            base: 'extend/behavior/ant/index',
             creator: 'extend/behavior/ant/Behavior'
+        },
+        quick: {
+            base: 'extend/behavior/quick/index',
+            creator: 'extend/behavior/quick/Behavior'
         },
         default: {
             base: 'extend/behavior/index',
@@ -37,12 +48,14 @@ const FRAMEWORK_EXTEND_PATH = {
     redux: 'extend/data/redux/index',
     ref: {
         default: 'extend/ref/index',
-        ant: 'extend/ref/ant/index'
+        ant: 'extend/ref/ant/index',
+        quick: 'extend/ref/quick/index'
     },
     filter: {
         wx: true,
         swan: true,
-        ant: true
+        ant: true,
+        quick: 'extend/filter/quick/index'
     }
 };
 

@@ -40,6 +40,10 @@ function processFilterInfo(file, owner, buildManager) {
     }
 
     let {code} = filters;
+    if (!code) {
+        return;
+    }
+
     let {root, buildConf} = buildManager;
     let outputConf = buildConf.output;
     let componentPartExtname = outputConf
@@ -147,7 +151,7 @@ function processFile(file, processor, buildManager) {
         return;
     }
 
-    if (result.isComponent) {
+    if (result.isSfcComponent) {
         compileComponent(result, file, buildManager);
         result = {content: file.content};
     }
@@ -228,25 +232,46 @@ function getImportFilterModules(usedFilters, scriptFile, buildManager) {
 
     let filterModules = [];
     let {file: filterFile, filterNames: definedFilters} = scriptFile.filters || {};
-    let usedFilterFile;
-    definedFilters && usedFilters.forEach(item => {
+    let hasFilterUsed = definedFilters && usedFilters.some(item => {
         if (definedFilters.includes(item)) {
-            usedFilterFile = filterFile;
+            return true;
         }
+        return false;
     });
 
-    if (usedFilterFile) {
-        let src = relative(usedFilterFile.path, scriptFile.dirname);
+    if (!hasFilterUsed) {
+        return filterModules;
+    }
+
+    if (filterFile) {
+        let src = relative(filterFile.path, scriptFile.dirname);
         if (src.charAt(0) !== '.') {
             src = './' + src;
         }
         filterModules.push({src, filters: definedFilters});
     }
+    else {
+        filterModules.push({filters: definedFilters});
+    }
 
     return filterModules;
 }
 
+function compileNativeComponent(component, buildManager) {
+    let scriptFile = component.script;
+    if (scriptFile) {
+        compile(scriptFile, buildManager);
+    }
+
+    let styleFiles = component.styles || [];
+    styleFiles.forEach(item => compile(item, buildManager));
+}
+
 function compileComponent(component, file, buildManager) {
+    if (file.isNativeComponent) {
+        return compileNativeComponent(component, buildManager);
+    }
+
     let tplFile = component.tpl;
     if (tplFile) {
         // tpl compile should ahead of the script part to extract ref info

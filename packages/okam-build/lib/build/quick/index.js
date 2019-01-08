@@ -14,6 +14,17 @@ const VALIDATED_DATA_TYPES = ['public', 'protected', 'private'];
 class BuildQuickAppManager extends BuildManager {
 
     /**
+     * @override
+     */
+    onAddNewFile(file) {
+        super.onAddNewFile(file);
+
+        if (file.extname === 'ux') {
+            file.isNativeComponent = true;
+        }
+    }
+
+    /**
      * Get all page config files
      *
      * @return {Array.<Object>}
@@ -105,6 +116,16 @@ class BuildQuickAppManager extends BuildManager {
     }
 
     /**
+     * @override
+     */
+    getFilterTransformOptions() {
+        let opts = super.getFilterTransformOptions();
+        opts || (opts = {});
+        opts.keepFiltersProp = true;
+        return opts;
+    }
+
+    /**
      * Init the auto adding the css style dependencies processor
      *
      * @private
@@ -124,6 +145,7 @@ class BuildQuickAppManager extends BuildManager {
         let outputPath = this.generator.getOutputPath(found);
         found.compiled = false; // reset compiled info
 
+        // init addCssDependencies processor options
         processor.registerProcessor({
             addCssDependencies: {
                 options: {
@@ -138,19 +160,34 @@ class BuildQuickAppManager extends BuildManager {
     /**
      * @override
      */
-    getAppBaseClassInitOptions(config, opts) {
+    getAppBaseClassInitOptions(file, config, opts) {
         if (!opts.isPage || !config) {
             return;
         }
 
+        let extraData;
         let envConfig = config[this.envConfigKey];
         let dataAccessType = envConfig && envConfig.data;
         if (dataAccessType) {
             if (!VALIDATED_DATA_TYPES.includes(dataAccessType)) {
                 this.logger.warn('illegal quick app page data type:', dataAccessType);
             }
-            return {dataAccessType};
+            extraData = {dataAccessType};
         }
+
+        if (this.isEnableFrameworkExtension('watch')) {
+            let watchCounter = 0;
+            let content = file.content.toString();
+            let watchApiCallRegexp = /\.\$watch(\s|\(|,|;|$)/g;
+            while (watchApiCallRegexp.exec(content)) {
+                watchCounter++;
+            }
+
+            extraData || (extraData = {});
+            extraData.watcherCounter = watchCounter;
+        }
+
+        return extraData;
     }
 
     /**

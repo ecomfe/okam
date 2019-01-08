@@ -192,6 +192,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
         config: configInitHandler
     };
     let filterOptions = buildManager.getFilterTransformOptions();
+    let enableMixinSupport = buildManager.isEnableMixinSupport();
     let {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
     if (file.isEntryScript) {
         Object.assign(pluginOpts, {
@@ -208,19 +209,22 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     }
     else if (file.isPageScript) {
         Object.assign(pluginOpts, {
+            enableMixinSupport,
+            filterOptions,
             tplRefs: file.tplRefs,
             baseClass: appBaseClass && appBaseClass.page,
-            getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager)
+            getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager, file)
         });
-        filterOptions && (pluginOpts.filterOptions = filterOptions);
         plugins.push([programPlugins.page, pluginOpts]);
     }
     else if (file.isComponentScript) {
         Object.assign(pluginOpts, {
+            enableMixinSupport,
+            filterOptions,
             tplRefs: file.tplRefs,
-            baseClass: appBaseClass && appBaseClass.component
+            baseClass: appBaseClass && appBaseClass.component,
+            getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager, file)
         });
-        filterOptions && (pluginOpts.filterOptions = filterOptions);
         plugins.push([programPlugins.component, pluginOpts]);
     }
     else if (file.isBehavior) {

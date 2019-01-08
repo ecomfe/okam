@@ -1,0 +1,24 @@
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="demo-page">
+    <text>{{text}}</text>
+    <text>{{des}}</text>
+  </div>
+</template>
+
+<style>
+  .demo-page {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+  }
+</style>
+
+<script>
+  export default {
+    private: {
+      text: '欢迎使用快应用卡片',
+      des: '卡片是一种轻量级的快应用，快应用卡片使快应用能够在其他app和系统里提供可扩展的app功能'
+    }
+  }
+</script>
