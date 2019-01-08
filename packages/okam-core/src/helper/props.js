@@ -49,24 +49,25 @@ export function normalizeOkamProps(props) {
         if (typeof propValue === 'function' || propValue === null) {
             result[k] = {type: propValue};
         }
+        else if (Array.isArray(propValue)) { // support multiple types
+            result[k] = propValue;
+        }
         else {
             if (!isPlainObject(propValue)) {
-                throw createPropError(`prop ${k} value require plain object or supported data type`);
+                throw createPropError(`prop ${k} declaration require plain object or supported data type`);
             }
 
-            let {type, observer, default: value} = propValue;
+            let {default: value} = propValue;
+            let propInfo = Object.assign({}, propValue);
             if (typeof value === 'function') {
                 value = value();
+                propInfo.default = value;
             }
 
             // if (type !== null && VALIDATED_TYPES.indexOf(type) === -1) {
             //     throw createPropError(`prop ${k} type is not supported`);
             // }
-
-            let item = {type};
-            value !== undefined && (item.default = value);
-            observer && (item.observer = observer);
-            result[k] = item;
+            result[k] = propInfo;
         }
     });
     return result;

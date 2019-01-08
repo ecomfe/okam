@@ -7,8 +7,8 @@
 
 /* eslint-disable fecs-export-on-declare */
 
-import {normalizeExtendProp} from '../helper/methods';
-import eventCenter from '../helper/eventCenter';
+import {normalizeExtendProp} from '../../helper/methods';
+import eventCenter from '../../helper/eventCenter';
 
 const ONCE_LISTEN_REGEXP = /^(.*)\.once$/;
 
@@ -115,6 +115,7 @@ export default {
          * @private
          */
         onLaunch() {
+            this.$eventHub = eventCenter;
             this.__bindBroadcastEvents(this.broadcastEvents);
         }
     }, broadcastAPIs),
@@ -139,6 +140,7 @@ export default {
          * @private
          */
         created() {
+            this.$eventHub = eventCenter;
             let events = this.$rawBroadcastEvents;
             if (typeof events === 'function') {
                 events = this.$rawBroadcastEvents = events();
