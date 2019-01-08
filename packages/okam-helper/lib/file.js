@@ -55,9 +55,14 @@ exports.relative = function (fullPath, rootDir) {
     return path.relative(rootDir, fullPath).replace(/\\/g, '/');
 };
 
-exports.getRequirePath = function (file, relativeFile) {
+exports.getRequirePath = function (file, relativeFile, keepExtnames) {
     let result = exports.relative(file, path.dirname(relativeFile));
-    result = result.replace(/\.\w+$/, '');
+    result = result.replace(/\.\w+$/, match => {
+        if (keepExtnames && keepExtnames.includes(match)) {
+            return match;
+        }
+        return '';
+    });
     if (/^\./.test(result)) {
         return result;
     }
