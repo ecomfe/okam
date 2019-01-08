@@ -97,6 +97,7 @@ module.exports = {
         view: { // 定义小程序模板转换的文件后缀名
             extnames: ['pug', 'tpl']
         },
+        // 引入 cssImport 用于处理 预处理语言里 引了 css 需要做依赖后缀处理
         cssImport: {
             extnames: ['styl']
         },

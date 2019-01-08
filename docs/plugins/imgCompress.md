@@ -36,9 +36,12 @@
 * `releaseSourcePath: true`。`boolean` 是否替换源文件, 默认为 `false`, 不进行原图片文件替换，推荐设置为 `true`, 可加快压缩及构建时间；
 * `releaseSourcePath: 'doc/img'`。`string`, 源文件存放的路径(`replaceRaw` 为 `true` 生效), 相对于项目根文件 默认为 `'doc/img'`, 在项目目录下时 建议：code 配置原文件不提交
 
-`.gitignore` 文件 添加一行配置
+* 压缩图片处理会在 `okam` 项目文件下生成一个 `.tinyimgcache` 文件，用于对已压缩及处理图片做标记，标记已处理的文件不会二次压缩且本地同一文件内容会走缓存压缩，建议不要 `.gitignore` 或删除, 可提交至代码仓库中，这样二次拉取代码已压缩的图片也不会进行二次压缩
+
+* `.gitignore` 文件 可添加一行配置
 
 ```
+# 源图片文件不提交到 git 上
 # tiny img source files
 doc/img/src/
 ```

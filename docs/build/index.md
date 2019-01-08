@@ -311,6 +311,7 @@ module.exports = {
     }
 }
 ```
+> [内建的处理器及插件详见](build/processors)
 
 ### rules
 `Array.<Object>` 构建处理规则定义，每个规则项定义主要包含两部分

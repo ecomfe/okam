@@ -1,6 +1,6 @@
-# 预定义处理器
+# 内置处理器
 
-> 预定义的处理器，有相关的依赖，如果用到了相应的处理器需要安装下面指定的依赖，比如 stylus 处理器，需要安装 `stylus` 依赖: `npm i stylus --save-dev`。
+> 内置的处理器，有相关的依赖，如果用到了相应的处理器需要安装下面指定的依赖，比如 stylus 处理器，需要安装 `stylus` 依赖: `npm i stylus --save-dev`。
 
 ## 样式相关
 
@@ -21,6 +21,14 @@
     * 默认扩展名：`无`
     * 处理器选项：参考官方 [postcss](https://postcss.org/)
 
+* `cssImport`: `css` 依赖处理器，用于开发小程序构建时 预处理语言中引入 `css` 样式的场景处理，一般不需要配置, 为保持一致性，也不推荐混写
+    ```x.config.js
+    processors: {
+        cssImport: {
+            extnames: ['styl']
+        }
+    }
+    ```
 
 ## 组件相关
 
@@ -32,7 +40,7 @@
 
 ## 模板相关
 
-* `pug`: [pug](https://github.com/pugjs/pug) 模板语法支持，为了使使用该语法的模板能继续使用 `okam` 框架扩展的模板语法，需要增加如下配置
+* `pug`: [pug](https://github.com/pugjs/pug) 模板语法支持，为了让使用该语法的模板能继续使用 `okam` 框架扩展的模板语法，需要增加如下配置
     * 默认扩展名：`pug`
     ```javascript
     {
@@ -168,6 +176,9 @@
                     px2rpx: {
                         // 设计稿尺寸
                         designWidth: 1242,
+                        // 开启 1px 不转, 即有 1px 的数字不会进行转换
+                        // 开启 1px 不转, okam-build 0.4.6 版本开始支持
+                        noTrans1px: true,
                         // 保留的小数点单位, 默认为 2
                         precision: 2
                     }

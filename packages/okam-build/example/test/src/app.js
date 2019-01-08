@@ -10,6 +10,7 @@ export default {
     config: {
         pages: [
             'pages/home/index',
+            'pages/sfc/sfc',
             'pages/home/styl'
         ],
 
