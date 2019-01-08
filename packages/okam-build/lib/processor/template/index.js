@@ -164,8 +164,11 @@ function compileTpl(file, options) {
         Object.assign({}, options, {file, addDep})
     );
 
-    // serialize by xml mode, close all elements
-    content = serializeDom(ast, {xmlMode: true});
+    let {keepOriginalContent} = config || {};
+    if (!keepOriginalContent) {
+        // serialize by xml mode, close all elements
+        content = serializeDom(ast, {xmlMode: true});
+    }
 
     return {
         ast,

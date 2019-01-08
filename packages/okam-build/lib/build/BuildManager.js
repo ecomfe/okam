@@ -269,6 +269,15 @@ class BuildManager extends EventEmitter {
     }
 
     /**
+     * Get the module path resolve to keep path extnames
+     *
+     * @return {?Array.<string>}
+     */
+    getModulePathKeepExtnames() {
+        return null;
+    }
+
+    /**
      * Compile file
      *
      * @param {Object} file the file to compile

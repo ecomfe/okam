@@ -83,7 +83,8 @@ exports.resolve = function (buildManager, file, requireModId) {
     let rebaseRelPath = file.resolvePath || file.path;
     let resolveModId = getRequirePath(
         depFile.resolvePath || depFile.path,
-        rebaseRelPath
+        rebaseRelPath,
+        buildManager.getModulePathKeepExtnames()
     );
 
     let cacheInfo = {
