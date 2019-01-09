@@ -30,6 +30,10 @@
     * 优化 `data` 扩展方法命名，不对外暴露方法改成 `__` 开头，不要尝试直接调用 `$setData` 方法 ([dfecb09](https://github.com/ecomfe/okam/commit/dfecb09))
 
 ### okam-cli@0.1.6
+* **优化**
+    * 优化 `okam` 包升级时判断条件 ([8fbdd92](https://github.com/ecomfe/okam/commit/8fbdd92))
+* **新功能**
+    * 增加在 `okam init` 之前升级工具本身选择功能 ([e185428](https://github.com/ecomfe/okam/commit/e185428))
 
 ## 2018-12-29
 ### okam-core@0.4.6
