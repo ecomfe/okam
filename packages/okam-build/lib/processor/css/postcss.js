@@ -50,6 +50,12 @@ module.exports = function (file, options) {
     }
 
     let plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
+    if (!plugins || !plugins.length) {
+        // skip process if none plugins provided
+        return {
+            content: file.content
+        };
+    }
 
     plugins = (plugins || []).map(({handler, options}) => handler(
         Object.assign({
