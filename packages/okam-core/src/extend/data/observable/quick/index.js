@@ -138,6 +138,9 @@ export default {
             });
 
             // init watcher
+            // we must declare all wather callback before defining component
+            // as for it does not support dynamic watcher callback declaration
+            // in quick app.
             dataKeys.forEach(k => {
                 this[getInnerWatcher(k)] = function (newVal, oldVal) {
                     this.__handleDataChange(k, newVal, oldVal);
@@ -153,23 +156,24 @@ export default {
          * @private
          */
         created() {
+            let computedInfo = this.$rawComputed;
+            if (typeof computedInfo === 'function') {
+                this.$rawComputed = computedInfo = computedInfo();
+            }
+
             // watch all data keys
             this.__allDataKeys = this.__allDataKeys();
             this.__allDataKeys.forEach(k => {
-                proxyDataGetter(this, k);
                 addDataChangeWatcher(this, k);
+                if (!computedInfo || !computedInfo[k]) {
+                    proxyDataGetter(this, k);
+                }
             });
 
             // override $set API
             let rawSet = this.$set;
             this.$set = (...args) => {
                 let k = args[0];
-                let proxyProp = k;
-                let dotIdx = k.indexOf('.');
-                if (dotIdx !== -1) {
-                    proxyProp = null;
-                    k = k.substr(0, dotIdx);
-                }
 
                 if (this.__allDataKeys.indexOf(k) === -1) {
                     this.__allDataKeys.push(k);
@@ -177,17 +181,13 @@ export default {
                 }
 
                 let result = rawSet.apply(this, args);
-                proxyProp && proxyDataGetter(this, proxyProp);
+                proxyDataGetter(this, k);
 
                 return result;
             };
 
             // add computed data
             this.__computedDeps = {};
-            let computedInfo = this.$rawComputed;
-            if (typeof computedInfo === 'function') {
-                this.$rawComputed = computedInfo = computedInfo();
-            }
             computedInfo && Object.keys(computedInfo).forEach(k => {
                 let getter = computedInfo[k];
                 let value = getter.call(this);
