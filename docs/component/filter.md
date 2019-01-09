@@ -2,7 +2,7 @@
 
 !> 要求 `okam-build` 版本号至少 `0.4.7`
 
-`filter` 实现依赖于原生支持，目前只支持 `百度小程序` `微信小程序` `支付宝小程序`，然后各个小程序平台对于 `filter` 或者 自定义脚本支持稍有差异，使用时候也需要注意下。
+`filter` 实现依赖于原生支持，目前只支持 `百度小程序` `微信小程序` `支付宝小程序` `快应用`（`okam-build@0.4.9` 开始支持），然后各个小程序平台对于 `filter` 或者 自定义脚本支持稍有差异，使用时候也需要注意下。
 
 `filter` 定义目前只支持`本地 filter` 定义，暂不支持 `全局 filter`，`filter 定义` 同 [MVVM 框架 San](https://baidu.github.io/san/tutorial/component/#%E8%BF%87%E6%BB%A4%E5%99%A8)。
 
@@ -22,6 +22,7 @@
 
 * 脚本里 `filters` 属性里定义要用到的 filter
 * 模板里使用 `Vue` filter 管道语法进行 filter 使用
+* **注意：** `filters` 配置不支持 `mixin`
 
 ```
 <template>

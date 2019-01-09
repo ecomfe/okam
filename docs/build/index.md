@@ -203,6 +203,16 @@ module.exports = {
 * `source.exclude`: `Array.<string|RegExp>` 要 exclude 的文件
 * `source.include`: `Array.<string|RegExp>` 要 include 的文件
 
+!> `okam-build@0.4.9` 开始，`source.include` 支持传入 [glob](https://github.com/isaacs/node-glob) pattern，来额外引入没有被分析到依赖的资源文件，比如字体资源文件，当前没有处理，该文件不局限在 `src` 目录下文件，也可以是 `node_modules` 下文件。**注意**：如果传入的是正则只能匹配根目录下文件（不包括子目录下）或者 `src` 目录下的文件。
+
+```javascript
+{
+    source: {
+        include: [/^src\/common\/font\/.*/, 'node_modules/xx/**/*.png']
+    }
+}
+```
+
 ### entry
 `Object` 小程序入口配置
 
@@ -266,7 +276,7 @@ module.exports = {
 * `component.global`: `Object` `>=0.4 版本支持` 自定义全局注入的组件
 
 ### processors
-`Object|Array.<Object>` 自定义的构建处理器，这里定义的处理器，后续的处理规则 `rules` 里，可以直接通过处理器名称 `name` 直接引用，处理器定义包含如下选项
+`Object|Array.<Object>` 自定义的构建处理器，这里定义的处理器，后续的处理规则 `rules` 里，可以直接通过处理器名称 `name` 直接引用，处理器定义包含如下选项，该配置也可以重写 [内建的处理器及插件](build/processors) 选项。
 
 * `name`: `string` 处理器名称，也可以指定内建的处理器名称，用来重写某些配置
 * `processor`: `string|Function` 处理器 npm 包名、路径、或者实现（直接 require），也可以直接通过字符串形式引用 `builtin` 处理器，相当于定义了另外一个处理器，该处理器调用内建处理器
@@ -311,7 +321,6 @@ module.exports = {
     }
 }
 ```
-> [内建的处理器及插件详见](build/processors)
 
 ### rules
 `Array.<Object>` 构建处理规则定义，每个规则项定义主要包含两部分

@@ -47,7 +47,7 @@ okam 提供 `this.xxx` 方式直接访问数据，以及直接赋值来进行数
 `this.xxx = value` 等价于原生 `this.setData('xxx', value)` 或者 `this.setData({xxx: value})`, 数据属性需为 `data` 或 `props` 中定义的数据
 
 
-**注意：** 微信小程序对于数据操作 API 语法上跟百度小程序有些不同，比如没有 `getData` API，`setData` 只支持传入对象形式，如果考虑同时支持微信和百度小程序，可以使用扩展的数据操作语法，不使用原生语法保证兼容性，或者在使用原生语法上注意规避不兼容的语法。
+**注意：** 微信小程序对于数据操作 API 语法上跟百度小程序有些不同，比如没有 `getData` API，`setData` 只支持传入对象形式，如果考虑同时支持微信和百度小程序，可以使用扩展的数据操作语法，不使用原生语法保证兼容性，或者在使用原生语法上注意规避不兼容的语法。`快应用` 默认就提供了 `Vue` 数据操作方法，此外为了跟原生小程序对齐，也提供了一个类似的 `setData` API 操作，但其 `callback` 执行时机可能不准确，由于原生没有相应 API 能获知该变更完成的能力。
 
 ## 对象操作
 
@@ -118,6 +118,8 @@ this.arr.splice(2);
 
 当某数据项的值由其他数据项计算得来时可通过 `computed` 定义实现；代码中可通过 `this.计算属性名` 来引用，模板中也可通过`{{ 计算属性名 }}` 来绑定数据
 
+!> `okam-core@0.4.7` 开始支持快应用 `computed`，依赖于原生的 `$watch` API，受限于 `快应用` 原生能力，目前原生还不支持 `deep` `watch` 能力，导致只能监听 `根属性变更`，此外其对于数组也是不支持 `deep` watch，导致如果 `computed` 属性依赖的数据是内部发生变更会导致无法监听到，e.g., 计算属性依赖了 `obj` 属性，`this.obj.num = 23;` 是无法触发计算属性变更，需要改成 `this.obj = Object.assign({}, this.obj, {num: 23})`，因此使用时候需要注意。此外，如果依赖的数据属性是通过动态新增的根属性（使用 `$set` API 添加），也是不支持的，由于快应用的 `$watch` 的 `handler` 必须预先声明好，不能动态添加。
+
 ```
 <template>
     <view>Hello: {{name}}</view>
@@ -180,6 +182,8 @@ export default {
 }
 ```
 
+!> `okam-core@0.4.7` 开始支持快应用 `watch`，依赖于原生的 `$watch` API，但由于原生 API 提供能力跟 Vue 有所不同。此外，受限于 `快应用` 原生能力，目前原生还不支持 `deep` `watch` 能力，导致只能监听 `根属性变更`，此外其对于数组也是不支持 `deep` watch，因此使用时候需要注意。
+
 一般情况下，使用 `computed` 基本能解决大部分业务场景问题，如果存在某些数据依赖需要异步去拉取数据更新，可以使用 `watch` 属性和 `$watch` API：
 
 * `watch` 属性
@@ -196,7 +200,7 @@ export default {
     * `callback`: watch 到变化执行的回调
     * `options`: watch 选项
 
-        * `options.deep`: `boolean` 默认 false，如果需要 watch 对象内部值变化，需要设为 `true`，**数组不需要**
+        * `options.deep`: `boolean` 默认 false，如果需要 watch 对象内部值变化，需要设为 `true`，**数组不需要** （`快应用` 不支持）
         * `options.immediate`: `boolean` 默认 false，如果设为 true，会立即触发 `callback` 执行
 
 ```javascript
