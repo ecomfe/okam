@@ -73,12 +73,15 @@ function addDataChangeWatcher(ctx, prop) {
  * @param {Object} ctx the component instance
  * @param {string} prop the computed prop name
  * @param {Function} getter the computed getter
+ * @return {*}
  */
 function collectComputedPropDeps(ctx, prop, getter) {
     ctx.__deps = [];
-    getter.call(ctx);
+    let value = getter.call(ctx);
     ctx.__computedDeps[prop] = ctx.__deps;
     ctx.__deps = null;
+
+    return value;
 }
 
 /**
@@ -249,6 +252,29 @@ export default {
                 let value = getter.call(this);
                 this[k] = value;
             });
+        },
+
+        /**
+         * Update computed property value
+         *
+         * @param {string} p the computed property name to update
+         * @param {Function=} shouldUpdate whether should update the computed property
+         */
+        __updateComputed(p, shouldUpdate) {
+            let old = this[p];
+
+            // lazy computed is not supported
+            let computedGetter = this.$rawComputed[p];
+            let value = collectComputedPropDeps(this, p, computedGetter);
+            // maybe the computed value is a reference of the dependence data,
+            // so if the old === value && typeof old === 'object', it'll also need
+            // to update view
+            let neeUpdate = typeof shouldUpdate === 'function'
+                ? shouldUpdate(old, value, p)
+                : (old !== value || (typeof old === 'object'));
+            if (neeUpdate) {
+                this[p] = value;
+            }
         }
     }
 };

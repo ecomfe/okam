@@ -210,6 +210,17 @@ export default {
             },
 
             /**
+             * Update computed property value
+             *
+             * @param {string} p the computed property name to update
+             * @param {Function=} shouldUpdate whether should update the computed property
+             */
+            __updateComputed(p, shouldUpdate) {
+                let observer = this.__computedObserver;
+                observer && observer.updateComputed(p, shouldUpdate);
+            },
+
+            /**
              * Notify setData done
              *
              * @private
