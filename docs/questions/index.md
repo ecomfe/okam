@@ -16,20 +16,23 @@
 ### 支付宝小程序
 
 * 目前支付宝开发者工具是默认支持 `ES6` 语法，但部分语法支持有点问题
-```javascript
-// ./a.js
-import * as abc from 'xxx';
-export default abc; // 这种写法会导致默认导出没有成功
-// export {abc as default}; // 这样也是没法导出成功
-// export default Object.assign{{}, abc}; // 这样是 ok 的
-// export {abc}; // 不使用默认导出，这样是 ok 的
-```
 
-```javascript
-// ./b.js
-import abc from 'a';
-// abc undefined
-```
+    模块 a 定义：
+    ```javascript
+    // ./a.js
+    import * as abc from 'xxx';
+    export default abc; // 这种写法会导致默认导出没有成功
+    // export {abc as default}; // 这样也是没法导出成功
+    // export default Object.assign{{}, abc}; // 这样是 ok 的
+    // export {abc}; // 不使用默认导出，这样是 ok 的
+    ```
+
+    模块 b 导入模块 a 定义：
+    ```javascript
+    // ./b.js
+    import abc from 'a';
+    // abc undefined
+    ```
 
 * 如果脚本文件内容是空的，会导致开发者工具报错
 
