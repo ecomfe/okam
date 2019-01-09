@@ -250,7 +250,6 @@ class BuildManager extends EventEmitter {
         // do nothing, subclass should provide implementation if needed
         if (this.isEnableModelSupport()) {
             return {
-                isSupportModel: true,
                 isSupportObserve: this.isEnableFrameworkExtension('data')
             };
         }

@@ -1,5 +1,5 @@
 /**
- * @file wx-model-plugin
+ * @file tt-model-plugin
  * @author xiaohong8023@outlook.com
  */
 

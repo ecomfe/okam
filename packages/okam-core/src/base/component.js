@@ -78,18 +78,6 @@ export default {
     },
 
     methods: {
-
-        __setData(expr, value) {
-            if (this._isSupportObserve) {
-                this[expr] = value;
-                return;
-            }
-
-            this.setData({
-                [expr]: value
-            });
-        },
-
         /**
          * Emit custom component event
          *
@@ -179,15 +167,8 @@ export default {
                 this[realHandler].apply(this, args);
             }
 
-            // model support
-            if (!this._isSupportModel) {
-                return;
-            }
-            const modelExpr = data.modelExpr;
-            const modelDetail = data.modelDetail;
-            if (eventType && modelExpr) {
-                this.__setData(modelExpr, event.detail[modelDetail]);
-            }
+            this.__handlerModelProxy && this.__handlerModelProxy(event);
+
         }
     }
 };

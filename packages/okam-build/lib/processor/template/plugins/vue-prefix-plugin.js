@@ -17,7 +17,7 @@ const DIRECTIVES_MAP = {
     'v-elif': 'elif',
     'v-else': 'else',
     'v-for': 'for',
-    'v-model': 'model'
+    'v-model': 'v-model'
 };
 
 /**
@@ -50,16 +50,13 @@ const DIRECTIVES_NOT_SUPPORT = [
 ];
 
 /**
- * 选择性支持的指令
+ * 通过 framework 选择性支持的指令
  *
  * @type {Object}
  * @const
  */
-const DIRECTIVES_CHOOSE_SUPPORT = {
-    'v-model': {
-        replace: 'model',
-        framwork: 'model'
-    }
+const DIRECTIVES_FRAMWORK_SUPPORT = {
+    'v-model': 'model'
 };
 
 function getNewAttrKey(attr) {
@@ -101,20 +98,21 @@ module.exports = {
                 return;
             }
 
-            let maySupportAttr = DIRECTIVES_CHOOSE_SUPPORT[key];
-            if (maySupportAttr && framwork.indexOf(maySupportAttr.framwork) < 0) {
+            let maySupportAttr = DIRECTIVES_FRAMWORK_SUPPORT[key];
+            if (maySupportAttr && framwork.indexOf(maySupportAttr) < 0) {
                 logger.error(`${file.path} template attribute ${key} not support`);
-                logger.warn(`you need to add 「${maySupportAttr.framwork}」 on framwork config`);
+                logger.warn(`you can add 「'${maySupportAttr}'」 on framwork config to supportg`);
                 return;
             }
 
             let newAttr = getNewAttrKey(key);
-            if (attrs.hasOwnProperty(newAttr)) {
-                logger.warn(`${file.path} template attribute ${key} is conflicted with ${newAttr}`);
+
+            if (!newAttr || key === newAttr) {
+                return;
             }
 
-            if (!newAttr) {
-                return;
+            if (attrs.hasOwnProperty(newAttr)) {
+                logger.warn(`${file.path} template attribute ${key} is conflicted with ${newAttr}`);
             }
 
             attrs[newAttr] = attrs[key];

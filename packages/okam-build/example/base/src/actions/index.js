@@ -4,4 +4,4 @@
  */
 
 import * as todoActions from './todo';
-export default todoActions;
+export default Object.assign({}, todoActions);

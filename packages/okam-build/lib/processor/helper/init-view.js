@@ -188,7 +188,6 @@ function handleOnFilter(file, filterName) {
  */
 function initViewTransformOptions(file, processOpts, buildManager) {
     let isSupportRef = buildManager.isEnableRefSupport();
-    let isSupportModel = buildManager.isEnableModelSupport();
     let plugins = processOpts.plugins;
 
     let {appType, componentConf, buildConf} = buildManager;
@@ -206,10 +205,6 @@ function initViewTransformOptions(file, processOpts, buildManager) {
         if (templateConf.useVuePrefix) {
             plugins.unshift('vuePrefix');
         }
-    }
-
-    if (isSupportRef) {
-        plugins.push('model');
     }
 
     plugins = normalizeViewPlugins(plugins, appType);
@@ -243,3 +238,4 @@ module.exports = exports = initViewTransformOptions;
 
 exports.getEventSyntaxPlugin = getEventSyntaxPlugin;
 exports.getFilterSyntaxPlugin = getFilterSyntaxPlugin;
+exports.getModelSyntaxPlugin = getModelSyntaxPlugin;

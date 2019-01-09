@@ -6,7 +6,7 @@
 'use strict';
 
 import store from './store/index';
-import a from 'a';
+// import a from 'a';
 
 export default {
     // the app config defined in app.json
