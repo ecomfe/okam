@@ -16,6 +16,7 @@ const OUTPUT_DIR = 'quick_dist';
  * @type {Array.<string>}
  */
 const overridePropertySelectors = [
+    'framework',
     'component.template',
     'processors.postcss.options.plugins'
 ];
@@ -26,22 +27,30 @@ module.exports = merge({}, require('./base.config'), {
         depDir: 'src/common'
     },
 
+    source: {
+        include: [
+            'node_modules/okam-component/src/**/*.png'
+        ]
+    },
+
     polyfill: [
         'async'
     ],
 
-    framework: null,
+    framework: [
+        'ref'
+    ],
 
     component: {
         template: {
             transformTags: {
                 'view': 'div',
-                'button': 'my-button'
+                // 'button': 'my-button'
             }
         },
-        global: {
-            'my-button': './components/quick/Button'
-        }
+        // global: {
+        //     'my-button': './components/quick/Button'
+        // }
     },
 
     api: {
@@ -50,8 +59,9 @@ module.exports = merge({}, require('./base.config'), {
 
     processors: {
         postcss: {
+            extnames: ['css', 'styl', 'less'],
             options: {
-                plugins: ['env']
+                plugins: ['env', 'quickCss']
             }
         }
     },

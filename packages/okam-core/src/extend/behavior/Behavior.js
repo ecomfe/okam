@@ -8,23 +8,40 @@
 /* global Behavior:false */
 
 import {normalizeBehavior} from './helper';
-import mixinStrategy from './strategy';
 import {normalizeAttributeNames} from '../../helper/component';
+
+export function normalizeBehaviorAttribute(componentInfo) {
+    let {mixins, behaviors} = componentInfo;
+    if (!behaviors && mixins) {
+        delete componentInfo.mixins;
+        componentInfo.behaviors = mixins;
+    }
+
+    return componentInfo;
+}
+
+function normalizeNativeAttributes(componentInfo) {
+    normalizeAttributeNames(componentInfo);
+    normalizeBehaviorAttribute(componentInfo);
+
+    return componentInfo;
+}
 
 export default function (behavior) {
     let componentBehavior;
-    return isPage => {
-        if (isPage || !mixinStrategy.useNativeBehavior) {
+    return (isPage, opts) => {
+        if (isPage || !opts.useNativeBehavior) {
             return behavior;
         }
 
+        // using native mixin support
         if (!componentBehavior) {
-            componentBehavior = normalizeBehavior(behavior);
+            componentBehavior = normalizeBehavior(behavior, opts);
             let behaviorInfo = componentBehavior.behavior;
             if (behaviorInfo) {
                 /* eslint-disable babel/new-cap */
                 componentBehavior.behavior = Behavior(
-                    normalizeAttributeNames(behaviorInfo)
+                    normalizeNativeAttributes(behaviorInfo)
                 );
             }
         }

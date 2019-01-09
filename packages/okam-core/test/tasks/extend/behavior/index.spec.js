@@ -242,22 +242,22 @@ describe('behavior', function () {
 
         assert(component.behaviors.length === 1);
         expect(component.behaviors[0]).toEqual({
-            properties: rawMixin.props,
-            data: rawMixin.data,
-            ready: rawMixin.ready,
-            created: rawMixin.created,
-            methods: rawMixin.methods
+            // properties: rawMixin.props,
+            // data: rawMixin.data,
+            ready: rawMixin.ready
+            // created: rawMixin.created,
+            // methods: rawMixin.methods
         });
-        expect(component.data).toEqual({c: 1});
+        expect(component.data).toEqual({c: 1, d: 2});
 
         expect(spyMixinReady).toNotHaveBeenCalled();
-        expect(Object.keys(component.behaviors[0].methods)).toEqual(['hi']);
+        // expect(Object.keys(component.behaviors[0].methods)).toEqual(['hi']);
         component.test();
         expect(spyComponentTest).toHaveBeenCalled();
         assert(spyComponentTest.calls.length === 1);
         expect(spyComponentTest.calls[0].context).toBe(component);
 
-        assert(typeof component.hi !== 'function');
+        assert(typeof component.hi === 'function');
 
         component.beforeUpdate();
         component.updated();
@@ -269,7 +269,7 @@ describe('behavior', function () {
             let hooks = spyHooks[name];
 
             if (name === 'created') {
-                expect(hooks[0]).toNotHaveBeenCalled();
+                expect(hooks[0]).toHaveBeenCalled();
                 expect(hooks[1]).toHaveBeenCalled();
                 expect(hooks[1].calls[0].context).toBe(component);
                 assert(hooks[1].calls.length === 1);

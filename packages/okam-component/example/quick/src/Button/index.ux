@@ -1,0 +1,174 @@
+<import name="c-button" src="../components/quick/button/index"></import>
+<template>
+    <div class="button-page">
+        <div class="img-wrap"><div class="img"></div></div>
+        <c-button disabled="{{disabled}}" type="{{btnType}}" @click="onChangeType" size="mini"><span>Update</span></c-button>
+        <div class="btn">
+            <c-button plain type="primary" class="my-btn" onclick="handleClick">
+                <span class="btn-txt">Hello222 Button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button loading>
+                <span>Default button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button>
+                <span>Default button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="primary">
+                <span>Primary button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="warn">
+                <span>Warn button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button plain>
+                <span>Default Plain button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="primary" plain>
+            <span>Primary Plain button</span>
+        </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="warn" plain>
+                <span>Warn Plain button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button disabled>
+                <span>Default disabled button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="primary" disabled>
+                <span>Primary disabled button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="warn" disabled>
+                <span>Warn disabled button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button plain disabled>
+                <span>Default Disabled Plain buttonDefault Disabled Plain buttonDefault Disabled Plain button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="primary" plain disabled>
+                <span>Primary Disabled Plain button</span>
+            </c-button>
+        </div>
+        <div class="btn">
+            <c-button type="warn" plain disabled>
+                <span>Warn Disabled Plain button</span>
+            </c-button>
+        </div>
+        <div class="mini-btn-wrap">
+            <c-button class="my-mini-btn" size="mini">
+                <span>Buttonsfsdf</span>
+            </c-button>
+            <c-button class="my-mini-btn" size="mini" type="primary">
+                <span>Primary</span>
+            </c-button>
+            <c-button class="my-mini-btn" size="mini" type="warn">
+                <span>Warn</span>
+            </c-button>
+        </div>
+    </div>
+</template>
+<script>
+import prompt from '@system.prompt';
+
+export default {
+    private: {
+        btnType: 'default',
+        disabled: false
+    },
+
+    handleClick(e) {
+        prompt.showToast({
+            message: JSON.stringify(e)
+        });
+    },
+
+    onChangeType() {
+        // prompt.showToast({
+        //     message: 'change type'
+        // });
+        this.btnType = 'primary';
+        this.disabled = true;
+    }
+}
+</script>
+<style lang="less">
+.button-page {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .btn-txt {
+        color: blue;
+        font-size: 40px;
+    }
+}
+
+.btn {
+    margin: 10px 0;
+}
+
+.my-btn {
+    width: 550px;
+    height: 86px;
+    margin-top: 75px;
+    border-radius: 43px;
+    background-color: #ccc;
+    &:active {
+        background-color: rgba(204, 204, 204, .6);
+    }
+}
+
+.my-mini-btn {
+    margin: 10px;
+    /* width: 300px; */
+}
+
+.img-wrap {
+    width: 32px;
+    height: 32px;
+}
+
+.img {
+    width: 100%;
+    height: 100%;
+    animation-name: weuiLoading;
+    animation-duration: 1000ms;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    background-image: url(./loading2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    /* background-color: #ffffff; */
+    /* background-size: 32px 32px; */
+    /* background-size: 100%; */
+}
+
+@keyframes weuiLoading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+</style>

@@ -39,6 +39,7 @@ exports.resolveDepModuleNewPath = function (oldPath, moduleDir, rebaseDepDir) {
     // remove `src` to fix toutiao cannot init correctly
     return result.replace(/\\/g, '/').replace('/src/', '/')
         .replace('/okam-core/', '/okam/')
+        .replace('/okam-component/', '/ocom/')
         .replace('/@babel/runtime/helpers/', '/babel/');
 };
 
@@ -62,7 +63,6 @@ exports.resolve = function (buildManager, file, requireModId) {
         return resolveModInfo.id;
     }
 
-    let isRelModId = requireModId.charAt(0) === '.';
     let depFileFullPath = buildManager.resolve(requireModId, file);
     if (!depFileFullPath) {
         return;
@@ -78,15 +78,14 @@ exports.resolve = function (buildManager, file, requireModId) {
     file.isWxCompScript && (depFile.isWxCompScript = true);
     file.isSwanCompScript && (depFile.isSwanCompScript = true);
     file.isAntCompScript && (depFile.isAntCompScript = true);
+    file.isTTCompScript && (depFile.isTTCompScript = true);
 
-    let resolveModId = requireModId;
-    if (!isRelModId) {
-        let rebaseRelPath = file.resolvePath || file.path;
-        resolveModId = getRequirePath(
-            depFile.resolvePath || depFile.path,
-            rebaseRelPath
-        );
-    }
+    let rebaseRelPath = file.resolvePath || file.path;
+    let resolveModId = getRequirePath(
+        depFile.resolvePath || depFile.path,
+        rebaseRelPath,
+        buildManager.getModulePathKeepExtnames()
+    );
 
     let cacheInfo = {
         id: resolveModId,

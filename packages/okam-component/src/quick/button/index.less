@@ -1,0 +1,186 @@
+/**
+ * @file Button component style
+ * @author sparklewhy@gmail.com
+ */
+
+
+@button-border-radius: 10px;
+
+.button {
+    justify-content: center;
+    align-items: center;
+    padding: 14px 10px;
+    border-radius: @button-border-radius;
+}
+
+.button-text {
+    color: #000;
+    lines: 1;
+    text-overflow: ellipsis;
+}
+
+.button-size-default {
+    .button {
+        width: 100%;
+    }
+}
+
+.button-normal {
+    .button {
+        &:active {
+            opacity: .7;
+        }
+    }
+
+    .button-text {
+        &:active {
+            opacity: .7;
+        }
+    }
+}
+
+.button-default {
+    .button {
+        background-color: #F8F8F8;
+        border: 1px solid #dfdfdf;
+
+        &:active {
+            background-color: #DEDEDE;
+        }
+    }
+}
+
+.button-default-disabled {
+    .button {
+        background-color: #F7F7F7;
+        border: 1px solid #dfdfdf;
+    }
+
+    .button-text {
+        color: rgba(0, 0, 0, .3);
+    }
+}
+
+.button-primary {
+    .button {
+        background-color: #1AAD19;
+
+        &:active {
+            background-color: #179B16;
+        }
+    }
+
+    .button-text {
+        color: #fff;
+    }
+}
+
+.button-primary-disabled {
+    .button {
+        background-color: #9ED99D;
+    }
+
+    .button-text {
+        color: rgba(255, 255, 255, .6);
+    }
+}
+
+.button-warn {
+    .button {
+        background-color: #E64340;
+
+        &:active {
+            background-color: #CE3C39;
+        }
+    }
+
+    .button-text {
+        color: #fff;
+    }
+}
+
+.button-warn-disabled {
+    .button {
+        background-color: #EC8B89;
+    }
+
+    .button-text {
+        color: rgba(255, 255, 255, .6);
+    }
+}
+
+.button-default-plain-disabled,
+.button-primary-plain-disabled,
+.button-warn-plain-disabled {
+    border: 1px solid #c6c6c6;
+
+    .button-text {
+        color: rgba(0, 0, 0, .2);
+    }
+}
+
+.button-default-plain  {
+    border: 1px solid #353535;
+    border-radius: @button-border-radius;
+    &:active {
+        border: 1px solid #838383;
+    }
+
+    .button-text {
+        color: #353535;
+
+        &:active {
+            color: #838383;
+        }
+    }
+}
+
+.button-primary-plain {
+    border: 1px solid #1aad19;
+    border-radius: @button-border-radius;
+    &:active {
+        border: 1px solid #70cc6e;
+    }
+
+    .button-text {
+        color: #1aad19;
+        &:active {
+            color: rgba(26, 173, 25, .6);
+        }
+    }
+}
+
+.button-warn-plain {
+    border: 1px solid #e64340;
+    border-radius: @button-border-radius;
+    &:active {
+        border: 1px solid #ef8a87;
+    }
+
+    .button-text {
+        color: #e64340;
+    }
+}
+
+.button-loading {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    animation-name: btnLoading;
+    animation-duration: 1000ms;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    background-image: url(./loading.png);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@keyframes btnLoading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

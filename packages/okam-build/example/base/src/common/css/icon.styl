@@ -1,0 +1,46 @@
+/**
+ * @file 字体图标定义
+ */
+
+font-face('okam', '../font/bdfont')
+
+.icon
+    font-family: 'okam'
+    speak: none
+    font-style: normal
+    font-weight: normal
+    font-variant: normal
+    text-transform: none
+    line-height: 1
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+
+.i-locked
+    @extend .icon
+    &:before
+        content: '\e001'
+
+.i-fullscreen
+    @extend .icon
+    &:before
+        content: '\e002'
+
+
+.i-edit
+    @extend .icon
+    &:before
+        content: '\e003'
+
+.i-refresh
+    @extend .icon
+    &:before
+        content: '\e004'
+
+.i-check
+    @extend .icon
+    &:before
+        content: '\e005'
+
+
+
+

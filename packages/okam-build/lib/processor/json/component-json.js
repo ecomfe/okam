@@ -22,7 +22,9 @@ const COMPONENT_FILE_EXT_NAMES = {
     wxml: 'isWxCompScript',
     swan: 'isSwanCompScript',
     axml: 'isAntCompScript',
+    ttml: 'isTTCompScript',
     acss: false,
+    ttss: false,
     wxss: false,
     css: false,
     js: false
@@ -155,7 +157,6 @@ function analyseNativeComponent(scriptFile, options) {
 
     let {appType} = options;
     if (appType === 'quick') {
-        // TODO: analyse quick app native component
         return;
     }
 

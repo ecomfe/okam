@@ -45,6 +45,7 @@ export default {
 ## include 方式引用
 
 * 按原生小程序 `include` 语法引入要引用的模板文件
+* 引用的模板会被内联过来，因此引入的模板上下文可以访问的模板数据同父模板，不需要传入
 
 ```src/common/tpl/include.tpl
 <view>Hello: {{from}}</view>
@@ -53,7 +54,7 @@ export default {
 ```src/pages/home/index.okm
 <template>
     <view class="tpl-reuse-wrap">
-        <include :from="from" src="../../common/tpl/include.tpl"/>
+        <include src="../../common/tpl/include.tpl"/>
     </view>
 </template>
 

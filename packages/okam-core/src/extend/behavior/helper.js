@@ -5,55 +5,13 @@
 
 'use strict';
 
-import strategy from './strategy';
-
 /**
- * The extend lifecycle hooks in okam
- *
- * @type {Object}
- */
-const okamExtendLifecycleHookMap = {
-    beforeCreate: 1,
-    beforeMount: 1,
-    mounted: 1,
-    beforeDestroy: 1,
-    destroyed: 1,
-    beforeUpdate: 1,
-    updated: 1
-};
-
-/**
- * The okam lifecycle hook map
- *
- * @type {Object}
- */
-const okamLifecycleHookMap = Object.assign(
-    {}, okamExtendLifecycleHookMap, {created: 1}
-);
-
-/**
- * The okam lifecycle hooks
- *
- * @type {Array.<string>}
- */
-const okamLifecycleHooks = Object.keys(okamLifecycleHookMap);
-
-/**
- * The extend attributes in okam
- *
- * @type {Object}
- */
-const okamExtendAttributes = {
-    computed: 1
-};
-
-/**
- * The mixins attribute
+ * The mixin attribute name
  *
  * @const
  * @type {string}
  */
-const MIXINS_ATTR = 'mixins';
+const MIXIN_ATTR_NAME = 'mixins';
 
 /**
  * Mixin the target with the source
@@ -62,20 +20,20 @@ const MIXINS_ATTR = 'mixins';
  * @param {Object} target the target
  * @param {Object} source the source
  * @param {string} k the key
- * @param {Object=} opts the mixin options
+ * @param {Object} opts the mixin options
  */
 function doMixin(target, source, k, opts) {
     let {
-        mixinAttrName = MIXINS_ATTR,
-        lifecycleHookMap = okamLifecycleHookMap,
-        mixinStrategy = strategy.mixin
-    } = opts || {};
+        mixinAttrName = MIXIN_ATTR_NAME,
+        lifecycleHookMap,
+        mixinStrategy
+    } = opts;
 
     if (k === mixinAttrName) {
         return;
     }
 
-    let mixinHandler = mixinStrategy[k];
+    let mixinHandler = mixinStrategy && mixinStrategy[k];
     if (mixinHandler) {
         target[k] = mixinHandler(target[k], source[k]);
     }
@@ -104,23 +62,28 @@ function doMixin(target, source, k, opts) {
  *
  * @param {Object} componentOrBehavior the component or behavior to init
  * @param {Object} extendMixin the extend mixin used to init
+ * @param {Object} opts the mixin options, optional
+ * @param {boolean} opts.useNativeBehavior whether using native behavior support
+ * @param {Object} opts.lifecycleHookMap the lifecycle hook map
+ * @param {string=} opts.mixinAttrName the mixin attribute name
+ * @param {Object=} opts.mixinStrategy the mixin strategy
  */
-export function initMixinsOption(componentOrBehavior, extendMixin) {
+export function initMixinsOption(componentOrBehavior, extendMixin, opts) {
     const mixins = componentOrBehavior.mixins;
     if (!Array.isArray(mixins) || !mixins.length) {
         return;
     }
 
     const behaviors = [];
-    const minxiNum = mixins.length;
-    for (let i = 0; i < minxiNum; i++) {
+    const mixinNum = mixins.length;
+    for (let i = 0; i < mixinNum; i++) {
         let item = mixins[i];
         if (typeof item === 'function') {
-            let {mixin, behavior} = item();
+            let {mixin, behavior} = item(false, opts);
             behavior && (behaviors.push(behavior));
 
             mixin && Object.keys(mixin).forEach(
-                k => doMixin(extendMixin, mixin, k)
+                k => doMixin(extendMixin, mixin, k, opts)
             );
         }
         else {
@@ -137,21 +100,28 @@ export function initMixinsOption(componentOrBehavior, extendMixin) {
  * Normalize behavior
  *
  * @param {Object} item the behavior info to normalize
+ * @param {Object=} opts the normalize options
+ * @param {Object} opts.lifecycleHookMap the extend lifecycle hook map in okam
+ * @param {Object} opts.mixinAttrMap the extend attributes map in okam
  * @return {Object}
  */
-export function normalizeBehavior(item) {
+export function normalizeBehavior(item, opts) {
     let behaviorObj = {};
     let extendBehavior = {};
+    let {
+        lifecycleHookMap,
+        mixinAttrMap
+    } = opts;
 
     // split behavior to extended lifecycle behavior and native behavior mixin
     Object.keys(item).forEach(k => {
         let value = item[k];
-        if (okamExtendLifecycleHookMap[k]) {
+        if (lifecycleHookMap[k]) {
             let list = extendBehavior[k];
             list || (list = extendBehavior[k] = []);
             value && list.push(value);
         }
-        else if (okamExtendAttributes[k]) {
+        else if (mixinAttrMap[k]) {
             extendBehavior[k] = value;
         }
         else {
@@ -160,10 +130,14 @@ export function normalizeBehavior(item) {
     });
 
     // replace the value of mixins with native behavior
-    initMixinsOption(item, extendBehavior);
+    initMixinsOption(item, extendBehavior, opts);
+
+    if (behaviorObj && Object.keys(behaviorObj).length === 0) {
+        behaviorObj = null;
+    }
 
     return {
-        mixin: extendBehavior, // okam'll implement this extended mixin
+        mixin: extendBehavior, // okam will implement this extended mixin
         behavior: behaviorObj
     };
 }
@@ -176,10 +150,10 @@ export function normalizeBehavior(item) {
  * @param {Object} target the target component or behavior
  * @param {Object=} opts the mixin options
  */
-function flattenMxins(mixins, target, opts) {
+function flattenMixins(mixins, target, opts) {
     mixins.forEach(item => {
         if (typeof item === 'function') {
-            item = item(true); // return component definition
+            item = item(true, opts); // return okam mixin definition
         }
 
         if (!item || typeof item !== 'object') {
@@ -189,7 +163,7 @@ function flattenMxins(mixins, target, opts) {
         let submixins = item.mixins;
         if (Array.isArray(submixins) && submixins.length) {
             item = Object.assign({}, item);
-            flattenMxins(submixins, item, opts);
+            flattenMixins(submixins, item, opts);
         }
 
         Object.keys(item).forEach(
@@ -203,16 +177,18 @@ function flattenMxins(mixins, target, opts) {
  *
  * @param {Object} component the component info
  * @param {Array.<Object>} behaviors the behaviors to mixin
- * @param {Object=} opts the mixin options, optional
- * @param {Array.<string>=} opts.lifecycleHooks the lifecycle hooks
- * @param {Object=} opts.lifecycleHookMap the lifecycle hook map
+ * @param {Object} opts the mixin options, optional
+ * @param {boolean} opts.useNativeBehavior whether using native behavior support
+ * @param {Object} opts.lifecycleHookMap the lifecycle hook map
  * @param {string=} opts.mixinAttrName the mixin attribute name
- * @param {Object=} opts.mixinStrategy the mixin strategy
+ * @param {Object} opts.mixinStrategy the mixin strategy
+ * @param {Object} opts.mixinAttrMap the custom mixin attributes map in okam
  */
 export function mixin(component, behaviors, opts) {
-    flattenMxins(behaviors, component, opts);
+    flattenMixins(behaviors, component, opts);
 
-    let {lifecycleHooks = okamLifecycleHooks} = opts || {};
+    let {lifecycleHookMap} = opts;
+    let lifecycleHooks = Object.keys(lifecycleHookMap);
     lifecycleHooks.forEach(k => {
         let handlers = component[k];
         if (Array.isArray(handlers)) {
@@ -226,4 +202,35 @@ export function mixin(component, behaviors, opts) {
             };
         }
     });
+}
+
+/**
+ * Init component mixin behaviors
+ *
+ * @param {Object} component the component definition
+ * @param {boolean} isPage whether is page component
+ * @param {Object} strategy the mixin strategy
+ */
+export function initBehaviors(component, isPage, strategy) {
+    let behaviors = component.mixins;
+    if (!behaviors) {
+        return;
+    }
+
+    let {useNativeBehavior, mixinAttrs, mixinHooks, mixin: mixinStrategy} = strategy;
+    let mixinOpts = {
+        useNativeBehavior,
+        mixinStrategy,
+        mixinAttrMap: mixinAttrs,
+        lifecycleHookMap: mixinHooks
+    };
+
+    if (isPage || !useNativeBehavior) {
+        mixin(component, behaviors, mixinOpts);
+    }
+    else {
+        let extendMixin = {};
+        initMixinsOption(component, extendMixin, mixinOpts);
+        mixin(component, [extendMixin], mixinOpts);
+    }
 }

@@ -28,7 +28,7 @@ const componentTransformer = require('./component');
  * @return {Object}
  */
 function getCodeTraverseVisitors(t, initConfig, opts) {
-    let {isPage, isComponent, isBehavior, filterOptions} = opts;
+    let {isPage, isComponent, isBehavior, enableMixinSupport, filterOptions} = opts;
     let hasComponents = isPage || isComponent;
     return {
         ObjectProperty(path) {
@@ -44,7 +44,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
                 // skip children traverse
                 path.skip();
             }
-            else if (keyName === 'mixins') {
+            else if (enableMixinSupport && keyName === 'mixins') {
                 // extract the mixins information for page/component
                 let mixins = componentTransformer.getUsedMixinModulePaths(
                     prop.value, path, t, opts
@@ -66,12 +66,20 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             else if (filterOptions && !isBehavior && keyName === 'filters') {
                 const {getExportFilterNames, generateCode} = require('./filter');
                 let filterNames = getExportFilterNames(prop.value, t);
-                let code = generateCode(prop.value, t, filterOptions);
-                initConfig.filters = {
-                    code,
-                    filterNames
-                };
-                removeNode(t, path, {tail: true});
+
+                if (filterOptions.keepFiltersProp) {
+                    initConfig.filters = {
+                        filterNames
+                    };
+                }
+                else {
+                    let code = generateCode(prop.value, t, filterOptions);
+                    initConfig.filters = {
+                        code,
+                        filterNames
+                    };
+                    removeNode(t, path, {tail: true});
+                }
 
                 path.skip();
             }

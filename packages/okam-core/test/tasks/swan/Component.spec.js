@@ -498,29 +498,45 @@ describe('Component', () => {
             return err.isTypeError;
         });
 
-        createComponent = () => {
-            MyComponent({
-                props: {
-                    a: [String, Number]
-                }
-            });
-        };
-        assert.throws(createComponent, function (err) {
-            return err.isTypeError;
+        let result = MyComponent({
+            props: {
+                a: [String, Number]
+            }
         });
-
-        createComponent = () => {
-            MyComponent({
-                props: {
-                    a: {
-                        type: [String, Number]
-                    }
-                }
-            });
-        };
+        expect(result.properties).toEqual({
+            a: [String, Number]
+        });
         // assert.throws(createComponent, function (err) {
         //     return err.isTypeError;
         // });
+
+        result = MyComponent({
+            props: {
+                a: {
+                    type: [String, Number]
+                }
+            }
+        });
+        expect(result.properties).toEqual({
+            a: {
+                type: [String, Number]
+            }
+        });
+
+        const aType = {
+            validator(value) {
+                return ['success', 'warning', 'danger'].indexOf(value) !== -1;
+            },
+            type: String
+        };
+        result = MyComponent({
+            props: {
+                a: aType
+            }
+        });
+        expect(result.properties).toEqual({
+            a: aType
+        });
     });
 
     it('should normalize mixins', () => {
@@ -528,7 +544,7 @@ describe('Component', () => {
         let instance = MyComponent({
             mixins
         });
-        assert(instance.behaviors === mixins);
+        assert(instance.behaviors === undefined);
 
         let behaviors = ['wx://form'];
         instance = MyComponent({

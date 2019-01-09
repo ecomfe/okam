@@ -52,7 +52,10 @@ function generateSFC(file, options) {
     }
 
     let result = '';
-    let componentConfig = getComponentConfig(subFiles);
+    let componentConfig = file.isNativeComponent
+        ? file.importComponents
+        : getComponentConfig(subFiles);
+
     subFiles.forEach((item, idx) => {
         if (item.isScript) {
             result += wrapContent('script', item);

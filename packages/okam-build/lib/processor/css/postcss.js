@@ -32,6 +32,9 @@ const BUILTIN_PLUGINS = {
     },
     env: {
         path: path.join(__dirname, 'plugins', 'postcss-plugin-env.js')
+    },
+    quickCss: {
+        path: path.join(__dirname, 'plugins', 'postcss-plugin-quick.js')
     }
 };
 

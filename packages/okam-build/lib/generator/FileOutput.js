@@ -142,7 +142,7 @@ function mergeComponentStyleFiles(styleFiles, rootDir) {
 }
 
 function isComponentFile(f) {
-    return f && f.isComponent;
+    return f && (f.isComponent || f.isNativeComponent);
 }
 
 function addFileOutputTask(allTasks, options, file) {

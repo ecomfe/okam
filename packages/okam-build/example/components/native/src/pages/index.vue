@@ -2,11 +2,13 @@
     <view class="native-page">
          <view class="title">Native 组件</view>
          <hello @hello="handleHello"></hello>
+         <hi></hi>
     </view>
 </template>
 
 <script>
 import Hello from '../components/Hello';
+import Hi from '../components/Hi';
 
 export default {
     config: {
@@ -14,7 +16,8 @@ export default {
     },
 
     components: {
-        Hello
+        Hello,
+        Hi
     },
 
     data: {

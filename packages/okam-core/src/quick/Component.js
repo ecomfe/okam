@@ -6,7 +6,6 @@
 'use strict';
 
 import {createComponent} from '../helper/factory';
-import {normalizeComponent} from '../helper/component';
 import {extractMethodsToOuterContext} from '../helper/methods';
 import componentBase from './base/component';
 
@@ -18,7 +17,6 @@ import componentBase from './base/component';
  * @return {Object}
  */
 function normalizeQuickAppComponent(componentInfo) {
-    componentInfo = normalizeComponent(componentInfo);
     return extractMethodsToOuterContext(componentInfo);
 }
 

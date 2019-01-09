@@ -3,7 +3,7 @@
         <import src="../../common/tpl/footer.tpl"/>
         <view class="main"></view>
         <tpl is="page-footer" :data="{copyRightDate: copyRightDate}" />
-        <include :from="from" src="../../common/tpl/include.tpl"/>
+        <include src="../../common/tpl/include.tpl"/>
     </view>
 </template>
 

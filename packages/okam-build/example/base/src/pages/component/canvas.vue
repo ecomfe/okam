@@ -11,7 +11,7 @@
         <textarea
             :placeholder="placeholder"
             placeholder-style="color: #000"
-            @blur="bindTextAreaBlur" />
+            @blur="bindTextAreaBlur"></textarea>
     </view>
 </template>
 <script>
