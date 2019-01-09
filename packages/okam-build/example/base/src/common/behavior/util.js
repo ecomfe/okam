@@ -1,1 +1,4 @@
 
+export function hi() {
+
+}
