@@ -73,6 +73,7 @@ module.exports = {
     framework: [
         'data',
         'watch',
+        'model',
         ['behavior', '{useNativeBehavior: true}'],
         'broadcast',
         'redux',

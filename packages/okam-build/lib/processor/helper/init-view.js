@@ -30,6 +30,16 @@ function getFilterSyntaxPlugin(appType) {
 }
 
 /**
+ * Get model syntax transformation plugin
+ *
+ * @param {string} appType the app type to transform
+ * @return {string}
+ */
+function getModelSyntaxPlugin(appType) {
+    return path.join(PLUGIN_BASE_NAME, 'model', `${appType}-model-plugin`);
+}
+
+/**
  * Get template syntax transformation plugin
  *
  * @inner
@@ -51,6 +61,7 @@ const REF_PLUGIN_PATH = path.join(PLUGIN_BASE_NAME, 'ref-plugin');
 const BUILTIN_PLUGINS = {
     syntax: getTemplateSyntaxPlugin,
     eventSync: getEventSyntaxPlugin,
+    model: getModelSyntaxPlugin,
     tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
     vuePrefix: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
     ref: {
@@ -60,6 +71,7 @@ const BUILTIN_PLUGINS = {
         default: [REF_PLUGIN_PATH]
     }
 };
+
 
 /**
  * Add ref plugin
@@ -178,7 +190,9 @@ function initViewTransformOptions(file, processOpts, buildManager) {
     let isSupportRef = buildManager.isEnableRefSupport();
     let plugins = processOpts.plugins;
 
-    let {appType, componentConf} = buildManager;
+    let {appType, componentConf, buildConf} = buildManager;
+
+    let framework = buildConf.framework || [];
     let templateConf = (componentConf && componentConf.template) || {};
     if (!plugins || !plugins.length) {
         plugins = ['syntax'];
@@ -211,6 +225,7 @@ function initViewTransformOptions(file, processOpts, buildManager) {
         {},
         processOpts,
         {
+            framework,
             plugins,
             filter: filterOptions,
             template: templateConf,
@@ -223,3 +238,4 @@ module.exports = exports = initViewTransformOptions;
 
 exports.getEventSyntaxPlugin = getEventSyntaxPlugin;
 exports.getFilterSyntaxPlugin = getFilterSyntaxPlugin;
+exports.getModelSyntaxPlugin = getModelSyntaxPlugin;
