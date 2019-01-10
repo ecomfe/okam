@@ -59,7 +59,10 @@ exports.modelTransformer = function (modelMap, attrs, name, tplOpts, opts, eleme
 
     if (attrName) {
         if (hasAttr(attrName, attrs)) {
-            logger.warn(`${file.path} template attribute 「v-model="${attrs[name]}"」 is conflicted with 「${attrName}」 on element <${element.name}>`);
+            logger.warn(
+                `${file.path} template attribute 「v-model="${attrs[name]}"」`,
+                `is conflicted with 「${attrName}」on element <${element.name}>`
+            );
         }
         attrs[attrName] = '{{' + attrs[name] + '}}';
     }

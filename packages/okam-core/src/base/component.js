@@ -78,6 +78,7 @@ export default {
     },
 
     methods: {
+
         /**
          * Emit custom component event
          *
