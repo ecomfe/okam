@@ -31,9 +31,8 @@ function hasAttr(name, attrs) {
 //      data-input-proxy="self"
 //      value="{{inputVal}}" />
 exports.modelTransformer = function (modelMap, attrs, name, tplOpts, opts, element) {
-
     const {logger, file} = tplOpts;
-    const customTags = opts.customComponentTags;
+    const customTags = (opts || {}).customComponentTags;
     let isCustomTag = customTags && customTags.indexOf(element.name) >= 0;
     let attrMap = isCustomTag ? modelMap[COMPONENT_PROP] : modelMap[element.name];
 
@@ -44,10 +43,17 @@ exports.modelTransformer = function (modelMap, attrs, name, tplOpts, opts, eleme
     let {eventName, eventType, attrName, detailName} = attrMap;
     let oldEvent = attrs[eventName];
 
-    if (!oldEvent || (attrs[eventName] === EVENT_FN_NAME)) {
+    let isOrigin = oldEvent && (attrs[eventName] !== EVENT_FN_NAME);
+
+    // 没有函数 或者 有函数， 不是 __handlerProxy 需要添加函数属性
+    // 不是 __handlerProxy 说明时原生写法
+    if (!oldEvent || isOrigin) {
         attrs[eventName] = EVENT_FN_NAME;
     }
-    else {
+
+    // 此时已处理，主要考虑原生写法
+    // 有函数 且不是 __handlerProxy 需要添加函数属性
+    if (isOrigin) {
         attrs[`data-${eventType}-proxy`] = oldEvent;
     }
 

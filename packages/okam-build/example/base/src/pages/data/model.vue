@@ -20,17 +20,41 @@
             <view>input has value attr「v-bind:value="input3"」: {{input3}}</view>
             <input v-model="input3" v-bind:value="input3" />
         </view>
-        <swan-env>
         <view class="example-item">
             <view class="sub-title">事件冲突</view>
-            <view>input has value attr「value=input1」: {{input1}}</view>
-            <input v-model="input1" value={{input1}} @input.capture="fn('@input.capture')" @input.once="fn('@input.once')"/>
-            <view>input has value attr「:value="input2"」: {{input2}}</view>
-            <input v-model="input2" :value="input2" capture-bind:input="fn('bindinput')"/>
-            <view>input has value attr「v-bind:value="input3"」: {{input3}}</view>
-            <input v-model="input3" v-bind:value="input3" bindinput="fn('bindinput')"/>
+            <view>input has event「@input.capture, @input.once」: {{input1}}</view>
+            <input v-model="input1" @input.capture="fn('@input.capture')" @input.once="fn('@input.once')"/>
+            <view>对比没有 v-model「@input.capture, @input.once」</view>
+            <input @input.capture="fn('@input.capture')" @input.once="fn('@input.once')"/>
+            <view>input has event「@input.capture」: {{input2}}</view>
+            <input v-model="input2" @input.capture="fn('bindinput')"/>
+            <view>对比没有 v-model「@input.capture」</view>
+            <input @input.capture="fn('bindinput')"/>
+            <swan-env>
+            <view>input has event「bindinput」: {{input3}}</view>
+            <input v-model="input3" bindinput="fn"/>
+            <view>对比没有 v-model「bindinput」</view>
+            <input bindinput="fn"/>
+            </swan-env>
+            <wx-env>
+            <view>input has event「bindinput」: {{input3}}</view>
+            <input v-model="input3" bindinput="fn"/>
+            <view>对比没有 v-model「bindinput」</view>
+            <input bindinput="fn"/>
+            </wx-env>
+            <tt-env>
+            <view>input has event「bindinput」: {{input3}}</view>
+            <input v-model="input3" bindinput="fn"/>
+            <view>对比没有 v-model「bindinput」</view>
+            <input bindinput="fn"/>
+            </tt-env>
+            <ant-env>
+            <view>input has event「onInput」: {{input3}}</view>
+            <input v-model="input3" onInput="fn"/>
+            <view>对比没有 v-model「onInput」</view>
+            <input onInput="fn"/>
+            </ant-env>
         </view>
-        </swan-env>
         <view class="example-item">
             <view class="sub-title">不同变量写法</view>
             <view>input1： {{inputVal}}</view>
@@ -158,19 +182,19 @@ export default {
 
     methods: {
         fn(e) {
-            console.log('test', e.type);
+            console.log('test', e);
         },
         handleTap1(e) {
-            console.log('handleTap1', e.type);
+            console.log('handleTap1', e);
         },
         handleTap2(e) {
-            console.log('handleTap2', e.type);
+            console.log('handleTap2', e);
         },
         handleTap3(e) {
-            console.log('handleTap3', e.type);
+            console.log('handleTap3', e);
         },
         handleTap4(e) {
-            console.log('handleTap4', e.type);
+            console.log('handleTap4', e);
         }
     }
 }

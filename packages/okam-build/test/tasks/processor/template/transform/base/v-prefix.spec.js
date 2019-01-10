@@ -1,5 +1,5 @@
 /**
- * @file v- prefix support
+ * @file v-model support
  * @author xiaohong8023@outlook.com
  */
 

@@ -18,7 +18,7 @@ export default {
     props: {
         value: String
     },
-    created() {
+    mounted() {
         this.valueInner = this.value;
     },
     methods: {

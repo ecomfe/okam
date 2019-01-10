@@ -87,7 +87,7 @@ function getNewAttrKey(attr) {
 module.exports = {
     tag(node, tplOpts) {
         const {logger, file, config} = tplOpts;
-        const framwork = config.framework;
+        const framwork = config.framework || [];
 
         let attrs = node.attribs || {};
 
