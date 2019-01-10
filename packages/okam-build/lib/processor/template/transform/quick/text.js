@@ -9,13 +9,11 @@
 
 const TEXT_CONTAINER = ['a', 'text', 'span', 'label'];
 
-function wrapTextData(parentNode, nodeIdx, textNode) {
+function wrapTextData(parentNode, nodeIdx, textNode, wrapElemName) {
     let {children} = parentNode;
     let newParentNode = {
         type: 'tag',
-        // the okam-component button implementation cannot using
-        // text wrapper, so here using span for button type
-        name: parentNode.name === 'button' ? 'span' : 'text',
+        name: wrapElemName,
         children: [textNode],
         prev: nodeIdx > 0 ? parentNode[nodeIdx - 1] : null,
         next: null,
@@ -31,7 +29,7 @@ function wrapTextData(parentNode, nodeIdx, textNode) {
     children.splice(nodeIdx, 1, newParentNode);
 }
 
-function processElementTextData(element) {
+function processElementTextData(element, tplOpts) {
     let {name, children} = element;
     if (TEXT_CONTAINER.includes(name)) {
         return;
@@ -49,7 +47,13 @@ function processElementTextData(element) {
         return;
     }
 
-    textNodes.forEach(({index, node}) => wrapTextData(element, index, node));
+    let {config} = tplOpts;
+    let transformTags = config && config.template && config.template.transformTags;
+    // the okam-component button implementation cannot using
+    // text wrapper, so here using span for button type
+    let wrapElemName = transformTags && transformTags[element.name] === 'o-button'
+        ? 'span' : 'text';
+    textNodes.forEach(({index, node}) => wrapTextData(element, index, node, wrapElemName));
 }
 
 module.exports = processElementTextData;
