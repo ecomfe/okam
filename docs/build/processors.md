@@ -36,7 +36,7 @@
     * 默认扩展名：依赖于构建配置的 `component.extname` 定义
 * `view`：用来编译单文件组件的模板部分，转成原生小程序支持的模板语法，属于核心的处理器，不需要安装任何附加依赖
     * 默认扩展名：`tpl`
-* `componentGenerator`: `0.4 版本开始支持` 生成 `SFC` 处理器，相当于 `component` 处理器逆过程，`快应用` 核心处理器。
+* ~~`componentGenerator`~~`quickComponentGenerator`(`0.4.9`变更): `0.4 版本开始支持` 生成 `SFC` 处理器，相当于 `component` 处理器逆过程，`快应用` 核心处理器。
 
 ## 模板相关
 

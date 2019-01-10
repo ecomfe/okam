@@ -1,5 +1,40 @@
 # ChangeLog
 
+## 2018-01-08
+### okam-core@0.4.7
+* **Bug修复**
+    * 修复 `behavior` 扩展设置 `useNativeBehavior: false` 出错问题 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
+
+* **新功能**
+    * 增加快应用对于 `mixin` `broadcast` `ref` `watch` `filter` 支持 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
+    * `behavior` 扩展支持自定义要使用 `okam` 实现特殊 `mixin` 的属性，基于 `mixinAttrs` 配置，同时也支持覆盖重写默认要特殊 `mixin` 属性。此外，也支持自定义要跟生命周期钩子一样 `mixin` 策略的方法属性，比如 `onShow`，基于 `mixinHooks` 配置，同时也支持覆盖重写默认要特殊 `mixin` 的钩子 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
+    * `broadcast` 扩展新增上下文属性 `$eventHub`，用于取代目前封装的 `$broadcast` 相关 API，建议后续使用广播扩展，都通过 `$eventHub` 来实现，该属性暴露出了 `on` `off` `emit` 等事件操作 API。之所以引入该属性，考虑到广播监听移除由开发者自行控制会合适些，其次快应用平台存在 `$broadcast` API 会冲突，且其含义跟扩展完全不同 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
+
+* **优化**
+    * 优化 `mixin` (`behavior`) 扩展支持，默认所有 `okam` 的生命周期钩子都统一由 `okam` 完成 `mixin` （之前的 `created` 原生钩子由原生 `behavior` 实现），默认所有特殊属性 `data` `props` `computed` `methods` 都统一由 `okam` 完成 `mixin` (之前只有 `data` `props` `methods` 由原生 `behavior` 实现)，这样调整确保了所有平台的 `mixin` 策略一致性，而不依赖原生实现。 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
+    * 优化组件创建工厂兼容快应用平台，对于快应用使用全局对象缓存安装的扩展 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
+    * 优化组件 `props` 的规范化，允许传入 `{myProp: [String, Number]}` 多类型场景及其它附加配置 `{myProp: {type: String, validator() {}}}` ( `validator` 会被保留)，至于原生是否支持包括跨平台支持，需要开发者自行选择判断 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
+
+### okam-build@0.4.9
+* **Bug修复**
+    * 修复 `less` `import` 文件里的字体 `url` 路径没有正确 `resolve` ([dba9f1d](https://github.com/ecomfe/okam/commit/dba9f1d))
+
+* **新功能**
+    * 增加原生模板依赖的模板文件、自定义脚本文件依赖分析 ([2165030](https://github.com/ecomfe/okam/commit/2165030))
+    * 增加快应用对于 `mixin` `broadcast` `ref` `watch` `filter` 及原生快应用组件支持支持 ([766d223](https://github.com/ecomfe/okam/commit/766d223))
+    * 构建配置 `source.include` 支持传入 `glob` pattern 来附加引入要处理的文件，不局限于源目录 `src` 下文件，`node_modules` 也是可以([766d223](https://github.com/ecomfe/okam/commit/766d223))
+
+* **优化**
+    * 优化导入的模块路径 `resolve` ([766d223](https://github.com/ecomfe/okam/commit/766d223))
+    * 优化头条原生组件支持 ([766d223](https://github.com/ecomfe/okam/commit/766d223))
+    * 优化 `data` 扩展方法命名，不对外暴露方法改成 `__` 开头，不要尝试直接调用 `$setData` 方法 ([dfecb09](https://github.com/ecomfe/okam/commit/dfecb09))
+
+### okam-cli@0.1.6
+* **优化**
+    * 优化 `okam` 包升级时判断条件 ([8fbdd92](https://github.com/ecomfe/okam/commit/8fbdd92))
+* **新功能**
+    * 增加在 `okam init` 之前升级工具本身选择功能 ([e185428](https://github.com/ecomfe/okam/commit/e185428))
+
 ## 2018-12-29
 ### okam-core@0.4.6
 * **新功能**
