@@ -22,6 +22,14 @@ module.exports = {
         extname: 'vue',
         template: {
             useVuePrefix: true,
+            modelMap: {
+                'sp-model-component': {
+                    eventType: 'spchange',
+                    eventName: 'bindspchange',
+                    attrName: 'spvalue',
+                    detailName: 'value'
+                }
+            },
             transformTags: {
                 div: 'view',
                 p: 'view',

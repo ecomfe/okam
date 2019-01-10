@@ -326,9 +326,14 @@ function compileComponent(component, file, buildManager) {
         // 在事件处理之后处理
         let enableModel = buildManager.isEnableModelSupport();
         if (enableModel) {
+            let {componentConf} = buildManager;
+            let templateConf = (componentConf && componentConf.template) || {};
             tplPlugins.push([
                 getModelSyntaxPlugin(buildManager.appType),
-                {customComponentTags}
+                {
+                    customComponentTags,
+                    modelMap: templateConf.modelMap
+                }
             ]);
         }
 

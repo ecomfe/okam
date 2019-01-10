@@ -17,7 +17,18 @@ module.exports = merge({}, require('./base.config'), {
     ],
 
     framework: ['filter'],
-
+    component: {
+        template: {
+            modelMap: {
+                'sp-model-component': {
+                    eventType: 'spchange',
+                    eventName: 'onSpchange',
+                    attrName: 'spvalue',
+                    detailName: 'value'
+                }
+            }
+        }
+    },
     processors: {
         babel7: {
             extnames: 'js',

@@ -26,3 +26,4 @@
 </radio-group>
 <switch name="switch1" v-model="switchVal" type="checkbox"></switch>
 <model-component v-model="componentVal" />
+<sp-model-component v-model="componentVal" />

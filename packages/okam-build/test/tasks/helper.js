@@ -40,8 +40,32 @@ const defaultTags = {
     img: 'image'
 };
 
-const defaultComponentTags = {
-    customComponentTags: ['model-component']
+const customComponentTags = ['model-component', 'sp-model-component'];
+const MODEL_MAP = {
+    swan: {
+        'sp-model-component': {
+            eventType: 'spchange',
+            eventName: 'bindspchange',
+            attrName: 'spvalue',
+            detailName: 'valueswan'
+        }
+    },
+    wx: {
+        'sp-model-component': {
+            eventType: 'spchange',
+            eventName: 'bindspchange',
+            attrName: 'spvalue',
+            detailName: 'valuewx'
+        }
+    },
+    ant: {
+        'sp-model-component': {
+            eventType: 'spchange',
+            eventName: 'onSpchange',
+            attrName: 'spvalue',
+            detailName: 'valueant'
+        }
+    }
 };
 
 /**
@@ -54,7 +78,10 @@ const getDefaultPlugins = function () {
         vueSyntax,
         swanSyntax,
         swanEventPlugin,
-        [swanModelPlugin, defaultComponentTags],
+        [swanModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.swan
+        }],
         html,
         ref
     ];
@@ -70,7 +97,10 @@ const getDefaultWXPlugins = function () {
         vueSyntax,
         wxSyntax,
         wxEventPlugin,
-        [wxModelPlugin, defaultComponentTags],
+        [wxModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.wx
+        }],
         html,
         ref
     ];
@@ -86,7 +116,10 @@ const getDefaultTTPlugins = function () {
         vueSyntax,
         ttSyntax,
         ttEventPlugin,
-        [ttModelPlugin, defaultComponentTags],
+        [ttModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.wx
+        }],
         html,
         ref
     ];
@@ -102,7 +135,10 @@ const getDefaultAntPlugins = function () {
         vueSyntax,
         antSyntax,
         antEventPlugin,
-        [antModelPlugin, defaultComponentTags],
+        [antModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.ant
+        }],
         html,
         ref
     ];
@@ -125,7 +161,6 @@ const PLUGIN_MAP = {
  */
 const fakeProcessorOptions = function (tagNames, myPlugins, appType = 'swan') {
     const initConfig = initBuildOption(appType, {}, {});
-
     let plugins = myPlugins ? myPlugins : PLUGIN_MAP[appType]();
 
     return {
@@ -138,6 +173,7 @@ const fakeProcessorOptions = function (tagNames, myPlugins, appType = 'swan') {
         config: {
             framework: ['data', 'model'],
             template: {
+                modelMap: Object.assign({}, MODEL_MAP[appType]),
                 transformTags: tagNames || defaultTags
             },
             plugins

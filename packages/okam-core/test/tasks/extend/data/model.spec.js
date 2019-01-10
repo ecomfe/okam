@@ -57,17 +57,47 @@ describe('model plugin', function () {
             }
         }, modelInfo);
         assert(typeof page.__handlerModelProxy === 'function');
+
+        // 有detail
         page.__handlerModelProxy({
             type: 'change',
             currentTarget: {dataset: {
-                modelExpr: 'value'
+                modelArgs: 'value,value'
             }, id: undefined},
             target: {dataset: {
-                modelExpr: 'value'
+                modelArgs: 'value,value'
             }, id: undefined},
             detail: {value: 1, a: 3}
         });
         assert(page.value === 1);
+
+        // detail 为 event.detail 本身
+        page.__handlerModelProxy({
+            type: 'change',
+            currentTarget: {dataset: {
+                modelArgs: 'value'
+            }, id: undefined},
+            target: {dataset: {
+                modelArgs: 'value'
+            }, id: undefined},
+            detail: 2
+        });
+        assert(page.value === 2);
+
+        // 有 detail 为 detail 不存在
+        page.__handlerModelProxy({
+            type: 'change',
+            currentTarget: {dataset: {
+                modelArgs: 'value,value'
+            }, id: undefined},
+            target: {dataset: {
+                modelArgs: 'value,value'
+            }, id: undefined},
+            detail: 2
+        });
+        assert(page.value === undefined);
+        assert(page.value !== 2);
+
         page.onLoad();
         page.onReady();
         assert(page.$isSupportObserve === true);
@@ -104,10 +134,10 @@ describe('model plugin', function () {
         page.__handlerModelProxy({
             type: 'change',
             currentTarget: {dataset: {
-                modelExpr: 'value'
+                modelArgs: 'value,value'
             }, id: undefined},
             target: {dataset: {
-                modelExpr: 'value'
+                modelArgs: 'value,value'
             }, id: undefined},
             detail: {value: 1, a: 3}
         });

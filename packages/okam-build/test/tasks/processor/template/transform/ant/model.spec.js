@@ -24,7 +24,7 @@ describe('template processor: v-model plugin of template', function () {
             content: '<input v-model="inputVal" />'
         };
         let result = templateProcessor(file, fakeProcessorOptions(undefined, undefined, 'ant'));
-        assert(result.content === '<input onInput="__handlerProxy" value="{{inputVal}}" data-model-expr="inputVal"/>');
+        assert(result.content === '<input onInput="__handlerProxy" value="{{inputVal}}" data-model-args="inputVal,value"/>');
     });
 
     it('v-model: support component', function () {

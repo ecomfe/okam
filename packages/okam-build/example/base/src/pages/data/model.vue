@@ -109,7 +109,10 @@
             <view>自定义组件: {{componentVal}}</view>
             <model-component v-model="componentVal" />
         </view>
-
+        <view class="example-item">
+            <view>特殊model的自定义组件: {{spComponentVal}}</view>
+            <sp-model-component v-model="spComponentVal" />
+        </view>
         <swan-env>
         <view class="example-item">
             <view class="sub-title">事件测试</view>
@@ -140,13 +143,15 @@
 
 <script>
 import ModelComponent from '../../components/ModelComponent';
+import SpModelComponent from '../../components/SpModelComponent';
 
 export default {
     config: {
         title: 'v-model支持'
     },
     components: {
-        ModelComponent
+        ModelComponent,
+        SpModelComponent
     },
     data: {
         input1: '',
@@ -159,6 +164,7 @@ export default {
         switchVal: true,
         textareaVal: 'default value',
         componentVal: 'components',
+        spComponentVal: 'sp',
         modelData: {
             input: 'default value',
             arr: [],

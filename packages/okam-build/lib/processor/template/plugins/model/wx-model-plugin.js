@@ -8,41 +8,48 @@
 const {createSyntaxPlugin} = require('../helper');
 const {modelTransformer} = require('./model-helper');
 
-const MODEL_MAP = {
+const DEFAULT_MODEL_MAP = {
      // 自定义默认的规则
-    '__default': {
+    'default': {
         eventType: 'change',
         eventName: 'bindchange',
-        attrName: 'value'
+        attrName: 'value',
+        detailName: 'value'
     },
     'input': {
         eventType: 'input',
         eventName: 'bindinput',
-        attrName: 'value'
+        attrName: 'value',
+        detailName: 'value'
     },
     'textarea': {
         eventType: 'input',
         eventName: 'bindinput',
-        attrName: 'value'
+        attrName: 'value',
+        detailName: 'value'
     },
     'picker': {
         eventType: 'change',
         eventName: 'bindchange',
-        attrName: 'value'
+        attrName: 'value',
+        detailName: 'value'
     },
     'switch': {
         eventType: 'change',
         eventName: 'bindchange',
-        attrName: 'checked'
+        attrName: 'checked',
+        detailName: 'value'
     },
     'checkbox-group': {
         eventType: 'change',
-        eventName: 'bindchange'
+        eventName: 'bindchange',
+        detailName: 'value'
         // 没有 attrName
     },
     'radio-group': {
         eventType: 'change',
-        eventName: 'bindchange'
+        eventName: 'bindchange',
+        detailName: 'value'
         // 没有 attrName
     }
 };
@@ -51,9 +58,13 @@ module.exports = createSyntaxPlugin({
     attribute: {
         model: {
             match: 'v-model',
-            transform(attrs, name, tplOpts, opts, element) {
+            transform(attrs, name, tplOpts, opts = {}, element) {
+                opts.modelMap = Object.assign(
+                    {},
+                    DEFAULT_MODEL_MAP,
+                    opts.modelMap || {}
+                );
                 modelTransformer(
-                    MODEL_MAP,
                     attrs,
                     name,
                     tplOpts,

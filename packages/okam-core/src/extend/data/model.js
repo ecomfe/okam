@@ -34,13 +34,21 @@ export default {
              */
             __handlerModelProxy(event) {
                 // get event dataSet
-                const {
-                    modelExpr,
-                    modelDetail
-                } = event.currentTarget.dataset;
+                const {modelArgs} = event.currentTarget.dataset;
+
+                if (!modelArgs) {
+                    return;
+                }
+
                 const eventType = event.type;
+
+                // 约定: 第一个为值表达式，第二个为detail值key名
+                let [modelExpr, modelDetail] = modelArgs.split(',');
                 if (eventType && modelExpr) {
-                    setData(this, modelExpr, event.detail[modelDetail || 'value']);
+                    let value = modelDetail == null
+                        ? event.detail
+                        : event.detail[modelDetail];
+                    setData(this, modelExpr, value);
                 }
             }
         },
