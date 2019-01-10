@@ -33,7 +33,7 @@ function hasAttr(name, attrs) {
 exports.modelTransformer = function (modelMap, attrs, name, tplOpts, opts, element) {
     const {logger, file} = tplOpts;
     const customTags = (opts || {}).customComponentTags;
-    let isCustomTag = customTags && customTags.indexOf(element.name) >= 0;
+    let isCustomTag = customTags && customTags.includes(element.name);
     let attrMap = isCustomTag ? modelMap[COMPONENT_PROP] : modelMap[element.name];
 
     if (!attrMap) {
