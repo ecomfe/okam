@@ -44,26 +44,23 @@ const customComponentTags = ['model-component', 'sp-model-component'];
 const MODEL_MAP = {
     swan: {
         'sp-model-component': {
-            eventType: 'spchange',
-            eventName: 'bindspchange',
-            attrName: 'spvalue',
-            detailName: 'valueswan'
+            event: 'spchange',
+            prop: 'spvalue',
+            detailProp: 'valueswan'
         }
     },
     wx: {
         'sp-model-component': {
-            eventType: 'spchange',
-            eventName: 'bindspchange',
-            attrName: 'spvalue',
-            detailName: 'valuewx'
+            event: 'spchange',
+            prop: 'spvalue',
+            detailProp: 'valuewx'
         }
     },
     ant: {
         'sp-model-component': {
-            eventType: 'spchange',
-            eventName: 'onSpchange',
-            attrName: 'spvalue',
-            detailName: 'valueant'
+            event: 'spchange',
+            prop: 'spvalue',
+            detailProp: 'valueant'
         }
     }
 };

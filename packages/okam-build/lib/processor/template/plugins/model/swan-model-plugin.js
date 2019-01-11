@@ -18,38 +18,38 @@ const {modelTransformer} = require('./model-helper');
 const DEFAULT_MODEL_MAP = {
     // 自定义默认的规则
     'default': {
-        eventType: 'change',
-        attrName: 'value'
+        event: 'change',
+        prop: 'value'
     },
     'input': {
-        eventType: 'input',
-        attrName: 'value',
-        detailName: 'value'
+        event: 'input',
+        prop: 'value',
+        detailProp: 'value'
     },
     'textarea': {
-        eventType: 'input',
-        attrName: 'value',
-        detailName: 'value'
+        event: 'input',
+        prop: 'value',
+        detailProp: 'value'
     },
     'picker': {
-        eventType: 'change',
-        attrName: 'value',
-        detailName: 'value'
+        event: 'change',
+        prop: 'value',
+        detailProp: 'value'
     },
     'switch': {
-        eventType: 'change',
-        attrName: 'checked',
-        detailName: 'checked'
+        event: 'change',
+        prop: 'checked',
+        detailProp: 'checked'
     },
     'checkbox-group': {
-        eventType: 'change',
-        detailName: 'value'
-        // 没有 attrName
+        event: 'change',
+        detailProp: 'value'
+        // 没有 prop
     },
     'radio-group': {
-        eventType: 'change',
-        detailName: 'value'
-        // 没有 attrName
+        event: 'change',
+        detailProp: 'value'
+        // 没有 prop
     }
 };
 

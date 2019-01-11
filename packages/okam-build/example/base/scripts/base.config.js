@@ -24,10 +24,9 @@ module.exports = {
             useVuePrefix: true,
             modelMap: {
                 'sp-model-component': {
-                    eventType: 'spchange',
-                    eventName: 'bindspchange',
-                    attrName: 'spvalue',
-                    detailName: 'value'
+                    event: 'spchange',
+                    prop: 'spvalue',
+                    detailProp: 'value'
                 }
             },
             transformTags: {

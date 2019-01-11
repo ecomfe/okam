@@ -58,7 +58,7 @@ exports.modelTransformer = function (attrs, name, tplOpts, opts, element) {
         return;
     }
 
-    let {eventName, eventType, attrName, detailName} = attrMap;
+    let {eventName, event: eventType, prop: propName, detailProp} = attrMap;
 
     eventName = eventName || getEventName(appType, eventType);
 
@@ -78,19 +78,19 @@ exports.modelTransformer = function (attrs, name, tplOpts, opts, element) {
         attrs[`data-${eventType}-proxy`] = oldEvent;
     }
 
-    if (attrName) {
-        if (hasAttr(attrName, attrs)) {
+    if (propName) {
+        if (hasAttr(propName, attrs)) {
             logger.warn(
                 `${file.path} template attribute 「v-model="${attrs[name]}"」`,
-                `is conflicted with 「${attrName}」on element <${element.name}>`
+                `is conflicted with 「${propName}」on element <${element.name}>`
             );
         }
-        attrs[attrName] = '{{' + attrs[name] + '}}';
+        attrs[propName] = '{{' + attrs[name] + '}}';
     }
 
     // '数据表达式,事件值'
     let modelVal = attrs[name];
-    detailName && (modelVal += `,${detailName}`);
+    detailProp && (modelVal += `,${detailProp}`);
     attrs['data-okam-model-args'] = modelVal;
     delete attrs[name];
 };

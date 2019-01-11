@@ -298,21 +298,18 @@ module.exports = {
              *     // 设置所有自定义组件
              *    'default': {
              *        // 必填 事件类型
-             *        eventType: 'change',
+             *        event: 'change',
              *        // 必填 对应 props 的属性名
-             *        attrName: 'value',
+             *        prop: 'value',
              *        // 对于event.detail 中的字段值的key
              *        // 不传表示为 event.detail 本身
-             *        detailName: 'value',
-             *        // 不填 除非特殊平台需要
-             *        // 自定义组件默认 ant 为 'onChange' 其他平台为 bindchange
-             *        eventName: ''
+             *        detailProp: 'value'
              *     },
              *
              *    // 配置特定组件的 v-model 对应值
              *    'sp_component': {
-             *        eventType: 'spchange',
-             *        attrName: 'valuex'
+             *        event: 'spchange',
+             *        prop: 'valuex'
              *     }
              *   eg:
              *       <sp_component v-model="xxx" />
