@@ -62,10 +62,10 @@ describe('model plugin', function () {
         page.__handlerModelProxy({
             type: 'change',
             currentTarget: {dataset: {
-                modelArgs: 'value,value'
+                okamModelArgs: 'value,value'
             }, id: undefined},
             target: {dataset: {
-                modelArgs: 'value,value'
+                okamModelArgs: 'value,value'
             }, id: undefined},
             detail: {value: 1, a: 3}
         });
@@ -75,10 +75,10 @@ describe('model plugin', function () {
         page.__handlerModelProxy({
             type: 'change',
             currentTarget: {dataset: {
-                modelArgs: 'value'
+                okamModelArgs: 'value'
             }, id: undefined},
             target: {dataset: {
-                modelArgs: 'value'
+                okamModelArgs: 'value'
             }, id: undefined},
             detail: 2
         });
@@ -88,10 +88,10 @@ describe('model plugin', function () {
         page.__handlerModelProxy({
             type: 'change',
             currentTarget: {dataset: {
-                modelArgs: 'value,value'
+                okamModelArgs: 'value,value'
             }, id: undefined},
             target: {dataset: {
-                modelArgs: 'value,value'
+                okamModelArgs: 'value,value'
             }, id: undefined},
             detail: 2
         });
@@ -134,10 +134,10 @@ describe('model plugin', function () {
         page.__handlerModelProxy({
             type: 'change',
             currentTarget: {dataset: {
-                modelArgs: 'value,value'
+                okamModelArgs: 'value,value'
             }, id: undefined},
             target: {dataset: {
-                modelArgs: 'value,value'
+                okamModelArgs: 'value,value'
             }, id: undefined},
             detail: {value: 1, a: 3}
         });

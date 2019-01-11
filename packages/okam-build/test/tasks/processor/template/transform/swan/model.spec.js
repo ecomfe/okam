@@ -17,14 +17,14 @@ function readTpl(file, isExpect) {
     );
 }
 
-describe('template processor: v-model plugin of template', function () {
+describe('百度: template processor: v-model plugin of template', function () {
     it('v-model: input', function () {
         const file = {
             path: 'test/fakefile',
             content: '<input v-model="inputVal" />'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<input bindinput="__handlerProxy" value="{{inputVal}}" data-model-args="inputVal,value"/>');
+        assert(result.content === '<input bindinput="__handlerProxy" value="{{inputVal}}" data-okam-model-args="inputVal,value"/>');
     });
 
     it('v-model: support component', function () {

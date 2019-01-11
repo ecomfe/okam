@@ -69,6 +69,6 @@ exports.modelTransformer = function (attrs, name, tplOpts, opts, element) {
     // '数据表达式,事件值'
     let modelVal = attrs[name];
     detailName && (modelVal += `,${detailName}`);
-    attrs['data-model-args'] = modelVal;
+    attrs['data-okam-model-args'] = modelVal;
     delete attrs[name];
 };

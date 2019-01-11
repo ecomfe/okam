@@ -34,16 +34,16 @@ export default {
              */
             __handlerModelProxy(event) {
                 // get event dataSet
-                const {modelArgs} = event.currentTarget.dataset;
+                const {okamModelArgs} = event.currentTarget.dataset;
 
-                if (!modelArgs) {
+                if (!okamModelArgs) {
                     return;
                 }
 
                 const eventType = event.type;
 
                 // 约定: 第一个为值表达式，第二个为detail值key名
-                let [modelExpr, modelDetail] = modelArgs.split(',');
+                let [modelExpr, modelDetail] = okamModelArgs.split(',');
                 if (eventType && modelExpr) {
                     let value = modelDetail == null
                         ? event.detail

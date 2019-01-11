@@ -29,6 +29,7 @@ module.exports = {
     framework: [
         'data',
         'watch',
+        'model',
         <% if: ${redux} %>
         'redux',
         <% /if %>

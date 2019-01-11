@@ -286,6 +286,43 @@ module.exports = {
             useVuePrefix: false,
 
             /**
+             * 组件 v-model 配置项
+             *
+             * @type {Object}
+             *
+             * 不同平台已内置相应的表单元素
+             * 以及默认自定义组件值，无特殊场景可以不配置
+             *
+             * 设置 default 可以替换 所有自定义组件默认属性
+             * {
+             *    'default': {
+             *        // 事件类型
+             *        eventType: 'change',
+             *        // 事件具体值
+             *        eventName: 'bindchange', // 'onChange' 为 ant 默认值
+             *        // v-mode 上的属性名
+             *        attrName: 'value',
+             *        // 对于event.detail 中的字段值的key
+             *        // 不传表示为 event.detail 本身
+             *        detailName: 'value'
+             *     },
+             *
+             *    // 配置特定组件的 v-model 对应值
+             *    'sp_component': {
+             *        eventType: 'spchange',
+             *        // 支付宝 与 其他平台事件不一致，
+             *        // 可在 不同 config 中进行配置
+             *        eventName: 'bindspchange',
+             *        attrName: 'valuex',
+             *        detailName: 'value'
+             *     }
+             *   eg:
+             *       <sp_component v-model="xxx" />
+             * }
+             */
+            modelMap: null,
+
+            /**
              * 标签转换支持
              *
              * @type {string|Object}
