@@ -298,9 +298,10 @@ module.exports = {
              *    'default': {
              *        // 事件类型
              *        eventType: 'change',
-             *        // 事件具体值
-             *        eventName: 'bindchange', // 'onChange' 为 ant 默认值
-             *        // v-mode 上的属性名
+             *        // 除非特殊平台需要，一般不配置
+             *        // 自定义组件默认 ant 为 'onChange' 其他平台为 bindchange
+             *        eventName: '',
+             *        // v-mode 上的属性名 没有不传
              *        attrName: 'value',
              *        // 对于event.detail 中的字段值的key
              *        // 不传表示为 event.detail 本身
@@ -310,11 +311,7 @@ module.exports = {
              *    // 配置特定组件的 v-model 对应值
              *    'sp_component': {
              *        eventType: 'spchange',
-             *        // 支付宝 与 其他平台事件不一致，
-             *        // 可在 不同 config 中进行配置
-             *        eventName: 'bindspchange',
-             *        attrName: 'valuex',
-             *        detailName: 'value'
+             *        attrName: 'valuex'
              *     }
              *   eg:
              *       <sp_component v-model="xxx" />

@@ -12,43 +12,35 @@ const DEFAULT_MODEL_MAP = {
      // 自定义默认的规则
     'default': {
         eventType: 'change',
-        eventName: 'bindchange',
-        attrName: 'value',
-        detailName: 'value'
+        attrName: 'value'
     },
     'input': {
         eventType: 'input',
-        eventName: 'bindinput',
         attrName: 'value',
         detailName: 'value'
     },
     'textarea': {
         eventType: 'input',
-        eventName: 'bindinput',
         attrName: 'value',
         detailName: 'value'
     },
     'picker': {
         eventType: 'change',
-        eventName: 'bindchange',
         attrName: 'value',
         detailName: 'value'
     },
     'switch': {
         eventType: 'change',
-        eventName: 'bindchange',
         attrName: 'checked',
         detailName: 'value'
     },
     'checkbox-group': {
         eventType: 'change',
-        eventName: 'bindchange',
         detailName: 'value'
         // 没有 attrName
     },
     'radio-group': {
         eventType: 'change',
-        eventName: 'bindchange',
         detailName: 'value'
         // 没有 attrName
     }

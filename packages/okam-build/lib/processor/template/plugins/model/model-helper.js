@@ -6,6 +6,25 @@
 const EVENT_FN_NAME = '__handlerProxy';
 
 /**
+ * 事件名获取
+ *
+ * @param  {string} appType   平台
+ * @param  {string} eventType 事件类型
+ * @return {string}           事件名
+ */
+function getEventName(appType, eventType) {
+    let eventName = `bind${eventType}`;
+
+    if (appType === 'ant') {
+        let formatEventType = eventType.charAt(0).toUpperCase() + eventType.substr(1);
+        eventName = `on${formatEventType}`;
+    }
+
+    return eventName;
+}
+
+
+/**
  * 是否已声明某属性
  *
  * @param  {string}  name  name
@@ -29,7 +48,7 @@ function hasAttr(name, attrs) {
 //      data-input-proxy="self"
 //      value="{{inputVal}}" />
 exports.modelTransformer = function (attrs, name, tplOpts, opts, element) {
-    const {logger, file} = tplOpts;
+    const {logger, file, appType} = tplOpts;
     const {customComponentTags: customTags, modelMap} = opts;
     let isCustomTag = customTags && customTags.includes(element.name);
     let attrMap = isCustomTag
@@ -40,6 +59,9 @@ exports.modelTransformer = function (attrs, name, tplOpts, opts, element) {
     }
 
     let {eventName, eventType, attrName, detailName} = attrMap;
+
+    eventName = eventName || getEventName(appType, eventType);
+
     let oldEvent = attrs[eventName];
 
     let isOrigin = oldEvent && (attrs[eventName] !== EVENT_FN_NAME);

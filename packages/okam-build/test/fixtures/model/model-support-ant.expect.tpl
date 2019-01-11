@@ -21,5 +21,5 @@
     </label>
 </radio-group>
 <switch name="switch1" type="checkbox" onChange="__handlerProxy" checked="{{switchVal}}" data-okam-model-args="switchVal,value"></switch>
-<model-component onChange="__handlerProxy" value="{{componentVal}}" data-okam-model-args="componentVal,value"/>
+<model-component onChange="__handlerProxy" value="{{componentVal}}" data-okam-model-args="componentVal"/>
 <sp-model-component onSpchange="__handlerProxy" spvalue="{{componentVal}}" data-okam-model-args="componentVal,valueant"/>
