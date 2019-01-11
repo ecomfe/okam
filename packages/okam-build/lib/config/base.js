@@ -295,17 +295,18 @@ module.exports = {
              *
              * 设置 default 可以替换 所有自定义组件默认属性
              * {
+             *     // 设置所有自定义组件
              *    'default': {
-             *        // 事件类型
+             *        // 必填 事件类型
              *        eventType: 'change',
-             *        // 除非特殊平台需要，一般不配置
-             *        // 自定义组件默认 ant 为 'onChange' 其他平台为 bindchange
-             *        eventName: '',
-             *        // v-mode 上的属性名 没有不传
+             *        // 必填 对应 props 的属性名
              *        attrName: 'value',
              *        // 对于event.detail 中的字段值的key
              *        // 不传表示为 event.detail 本身
-             *        detailName: 'value'
+             *        detailName: 'value',
+             *        // 不填 除非特殊平台需要
+             *        // 自定义组件默认 ant 为 'onChange' 其他平台为 bindchange
+             *        eventName: ''
              *     },
              *
              *    // 配置特定组件的 v-model 对应值
