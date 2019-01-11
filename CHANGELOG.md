@@ -5,7 +5,7 @@
 * **新功能**
     * `v-model` 支持 ([26c6c0e](https://github.com/ecomfe/okam/commit/26c6c0e))
 
-### okam-build@0.4.10
+### okam-build@0.4.11
 * **新功能**
     * `v-model` 支持 ([26c6c0e](https://github.com/ecomfe/okam/commit/26c6c0e))
 

@@ -1,6 +1,6 @@
 # v-model
 
-> `okam` 从 `okam-core: 0.4.8`， `okam-build: 0.4.10` 版本开始支持；
+> `okam` 从 `okam-core: 0.4.8`， `okam-build: 0.4.11` 版本开始支持；
 
 提供对表单组件及自定义组件 `v-model` 支持，默认不开启，需在配置项中，配置 `v-model` 支持
 
@@ -129,13 +129,13 @@ export default {
 
 * modelMap: `Object` 自定义组件 `v-model` 配置项
 * modelMap.default: `Object` 变更  自定义组件的 `v-model` 默认配置项
-    * modelMap.default.eventType: `string` 必填 事件类型
-    * modelMap.default.attrName: `string` 必填 对应 `props` 的属性名
-    * modelMap.default.detailName: `string` 选填 `event.detail` 上的字段值的 `key`，如果是 `event.detail` 则不填
+    * modelMap.default.event: `string` 必填 事件类型
+    * modelMap.default.prop: `string` 必填 对应 `props` 的属性名
+    * modelMap.default.detailProp: `string` 选填 `event.detail` 上的属性名，如果是 `event.detail` 则不填
 * modelMap.xxx: `Object` 变更  特定组件的 `v-model` 特殊配置项 xxx 表示组件具体标签名
-    * modelMap.xxx.eventType: `string` 必填 事件类型
-    * modelMap.xxx.attrName: `string` 必填 对应 `props` 的属性名
-    * modelMap.xxx.detailName: `string` 选填 `event.detail` 上字段值的 `key`，如果是 `event.detail` 本身 则不填
+    * modelMap.xxx.event: `string` 必填 事件类型
+    * modelMap.xxx.prop: `string` 必填 对应 `props` 的属性名
+    * modelMap.xxx.detailProp: `string` 选填 `event.detail` 上的属性名，如果是 `event.detail` 本身 则不填
 
 如果有以下任一情况可进行自定义配置来支持 `v-model`
 
@@ -184,7 +184,7 @@ export default {
 
 - 属性名: `show`
 - 事件类型：`spchange`
-- 事件变量取值：为 `event.detail` 属性 `show` 的值
+- 事件 `event.detail`上的属性名：为 `show` 的值
 
 因此在 `x.config.js` 加上如下配置， 可使 `v-model` 写法生效
 
@@ -194,11 +194,11 @@ export default {
         modelMap: {
             'sp-model-component': {
                 // 必填 事件类型
-                eventType: 'spchange',
+                event: 'spchange',
                 // 必填 对应 props 的属性名
-                attrName: 'show',
-                // 选填 event.detail 上的字段值的key，如果是 event.detail 则不填
-                detailName: 'show'
+                prop: 'show',
+                // 选填 `event.detail` 上的属性名，如果是 event.detail 本身, 则不填
+                detailProp: 'show'
             }
         }
     }

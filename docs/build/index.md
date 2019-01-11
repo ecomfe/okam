@@ -36,7 +36,7 @@
 `Array.<string>` 扩展的原生小程序的框架，目前只支持 `okam-core` 提供的扩展
 
 * `data`: 支持 `vue` 数据操作方式 及 `computed`
-* `model`: 提供 `v-model` 支持 (要求：`okam-build: 0.4.10`, `okam-core: 0.4.8`)
+* `model`: 提供 `v-model` 支持 (要求：`okam-build: 0.4.11`, `okam-core: 0.4.8`)
 * `watch`: 提供 `watch` 属性 和 `$watch` API 支持，依赖 `data`
 * `broadcast`: 支持广播事件
 * `ref`: 允许模板指定 `ref` 属性，组件实例 `$refs` 获取引用，类似 Vue
@@ -279,7 +279,7 @@ module.exports = {
 * `component.template.modelMap`: `Object` 自定义组件 `v-model` 配置项，[详见自定义配置v-model支持](template/v-model?id=自定义配置支持-v-model)
     * 要求：
         * [framework](build/index?id=framework) 配置了 `'model'` 此项配置才生效
-        * 版本: `okam-build >= 0.4.10`
+        * 版本: `okam-build >= 0.4.11`
         * 版本: `okam-core >= 0.4.8`
 
 ### processors
