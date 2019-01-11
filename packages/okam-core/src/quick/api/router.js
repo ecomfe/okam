@@ -31,14 +31,14 @@ function navigateTo(options) {
         }
     }
 
-    if (url.chartAt(0) === '/') {
+    if (url.charAt(0) === '/') {
         let urlParts = url.split('/');
         urlParts.pop(); // remove component name
-        url = url.join('/');
+        url = urlParts.join('/');
     }
 
     router.push({
-        url,
+        uri: url,
         params
     });
 }

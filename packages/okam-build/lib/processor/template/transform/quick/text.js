@@ -13,7 +13,9 @@ function wrapTextData(parentNode, nodeIdx, textNode) {
     let {children} = parentNode;
     let newParentNode = {
         type: 'tag',
-        name: 'text',
+        // the okam-component button implementation cannot using
+        // text wrapper, so here using span for button type
+        name: parentNode.name === 'button' ? 'span' : 'text',
         children: [textNode],
         prev: nodeIdx > 0 ? parentNode[nodeIdx - 1] : null,
         next: null,

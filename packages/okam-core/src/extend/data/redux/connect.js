@@ -91,14 +91,14 @@ function shouldUpdate(old, curr) {
 }
 
 function onStoreChange() {
-    let observer = this.__computedObserver;
     let upKeys = this.__storeComputedKeys;
+    let updateComputed = this.__updateComputed;
     if (typeof upKeys === 'function') {
         this.__storeComputedKeys = upKeys = upKeys();
     }
 
-    if (observer && upKeys) {
-        upKeys.forEach(k => observer.updateComputed(k, shouldUpdate));
+    if (updateComputed && upKeys) {
+        upKeys.forEach(k => updateComputed.call(this, k, shouldUpdate));
     }
 }
 
