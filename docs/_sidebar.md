@@ -28,6 +28,8 @@
 
     * [v- 指令支持](template/vueSyntax.md)
 
+    * [v-model 支持](template/v-model.md)
+
 * 组件
 
     * [开发模式](component/sfc.md)

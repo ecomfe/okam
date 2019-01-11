@@ -132,10 +132,10 @@ export default {
     * modelMap.default.eventType: `string` 必填 事件类型
     * modelMap.default.attrName: `string` 必填 对应 `props` 的属性名
     * modelMap.default.detailName: `string` 选填 `event.detail` 上的字段值的 `key`，如果是 `event.detail` 则不填
-* modelMap.xxx: `Object` 变更  特定组件的 `v-model` 特殊配置项 xxx 表示组件具体标签
+* modelMap.xxx: `Object` 变更  特定组件的 `v-model` 特殊配置项 xxx 表示组件具体标签名
     * modelMap.xxx.eventType: `string` 必填 事件类型
     * modelMap.xxx.attrName: `string` 必填 对应 `props` 的属性名
-    * modelMap.xxx.detailName: `string` 选填 `event.detail` 上的字段值的 `key`，如果是 `event.detail` 则不填
+    * modelMap.xxx.detailName: `string` 选填 `event.detail` 上字段值的 `key`，如果是 `event.detail` 本身 则不填
 
 如果有以下任一情况可进行自定义配置来支持 `v-model`
 
@@ -184,7 +184,7 @@ export default {
 
 - 属性名: `show`
 - 事件类型：`spchange`
-- `event.detail`：属性为 `show` 的值
+- 事件变量取值：为 `event.detail` 属性 `show` 的值
 
 因此在 `x.config.js` 加上如下配置， 可使 `v-model` 写法生效
 

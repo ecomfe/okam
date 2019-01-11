@@ -52,5 +52,7 @@
 <button @click.prevent="handleNoArgs">click me with no arguments</button>
 ```
 
-!>  暂不支持 `v-text、v-html、v-show、v-model、v-pre、v-cloak、v-once`;<br>
-    `okam` 不支持的指令，`v-` 也不支持，`v-` 只在 `okam` 框架语法基础上 增加了 `v-` 前缀写法;
+## 注意项
+!>  1.暂不支持 `v-text、v-html、v-show、v-pre、v-cloak、v-once`;<br>
+    2.`v-model` 需要配置才支持[配置详见](template/v-model.md);<br>
+    3.`okam` 不支持的指令，`v-` 也不支持，`v-` 只在 `okam` 框架语法基础上 增加了 `v-` 前缀写法;
