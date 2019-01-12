@@ -12,11 +12,11 @@ const {
     updateReferProcessorInfo
 } = require('./helper/builtin');
 
-const STYLE_EXT_NAMES = ['css', 'less', 'styl', 'sass', 'scss'];
-const SCRIPT_EXT_NAMES = ['js', 'es', 'es6', 'ts', 'coffee'];
-const TEMPLATE_EXT_NAMES = ['html', 'tpl', 'etpl', 'art', 'jade', 'pug'];
-const JSON_EXT_NAMES = ['json', 'json5'];
-const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg'];
+export const STYLE_EXT_NAMES = ['css', 'less', 'styl', 'sass', 'scss'];
+export const SCRIPT_EXT_NAMES = ['js', 'es', 'es6', 'ts', 'coffee'];
+export const TEMPLATE_EXT_NAMES = ['html', 'tpl', 'etpl', 'art', 'jade', 'pug'];
+export const JSON_EXT_NAMES = ['json', 'json5'];
+export const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg'];
 
 function getProcessorPath(type) {
     return path.join(__dirname, type);
