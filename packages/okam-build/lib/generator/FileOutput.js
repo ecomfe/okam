@@ -11,10 +11,10 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const createFile = require('../processor/FileFactory').createFile;
-const fileUtil = require('../util').file;
+const {replaceFileName, replaceExtname, isFileExists} = require('../util').file;
 
 function outputFile(file, targetPath, logger) {
-    if (file.isProjectConfig && fileUtil.isFileExists(targetPath)) {
+    if (file.isProjectConfig && isFileExists(targetPath)) {
         logger.debug('ignore project config file output');
         return;
     }
@@ -33,12 +33,12 @@ function outputFile(file, targetPath, logger) {
     });
 }
 
-function replaceFileName(filePath, newFileName) {
+function updateFileName(filePath, newFileName) {
     if (!newFileName) {
         return false;
     }
 
-    return fileUtil.replaceFileName(filePath, newFileName);
+    return replaceFileName(filePath, newFileName);
 }
 
 function getOutputPath(filePath, file, options) {
@@ -50,16 +50,16 @@ function getOutputPath(filePath, file, options) {
 
     let result;
     if (file.isProjectConfig) {
-        result = replaceFileName(filePath, outputPathMap.projectConfig);
+        result = updateFileName(filePath, outputPathMap.projectConfig);
     }
     else if (file.isEntryScript) {
-        result = replaceFileName(filePath, outputPathMap.entryScript);
+        result = updateFileName(filePath, outputPathMap.entryScript);
     }
     else if (file.isEntryStyle) {
-        result = replaceFileName(filePath, outputPathMap.entryStyle);
+        result = updateFileName(filePath, outputPathMap.entryStyle);
     }
     else if (file.isAppConfig) {
-        result = replaceFileName(filePath, outputPathMap.appConfig);
+        result = updateFileName(filePath, outputPathMap.appConfig);
     }
     else {
         result = file.resolvePath || filePath;
@@ -70,7 +70,7 @@ function getOutputPath(filePath, file, options) {
 
         let rext = file.rext;
         if (rext) {
-            result = result.replace(/\.\w+$/, '.' + rext);
+            result = replaceExtname(result, rext);
         }
     }
 
@@ -118,8 +118,9 @@ function mergeComponentStyleFiles(styleFiles, rootDir) {
         return;
     }
 
+    let styleFileItem = styleFiles[0];
     if (styleFiles.length === 1) {
-        return styleFiles[0];
+        return styleFileItem;
     }
 
     let content = [];
@@ -134,7 +135,8 @@ function mergeComponentStyleFiles(styleFiles, rootDir) {
         data: content.join('\n')
     }, rootDir);
 
-    mergeFile.owner = styleFiles[0].owner;
+    mergeFile.resolvePath = styleFileItem.resolvePath;
+    mergeFile.owner = styleFileItem.owner;
     mergeFile.allowRelease = true;
     mergeFile.compiled = true;
 

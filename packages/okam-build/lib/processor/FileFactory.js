@@ -1,5 +1,5 @@
 /**
- * @file the file object to process
+ * @file File factory that cache all files to process
  * @author sparklewhy@gmail.com
  */
 
@@ -17,7 +17,7 @@ const {
     isJSON: isJsonType,
     isImg: isImgType
 } = require('./type');
-const relative = require('../util').file.relative;
+const {relative} = require('../util').file;
 
 const {DEFAULT_DEP_DIR_NAME, resolveDepModuleNewPath} = require('./helper/npm');
 

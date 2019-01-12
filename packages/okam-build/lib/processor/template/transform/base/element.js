@@ -8,6 +8,7 @@
 /* eslint-disable fecs-properties-quote */
 /* eslint-disable fecs-min-vars-per-destructure */
 
+const {replaceExtname} = require('../../../../util').file;
 const forIfTransformer = require('./for-if');
 const transformTplElement = require('./tpl');
 const transformEnvElement = require('./env');
@@ -21,7 +22,7 @@ function transformIncludeImportElement(element, tplOpts) {
     if (src) {
         addDep(src);
         // change included tpl file path extname to mini program template extname
-        attrs.src = src.replace(/\.\w+$/, '.' + tplExtname);
+        attrs.src = replaceExtname(src, tplExtname);
     }
 }
 
