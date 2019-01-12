@@ -220,10 +220,11 @@ class BuildManager extends EventEmitter {
      * @param {string} requireModId the module id to require
      * @param {string|Object} file the full file path or virtual file object
      *        to require the given module id
+     * @param {Object=} opts the extra resolve options
      * @return {string}
      */
-    resolve(requireModId, file) {
-        return this.resolver.resolve(requireModId, file);
+    resolve(requireModId, file, opts) {
+        return this.resolver.resolve(requireModId, file, opts);
     }
 
     /**
@@ -444,9 +445,10 @@ class BuildManager extends EventEmitter {
             return;
         }
 
-        let {content, deps, sourceMap, ast} = compileResult;
+        let {rext, content, deps, sourceMap, ast} = compileResult;
         file.compiled = true;
         file.content = content;
+        rext && (file.rext = rext);
         ast && (file.ast = ast);
 
         deps && deps.forEach(item => {

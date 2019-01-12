@@ -146,9 +146,10 @@ class ModuleResolver {
      * @param {string} requireModId the module id to require
      * @param {string|Object} file the full file path or virtual file object
      *        to require the given module id
+     * @param {Object=} opts the extra resolve options
      * @return {?string}
      */
-    resolve(requireModId, file) {
+    resolve(requireModId, file, opts) {
         this.onResolve && this.onResolve(requireModId, file);
 
         if (this.resolveFilter && this.resolveFilter(requireModId, this.appType)) {
@@ -165,14 +166,15 @@ class ModuleResolver {
         let depFile;
         let filePath = typeof file === 'string' ? file : file.fullPath;
         try {
+            let resolveOpts = {
+                extensions: this.extensions,
+                basedir: pathUtil.dirname(filePath),
+                moduleDirectory: this.moduleDirs,
+                paths: this.modulePaths
+            };
+            opts && Object.assign(resolveOpts, opts);
             depFile = resolve.sync(
-                requireModId,
-                {
-                    extensions: this.extensions,
-                    basedir: pathUtil.dirname(filePath),
-                    moduleDirectory: this.moduleDirs,
-                    paths: this.modulePaths
-                }
+                requireModId, resolveOpts
             );
 
             if (depFile === requireModId) {
