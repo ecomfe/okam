@@ -4,7 +4,6 @@
  */
 
 const {file: fileUtil} = require('../../util');
-const {STYLE_EXT_NAMES} = require('../type');
 const {getRequirePath} = fileUtil;
 
 const DEP_DIR_NAME = 'node_modules';
@@ -65,12 +64,7 @@ exports.resolve = function (buildManager, file, requireModId) {
     }
 
     let resolveOpts;
-    if (file.isStyle) {
-        resolveOpts = {
-            extensions: STYLE_EXT_NAMES
-        };
-    }
-    else if (file.isTpl) {
+    if (file.isStyle || file.isTpl) {
         resolveOpts = {
             extensions: []
         };

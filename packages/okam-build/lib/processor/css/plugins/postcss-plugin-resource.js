@@ -8,7 +8,7 @@
 const postcss = require('postcss');
 const {parse: parseUrl} = require('url');
 
-const URL_REGEXP = /url(\s*\(\s*['"]?\s*)([^'"\)]+)(\s*['"]?\s*\))/g;
+const URL_REGEXP = /(url\s*\(\s*['"]?\s*)([^'"\)]+)(\s*['"]?\s*\))/g;
 const HTTP_PROTOCOL_REGEXP = /^https?\:\/\//;
 
 function processStyleDeclaration(decl, opts) {
@@ -25,8 +25,17 @@ function processStyleDeclaration(decl, opts) {
         }
 
         let urlInfo = parseUrl(url);
-        let {path, search, hash} = urlInfo;
-        let relPath = resolve(file, path) + (search || '') + (hash || '');
+        let {pathname, search, hash} = urlInfo;
+        if (pathname.charAt(0) !== '.') {
+            pathname = './' + pathname;
+        }
+
+        let resolvePath = resolve(file, pathname);
+        if (!resolvePath) {
+            return match;
+        }
+
+        let relPath = resolvePath + (search || '') + (hash || '');
         return prefix + relPath + suffix;
     });
 }
