@@ -4,6 +4,7 @@
 ### okam-core@0.4.8
 * **新功能**
     * `v-model` 支持 ([26c6c0e](https://github.com/ecomfe/okam/commit/26c6c0e))
+    * 新增 `快应用` 对于 `redux` 状态管理支持 ([8d8915d](https://github.com/ecomfe/okam/commit/8d8915d))
 
 ### okam-build@0.4.11
 * **新功能**
