@@ -80,9 +80,13 @@ const BUILTIN_PLUGINS = {
  * @param {string} pluginName the builtin plugin name to add
  * @param {string} appType the app type to transform
  * @param {Array.<Object>} plugins the existed plugins
+ * @param {boolean=} insertAtTop whether insert the added plugin at the first position
  */
-function addBuiltinPlugin(pluginName, appType, plugins) {
+function addBuiltinPlugin(pluginName, appType, plugins, insertAtTop) {
     let pluginInfo = BUILTIN_PLUGINS[pluginName];
+    if (typeof pluginInfo === 'object') {
+        pluginInfo = pluginInfo[appType] || pluginInfo.default;
+    }
     pluginInfo = normalizeViewPlugins([pluginInfo], appType)[0];
 
     let plugin = Array.isArray(pluginInfo) ? pluginInfo[0] : pluginInfo;
@@ -90,7 +94,7 @@ function addBuiltinPlugin(pluginName, appType, plugins) {
         item => (plugin === (Array.isArray(item) ? item[0] : item))
     );
     if (!hasBuiltinPlugin) {
-        plugins.push(pluginInfo);
+        plugins[insertAtTop ? 'unshift' : 'push'](pluginInfo);
     }
 }
 
@@ -213,7 +217,7 @@ function initViewTransformOptions(file, processOpts, buildManager, isNativeView)
     plugins = normalizeViewPlugins(plugins, appType);
     let isSupportRef = buildManager.isEnableRefSupport();
     isSupportRef && addBuiltinPlugin('ref', appType, plugins);
-    addBuiltinPlugin('resource', appType, plugins);
+    addBuiltinPlugin('resource', appType, plugins, true);
 
     processOpts.plugins = plugins;
 

@@ -59,7 +59,7 @@ module.exports = function (file, options) {
 
     let plugins = config.plugins || [];
     if (!plugins.includes('resource')) {
-        plugins.push('resource');
+        plugins.unshift('resource');
     }
 
     plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
