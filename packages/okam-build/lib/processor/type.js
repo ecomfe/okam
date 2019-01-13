@@ -12,12 +12,6 @@ const {
     updateReferProcessorInfo
 } = require('./helper/builtin');
 
-export const STYLE_EXT_NAMES = ['css', 'less', 'styl', 'sass', 'scss'];
-export const SCRIPT_EXT_NAMES = ['js', 'es', 'es6', 'ts', 'coffee'];
-export const TEMPLATE_EXT_NAMES = ['html', 'tpl', 'etpl', 'art', 'jade', 'pug'];
-export const JSON_EXT_NAMES = ['json', 'json5'];
-export const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg'];
-
 function getProcessorPath(type) {
     return path.join(__dirname, type);
 }
@@ -201,22 +195,32 @@ exports.getProcessorProcessExtname = function (processorName) {
     return extnames;
 };
 
+const STYLE_EXT_NAMES = ['css', 'less', 'styl', 'sass', 'scss'];
+exports.STYLE_EXT_NAMES = STYLE_EXT_NAMES;
 exports.isStyle = function (extname) {
     return STYLE_EXT_NAMES.includes(extname);
 };
 
+const SCRIPT_EXT_NAMES = ['js', 'es', 'es6', 'ts', 'coffee'];
+exports.SCRIPT_EXT_NAMES = SCRIPT_EXT_NAMES;
 exports.isScript = function (extname) {
     return SCRIPT_EXT_NAMES.includes(extname);
 };
 
+const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg'];
+exports.IMG_EXT_NAMES = IMG_EXT_NAMES;
 exports.isImg = function (extname) {
     return IMG_EXT_NAMES.includes(extname);
 };
 
+const TEMPLATE_EXT_NAMES = ['html', 'tpl', 'etpl', 'art', 'jade', 'pug'];
+exports.TEMPLATE_EXT_NAMES = TEMPLATE_EXT_NAMES;
 exports.isTemplate = function (extname) {
     return TEMPLATE_EXT_NAMES.includes(extname);
 };
 
+const JSON_EXT_NAMES = ['json', 'json5'];
+exports.JSON_EXT_NAMES = JSON_EXT_NAMES;
 exports.isJSON = function (extname) {
     return JSON_EXT_NAMES.includes(extname);
 };

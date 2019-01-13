@@ -27,11 +27,11 @@ const BUILTIN_PLUGINS = {
             precision: 2
         }
     },
-    cssImport: {
-        path: path.join(__dirname, 'plugins', 'postcss-plugin-import.js')
-    },
     env: {
         path: path.join(__dirname, 'plugins', 'postcss-plugin-env.js')
+    },
+    resource: {
+        path: path.join(__dirname, 'plugins', 'postcss-plugin-resource.js')
     },
     quickCss: {
         path: path.join(__dirname, 'plugins', 'postcss-plugin-quick.js')
@@ -40,7 +40,7 @@ const BUILTIN_PLUGINS = {
 
 module.exports = function (file, options) {
 
-    let {root, appType, allAppTypes, designWidth, config, output} = options;
+    let {root, appType, allAppTypes, designWidth, config, output, resolve} = options;
     let styleExtname = output.componentPartExtname
         && output.componentPartExtname.style;
 
@@ -49,7 +49,11 @@ module.exports = function (file, options) {
         BUILTIN_PLUGINS.px2rpx.options.designWidth = designWidth;
     }
 
-    let plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
+    let plugins = config.plugins || [];
+    if (!plugins.includes('resource')) {
+        plugins.unshift('resource');
+    }
+    plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
     if (!plugins || !plugins.length) {
         // skip process if none plugins provided
         return {
@@ -57,15 +61,16 @@ module.exports = function (file, options) {
         };
     }
 
-    plugins = (plugins || []).map(({handler, options}) => handler(
-        Object.assign({
+    plugins = (plugins || []).map(
+        ({handler, options}) => handler(Object.assign({
             allAppTypes,
             appType,
-            styleExtname
-        },
-        options)
-    ));
-    let {css, result} = postcss(plugins)
+            styleExtname,
+            file,
+            resolve
+        }, options))
+    );
+    let {css} = postcss(plugins)
         .process(
             file.content.toString(),
             {
@@ -75,7 +80,7 @@ module.exports = function (file, options) {
 
     return {
         content: css,
-        deps: result.deps
+        rext: styleExtname
     };
 };
 

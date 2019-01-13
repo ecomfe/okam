@@ -38,14 +38,8 @@ module.exports = merge({}, baseConf, {
     },
 
     processors: {
-        cssImport: {
-            // using the existed postcss processor
-            processor: 'postcss',
-            extnames: ['acss', 'css'],
-            rext: 'acss',
-            options: {
-                plugins: ['cssImport']
-            }
+        postcss: {
+            extnames: ['acss', 'css']
         },
         filter: {
             extnames: ['sjs'],
