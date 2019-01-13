@@ -77,6 +77,7 @@ function resetFile() {
     this.deps && (this.deps = []);
     this.compiled = false;
     this.refs && (this.refs = null);
+    this.analysedDeps && (this.analysedDeps = false);
     this.resolvedModIds && (this.resolvedModIds = null);
     if (this.isAnalysedComponents) {
         this.isAnalysedComponents = false;

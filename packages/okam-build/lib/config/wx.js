@@ -51,6 +51,20 @@ module.exports = merge({}, baseConf, {
             options: {
                 plugins: ['dep']
             }
+        },
+        nativeView: {
+            processor: 'view',
+            extnames: ['wxml'],
+            options: {
+                keepOriginalContent: true,
+                plugins: [['resource', {
+                    tags: {
+                        import: true,
+                        include: true,
+                        wxs: true
+                    }
+                }]]
+            }
         }
     }
 });

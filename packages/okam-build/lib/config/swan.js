@@ -41,6 +41,20 @@ module.exports = merge({}, baseConf, {
     processors: {
         postcss: {
             extnames: ['css']
+        },
+        nativeView: {
+            processor: 'view',
+            extnames: ['swan'],
+            options: {
+                keepOriginalContent: true,
+                plugins: [['resource', {
+                    tags: {
+                        import: true,
+                        include: true,
+                        filter: true
+                    }
+                }]]
+            }
         }
     }
 });

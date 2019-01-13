@@ -7,7 +7,7 @@
 
 const path = require('path');
 const BuildManager = require('../BuildManager');
-const processor = require('../../processor');
+const {registerProcessor} = require('../../processor');
 const {relative} = require('../../util').file;
 
 const VALIDATED_DATA_TYPES = ['public', 'protected', 'private'];
@@ -260,7 +260,7 @@ class BuildQuickAppManager extends BuildManager {
         }
 
         // init addCssDependencies processor options
-        processor.registerProcessor({
+        registerProcessor({
             addCssDependencies: {
                 options: {
                     styleFiles: [

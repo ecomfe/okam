@@ -47,6 +47,20 @@ module.exports = merge({}, baseConf, {
             options: {
                 plugins: ['dep']
             }
+        },
+        nativeView: {
+            processor: 'view',
+            extnames: ['axml'],
+            options: {
+                keepOriginalContent: true,
+                plugins: [['resource', {
+                    tags: {
+                        'import': true,
+                        'include': true,
+                        'import-sjs': 'from'
+                    }
+                }]]
+            }
         }
     }
 });

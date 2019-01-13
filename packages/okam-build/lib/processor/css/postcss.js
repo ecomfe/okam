@@ -39,8 +39,16 @@ const BUILTIN_PLUGINS = {
 };
 
 module.exports = function (file, options) {
-
-    let {root, appType, allAppTypes, designWidth, config, output, resolve} = options;
+    let {
+        root,
+        appType,
+        allAppTypes,
+        designWidth,
+        config,
+        output,
+        resolve,
+        logger
+    } = options;
     let styleExtname = output.componentPartExtname
         && output.componentPartExtname.style;
 
@@ -51,8 +59,9 @@ module.exports = function (file, options) {
 
     let plugins = config.plugins || [];
     if (!plugins.includes('resource')) {
-        plugins.unshift('resource');
+        plugins.push('resource');
     }
+
     plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
     if (!plugins || !plugins.length) {
         // skip process if none plugins provided
@@ -67,7 +76,8 @@ module.exports = function (file, options) {
             appType,
             styleExtname,
             file,
-            resolve
+            resolve,
+            logger
         }, options))
     );
     let {css} = postcss(plugins)

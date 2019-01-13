@@ -12,12 +12,7 @@ const {merge} = require('../../../../util');
 const {element, attribute, text} = require('../base');
 
 module.exports = {
-    element: merge({}, element, {
-        filter: {
-            match: 'filter',
-            transform: require('./filter')
-        }
-    }),
+    element: merge({}, element),
     attribute: merge({}, attribute, {
         if: {
             transform: require('./condition')

@@ -183,6 +183,8 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
         processorOpts = merge({}, defaultOpts, processorOpts);
     }
 
+    let isNativeViewProcessor = processorName === 'nativeView';
+
     // init babel transform extra options
     let isUsingBabelProcessor = hasBabelProcessor(referProcessorName || processorName);
     if (isUsingBabelProcessor) {
@@ -190,9 +192,9 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
             file, processorOpts, buildManager
         );
     }
-    else if (processorName === 'view') {
+    else if (processorName === 'view' || isNativeViewProcessor) {
         processorOpts = initViewProcessorOptions(
-            file, processorOpts, buildManager
+            file, processorOpts, buildManager, isNativeViewProcessor
         );
     }
 

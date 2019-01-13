@@ -278,6 +278,7 @@ module.exports = {
          * @type {Object}
          */
         template: {
+
             /**
              * vue v- 前缀支持
              *
@@ -342,7 +343,21 @@ module.exports = {
              * 转为:
              * <navigator class="inline" url='xxx'></navigator>
              */
-            transformTags: null
+            transformTags: null,
+
+            /**
+             * 定义模板依赖的本地资源信息获取的标签属性信息，
+             * 如果不想获取某个标签依赖资源信息，可以配置为 false
+             *
+             * {
+             *    img: 'src',
+             *    import: true, // 设为 true，默认为 src 属性获取依赖的资源
+             *    include: false // 设为 false，不会分析该标签的依赖资源
+             * }
+             *
+             * @type {?Object}
+             */
+            resourceTags: null
         }
     },
 

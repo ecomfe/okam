@@ -6,10 +6,9 @@
 'use strict';
 
 const postcss = require('postcss');
-const {parse: parseUrl} = require('url');
+const {resolveUrlPath} = require('../../helper/url');
 
 const URL_REGEXP = /(url\s*\(\s*['"]?\s*)([^'"\)]+)(\s*['"]?\s*\))/g;
-const HTTP_PROTOCOL_REGEXP = /^https?\:\/\//;
 
 function processStyleDeclaration(decl, opts) {
     let {value} = decl;
@@ -17,25 +16,13 @@ function processStyleDeclaration(decl, opts) {
         return;
     }
 
-    let {file, resolve} = opts;
+    let {file, resolve, logger} = opts;
     decl.value = value.replace(URL_REGEXP, (match, prefix, url, suffix) => {
-        // ignore http url and data base64 resource
-        if (HTTP_PROTOCOL_REGEXP.test(url) || url.startsWith('data:')) {
+        let relPath = resolveUrlPath(url, file, resolve, logger);
+        if (!relPath) {
             return match;
         }
 
-        let urlInfo = parseUrl(url);
-        let {pathname, search, hash} = urlInfo;
-        if (pathname.charAt(0) !== '.') {
-            pathname = './' + pathname;
-        }
-
-        let resolvePath = resolve(file, pathname);
-        if (!resolvePath) {
-            return match;
-        }
-
-        let relPath = resolvePath + (search || '') + (hash || '');
         return prefix + relPath + suffix;
     });
 }
@@ -43,6 +30,11 @@ function processStyleDeclaration(decl, opts) {
 module.exports = postcss.plugin('postcss-plugin-resource', function (opts = {}) {
     let {styleExtname: extname, file, resolve} = opts;
     return function (css) {
+        if (file.analysedDeps) {
+            return;
+        }
+        file.analysedDeps = true;
+
         css.walkDecls(decl => processStyleDeclaration(decl, opts));
         css.walkAtRules(rule => {
             if (rule.name === 'import') {
