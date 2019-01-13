@@ -7,7 +7,7 @@
 
 const {createSyntaxPlugin} = require('../helper');
 const transformEvent = require('../../transform/base/event');
-const {EVENT_REGEXP} = require('../../transform/base/constant');
+const {EVENT_REGEXP, NOT_SUPPORT_MODIFIERS} = require('../../transform/base/constant');
 const {transformMiniProgramEventType} = require('./event-helper');
 
 const NATIVE_EVENT_MAP = {
@@ -18,6 +18,8 @@ const NATIVE_EVENT_MAP = {
     'touchcancel': 'touchCancel',
     'longtap': 'longTap'
 };
+
+let antNotSupportModifier = NOT_SUPPORT_MODIFIERS.concat('stop');
 
 /**
  * Parse event bind information
@@ -36,17 +38,18 @@ function parseEventName(name, element, tplOpts, opts) {
 
     eventType = transformMiniProgramEventType(element, eventType, opts);
 
-    const includesStop = eventModifiers.includes('stop');
-    const includesCapture = eventModifiers.includes('capture');
-
     let {logger, file} = tplOpts;
-    if (includesCapture) {
-        logger.warn(
-            `${file.path} template event attribute ${name} using`,
-            'capture is not supported in ant env'
-        );
-    }
-    else if (includesStop) {
+
+    antNotSupportModifier.forEach(item => {
+        if (eventModifiers.includes(item)) {
+            logger.warn(
+                `${file.path} template event attribute ${name} using`,
+                `${item} is not supported in ant env`
+            );
+        }
+    });
+
+    if (eventModifiers.includes('capture')) {
         eventMode = 'catch';
     }
 

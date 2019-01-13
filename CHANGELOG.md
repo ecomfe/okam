@@ -1,6 +1,22 @@
 # ChangeLog
 
-## 2018-01-08
+## 2019-01-11
+### okam-core@0.4.8
+* **新功能**
+    * `v-model` 支持 ([26c6c0e](https://github.com/ecomfe/okam/commit/26c6c0e))
+
+### okam-build@0.4.11
+* **新功能**
+    * `v-model` 支持 ([26c6c0e](https://github.com/ecomfe/okam/commit/26c6c0e))
+
+* **Bug修复**
+    * 修复支付宝 `catch` 事件处理 ([a41606c](https://github.com/ecomfe/okam/commit/a41606c))
+
+### okam-cli@0.1.7
+* **优化**
+    * 去除支付宝默认依赖配置 `'@babel/preset-env'`, 更新模板 ([d1f18d9](https://github.com/ecomfe/okam/commit/d1f18d9))
+
+## 2019-01-08
 ### okam-core@0.4.7
 * **Bug修复**
     * 修复 `behavior` 扩展设置 `useNativeBehavior: false` 出错问题 ([a971f4a](https://github.com/ecomfe/okam/commit/a971f4a))
@@ -32,6 +48,7 @@
 ### okam-cli@0.1.6
 * **优化**
     * 优化 `okam` 包升级时判断条件 ([8fbdd92](https://github.com/ecomfe/okam/commit/8fbdd92))
+
 * **新功能**
     * 增加在 `okam init` 之前升级工具本身选择功能 ([e185428](https://github.com/ecomfe/okam/commit/e185428))
 

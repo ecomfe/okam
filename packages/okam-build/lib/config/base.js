@@ -286,6 +286,38 @@ module.exports = {
             useVuePrefix: false,
 
             /**
+             * 组件 v-model 配置项
+             *
+             * @type {Object}
+             *
+             * 不同平台已内置相应的表单元素
+             * 以及默认自定义组件值，无特殊场景可以不配置
+             *
+             * 设置 default 可以替换 所有自定义组件默认属性
+             * {
+             *     // 设置所有自定义组件
+             *    'default': {
+             *        // 必填 事件类型
+             *        event: 'change',
+             *        // 必填 对应 props 的属性名
+             *        prop: 'value',
+             *        // 对于event.detail 中的字段值的key
+             *        // 不传表示为 event.detail 本身
+             *        detailProp: 'value'
+             *     },
+             *
+             *    // 配置特定组件的 v-model 对应值
+             *    'sp_component': {
+             *        event: 'spchange',
+             *        prop: 'valuex'
+             *     }
+             *   eg:
+             *       <sp_component v-model="xxx" />
+             * }
+             */
+            modelMap: null,
+
+            /**
              * 标签转换支持
              *
              * @type {string|Object}

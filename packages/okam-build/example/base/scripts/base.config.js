@@ -22,6 +22,13 @@ module.exports = {
         extname: 'vue',
         template: {
             useVuePrefix: true,
+            modelMap: {
+                'sp-model-component': {
+                    event: 'spchange',
+                    prop: 'spvalue',
+                    detailProp: 'value'
+                }
+            },
             transformTags: {
                 div: 'view',
                 p: 'view',
@@ -73,6 +80,7 @@ module.exports = {
     framework: [
         'data',
         'watch',
+        'model',
         ['behavior', '{useNativeBehavior: true}'],
         'broadcast',
         'redux',

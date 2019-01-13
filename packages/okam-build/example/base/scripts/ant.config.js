@@ -17,10 +17,9 @@ module.exports = merge({}, require('./base.config'), {
     ],
 
     framework: ['filter'],
-
     processors: {
         babel7: {
-            extnames: 'js',
+            extnames: 'js'
             // options: {
             //     presets: ['@babel/preset-env']
             // }

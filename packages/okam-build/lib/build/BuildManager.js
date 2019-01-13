@@ -249,6 +249,12 @@ class BuildManager extends EventEmitter {
      */
     getAppBaseClassInitOptions(file, config, opts) {
         // do nothing, subclass should provide implementation if needed
+        // for model framework
+        if (!opts.isApp && this.isEnableModelSupport()) {
+            return {
+                isSupportObserve: this.isEnableFrameworkExtension('data')
+            };
+        }
         return null;
     }
 
@@ -418,6 +424,10 @@ class BuildManager extends EventEmitter {
 
     isEnableFilterSupport() {
         return this.isEnableFrameworkExtension('filter');
+    }
+
+    isEnableModelSupport() {
+        return this.isEnableFrameworkExtension('model');
     }
 
     getProcessFileCount() {

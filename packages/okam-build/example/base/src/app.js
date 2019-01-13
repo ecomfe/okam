@@ -6,7 +6,7 @@
 'use strict';
 
 import store from './store/index';
-import a from 'a';
+// import a from 'a';
 
 export default {
     // the app config defined in app.json
@@ -27,6 +27,7 @@ export default {
             'pages/data/init',
             'pages/data/array',
             'pages/data/watch',
+            'pages/data/model',
             'pages/todos/todoList',
             'pages/todos/counter',
             'pages/behavior/index',

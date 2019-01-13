@@ -11,7 +11,7 @@
 const path = require('path');
 const {createFile} = require('./FileFactory');
 const {findMatchProcessor, getBuiltinProcessor} = require('./helper/processor');
-const {getEventSyntaxPlugin, getFilterSyntaxPlugin} = require('./helper/init-view');
+const {getEventSyntaxPlugin, getFilterSyntaxPlugin, getModelSyntaxPlugin} = require('./helper/init-view');
 const registerProcessor = require('./type').registerProcessor;
 const {isPromise} = require('../util').helper;
 const {toHyphen} = require('../util').string;
@@ -330,6 +330,20 @@ function compileComponent(component, file, buildManager) {
             filterModules && tplPlugins.push([
                 getFilterSyntaxPlugin(buildManager.appType),
                 {filters: filterModules}
+            ]);
+        }
+
+        // 在事件处理之后处理
+        let enableModel = buildManager.isEnableModelSupport();
+        if (enableModel) {
+            let {componentConf} = buildManager;
+            let templateConf = (componentConf && componentConf.template) || {};
+            tplPlugins.push([
+                getModelSyntaxPlugin(buildManager.appType),
+                {
+                    customComponentTags,
+                    modelMap: templateConf.modelMap
+                }
             ]);
         }
 

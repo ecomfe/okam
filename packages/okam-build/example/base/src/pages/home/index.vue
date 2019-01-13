@@ -123,6 +123,10 @@ export default {
                     {
                         subName: 'redux状态管理',
                         path: 'todos/todoList'
+                    },
+                    {
+                        subName: 'v-model属性',
+                        path: 'data/model',
                     }
                 ]
             },

@@ -18,7 +18,7 @@ module.exports = {
     },
     component: {
         // vue v- 前缀支持, 默认为 false
-        // useVuePrefix: true,
+        useVuePrefix: true,
         extname: '${sfcExt}',
         template: {
             // 标签转换配置项
@@ -29,6 +29,7 @@ module.exports = {
     framework: [
         'data',
         'watch',
+        'model',
         <% if: ${redux} %>
         'redux',
         <% /if %>

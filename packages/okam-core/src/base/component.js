@@ -167,6 +167,9 @@ export default {
                 // trigger real handle methods
                 this[realHandler].apply(this, args);
             }
+
+            this.__handlerModelProxy && this.__handlerModelProxy(event);
+
         }
     }
 };

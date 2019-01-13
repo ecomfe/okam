@@ -13,11 +13,21 @@ const initBuildOption = require('okam/build/init-build-options');
 const vueSyntax = require('okam/processor/template/plugins/vue-prefix-plugin');
 const swanSyntax = require('okam/processor/template/plugins/swan-syntax-plugin');
 const wxSyntax = require('okam/processor/template/plugins/wx-syntax-plugin');
+const antSyntax = require('okam/processor/template/plugins/ant-syntax-plugin');
+const ttSyntax = require('okam/processor/template/plugins/tt-syntax-plugin');
+
 const html = require('okam/processor/template/plugins/tag-transform-plugin');
 const ref = require('okam/processor/template/plugins/ref-plugin');
 const swanEventPlugin = require('okam/processor/template/plugins/event/swan-event-plugin');
 const wxEventPlugin = require('okam/processor/template/plugins/event/wx-event-plugin');
 const antEventPlugin = require('okam/processor/template/plugins/event/ant-event-plugin');
+const ttEventPlugin = require('okam/processor/template/plugins/event/tt-event-plugin');
+
+const swanModelPlugin = require('okam/processor/template/plugins/model/swan-model-plugin');
+const wxModelPlugin = require('okam/processor/template/plugins/model/wx-model-plugin');
+const antModelPlugin = require('okam/processor/template/plugins/model/ant-model-plugin');
+const ttModelPlugin = require('okam/processor/template/plugins/model/tt-model-plugin');
+
 
 const defaultTags = {
     div: 'view',
@@ -30,6 +40,30 @@ const defaultTags = {
     img: 'image'
 };
 
+const customComponentTags = ['model-component', 'sp-model-component'];
+const MODEL_MAP = {
+    swan: {
+        'sp-model-component': {
+            event: 'spchange',
+            prop: 'spvalue',
+            detailProp: 'valueswan'
+        }
+    },
+    wx: {
+        'sp-model-component': {
+            event: 'spchange',
+            prop: 'spvalue',
+            detailProp: 'valuewx'
+        }
+    },
+    ant: {
+        'sp-model-component': {
+            event: 'spchange',
+            prop: 'spvalue',
+            detailProp: 'valueant'
+        }
+    }
+};
 
 /**
  * 获取默认的swan插件配置，使用函数形式避免缓存
@@ -41,6 +75,10 @@ const getDefaultPlugins = function () {
         vueSyntax,
         swanSyntax,
         swanEventPlugin,
+        [swanModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.swan
+        }],
         html,
         ref
     ];
@@ -56,9 +94,58 @@ const getDefaultWXPlugins = function () {
         vueSyntax,
         wxSyntax,
         wxEventPlugin,
+        [wxModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.wx
+        }],
         html,
         ref
     ];
+};
+
+/**
+ * 获取默认的tt插件配置，使用函数形式避免缓存
+ *
+ * @return {Object} plugins config
+ */
+const getDefaultTTPlugins = function () {
+    return [
+        vueSyntax,
+        ttSyntax,
+        ttEventPlugin,
+        [ttModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.wx
+        }],
+        html,
+        ref
+    ];
+};
+
+/**
+ * 获取默认的ant插件配置，使用函数形式避免缓存
+ *
+ * @return {Object} plugins config
+ */
+const getDefaultAntPlugins = function () {
+    return [
+        vueSyntax,
+        antSyntax,
+        antEventPlugin,
+        [antModelPlugin, {
+            customComponentTags,
+            modelMap: MODEL_MAP.ant
+        }],
+        html,
+        ref
+    ];
+};
+
+const PLUGIN_MAP = {
+    swan: getDefaultPlugins,
+    wx: getDefaultWXPlugins,
+    ant: getDefaultAntPlugins,
+    tt: getDefaultTTPlugins
 };
 
 /**
@@ -71,9 +158,7 @@ const getDefaultWXPlugins = function () {
  */
 const fakeProcessorOptions = function (tagNames, myPlugins, appType = 'swan') {
     const initConfig = initBuildOption(appType, {}, {});
-
-    let plugins = myPlugins ? myPlugins
-        : (appType === 'wx' ? getDefaultWXPlugins() : getDefaultPlugins());
+    let plugins = myPlugins ? myPlugins : PLUGIN_MAP[appType]();
 
     return {
         appType,
@@ -83,7 +168,9 @@ const fakeProcessorOptions = function (tagNames, myPlugins, appType = 'swan') {
         }),
         root: path.join(__dirname, '..'),
         config: {
+            framework: ['data', 'model'],
             template: {
+                modelMap: Object.assign({}, MODEL_MAP[appType]),
                 transformTags: tagNames || defaultTags
             },
             plugins
