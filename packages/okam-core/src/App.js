@@ -31,8 +31,8 @@ function registerApi(apiConfig) {
  * @return {Function}
  */
 export default function createAppFactory(appBase) {
-    let creator = function (appInfo) {
-        return createApp(appInfo, appBase);
+    let creator = function (appInfo, options) {
+        return createApp(appInfo, appBase, options);
     };
 
     creator.use = use;
