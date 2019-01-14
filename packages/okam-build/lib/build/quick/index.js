@@ -11,6 +11,7 @@ const {registerProcessor} = require('../../processor');
 const {relative} = require('../../util').file;
 
 const VALIDATED_DATA_TYPES = ['public', 'protected', 'private'];
+const CHANGED_PAGE_PATH_PLACEHOLDER = '#$CHANGED_PATH$#';
 
 function getNewPagePath(pagePath, extname) {
     let lastDotIdx = pagePath.lastIndexOf('.');
@@ -72,16 +73,22 @@ function resolveSubPkgList(subPackages, root, relativeRoot, pageFileMap) {
 
 function resolvePageList(pages, root, relativeRoot, pageFileMap) {
     let result = [];
+    let upMap = {};
     pages.forEach(pagePath => {
         let {resolvePath} = pageFileMap[pagePath] || {};
         if (resolvePath) {
-            result.push(resolveNewPage(root, resolvePath, relativeRoot));
+            let newPagePath = resolveNewPage(root, resolvePath, relativeRoot);
+            result.push(newPagePath);
+            upMap[pagePath] = newPagePath;
         }
         else {
             result.push(pagePath);
         }
     });
-    return result;
+    return {
+        pages: result,
+        changedPages: upMap
+    };
 }
 
 class BuildQuickAppManager extends BuildManager {
@@ -97,9 +104,11 @@ class BuildQuickAppManager extends BuildManager {
         let {pages, subPackages} = appConfig;
 
         let root = this.root;
-        appConfig.pages = resolvePageList(
+        let {pages: newPages, changedPages} = resolvePageList(
             pages, root, relativeRoot, pageFileMap
         );
+        appConfig.pages = newPages;
+        this.changedPagePathMap = changedPages;
 
         if (subPackages && subPackages.length > 0) {
             appConfig.subPackages = resolveSubPkgList(
@@ -279,6 +288,13 @@ class BuildQuickAppManager extends BuildManager {
         let result = super.getAppBaseClassInitOptions(file, config, opts);
 
         let extraData;
+        if (opts.isApp) {
+            this.entryAppFile = file;
+            extraData = {
+                changedPagePathMap: CHANGED_PAGE_PATH_PLACEHOLDER
+            };
+        }
+
         if (opts.isPage && config) {
             let envConfig = config[this.envConfigKey];
             let dataAccessType = envConfig && envConfig.data;
@@ -286,7 +302,9 @@ class BuildQuickAppManager extends BuildManager {
                 if (!VALIDATED_DATA_TYPES.includes(dataAccessType)) {
                     this.logger.warn('illegal quick app page data type:', dataAccessType);
                 }
-                extraData = {dataAccessType};
+
+                extraData || (extraData = {});
+                extraData.dataAccessType = dataAccessType;
             }
         }
 
@@ -335,6 +353,24 @@ class BuildQuickAppManager extends BuildManager {
             appConfigFile.compileReady = true;
             this.compile(appConfigFile);
         }
+
+        // update entry app options
+        let content = this.entryAppFile.content;
+        let info = this.changedPagePathMap; // used for router
+        if (info) {
+            let result = {};
+            Object.keys(info).forEach(k => {
+                let value = info[k];
+                result['/' + k] = '/' + value;
+            });
+            info = JSON.stringify(result);
+        }
+        else {
+            info = 'null';
+        }
+        this.entryAppFile.content = content.replace(
+            '"' + CHANGED_PAGE_PATH_PLACEHOLDER + '"', info
+        );
     }
 }
 
