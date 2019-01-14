@@ -7,7 +7,7 @@
 
 const path = require('path');
 const postcss = require('postcss');
-const normalizePlugins = require('../helper/plugin');
+const {normalizePlugins} = require('./plugins/helper');
 
 const BUILTIN_PLUGINS = {
     autoprefixer: {
@@ -58,11 +58,14 @@ module.exports = function (file, options) {
     }
 
     let plugins = config.plugins || [];
-    if (!plugins.includes('resource')) {
-        plugins.unshift('resource');
+    if (!Array.isArray(plugins)) {
+        plugins = Object.keys(plugins).map(
+            k => ({name: k, options: plugins[k]})
+        );
     }
-
+    plugins.unshift('resource');
     plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
+
     if (!plugins || !plugins.length) {
         // skip process if none plugins provided
         return {

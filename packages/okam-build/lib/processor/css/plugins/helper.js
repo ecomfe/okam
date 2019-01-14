@@ -9,7 +9,7 @@
 
 const {
     require: customRequire
-} = require('../../util');
+} = require('../../../util');
 
 function ensureDepAvailable(name, plugin, root) {
     if (plugin.deps && plugin.deps.length) {
@@ -61,12 +61,6 @@ function normalizePlugins(plugins, builtin, root) {
         return;
     }
 
-    if (!Array.isArray(plugins)) {
-        plugins = Object.keys(plugins).map(
-            k => ({name: k, options: plugins[k]})
-        );
-    }
-
     try {
         return plugins.map(item => getPlugin(item, builtin, root));
     }
@@ -78,4 +72,4 @@ function normalizePlugins(plugins, builtin, root) {
     }
 }
 
-module.exports = exports = normalizePlugins;
+exports.normalizePlugins = normalizePlugins;
