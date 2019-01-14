@@ -64,7 +64,7 @@ module.exports = function (file, options) {
         );
     }
     plugins.unshift('resource');
-    plugins = normalizePlugins(config.plugins, BUILTIN_PLUGINS, root);
+    plugins = normalizePlugins(plugins, BUILTIN_PLUGINS, root);
 
     if (!plugins || !plugins.length) {
         // skip process if none plugins provided
