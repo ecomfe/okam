@@ -108,7 +108,7 @@ this.arr.splice(0, 1, 23);
 this.arr.splice(2);
 ```
 
-* 数组操作扩展的 `API` (如果考虑对齐 `Vue` 使用方式，需要避开该方式使用)
+* 数组操作扩展的 `API` (如果考虑对齐 `Vue` 使用方式，`快应用` 不支持，需要避开该方式使用)
 
     * `setItem(idx, value)`: 如果想替换某个数组项，除了上面的 `splice` 方式，还可以使用该扩展 API: `arr.setItem(idx, newValue)`
     * `getItem(idx)`: 如果想对数组项内容进行修改用于数组项为对象情况下，可以这么修改：`arr.getItem(idx).show = false`
@@ -118,7 +118,7 @@ this.arr.splice(2);
 
 当某数据项的值由其他数据项计算得来时可通过 `computed` 定义实现；代码中可通过 `this.计算属性名` 来引用，模板中也可通过`{{ 计算属性名 }}` 来绑定数据
 
-!> `okam-core@0.4.7` 开始支持快应用 `computed`，依赖于原生的 `$watch` API，受限于 `快应用` 原生能力，目前原生还不支持 `deep` `watch` 能力，导致只能监听 `根属性变更`，此外其对于数组也是不支持 `deep` watch，导致如果 `computed` 属性依赖的数据是内部发生变更会导致无法监听到，e.g., 计算属性依赖了 `obj` 属性，`this.obj.num = 23;` 是无法触发计算属性变更，需要改成 `this.obj = Object.assign({}, this.obj, {num: 23})`，因此使用时候需要注意。此外，如果依赖的数据属性是通过动态新增的根属性（使用 `$set` API 添加），也是不支持的，由于快应用的 `$watch` 的 `handler` 必须预先声明好，不能动态添加。
+!> `okam-core@0.4.7` 开始支持快应用 `computed`，依赖于原生的 `$watch` API，受限于 `快应用` 原生能力，如果依赖的数据属性是通过动态新增的根属性（使用 `$set` API 添加），是不支持的，由于快应用的 `$watch` 的 `handler` 必须预先声明好，不能动态添加。
 
 ```
 <template>
@@ -200,7 +200,7 @@ export default {
     * `callback`: watch 到变化执行的回调
     * `options`: watch 选项
 
-        * `options.deep`: `boolean` 默认 false，如果需要 watch 对象内部值变化，需要设为 `true`，**数组不需要** （`快应用` 不支持）
+        * `options.deep`: `boolean` 默认 false，如果需要 watch 对象内部值变化，需要设为 `true`，**数组不需要** （`快应用` 不支持数组索引的 watch，不能 watch 到数组元素值变更，e.g., `arr[0].xx = xx` 不能变更，需要改成数组 API 的操作： `arr.splice(0, 1, Object.assign({}, arr[0], {xx: xx}))` 才能 watch 到变更）
         * `options.immediate`: `boolean` 默认 false，如果设为 true，会立即触发 `callback` 执行
 
 ```javascript
