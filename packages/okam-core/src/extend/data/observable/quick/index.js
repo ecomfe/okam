@@ -5,6 +5,9 @@
 
 'use strict';
 
+import {getDataByPath} from '../../../../helper/data';
+import watchDataChange from './watch';
+
 /**
  * Proxy data getter
  *
@@ -53,17 +56,18 @@ function getInnerWatcher(prop) {
  * @inner
  * @param {Object} ctx the component instance
  * @param {string} prop the data prop name
+ * @param {boolean=} deep whether watch deep
  */
-function addDataChangeWatcher(ctx, prop) {
+function addDataChangeWatcher(ctx, prop, deep) {
     // in quick app, the watch handler does not support dynamic added methods
     // let handler = '__handleDataChange$' + prop;
     // ctx[handler] = (newVal, oldVal) => ctx.__handleDataChange(
     //     prop, newVal, oldVal
     // );
-    // FIXME: should using deep watch, which currently is not supported
-    // in quick app
-    // FIXME: array cannot support deep watch in quick app
-    ctx.$watch(prop, getInnerWatcher(prop));
+
+    // FIXME: array cannot support deep watch in quick app when change array item info
+    let handlerName = getInnerWatcher(prop);
+    watchDataChange.call(ctx, prop, handlerName, {deep});
 }
 
 /**
@@ -141,7 +145,7 @@ export default {
             });
 
             // init watcher
-            // we must declare all wather callback before defining component
+            // we must declare all watcher callback before defining component
             // as for it does not support dynamic watcher callback declaration
             // in quick app.
             dataKeys.forEach(k => {
@@ -159,6 +163,7 @@ export default {
          * @private
          */
         created() {
+            this.__originalWatch = this.__originalWatch || this.$watch;
             let computedInfo = this.$rawComputed;
             if (typeof computedInfo === 'function') {
                 this.$rawComputed = computedInfo = computedInfo();
@@ -167,8 +172,9 @@ export default {
             // watch all data keys
             this.__allDataKeys = this.__allDataKeys();
             this.__allDataKeys.forEach(k => {
-                addDataChangeWatcher(this, k);
-                if (!computedInfo || !computedInfo[k]) {
+                let isComputedProp = computedInfo && computedInfo[k];
+                addDataChangeWatcher(this, k, !isComputedProp);
+                if (!isComputedProp) {
                     proxyDataGetter(this, k);
                 }
             });
@@ -202,6 +208,22 @@ export default {
                 k => collectComputedPropDeps(this, k, computedInfo[k])
             );
         },
+
+        /**
+         * Watch data change which support deep and immediate options
+         *
+         * @param {string} expression the expression to watch
+         * @param {string} handlerName the callback handler name to execute when the
+         *        expression value changes
+         * @param {Object=} options watch options
+         * @param {boolean=} options.immediate whether trigger the callback
+         *        immediately with the current value of the expression or function
+         *        optional, by default false
+         * @param {boolean=} optional.deep whether watch object nested value
+         *        optional, by default false
+         * @return {*}
+         */
+        __watchDataChange: watchDataChange,
 
         /**
          * Add anonymous computed prop
