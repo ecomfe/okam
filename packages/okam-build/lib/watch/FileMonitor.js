@@ -67,7 +67,12 @@ class FileWatcher extends EventEmitter {
             files = [files];
         }
 
-        this.watchFiles = files;
+        this.watchFiles = files.filter(path => {
+            if (path.startsWith('node_modules/')) {
+                return false;
+            }
+            return true;
+        });
     }
 
     /**
