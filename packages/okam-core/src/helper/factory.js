@@ -31,6 +31,9 @@ const PAGE_TYPE = 'page';
 function initExtensions(type, instance, base) {
     let cache = pluginCache;
     if (process.env.APP_TYPE === 'quick') {
+        if (!appGlobal.okamPluginCache) {
+            appGlobal.okamPluginCache = pluginCache;
+        }
         cache = appGlobal.okamPluginCache;
     }
 
