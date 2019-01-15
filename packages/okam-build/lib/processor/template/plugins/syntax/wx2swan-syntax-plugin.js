@@ -5,8 +5,8 @@
 
 'use strict';
 
-const {createSyntaxPlugin} = require('./helper');
-const transformers = require('../transform/wx2swan');
+const {createSyntaxPlugin} = require('../helper');
+const transformers = require('../../transform/wx2swan');
 
 module.exports = createSyntaxPlugin(transformers);
 

@@ -47,7 +47,7 @@ function getModelSyntaxPlugin(appType) {
  * @return {string}
  */
 function getTemplateSyntaxPlugin(appType) {
-    return path.join(PLUGIN_BASE_NAME, `${appType}-syntax-plugin`);
+    return path.join(PLUGIN_BASE_NAME, `syntax/${appType}-syntax-plugin`);
 }
 
 const REF_PLUGIN_PATH = path.join(PLUGIN_BASE_NAME, 'ref-plugin');
