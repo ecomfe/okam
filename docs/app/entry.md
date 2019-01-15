@@ -40,6 +40,8 @@
     };
     ```
 
+!> `快应用` 不支持 `onShow` `onHide` `onPageNotFound` hook
+
 ## App 扩展 API
 
 * `$api`: 挂载所有原生小程序 API，App 上下文访问：`this.$api.xxx()` 等价于 `swan.xxx()`，建议小程序都摒弃特定小程序命名空间 API 访问方式，方便以后同一套代码转成其它平台端的小程序
