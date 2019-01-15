@@ -4,7 +4,12 @@
  */
 
 module.exports = function (attrs, name, tplOpts) {
-    let {logger, file} = tplOpts;
-    logger.warn(`${file.path}, swan is not support with :key`);
+    // let {logger, file} = tplOpts;
+    // logger.warn(`${file.path}, swan is not support with :key`);
+    // delete attrs[name];
+
+    let newAttr = name.substr(1);
+    let value = attrs[name];
+    attrs[newAttr] = `{{${value}}}`;
     delete attrs[name];
 };
