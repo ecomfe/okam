@@ -24,6 +24,7 @@ function compileFile(buildManager, file, releaseFiles) {
     logger.debug('compile file', file.path);
     releaseFiles.processFileNum += 1;
     if (file.isImg) {
+        file.allowRelease = true;
         // xxx: skip image file rebuild to avoid rebuild repeatedly
         file.processing || releaseFiles.add(file);
         return;
