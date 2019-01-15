@@ -4,18 +4,14 @@
     <% use: ch-tpl-normal() %>
 <% /if %>
 
-<% if: ${script} === 'typescript' %>
-    <% use: ch-script-ts() %>
-<% else %>
-    <% use: ch-script-js() %>
-<% /if %>
+<% use: ch-script-js(script=${script}) %>
 
 <% if: ${style} === 'stylus' %>
     <% use: ch-stylus() %>
 <% elif: ${style} === 'less' %>
-    <% use: ch-less() %>
+    <% use: ch-less(style=${style}) %>
 <% elif: ${style} === 'scss' %>
-    <% use: ch-scss() %>
+    <% use: ch-less(style=${style}) %>
 <% else %>
     <% use: ch-css() %>
 <% /if %>
@@ -35,30 +31,7 @@ view.hello-wrap
     ) Hello in {{from}}
 </template>
 <% target: ch-script-js %>
-<script>
-export default {
-    config: {
-    },
-
-    props: {
-        from: String
-    },
-
-    components: {
-    },
-
-    data: {
-    },
-
-    methods: {
-        handleClick() {
-            this.$emit('hello', {from: this.from});
-        }
-    }
-};
-</script>
-<% target: ch-script-ts %>
-<script lang="typescript">
+<script<% if: ${style} === 'typescript' %> lang="typescript"<% /if %>>
 export default {
     config: {
     },
@@ -87,30 +60,24 @@ export default {
 
     .hello-btn
         border: none
+        padding: 30px
         text-align: center
         background: #fff
+        -quick-justify-content: center
+        -quick-align-items: center
 </style>
 <% target: ch-less %>
-<style lang="less">
+<style lang="${style}">
 .hello-wrap {
     margin: 20px;
 
     .hello-btn {
         border: none;
+        padding: 30px;
         text-align: center;
         background: #fff;
-    }
-}
-</style>
-<% target: ch-scss %>
-<style lang="scss">
-.hello-wrap {
-    margin: 20px;
-
-    .hello-btn {
-        border: none;
-        text-align: center;
-        background: #fff;
+        -quick-justify-content: center;
+        -quick-align-items: center;
     }
 }
 </style>
@@ -122,7 +89,10 @@ export default {
 
 .hello-wrap .hello-btn {
     border: none;
+    padding: 30px;
     text-align: center;
     background: #fff;
+    -quick-justify-content: center;
+    -quick-align-items: center;
 }
 </style>

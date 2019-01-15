@@ -173,17 +173,33 @@ const PACKAGE_NAMES_MAP = {
             {
                 name: '@babel/core',
                 version: '7.1.6'
+            },
+            {
+                name: '@babel/preset-env',
+                version: '7.1.6'
             }
         ],
         babel: [
             {
                 name: 'babel-core',
                 version: '6.26.3'
+            },
+            {
+                name: 'babel-preset-env',
+                version: '1.7.0'
             }
         ],
         typescript: [
             {
                 name: '@babel/core',
+                version: '7.1.6'
+            },
+            {
+                name: '@babel/preset-typescript',
+                version: '7.1.0'
+            },
+            {
+                name: '@babel/preset-env',
                 version: '7.1.6'
             }
         ],

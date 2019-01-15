@@ -4,6 +4,15 @@
  */
 
 const EVENT_FN_NAME = '__handlerProxy';
+const EVENT_PREFIX = {
+    swan: 'bind',
+    wx: 'bind',
+    quick: 'on',
+    ant: 'on'
+};
+
+const {toHyphen} = require('../../../../util').string;
+
 
 /**
  * 事件名获取
@@ -13,14 +22,18 @@ const EVENT_FN_NAME = '__handlerProxy';
  * @return {string}           事件名
  */
 function getEventName(appType, eventType) {
-    let eventName = `bind${eventType}`;
+    let eventName = eventType;
 
     if (appType === 'ant') {
         let formatEventType = eventType.charAt(0).toUpperCase() + eventType.substr(1);
-        eventName = `on${formatEventType}`;
+        eventName = formatEventType;
     }
 
-    return eventName;
+    if (appType === 'quick') {
+        eventName = toHyphen(eventType);
+    }
+
+    return `${EVENT_PREFIX[appType]}${eventName}`;
 }
 
 
