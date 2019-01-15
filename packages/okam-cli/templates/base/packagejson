@@ -51,7 +51,9 @@
     "ignore": [
       "dist/**/*",
       "wx_dist/**/*",
-      "ant_dist/**/*"
+      "ant_dist/**/*",
+      "tt_dist/**/*",
+      "quick_dist/**/*"
     ]
   },
   <% /if %>
@@ -66,7 +68,9 @@
     "ignore": [
       "dist/**/*",
       "wx_dist/**/*",
-      "ant_dist/**/*"
+      "ant_dist/**/*",
+      "tt_dist/**/*",
+      "quick_dist/**/*"
     ]
   },
   <% /if %>
