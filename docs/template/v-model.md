@@ -210,3 +210,28 @@ export default {
 // 生效
 <sp-model-component v-model="componentVal" />
 ```
+
+在 `okam` 中， `v-model` 是利用属性值 + 相应事件搭配使用进行实现的，如果想更多的原生组件支持，也可以通过配置 `component.template.modelMap` 来支持
+如：让支持 `slider` 支持 `v-model` 写法，可在 `x.config.js` 里加上如下配置即可：
+
+```
+{
+    template: {
+        modelMap: {
+            'slider': {
+                // 必填 事件类型, 此处 change 还是 changing，可根据自身场景进行配置
+                event: 'change',
+                // 必填 对应 props 的属性名
+                prop: 'value',
+                // 选填 `event.detail` 上的属性名，如果是 event.detail 本身, 则不填
+                detailProp: 'value'
+            }
+        }
+    }
+}
+```
+
+```
+// 使用
+<slider v-model="sliderVal"></slider>
+```
