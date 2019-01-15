@@ -48,8 +48,8 @@ export default {
     },
 
     methods: {
-        handleCounterChange() {
-            console.log('counter change...', arguments)
+        handleCounterChange(...args) {
+            console.log('counter change...', args);
         }
     }
 };
