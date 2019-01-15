@@ -42,10 +42,11 @@
 * `ref`: 允许模板指定 `ref` 属性，组件实例 `$refs` 获取引用，类似 Vue
 * `redux`: 使用 `redux` 进行状态管理，要求安装依赖 `redux` 库：`npm i redux --save`, 另外，`redux` 依赖 `data` 扩展，因此需要一起配置
 * `behavior`: mixin 支持包括页面组件和自定义组件，对于插件支持选项，可以传入数组形式：`[ ['behavior', '{useNativeBehavior: true}'] ]`，**注意** 第二个参数为插件选项代码的字符串形式
+* `filter`: 提供 `filter` 支持，使用示例参考[这里](component/filter)
 
 ```javascript
 {
-    framework: ['data', 'watch', 'model', 'broadcast', 'ref', 'redux', 'behavior']
+    framework: ['data', 'watch', 'model', 'broadcast', 'ref', 'redux', 'behavior', 'filter']
 }
 ```
 

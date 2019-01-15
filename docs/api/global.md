@@ -138,5 +138,37 @@ request.fetch(
 
 ## 各个平台对齐的 API
 
-> TODO
+目前未提供对齐的 API 或者组件，开发者可以参考[撰写特定平台代码](advance/platformSpecCode)实现不同平台对齐。同时，我们也非常希望开发者把自己对齐的 API/组件 也可以开源出来，以帮助更多开发者，如果能直接发 pr 贡献到 `okam` 最好。
+
+下面列出的 API 是各个平台已经对齐的接口，没列出来，表示我们未做任何对齐实现，具体是否需要对齐需要开发者自行调研。如果开发者，想覆盖掉默认的对齐实现也是允许的，实现方式跟新增要对齐 API。
+
+### 微信小程序
+
+> 暂无
+
+### 百度小程序
+
+> 暂无
+
+### 支付宝小程序
+
+* `showToast`
+* `getSystemInfo`
+* `getSystemInfoSync`
+* `setNavigationBarTitle`
+
+### 头条小程序
+
+> 暂无
+
+### 快应用
+
+`快应用` 并没有像其它小程序平台提供了全局的 `API` 供访问，目前 `Okam` 框架参照 `微信小程序` 封装对齐了微信部分 API，建议开发者通过[扩展全局API方式](advance/platformSpecCode#API)来新增 API，不建议自行 `import clipboard from '@system.clipboard'` 方式来访问，除非你不考虑多平台支持，此外导入接口包一般情况下也不需要配置 `features`，具体可以参考[配置说明](app/entry#快应用配置)。
+
+* `getSystemInfo`
+* `showToast`
+* `request`
+* `navigateBack`
+* `navigateTo`
+* `redirectTo`
 

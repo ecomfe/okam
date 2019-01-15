@@ -213,7 +213,7 @@ okam 保留了小程序原始生命周期 及全局事件处理函数, 同时提
 * `App` 入口文件声明 `Promise` 化的 API，`Page` 能直接使用；[详见-Promise化 API](app/promise.md)
 * data 操作语法类似于 Vue，支持 `computed`，`$nextTick`； [详见-数据操作](component/setData.md)
 * `$query`: 获取当前页面查询参数
-* `createSelectorQuery`: 创建选择器查询接口，基于全局 API `createSelectorQuery`，这样页面组件、自定义组件（原生提供）上下文都可以用同样方式访问到该接口。`要求升级到 0.4 最新版本`
+* `createSelectorQuery`: 创建选择器查询接口，基于全局 API `createSelectorQuery`，这样页面组件、自定义组件（原生提供）上下文都可以用同样方式访问到该接口。`要求升级到 0.4 最新版本` `快应用不支持`
 
 ``` javascript
 // 当前链接:  xxx?id=3，可通过 this.$query 进行访问获取
