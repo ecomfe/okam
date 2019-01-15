@@ -39,7 +39,6 @@ export default {
         }
 
         this.onLaunch && this.onLaunch();
-        this.onShow && this.onShow();
     }
 };
 

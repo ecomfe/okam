@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {createSyntaxPlugin} = require('./helper');
-const transformers = require('../transform/ant');
+const {createSyntaxPlugin} = require('../helper');
+const transformers = require('../../transform/ant');
 
 module.exports = createSyntaxPlugin(transformers);

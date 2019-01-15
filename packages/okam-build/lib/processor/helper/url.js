@@ -6,7 +6,7 @@
 'use strict';
 
 const HTTP_PROTOCOL_REGEXP = /^https?\:\/\//;
-const URL_REGEXP = /^[\w\.\/]+$/;
+const URL_REGEXP = /^[\w\.\/\-]+$/;
 
 function getUrlInfo(url) {
     let queryIdx = url.indexOf('?');
@@ -44,7 +44,7 @@ exports.resolveUrlPath = function (url, file, resolver, logger) {
 
     let {pathname, search, hash} = getUrlInfo(url);
     if (!URL_REGEXP.test(pathname)) {
-        logger.warn('cannot resolve resource', url, 'in', file.path);
+        logger.debug('cannot resolve resource', url, 'in', file.path);
         return;
     }
 

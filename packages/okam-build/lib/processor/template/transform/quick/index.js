@@ -40,6 +40,9 @@ module.exports = {
         },
         key: {
             transform: require('./key')
+        },
+        class: {
+            transform: require('./class')
         }
     }),
     text

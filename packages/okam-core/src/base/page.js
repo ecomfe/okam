@@ -19,6 +19,14 @@ export default Object.assign({}, component, {
         this.$isPage = true;
         this.$query = query || {};
 
+         /**
+         * Create selector query basing global API, this API like the
+         * createSelectorQuery defined in the native component context.
+         *
+         * @return {Object}
+         */
+        this.createSelectorQuery = () => this.$api.createSelectorQuery();
+
         // call component create life cycle method
         this.created();
     },
@@ -46,17 +54,8 @@ export default Object.assign({}, component, {
 
     methods: Object.assign(
         {
-
-            /**
-             * Create selector query basing global API, this API like the
-             * createSelectorQuery defined in the native component context.
-             *
-             * @return {Object}
-             */
-            createSelectorQuery() {
-                return this.$api.createSelectorQuery();
-            }
-
+            // cannot define createSelectorQuery here, in weixin 2.1.3 sdk will
+            // leading to error
         }, component.methods
     )
 });

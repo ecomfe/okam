@@ -92,4 +92,5 @@
 
 * 常见问题
 
-    * [常见问题](questions/index.md)
+    * [问题解决](questions/index.md)
+    * [问题集锦](questions/problems.md)
