@@ -4,18 +4,14 @@
     <% use: cc-tpl-normal() %>
 <% /if %>
 
-<% if: ${script} === 'typescript' %>
-    <% use: cc-script-ts() %>
-<% else %>
-    <% use: cc-script-js() %>
-<% /if %>
+<% use: cc-script-js(script=${script}) %>
 
 <% if: ${style} === 'stylus' %>
     <% use: cc-stylus() %>
 <% elif: ${style} === 'less' %>
-    <% use: cc-less() %>
+    <% use: cc-less(style=${style}) %>
 <% elif: ${style} === 'scss' %>
-    <% use: cc-scss() %>
+    <% use: cc-less(style=${style}) %>
 <% else %>
     <% use: cc-css() %>
 <% /if %>
@@ -41,55 +37,7 @@ view.counter-wrap
     ) 增加 Counter
 </template>
 <% target: cc-script-js %>
-<script>
-import actions from '../actions/index';
-
-export default {
-    data: {
-    },
-
-    computed: {
-    },
-
-    watch: {
-        counter(old, newVal) {
-            console.log('watch counter change...', old, newVal);
-        }
-    },
-
-    $store: {
-        computed: ['counter'],
-        actions: [
-            // original actions
-            actions,
-            {
-                // this.incr(10) 等价于 store.dispatch(actions.increment(10))
-                incr: 'addCounter',
-                decr: 'reduceCounter'
-            }
-        ]
-    },
-
-    created() {
-        let state = this.$store.getState();
-        console.log('created counter', state);
-    },
-
-    methods: {
-        onAddCounter() {
-            this.incr(5);
-            this.$emit('counterChange', this.counter);
-        },
-
-        onMinusCounter() {
-            this.decr();
-            this.$emit('counterChange', this.counter);
-        }
-    }
-};
-</script>
-<% target: cc-script-ts %>
-<script lang="typescript">
+<script<% if: ${style} === 'typescript' %> lang="typescript"<% /if %>>
 import actions from '../actions/index';
 
 export default {
@@ -139,6 +87,8 @@ export default {
 <% target: cc-stylus %>
 <style lang="stylus">
 .counter-wrap
+    -quick-flex-direction: column
+
     .counter-title
         font-weight: 600
         padding: 20px
@@ -146,35 +96,42 @@ export default {
 
     .counter-btn
         margin: 20px 0
+        padding: 30px
+        border: 1px solid #000
+        border-radius: 5px
+        background-color: #fff
+        -quick-justify-content: center
+        -quick-align-items: center
 </style>
 
 <% target: cc-less %>
-<style lang="less">
-.counter-wrap .counter-title {
-    font-weight: 600;
-    padding: 20px;
-    text-align: center;
-}
+<style lang="${style}">
+.counter-wrap {
+    -quick-flex-direction: column;
 
-.counter-wrap .counter-btn {
-    margin: 20px 0;
-}
+    .counter-title {
+        font-weight: 600;
+        padding: 20px;
+        text-align: center;
+    }
 
-</style>
-<% target: cc-scss %>
-<style lang="scss">
-.counter-wrap .counter-title {
-    font-weight: 600;
-    padding: 20px;
-    text-align: center;
-}
-
-.counter-wrap .counter-btn {
-    margin: 20px 0;
+    .counter-btn {
+        margin: 20px 0;
+        padding: 30px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        background-color: #fff;
+        -quick-justify-content: center;
+        -quick-align-items: center;
+    }
 }
 </style>
 <% target: cc-css %>
 <style>
+.counter-wrap {
+    -quick-flex-direction: column;
+}
+
 .counter-wrap .counter-title {
     font-weight: 600;
     padding: 20px;
@@ -183,6 +140,12 @@ export default {
 
 .counter-wrap .counter-btn {
     margin: 20px 0;
+    padding: 30px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #fff;
+    -quick-justify-content: center;
+    -quick-align-items: center;
 }
 </style>
 
