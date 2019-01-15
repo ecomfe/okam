@@ -54,6 +54,7 @@ const FRAMEWORK_EXTEND_PATH = {
     },
     filter: {
         wx: true,
+        tt: true,
         swan: true,
         ant: true,
         quick: 'extend/filter/quick/index'
