@@ -16,7 +16,7 @@
 
 * `CSS` 声明的 `url` 或者 `@import` 依赖资源
 
-!> 注意对于模板依赖的资源文件比如图片地址，使用了变量定义，是没法正常收集到的，对于这部分依赖，需要手动配置引入 [`source.include`](build/index#source)，当然对于源文件不想输出也可以通过 [`source.exclude`](build/index#exclude) 配置
+!> 注意对于模板依赖的资源文件比如图片地址，使用了变量定义，是没法正常收集到的，对于这部分依赖，需要手动配置引入 [`source.include`](build/index#source)，当然对于源文件不想输出也可以通过 [`source.exclude`](build/index#exclude) 配置。目前默认对于所有图片资源都会作为依赖资源输出到构建产物。
 
 ## 自定义要输出的资源文件
 
