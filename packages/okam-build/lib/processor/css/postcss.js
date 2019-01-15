@@ -33,8 +33,8 @@ const BUILTIN_PLUGINS = {
     resource: {
         path: path.join(__dirname, 'plugins', 'postcss-plugin-resource.js')
     },
-    quickCss: {
-        path: path.join(__dirname, 'plugins', 'postcss-plugin-quick.js')
+    quickcss: {
+        path: path.join(__dirname, 'plugins', 'postcss-plugin-quickcss.js')
     }
 };
 
