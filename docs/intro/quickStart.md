@@ -19,7 +19,7 @@ npm install
 
 ```
 
-!> 如果想支持 `快应用`，且需要 `多平台支持`，建议**优先开发快应用，再兼容其它平台**，由于快应用组件、API 和 样式差异性跟小程序比较大，此外各个平台组件对齐还有 API 目前需要开发者[自行实现](advance/platformSpecCode)。快应用开发模式跟小程序一样，具体差异点可以看各个章节文档说明。`快应用` 并没有像其它小程序平台提供了全局的 `API` 供访问，目前 `Okam` 框架参照 `微信小程序` 封装对齐了微信部分 API，建议开发者通过[扩展全局API方式](advance/platformSpecCode#API)来新增 API，不建议自行 `import clipboard from '@system.clipboard'` 方式来访问，除非你不考虑多平台支持，此外导入接口包一般情况下也不需要配置 `features`，具体可以参考[配置说明](app/entry#快应用配置)。
+!> 如果想支持 `快应用`，且需要 `多平台支持`，建议**优先开发快应用，再兼容其它平台**，由于快应用组件、API 和 样式差异性跟小程序比较大，此外各个平台组件对齐还有 API 目前需要开发者[自行实现](advance/platformSpecCode)。快应用开发模式跟小程序一样，具体差异点可以看各个章节文档说明。`快应用` 并没有像其它小程序平台提供了全局的 `API` 供访问，目前 `Okam` 框架参照 `微信小程序` 封装对齐了微信部分 API，建议开发者通过[扩展全局API方式](advance/platformSpecCode#API)来新增 API，不建议自行 `import clipboard from '@system.clipboard'` 方式来访问，除非你不考虑多平台支持，此外导入接口包一般情况下也不需要配置 `features`，具体可以参考[配置说明](app/entry#快应用配置)。`快应用` 样式跟其它小程序平台差异比较大，对此 `okam` 也做了一些兼容修复，需要在构建配置引入 `postcss` 插件 `quickcss`，具体配置可以参考[这里](build/processors#Postcss插件)。
 
 ## 运行调试
 

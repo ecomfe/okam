@@ -144,6 +144,13 @@
         }
     }
     ```
+* `quickcss`: `0.4.11 版本开始支持` 引入该插件，会自动修复一些快应用不支持的写法，关于快应用样式支持可以参考[这里](https://doc.quickapp.cn/widgets/common-styles.html)
+    * 背景样式 `background` 定义会自动展开，由于快应用不支持合并的写法：[具体参考这里](https://doc.quickapp.cn/widgets/background-img-styles.html)，比如 `background: url(./img.png) no-repeat` 会转成 `background-image: url(./img.png); background-repeat: no-repeat;`
+    * 快应用颜色值不支持缩写：比如 `background-color: #2dd` 会转成 `background-color: #22dddd`，目前会对 `background` 及 `border` 相关样式的 `color` 进行处理；
+    * `border` 样式：快应用不支持 `none` 写法会自动转成 `0`，此外快应用不支持 `border-left/border-right/border-top/border-bottom` 合并写法，会被自动展开，比如 `border-left: 1px solid #ccc` 会转成 `border-left-width: 1px; border-left-style: solid; border-left-color: #cccccc;`
+    * `font-weight`: 快应用不支持 `数字` 写法，会自动转成 `normal` `bold` 取值，`<600` 会转成 `normal`，`>=600` 会转成 `bold`
+    * `display`: 快应用只支持 `flex`，`block` 值会自动转成 `flex`
+    * `position`: 快应用只支持 `fixed`，`absolute` 会自动转成 `fixed`
 
 * `autoprefixer`
     * 需要安装依赖：`npm i autoprefixer --save-dev`
