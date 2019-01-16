@@ -52,6 +52,7 @@
 ## Usage
 
 * [使用教程](https://ecomfe.github.io/okam)
+* [其它示例](https://github.com/awesome-okam)
 
 ## Main Packages
 
