@@ -1,5 +1,29 @@
 # ChangeLog
 
+## 2019-01-16
+### okam-core@0.4.9
+* **Bug修复**
+    * 修复页面组件 `createSelectorQuery` 新增扩展接口在 `微信小程序` SDK 版本 `2.1.3` 出错问题 ([3b7eb07](https://github.com/ecomfe/okam/commit/3b7eb07))
+
+* **优化**
+    * 优化快应用 `watch` `deep` 支持 ([fcb6fd2](https://github.com/ecomfe/okam/commit/fcb6fd2))
+
+### okam-build@0.4.12
+* **Bug修复**
+    * 修复 `watch` 模式下，新增图片文件没有输出到构建目录 ([711e79e](https://github.com/ecomfe/okam/commit/711e79e))
+
+* **新功能**
+    * 对于 `百度小程序` 不支持 `for` `key` 属性配置，不再打印 `warning` 信息，同时 `key` 属性也会保留不会删除 ([5ff8855](https://github.com/ecomfe/okam/commit/5ff8855))
+    * 增加模板和CSS资源依赖分析，同时重构原生组件模板依赖分析，新增构建配置 `component.template.resourceTags` 用于定制模板依赖资源分析 ([60a03d6](https://github.com/ecomfe/okam/commit/60a03d6))
+    * `px2rpx` postcss 插件新增 `ignore` 选项，用于配置不想 `px` 转换的样式文件，默认 `node_modules` 下样式文件都不会转换 ([6b9ceea](https://github.com/ecomfe/okam/commit/6b9ceea))
+    * 支持 `快应用` 不同页面组件放置在同一目录下 ([acdb588](https://github.com/ecomfe/okam/commit/acdb588))
+
+* **优化**
+    * `watch` 模式下，不再 `watch` `node_modules` 下依赖文件 ([feed692](https://github.com/ecomfe/okam/commit/feed692))
+
+### okam-cli@0.1.8
+
+
 ## 2019-01-11
 ### okam-core@0.4.8
 * **新功能**
@@ -7,11 +31,11 @@
     * 新增 `快应用` 对于 `redux` 状态管理支持 ([8d8915d](https://github.com/ecomfe/okam/commit/8d8915d))
 
 ### okam-build@0.4.11
-* **新功能**
-    * `v-model` 支持 ([26c6c0e](https://github.com/ecomfe/okam/commit/26c6c0e))
-
 * **Bug修复**
     * 修复支付宝 `catch` 事件处理 ([a41606c](https://github.com/ecomfe/okam/commit/a41606c))
+
+* **新功能**
+    * `v-model` 支持 ([26c6c0e](https://github.com/ecomfe/okam/commit/26c6c0e))
 
 ### okam-cli@0.1.7
 * **优化**
