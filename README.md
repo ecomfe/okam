@@ -53,25 +53,6 @@
 
 * [使用教程](https://ecomfe.github.io/okam)
 
-* [使用示例](https://github.com/ecomfe/okam-template)
-
-    ```shell
-    git clone https://github.com/ecomfe/okam-template.git
-
-    cd okam-template
-
-    npm i
-
-    npm run dev # 百度小程序开发模式
-    npm run dev:wx # 微信小程序开发模式
-    npm run dev:ant # 支付宝小程序开发模式
-
-    # 下载小程序开发工具 打开 相应构建产物目录
-    # `dist`: 百度小程序构建产物
-    # `wx_dist`: 微信小程序构建产物
-    # `ant_dist`: 支付宝小程序构建产物
-    ```
-
 ## Main Packages
 
 | Package | Status | Description |
