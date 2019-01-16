@@ -42,10 +42,11 @@
 * `ref`: 允许模板指定 `ref` 属性，组件实例 `$refs` 获取引用，类似 Vue
 * `redux`: 使用 `redux` 进行状态管理，要求安装依赖 `redux` 库：`npm i redux --save`, 另外，`redux` 依赖 `data` 扩展，因此需要一起配置
 * `behavior`: mixin 支持包括页面组件和自定义组件，对于插件支持选项，可以传入数组形式：`[ ['behavior', '{useNativeBehavior: true}'] ]`，**注意** 第二个参数为插件选项代码的字符串形式
+* `filter`: 提供 `filter` 支持，使用示例参考[这里](component/filter)
 
 ```javascript
 {
-    framework: ['data', 'watch', 'model', 'broadcast', 'ref', 'redux', 'behavior']
+    framework: ['data', 'watch', 'model', 'broadcast', 'ref', 'redux', 'behavior', 'filter']
 }
 ```
 
@@ -275,12 +276,26 @@ module.exports = {
 * `component.template`: `Object` 模板配置项
 * `component.template.useVuePrefix`: `boolean` `>= 0.4.6版本支持` 开启使用 `v-` 指令，默认 `false`, 具体使用详见[v- 指令支持](template/vueSyntax.md)
 * `component.template.transformTags`: `Object` 模板标签转换配置项，[详见标签转换](build/transformTag)
-* `component.global`: `Object` `>=0.4 版本支持` 自定义全局注入的组件
+* `component.global`: `Object` `>=0.4 版本支持` 自定义全局注入的组件，[具体可以参考特定平台代码](advance/platformSpecCode#组件)
 * `component.template.modelMap`: `Object` 自定义组件 `v-model` 配置项，[详见自定义配置v-model支持](template/v-model?id=自定义配置支持-v-model)
     * 要求：
         * [framework](build/index?id=framework) 配置了 `'model'` 此项配置才生效
         * 版本: `okam-build >= 0.4.11`
         * 版本: `okam-core >= 0.4.8`
+* `component.resourceTags`: `Object` `0.4.12 版本开始支持` 用于依赖资源信息收集的标签定义，默认会尝试从所有 `src` 属性获取本地的资源文件依赖，要求属性值不能使用变量形式，否则不能正确获取对应的依赖信息。
+
+```javascript
+{
+    component: {
+        template: {
+            myTag: 'myProp', // 自定义的依赖标签定义，会通过 myTag 的 myProp 获取依赖的资源
+            include: true, // 如果设为 true，默认通过 src 属性读取依赖信息
+            import: false // 如果设为 false，则不会读取该标签属性定义的依赖信息
+        }
+    }
+}
+```
+
 
 ### processors
 `Object|Array.<Object>` 自定义的构建处理器，这里定义的处理器，后续的处理规则 `rules` 里，可以直接通过处理器名称 `name` 直接引用，处理器定义包含如下选项，该配置也可以重写 [内建的处理器及插件](build/processors) 选项。

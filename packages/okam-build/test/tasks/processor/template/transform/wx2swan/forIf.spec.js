@@ -10,7 +10,7 @@
 const assert = require('assert');
 const {readFile, fakeProcessorOptions} = require('test/helper');
 const viewProcessor = require('okam/processor/template/index');
-const syntax = require('okam/processor/template/plugins/wx2swan-syntax-plugin.js');
+const syntax = require('okam/processor/template/plugins/syntax/wx2swan-syntax-plugin.js');
 
 function readTpl(file, isExpect) {
     return readFile(

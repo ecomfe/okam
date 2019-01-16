@@ -29,6 +29,8 @@
                             precision: 2
                             // 保持 不转 px 的注释值，默认: px2rpx: no
                             // keepComment: 'px2rpx: no'
+                            // ignore(path):boolean 忽略要转换的文件
+                            // ignore(path) { // ... return false;}
                         }
                     }
                 }

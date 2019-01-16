@@ -6,16 +6,21 @@
 <% var: size = ${px2rpx} ? 150 : 50 %>
 <% if: ${style} === 'stylus' %>
 @import './common/css/common'
+
 .page-img
     margin: 0 auto
+    -quick-margin: 0 44%;
     display: block
     width: ${size}px
     height: ${size}px
+
 .page-footer
     position: absolute
     bottom: 80px
     width: 100%
     text-align: center
+    -quick-justify-content: center
+    -quick-align-items: center
 <% else %>
 
 <% if: ${style} === 'css' %>
@@ -26,14 +31,18 @@
 
 .page-img {
     margin: 0 auto;
+    -quick-margin: 0 44%;
     display: block;
     width: ${size}px;
     height: ${size}px;
 }
+
 .page-footer {
     position: absolute;
     bottom: 80px;
     width: 100%;
     text-align: center;
+    -quick-justify-content: center;
+    -quick-align-items: center;
 }
 <% /if %>

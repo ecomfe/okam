@@ -17,29 +17,14 @@ module.exports = merge({}, require('./base.config'), {
         'async'
     ],
     <% /if %>
-    dev: {
-        processors: {
-            postcss: {
-                options: {
-                    plugins: {
-                        'postcss-url': {
-                            url: 'inline'
-                        }
-                    }
-                }
-            }
-        }
-    },
-    prod: {
-        processors: {
-            postcss: {
-                options: {
-                    plugins: {
-                        'postcss-url': {
-                            url: 'inline'
-                        }
-                    }
-                }
+    processors: {
+        postcss: {
+            options: {
+                plugins: [
+                    ['postcss-url', {
+                        url: 'inline'
+                    }]
+                ]
             }
         }
     }

@@ -25,7 +25,7 @@ function isDirectoryExists(dir) {
 
 function initQuickAppProject() {
     try {
-        let result = execSync('hap -V');
+        let result = execSync('hap --version');
         console.log('Using hap version: ' + result);
     }
     catch (ex) {

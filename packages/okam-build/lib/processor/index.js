@@ -85,21 +85,30 @@ function processEntryScript(file, buildManager) {
                 return [];
             })
             .reduce((a, b) => a.concat(b));
-
         pages = pages.concat(subPackagesPages);
     }
 
+    let allPageFiles = [];
+    let pageFileMap = {};
     pages.forEach(
         p => {
             let pageFullPath = path.resolve(file.dirname, p)
                 + '.' + componentExtname;
             let pageFile = allFiles.getByFullPath(pageFullPath);
             if (pageFile) {
+                pageFileMap[p] = pageFile;
                 pageFile.isPageComponent = true;
                 buildManager.addNeedBuildFile(pageFile);
+                allPageFiles.push(pageFile);
             }
         }
     );
+
+    // resolve page path as new path if needed, currently only for quick app
+    if (buildManager.resolvePageNewPath) {
+        buildManager.resolvePageNewPath(allPageFiles);
+        buildManager.normalizeAppPageConfig(pageFileMap, appConfig, file.dirname);
+    }
 
     let jsonFile = processConfigInfo(file, root, file);
     if (!jsonFile) {
@@ -107,6 +116,7 @@ function processEntryScript(file, buildManager) {
         return;
     }
     jsonFile.isAppConfig = true;
+
     allFiles.push(jsonFile);
 
     buildManager.addNeedBuildFile(jsonFile);

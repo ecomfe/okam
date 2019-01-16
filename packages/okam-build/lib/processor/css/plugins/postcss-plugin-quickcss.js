@@ -7,8 +7,8 @@
 
 const postcss = require('postcss');
 
-const ABBREV_COLOR_VALUE = /(^|\s+)(#[0-9A-Fa-f]{3})($|\s+)/;
-const COLOR_VALUE = /^#[0-9A-Fa-f]{6}$/;
+const HAS_ABBREV_COLOR_VALUE = /(^|\s+)(#[0-9A-Fa-f]{3})($|\s+)/;
+const COLOR_VALUE = /(^|\s+)(#[0-9A-Fa-f]{3,6})($|\s+)/;
 
 const NOT_SUPPORTED_BORDER_STYLES = [
     'border-left', 'border-right',
@@ -53,7 +53,7 @@ function transformBorderValue(prop, value, decl) {
 const styleDeclTransformers = [
     {
         match(prop) {
-            return prop === 'background' || prop === 'background-color';
+            return prop === 'background';
         },
         transform(decl) {
             let {value} = decl;
@@ -61,13 +61,58 @@ const styleDeclTransformers = [
                 return;
             }
 
+            // convert background: #ccc => background-color: #cccccc
+            // background: top left url(./img/xx.png) #ccc no-repeat
+            // => background-color: #ccc; background-position: top left;
+            //    background-image: url(./img/xx.png); background-repeat: no-repeat;
+            value = value.replace(/(^|\s+)(url\(.+\))/, (match, prefix, url) => {
+                let newPropDecl = {prop: 'background-image', value: url};
+                decl.parent.insertAfter(decl, newPropDecl);
+                return prefix;
+            });
+
+            value = value.replace(
+                /(^|\s+)(repeat|repeat\-x|repeat\-y|no\-repeat)(\s+|$)/,
+                (match, prefix, value, suffix) => {
+                    let newPropDecl = {prop: 'background-repeat', value};
+                    decl.parent.insertAfter(decl, newPropDecl);
+                    return prefix + suffix;
+                }
+            );
+
+            value = value.replace(COLOR_VALUE, (match, prefix, value, suffix) => {
+                if (value.length === 4) {
+                    value = normalizeColor(value);
+                }
+                let newPropDecl = {prop: 'background-color', value};
+                decl.parent.insertAfter(decl, newPropDecl);
+                return prefix + suffix;
+            });
+
             value = value.trim();
-            if (ABBREV_COLOR_VALUE.test(value)) {
-                decl.prop = 'background-color';
-                decl.value = normalizeColor(value);
+            if (value) {
+                let newPropDecl = {prop: 'background-position', value};
+                decl.parent.insertAfter(decl, newPropDecl);
             }
-            else if (COLOR_VALUE.test(value)) {
-                decl.prop = 'background-color';
+
+            decl.remove();
+        }
+    },
+    {
+        match(prop) {
+            return prop === 'background-color';
+        },
+        transform(decl) {
+            let {value} = decl;
+            if (!value) {
+                return;
+            }
+
+            // convert background-color: #c2d => background-color: #cc22dd
+            value = value.trim();
+            if (value.length === 4) {
+                value = normalizeColor(value);
+                decl.value = value;
             }
         }
     },
@@ -83,40 +128,49 @@ const styleDeclTransformers = [
 
             value = value.trim();
 
+            // convert border: none => border: 0
+            // convert border: 1px solid #c2d => border: 1px solid #cc22dd
+
             // none is not supported in quick app
             if (value === 'none') {
                 decl.value = value = '0';
             }
             else {
                 decl.value = value = value.replace(
-                    ABBREV_COLOR_VALUE,
+                    HAS_ABBREV_COLOR_VALUE,
                     (match, prefix, color, suffix) =>
                         (prefix + normalizeColor(color) + suffix)
                 );
             }
 
+            // convert border-left: 1px solid #ccc =>
+            // border-left-width: 1px;
+            // border-left-style: solid;
+            // border-left-color: #ccc;
+            // border-right/border-top/border-bottom is the same as border-left
             if (NOT_SUPPORTED_BORDER_STYLES.includes(prop)) {
                 transformBorderValue(prop, value, decl);
             }
         }
     },
-    {
-        match: 'box-sizing',
-        transform(decl) {
-            // only support box-sizing and do not support box-sizing property
-            let {value} = decl;
-            value && (value = value.trim());
-            if (value === 'border-box') {
-                decl.remove();
-            }
-        }
-    },
+    // {
+    //     match: 'box-sizing',
+    //     transform(decl) {
+    //         // only support box-sizing and do not support box-sizing property
+    //         let {value} = decl;
+    //         value && (value = value.trim());
+    //         if (value === 'border-box') {
+    //             decl.remove();
+    //         }
+    //     }
+    // },
     {
         match: 'font-weight',
         transform(decl) {
             let {value} = decl;
             value = value && parseInt(value.trim(), 10);
 
+            // convert font-weight: number => font-weight: normal/bold
             if (typeof value === 'number') {
                 if (value < 600) {
                     value = 'normal';
@@ -134,11 +188,10 @@ const styleDeclTransformers = [
         transform(decl) {
             let {value} = decl;
             value = value && value.trim();
+
+            // convert display: block => display: flex
             if (value === 'block') {
                 decl.value = 'flex';
-            }
-            else if (value === 'inline') {
-                decl.value = 'none';
             }
         }
     },
@@ -147,28 +200,18 @@ const styleDeclTransformers = [
         transform(decl) {
             let {value} = decl;
             value = value && value.trim();
+
+            // convert position: absolute => position: fixed
             if (value === 'absolute') {
                 value = 'fixed';
             }
-            else if (value === 'relative') {
-                value = 'none';
-            }
+
             decl.value = value;
-        }
-    },
-    {
-        match(prop, decl) {
-            let {value} = decl;
-            value && (value = value.trim());
-            if (value) {
-                value = value.replace(/(vh|vw)$/, '%');
-                decl.value = value;
-            }
         }
     }
 ];
 
-module.exports = postcss.plugin('postcss-plugin-quick', function (opts = {}) {
+module.exports = postcss.plugin('postcss-plugin-quickcss', function (opts = {}) {
     return function (css, result) {
 
         css.walkDecls(decl => {

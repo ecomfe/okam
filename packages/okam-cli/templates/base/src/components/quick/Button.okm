@@ -1,0 +1,78 @@
+<% if: ${template} === 'pug' %>
+    <% use: btn-tpl-pug() %>
+<% else %>
+    <% use: btn-tpl-normal() %>
+<% /if %>
+
+<% use: btn-script-js(script=${script}) %>
+
+<% if: ${style} === 'stylus' %>
+    <% use: btn-stylus() %>
+<% else %>
+    <% use: btn-css(style=${style}) %>
+<% /if %>
+<% target: btn-tpl-normal %>
+<template>
+    <div class="button">
+        <slot></slot>
+    </div>
+</template>
+<% target: btn-tpl-pug %>
+<template lang="pug">
+div.button
+    slot
+</template>
+<% target: btn-script-js %>
+<script<% if: ${style} === 'typescript' %> lang="typescript"<% /if %>>
+// 此组件用于快应用
+export default {
+    props: {
+        plain: {
+            type: Boolean,
+            default: false
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        loading: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'default'
+        },
+        type: {
+            type: String,
+            default: 'default'
+        }
+    }
+};
+</script>
+<% target: btn-stylus %>
+<style lang="stylus">
+.button
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 30px
+    font-size: 18px
+    border-radius: 5px
+    color: #000
+</style>
+
+<% target: btn-css %>
+<style<% if: ${style} !== 'css' %> lang="${style}"<% /if %>>
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    font-size: 18px;
+    border-radius: 5px;
+    color: #000;
+}
+</style>
+
+

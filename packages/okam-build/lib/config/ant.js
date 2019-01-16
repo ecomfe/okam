@@ -38,20 +38,28 @@ module.exports = merge({}, baseConf, {
     },
 
     processors: {
-        cssImport: {
-            // using the existed postcss processor
-            processor: 'postcss',
-            extnames: ['acss', 'css'],
-            rext: 'acss',
-            options: {
-                plugins: ['cssImport']
-            }
+        postcss: {
+            extnames: ['acss', 'css']
         },
         filter: {
             extnames: ['sjs'],
             rext: 'sjs',
             options: {
                 plugins: ['dep']
+            }
+        },
+        nativeView: {
+            processor: 'view',
+            extnames: ['axml'],
+            options: {
+                keepOriginalContent: true,
+                plugins: [['resource', {
+                    tags: {
+                        'import': true,
+                        'include': true,
+                        'import-sjs': 'from'
+                    }
+                }]]
             }
         }
     }

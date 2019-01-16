@@ -31,6 +31,9 @@ const PAGE_TYPE = 'page';
 function initExtensions(type, instance, base) {
     let cache = pluginCache;
     if (process.env.APP_TYPE === 'quick') {
+        if (!appGlobal.okamPluginCache) {
+            appGlobal.okamPluginCache = pluginCache;
+        }
         cache = appGlobal.okamPluginCache;
     }
 
@@ -147,10 +150,13 @@ export function use(plugin, pluginOpts) {
  *
  * @param {Object} instance the instance to init app
  * @param {Object} base the app base
+ * @param {Object=} options the extra init options
  * @return {Object}
  */
-export function createApp(instance, base) {
-    return initExtensions(APP_TYPE, instance, base);
+export function createApp(instance, base, options) {
+    let appInfo = initExtensions(APP_TYPE, instance, base);
+    options && (appInfo.$appOptions = () => options);
+    return appInfo;
 }
 
 /**

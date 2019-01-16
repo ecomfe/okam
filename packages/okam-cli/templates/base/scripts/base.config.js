@@ -26,28 +26,32 @@ module.exports = {
             }
         }
     },
+    // 此处没用上的功能可自行精简
     framework: [
         'data',
+        // 依赖 data
         'watch',
+        // 快应用 不支持
         'model',
+        // touttiao 不支持
+        'filter',
         <% if: ${redux} %>
+        // 依赖 data
         'redux',
         <% /if %>
         'behavior',
         'broadcast',
         'ref'
     ],
+    // 快应用 不转 rpx
+    designWidth: 1242,
     processors: {
-        <% if: ${script} === 'typescript' %>
-        babel7: {
-            extnames: ['js', 'ts']
-        },
-        <% elif: ${script} === 'babel7' %>
-        babel7: {
+        <% if: ${script} === 'babel' %>
+        babel: {
             extnames: ['js']
         },
         <% else %>
-        babel: {
+        babel7: {
             extnames: ['js']
         },
         <% /if %>
@@ -74,14 +78,20 @@ module.exports = {
             extnames: ['${styleExt}'],
             options: {
                 <% if: ${px2rpx} %>
-                plugins: {
-                    px2rpx: {
-                        // 设计稿尺寸
-                        designWidth: 1242,
-                        // 开启 1px 不转
-                        noTrans1px: true
-                    }
-                }
+                plugins: [
+                    'env',
+                    [
+                        'px2rpx',
+                        {
+                            // 设计稿尺寸,
+                            // 此配置项优先级高于 外层的 `designWidth`
+                            // 相同时 内部配置项可以不配置
+                            // designWidth: 1242,
+                            // 开启 1px 不转
+                            noTrans1px: true
+                        }
+                    ]
+                ]
                 <% /if %>
             }
         }

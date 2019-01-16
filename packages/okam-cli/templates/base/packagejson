@@ -28,7 +28,11 @@
     "dev:tt": "npm run dev:base -- --type tt",
     "dev:tt:server": "npm run dev:base -- --server --type tt",
     "dev:tt:clean": "npm run dev:base -- --clean --type tt",
-    "prod:tt": "npm run prod:base -- --type tt"
+    "prod:tt": "npm run prod:base -- --type tt",
+    "dev:quick": "npm run dev:base -- --type quick",
+    "dev:quick:server": "npm run dev:base -- --server --type quick",
+    "dev:quick:clean": "npm run dev:base -- --clean --type quick",
+    "prod:quick": "npm run prod:base -- --type quick"
   },
   <% if: ${lint} !== 'lintnone' %>
   "husky": {
@@ -47,7 +51,9 @@
     "ignore": [
       "dist/**/*",
       "wx_dist/**/*",
-      "ant_dist/**/*"
+      "ant_dist/**/*",
+      "tt_dist/**/*",
+      "quick_dist/**/*"
     ]
   },
   <% /if %>
@@ -62,7 +68,9 @@
     "ignore": [
       "dist/**/*",
       "wx_dist/**/*",
-      "ant_dist/**/*"
+      "ant_dist/**/*",
+      "tt_dist/**/*",
+      "quick_dist/**/*"
     ]
   },
   <% /if %>

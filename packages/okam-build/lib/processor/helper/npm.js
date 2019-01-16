@@ -1,5 +1,5 @@
 /**
- * @file Npm module helper
+ * @file Resource resolve helper including npm module resolve
  * @author xiaohong8023@outlook.com
  */
 
@@ -28,7 +28,6 @@ exports.DEFAULT_DEP_DIR_NAME = DEP_DIR_NAME;
  */
 exports.resolveDepModuleNewPath = function (oldPath, moduleDir, rebaseDepDir) {
     let newPath = rebaseDepDir + oldPath.substr(moduleDir.length);
-    // console.log('old', oldPath, newPath, moduleDir, rebaseDepDir)
 
     // replace all `node_modules` to `npm` to fix weixin cannot find the module
     // if the module path exists `node_module` dir name
@@ -44,11 +43,12 @@ exports.resolveDepModuleNewPath = function (oldPath, moduleDir, rebaseDepDir) {
 };
 
 /**
- * Resolve required module id. If resolve fail, return empty.
+ * Resolve required module id or other resource file path.
+ * If resolve fail, return empty.
  *
  * @param {BuildManager} buildManager the build manager
  * @param {Object} file the file to host the required module id
- * @param {string} requireModId the required module id to resolve
+ * @param {string} requireModId the required module id or resource path to resolve
  * @return {?string}
  */
 exports.resolve = function (buildManager, file, requireModId) {
@@ -63,7 +63,14 @@ exports.resolve = function (buildManager, file, requireModId) {
         return resolveModInfo.id;
     }
 
-    let depFileFullPath = buildManager.resolve(requireModId, file);
+    let resolveOpts;
+    if (file.isStyle || file.isTpl) {
+        resolveOpts = {
+            extensions: []
+        };
+    }
+
+    let depFileFullPath = buildManager.resolve(requireModId, file, resolveOpts);
     if (!depFileFullPath) {
         return;
     }
@@ -84,7 +91,7 @@ exports.resolve = function (buildManager, file, requireModId) {
     let resolveModId = getRequirePath(
         depFile.resolvePath || depFile.path,
         rebaseRelPath,
-        buildManager.getModulePathKeepExtnames()
+        (file.isStyle || file.isTpl) ? true : buildManager.getModulePathKeepExtnames()
     );
 
     let cacheInfo = {

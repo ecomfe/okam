@@ -47,7 +47,7 @@ function getModelSyntaxPlugin(appType) {
  * @return {string}
  */
 function getTemplateSyntaxPlugin(appType) {
-    return path.join(PLUGIN_BASE_NAME, `${appType}-syntax-plugin`);
+    return path.join(PLUGIN_BASE_NAME, `syntax/${appType}-syntax-plugin`);
 }
 
 const REF_PLUGIN_PATH = path.join(PLUGIN_BASE_NAME, 'ref-plugin');
@@ -69,29 +69,33 @@ const BUILTIN_PLUGINS = {
             REF_PLUGIN_PATH, {useId: true}
         ],
         default: [REF_PLUGIN_PATH]
-    }
+    },
+    resource: path.join(PLUGIN_BASE_NAME, 'resource-plugin')
 };
-
 
 /**
  * Add ref plugin
  *
  * @inner
+ * @param {string} pluginName the builtin plugin name to add
  * @param {string} appType the app type to transform
  * @param {Array.<Object>} plugins the existed plugins
- * @return {Array.<Object>}
+ * @param {boolean=} insertAtTop whether insert the added plugin at the first position
  */
-function addRefPlugin(appType, plugins) {
-    let refPluginInfo = BUILTIN_PLUGINS.ref[appType] || BUILTIN_PLUGINS.ref.default;
-    let refPlugin = require(refPluginInfo[0]);
-    let hasRefPlugin = plugins.some(
-        item => (refPlugin === (Array.isArray(item) ? item[0] : item))
-    );
-    if (!hasRefPlugin) {
-        plugins.push([refPlugin, refPluginInfo[1]]);
+function addBuiltinPlugin(pluginName, appType, plugins, insertAtTop) {
+    let pluginInfo = BUILTIN_PLUGINS[pluginName];
+    if (typeof pluginInfo === 'object') {
+        pluginInfo = pluginInfo[appType] || pluginInfo.default;
     }
+    pluginInfo = normalizeViewPlugins([pluginInfo], appType)[0];
 
-    return plugins;
+    let plugin = Array.isArray(pluginInfo) ? pluginInfo[0] : pluginInfo;
+    let hasBuiltinPlugin = plugins.some(
+        item => (plugin === (Array.isArray(item) ? item[0] : item))
+    );
+    if (!hasBuiltinPlugin) {
+        plugins[insertAtTop ? 'unshift' : 'push'](pluginInfo);
+    }
 }
 
 /**
@@ -184,15 +188,18 @@ function handleOnFilter(file, filterName) {
  *           tag() {} // refer to the ref plugin implementation
  *        }
  * @param {BuildManager} buildManager the build manager
+ * @param {boolean=} isNativeView whether is native view transformation
  * @return {Object}
  */
-function initViewTransformOptions(file, processOpts, buildManager) {
-    let isSupportRef = buildManager.isEnableRefSupport();
+function initViewTransformOptions(file, processOpts, buildManager, isNativeView) {
     let plugins = processOpts.plugins;
-
     let {appType, componentConf, buildConf} = buildManager;
+    if (isNativeView) {
+        return Object.assign({}, processOpts, {
+            plugins: normalizeViewPlugins(plugins, appType)
+        });
+    }
 
-    let framework = buildConf.framework || [];
     let templateConf = (componentConf && componentConf.template) || {};
     if (!plugins || !plugins.length) {
         plugins = ['syntax'];
@@ -208,9 +215,9 @@ function initViewTransformOptions(file, processOpts, buildManager) {
     }
 
     plugins = normalizeViewPlugins(plugins, appType);
-    if (isSupportRef) {
-        plugins = addRefPlugin(appType, plugins);
-    }
+    let isSupportRef = buildManager.isEnableRefSupport();
+    isSupportRef && addBuiltinPlugin('ref', appType, plugins);
+    addBuiltinPlugin('resource', appType, plugins, true);
 
     processOpts.plugins = plugins;
 
@@ -225,7 +232,7 @@ function initViewTransformOptions(file, processOpts, buildManager) {
         {},
         processOpts,
         {
-            framework,
+            framework: buildConf.framework || [],
             plugins,
             filter: filterOptions,
             template: templateConf,

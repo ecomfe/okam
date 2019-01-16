@@ -194,6 +194,9 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     let filterOptions = buildManager.getFilterTransformOptions();
     let enableMixinSupport = buildManager.isEnableMixinSupport();
     let {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
+    let getInitOptions = buildManager.getAppBaseClassInitOptions.bind(
+        buildManager, file
+    );
     if (file.isEntryScript) {
         Object.assign(pluginOpts, {
             framework,
@@ -202,6 +205,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
         });
         // polyfill using local variable is prior to global polyfill
         localPolyfill || (pluginOpts.polyfill = polyfill);
+        pluginOpts.getInitOptions = getInitOptions;
         plugins.push([
             programPlugins.app,
             pluginOpts
@@ -213,7 +217,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
             filterOptions,
             tplRefs: file.tplRefs,
             baseClass: appBaseClass && appBaseClass.page,
-            getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager, file)
+            getInitOptions
         });
         plugins.push([programPlugins.page, pluginOpts]);
     }
@@ -223,7 +227,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
             filterOptions,
             tplRefs: file.tplRefs,
             baseClass: appBaseClass && appBaseClass.component,
-            getInitOptions: buildManager.getAppBaseClassInitOptions.bind(buildManager, file)
+            getInitOptions
         });
         plugins.push([programPlugins.component, pluginOpts]);
     }

@@ -42,20 +42,28 @@ module.exports = merge({}, baseConf, {
     },
 
     processors: {
-        cssImport: {
-            // using the existed postcss processor
-            processor: 'postcss',
-            extnames: ['wxss', 'css'],
-            rext: 'wxss',
-            options: {
-                plugins: ['cssImport']
-            }
+        postcss: {
+            extnames: ['wxss', 'css']
         },
         filter: {
             extnames: ['wxs'],
             rext: 'wxs',
             options: {
                 plugins: ['dep']
+            }
+        },
+        nativeView: {
+            processor: 'view',
+            extnames: ['wxml'],
+            options: {
+                keepOriginalContent: true,
+                plugins: [['resource', {
+                    tags: {
+                        import: true,
+                        include: true,
+                        wxs: true
+                    }
+                }]]
             }
         }
     }

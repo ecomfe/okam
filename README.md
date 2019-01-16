@@ -8,13 +8,14 @@
 
 ## Introduction
 
-### 小程序支持
+### 平台支持
 
 - [x] [百度小程序](https://smartprogram.baidu.com/docs/introduction/enter_application/)
 - [x] [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/)
 - [x] [支付宝小程序](https://docs.alipay.com/mini/developer/getting-started)
 - [x] [头条小程序](https://developer.toutiao.com/docs/)
-- [ ] [快应用](https://www.quickapp.cn/) `初步支持，待完善`
+- [x] [快应用](https://www.quickapp.cn/)
+- [ ] H5 `待支持`
 
 ### 功能特性
 
@@ -31,6 +32,8 @@
 * 扩展的能力
     * `HTML` 标签支持
     * `Vue` 数据操作语法，包括 `computed`、`watch` 支持
+    * `Vue` 双向绑定 `v-model` 指令支持
+    * `filter` 模板语法支持
     * `Redux` 数据状态管理
     * 模板组件 `ref` 引用支持
     * `Mixins` 支持

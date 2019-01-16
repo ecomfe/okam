@@ -10,7 +10,6 @@
 * page 页面一般有4个文件：
     `page.js、page.json、page.swan、page.css`
 
-
 * component 组件一般有4个文件：
     `component.js、component.json、component.swan、component.css`
 

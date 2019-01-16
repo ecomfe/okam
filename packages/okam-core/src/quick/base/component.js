@@ -68,7 +68,7 @@ export default {
         // In quick app, required module may not be cached and the inner module
         // state cannot be persisted even if we have changed its inner state
         // during app lifetime.
-        // As for we need to register API anc change API dynamically when startup.
+        // As for we need to register API and change API dynamically when startup.
         // So, we get the global API must be from the global app instance.
         this.$api = rawApp.$api;
 

@@ -61,7 +61,7 @@ module.exports = merge({}, require('./base.config'), {
         postcss: {
             extnames: ['css', 'styl', 'less'],
             options: {
-                plugins: ['env', 'quickCss']
+                plugins: ['env', 'quickcss']
             }
         }
     },

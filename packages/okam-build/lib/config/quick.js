@@ -96,6 +96,14 @@ module.exports = merge({}, baseConf, {
 
     component: {
         template: {
+            resourceTags: {
+                // 由于快应用不支持模板导入功能，页面组件路径可能会因为同一目录下存在
+                // 多个页面组件，而自动调整页面路径，为了避免 include/import 路径
+                // 重新计算找不到导入/引用的模板，这里不分析这两个标签定义的依赖资源
+                include: false,
+                import: false
+            },
+
             transformTags: {
                 'button': 'o-button'
             }
@@ -125,14 +133,8 @@ module.exports = merge({}, baseConf, {
             }
         },
 
-        cssImport: {
-            // using the existed postcss processor
-            processor: 'postcss',
-            extnames: ['css'],
-            rext: 'css',
-            options: {
-                plugins: ['cssImport']
-            }
+        postcss: {
+            extnames: ['css']
         }
     },
 

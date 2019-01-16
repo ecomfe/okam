@@ -8,8 +8,6 @@
 
 /* eslint-disable fecs-camelcase */
 
-import {getDataByPath} from '../../../../helper/data';
-
 /**
  * Normalize watch info
  *
@@ -87,22 +85,13 @@ function getAnonymousWatcherName(ctx) {
  * @param {boolean=} options.immediate whether trigger the callback
  *        immediately with the current value of the expression or function
  *        optional, by default false
+ * @param {boolean=} optional.deep whether watch object nested value
+ *        optional, by default false
  * @return {*}
  */
 function watchDataChange(expressOrFunc, callback, options) {
     if (typeof expressOrFunc === 'function') {
         expressOrFunc = this.__addComputedProp(expressOrFunc);
-    }
-
-    let {immediate} = options || {};
-    if (immediate) {
-        let handler = callback;
-        if (typeof handler === 'string') {
-            handler = this[handler];
-        }
-
-        let value = getDataByPath(this, expressOrFunc);
-        handler.call(this, value);
     }
 
     if (typeof callback === 'function') {
@@ -111,7 +100,7 @@ function watchDataChange(expressOrFunc, callback, options) {
         callback = handlerName;
     }
 
-    return this.__originalWatch(expressOrFunc, callback);
+    return this.__watchDataChange(expressOrFunc, callback, options);
 }
 
 export default {
@@ -160,7 +149,7 @@ export default {
          * @private
          */
         created() {
-            this.__originalWatch = this.$watch;
+            this.__originalWatch = this.__originalWatch || this.$watch;
             this.$watch = watchDataChange.bind(this);
             if (typeof this.__innerWatchers === 'function') {
                 let watchers = this.__innerWatchers = this.__innerWatchers();

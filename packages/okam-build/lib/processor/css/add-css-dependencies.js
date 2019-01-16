@@ -5,18 +5,19 @@
 
 'use strict';
 
-const path = require('path');
-const {relative} = require('../../util').file;
+const {relative, replaceExtname} = require('../../util').file;
 
 module.exports = function (file, options) {
-    let {config} = options;
+    let {config, resolve} = options;
     let content = file.content.toString();
-    let {styleFiles} = config;
-    let dirName = path.dirname(file.fullPath);
+    let {styleFiles, rext} = config;
+    let dirName = file.dirname;
 
     // add css style dependencies
     styleFiles && styleFiles.forEach(item => {
         let relPath = relative(item, dirName);
+        relPath = resolve(file, relPath);
+        rext && (relPath = replaceExtname(relPath, rext));
         content = `@import '${relPath}';\n` + content;
     });
 

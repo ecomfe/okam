@@ -2,14 +2,22 @@
 
 > 奥卡姆，一个面向小程序开发的开发框架，提供类 `Vue` 的开发体验。
 
-
-## 目前支持的平台
+## 支持平台
 
 - [x] [百度小程序](https://smartprogram.baidu.com/docs/introduction/enter_application/)
 - [x] [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/)
 - [x] [支付宝小程序](https://docs.alipay.com/mini/developer/getting-started)
 - [x] [头条小程序](https://developer.toutiao.com/docs/)
-- [ ] [快应用](https://www.quickapp.cn/) `初步支持，待完善`
+- [x] [快应用](https://www.quickapp.cn/)
+- [ ] H5 `待支持`
+
+## 交流反馈
+
+技术交流：
+* QQ 群 `728460911`，入群备注：okam
+* 百度同学可以加 Hi 群：`1637339`
+
+反馈建议：项目代码开源在 [Github](https://github.com/ecomfe/okam) 上，有任何问题或者建议，欢迎提 [issue](https://github.com/ecomfe/okam/issues/new), 发 [pr](https://github.com/ecomfe/okam)。
 
 ## 主要功能特性
 
@@ -28,6 +36,8 @@
 * 扩展的能力
     * `HTML` 标签支持
     * `Vue` 数据操作语法，包括 `computed`、`watch` 支持
+    * `Vue` 双向绑定 `v-model` 指令支持
+    * `filter` 模板语法支持
     * `Redux` 数据状态管理
     * 模板组件 `ref` 引用支持
     * `Mixins` 支持
@@ -48,9 +58,3 @@
 * 减减鸭
 * 邮政EMS
 * 简单翻译
-
-## 交流反馈
-
-技术交流：QQ 群 `728460911`，入群备注：okam
-
-反馈建议：项目代码开源在 [Github](https://github.com/ecomfe/okam) 上，有任何问题或者建议，欢迎提 [issue](https://github.com/ecomfe/okam/issues/new), 发 [pr](https://github.com/ecomfe/okam)。

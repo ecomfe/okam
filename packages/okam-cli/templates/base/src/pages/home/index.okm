@@ -4,35 +4,31 @@
     <% use: ph-tpl-normal() %>
 <% /if %>
 
-<% if: ${script} === 'typescript' %>
-    <% use: ph-script-ts() %>
-<% else %>
-    <% use: ph-script-js() %>
-<% /if %>
+<% use: ph-script-js(script=${script}) %>
 
 <% if: ${style} === 'stylus' %>
     <% use: ph-stylus() %>
 <% elif: ${style} === 'less' %>
-    <% use: ph-less() %>
+    <% use: ph-less(style=${style}) %>
 <% elif: ${style} === 'scss' %>
-    <% use: ph-scss() %>
+    <% use: ph-less(style=${style}) %>
 <% else %>
     <% use: ph-css() %>
 <% /if %>
 <% target: ph-tpl-normal %>
 <template>
-    <import src="../../common/tpl/footer.tpl" />
     <view class="home-wrap">
+        <import src="../../common/tpl/footer.tpl" />
         <image class="page-img" src="../../common/img/okm.png" />
         <hello :from="from" @hello="handleHello"></hello>
         <view class="click-tip" if="clicked">You click me~</view>
+        <tpl is="page-footer" />
     </view>
-    <tpl is="page-footer" />
 </template>
 <% target: ph-tpl-pug %>
 <template lang="pug">
-import(src="../../common/tpl/footer.tpl")/
 view.home-wrap
+    import(src="../../common/tpl/footer.tpl")/
     image.page-img(
         src="../../common/img/okm.png"
     )/
@@ -43,43 +39,10 @@ view.home-wrap
     view.click-tip(
         if="clicked"
     ) You click me~
-tpl(is="page-footer")/
+    tpl(is="page-footer")/
 </template>
 <% target: ph-script-js %>
-<script>
-import Hello from '../../components/Hello';
-
-export default {
-    config: {
-        title: 'Home Page Title'
-    },
-
-    components: {
-        Hello
-    },
-
-    data: {
-        btnText: 'Hello',
-        clicked: false,
-        from: 'Okam home page'
-    },
-
-    methods: {
-
-        handleHello(e) {
-            this.clicked = true;
-            this.btnText = 'You clicked';
-
-            this.$api.showToast({
-                title: 'Received Hello',
-                duration: 3000
-            });
-        }
-    }
-};
-</script>
-<% target: ph-script-ts %>
-<script lang="typescript">
+<script<% if: ${style} === 'typescript' %> lang="typescript"<% /if %>>
 import Hello from '../../components/Hello';
 
 export default {
@@ -117,39 +80,35 @@ export default {
     box-sizing: border-box
     height: 100vh
     background: #f0f0f0
+    -quick-flex-direction: column
+    -quick-align-items: center
 
     .click-tip
         text-align: center
-        color: red
+
+        text
+            color: red
 
 </style>
 
 <% target: ph-less %>
-<style lang="less">
+<style lang="${style}">
 .home-wrap {
     box-sizing: border-box;
     height: 100vh;
     background: #f0f0f0;
+    -quick-flex-direction: column;
+    -quick-align-items: center;
 
     .click-tip {
         text-align: center;
-        color: red;
+
+        text {
+            color: red;
+        }
     }
 }
 
-</style>
-<% target: ph-scss %>
-<style lang="scss">
-.home-wrap {
-    box-sizing: border-box;
-    height: 100vh;
-    background: #f0f0f0;
-
-    .click-tip {
-        text-align: center;
-        color: red;
-    }
-}
 </style>
 <% target: ph-css %>
 <style>
@@ -157,10 +116,15 @@ export default {
     box-sizing: border-box;
     height: 100vh;
     background: #f0f0f0;
+    -quick-flex-direction: column;
+    -quick-align-items: center;
 }
 
 .home-wrap .click-tip {
     text-align: center;
+}
+
+.home-wrap .click-tip text {
     color: red;
 }
 </style>

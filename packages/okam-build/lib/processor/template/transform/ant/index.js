@@ -19,10 +19,6 @@ module.exports = {
         canvas: {
             match: 'canvas',
             transform: require('./canvas')
-        },
-        filter: {
-            match: 'import-sjs',
-            transform: require('./filter')
         }
     }),
     attribute: merge({}, attribute, {

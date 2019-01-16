@@ -19,30 +19,28 @@ module.exports = merge({}, require('./base.config'), {
     ],
     <% /if %>
 
-    dev: {
-        processors: {
-            postcss: {
-                options: {
-                    plugins: {
-                        'postcss-url': {
-                            url: 'inline'
-                        }
-                    }
-                }
+    processors: {
+        postcss: {
+            options: {
+                plugins: [
+                    ['postcss-url', {
+                        url: 'inline'
+                    }]
+                ]
+            }
+        },
+        <% if: ${script} === 'babel' %>
+        filter: {
+            options: {
+                presets: ['babel-preset-env']
             }
         }
-    },
-    prod: {
-        processors: {
-            postcss: {
-                options: {
-                    plugins: {
-                        'postcss-url': {
-                            url: 'inline'
-                        }
-                    }
-                }
+        <% else %>
+        filter: {
+            options: {
+                presets: ['@babel/preset-env']
             }
         }
+        <% /if %>
     }
 });

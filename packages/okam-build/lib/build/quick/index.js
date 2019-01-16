@@ -7,11 +7,142 @@
 
 const path = require('path');
 const BuildManager = require('../BuildManager');
-const processor = require('../../processor');
+const {registerProcessor} = require('../../processor');
+const {relative} = require('../../util').file;
 
 const VALIDATED_DATA_TYPES = ['public', 'protected', 'private'];
+const CHANGED_PAGE_PATH_PLACEHOLDER = '#$CHANGED_PATH$#';
+
+function getNewPagePath(pagePath, extname) {
+    let lastDotIdx = pagePath.lastIndexOf('.');
+    if (lastDotIdx !== -1) {
+        pagePath = pagePath.substring(0, lastDotIdx);
+    }
+    return pagePath + '/index.' + extname;
+}
+
+function resolveNewPage(root, resolvePath, relativeRoot) {
+    let newPage = relative(path.join(root, resolvePath), relativeRoot);
+    return newPage.substring(0, newPage.lastIndexOf('.'));
+}
+
+function initNewPkgResolve(pkg, result, opts) {
+    let {root, relativeRoot, pageFileMap} = opts;
+    let {root: pkgRoot, pages} = pkg;
+    pages && pages.forEach(subPage => {
+        let pagePath = pkgRoot + '/' + subPage;
+        let {resolvePath} = pageFileMap[pagePath] || {};
+        let newSubPage = subPage;
+        let newPkgRoot = pkgRoot;
+        if (resolvePath) {
+            newSubPage = resolveNewPage(root, resolvePath, relativeRoot);
+
+            let firstSlashIdx = newSubPage.indexOf('/');
+            newPkgRoot = newSubPage.substring(0, firstSlashIdx);
+            newSubPage = newSubPage.substr(firstSlashIdx + 1);
+        }
+
+        let subPageList = result[newPkgRoot];
+        subPageList || (subPageList = result[newPkgRoot] = []);
+        subPageList.push(newSubPage);
+    });
+
+    return result;
+}
+
+function resolveSubPkgList(subPackages, root, relativeRoot, pageFileMap) {
+    let result = {};
+    let resolveOpts = {
+        root, relativeRoot, pageFileMap
+    };
+    subPackages.forEach(pkg => {
+        initNewPkgResolve(
+            pkg, result, resolveOpts
+        );
+    });
+
+    let newSubPkgs = [];
+    Object.keys(result).forEach(k => {
+        newSubPkgs.push({
+            root: k,
+            pages: result[k]
+        });
+    });
+    return newSubPkgs;
+}
+
+function resolvePageList(pages, root, relativeRoot, pageFileMap) {
+    let result = [];
+    let upMap = {};
+    pages.forEach(pagePath => {
+        let {resolvePath} = pageFileMap[pagePath] || {};
+        if (resolvePath) {
+            let newPagePath = resolveNewPage(root, resolvePath, relativeRoot);
+            result.push(newPagePath);
+            upMap[pagePath] = newPagePath;
+        }
+        else {
+            result.push(pagePath);
+        }
+    });
+    return {
+        pages: result,
+        changedPages: upMap
+    };
+}
 
 class BuildQuickAppManager extends BuildManager {
+
+    /**
+     * Normalize app page config value
+     *
+     * @param {Object} pageFileMap page file map
+     * @param {Object} appConfig the original app config
+     * @param {string} relativeRoot the root to relative
+     */
+    normalizeAppPageConfig(pageFileMap, appConfig, relativeRoot) {
+        let {pages, subPackages} = appConfig;
+
+        let root = this.root;
+        let {pages: newPages, changedPages} = resolvePageList(
+            pages, root, relativeRoot, pageFileMap
+        );
+        appConfig.pages = newPages;
+        this.changedPagePathMap = changedPages;
+
+        if (subPackages && subPackages.length > 0) {
+            appConfig.subPackages = resolveSubPkgList(
+                subPackages, root, relativeRoot, pageFileMap
+            );
+        }
+    }
+
+    /**
+     * Resolve page component new paths.
+     * In quick app, only allow to have one page component in the same directory.
+     *
+     * @param {Array.<Object>} pageFiles all page files
+     */
+    resolvePageNewPath(pageFiles) {
+        let dirPageMap = {};
+        pageFiles.forEach(item => {
+            let {dirname} = item;
+            let pageList = dirPageMap[dirname];
+            pageList || (pageList = dirPageMap[dirname] = []);
+            pageList.push(item);
+        });
+
+        Object.keys(dirPageMap).forEach(k => {
+            let pageList = dirPageMap[k];
+            if (pageList.length <= 1) {
+                return;
+            }
+
+            pageList.forEach(page => {
+                page.resolvePath = getNewPagePath(page.path, page.extname);
+            });
+        });
+    }
 
     /**
      * @override
@@ -137,21 +268,14 @@ class BuildQuickAppManager extends BuildManager {
             return;
         }
 
-        found.allowRelease = true;
-
-        // avoid the file output path return `false`, here we make an assumption
-        // that the file has been compiled
-        found.compiled = true;
-        let outputPath = this.generator.getOutputPath(found);
-        found.compiled = false; // reset compiled info
-
         // init addCssDependencies processor options
-        processor.registerProcessor({
+        registerProcessor({
             addCssDependencies: {
                 options: {
                     styleFiles: [
-                        path.join(this.root, outputPath)
-                    ]
+                        path.join(this.root, found.path)
+                    ],
+                    rext: 'css'
                 }
             }
         });
@@ -161,21 +285,30 @@ class BuildQuickAppManager extends BuildManager {
      * @override
      */
     getAppBaseClassInitOptions(file, config, opts) {
-        if (!opts.isPage || !config) {
-            return;
-        }
+        let result = super.getAppBaseClassInitOptions(file, config, opts);
 
         let extraData;
-        let envConfig = config[this.envConfigKey];
-        let dataAccessType = envConfig && envConfig.data;
-        if (dataAccessType) {
-            if (!VALIDATED_DATA_TYPES.includes(dataAccessType)) {
-                this.logger.warn('illegal quick app page data type:', dataAccessType);
-            }
-            extraData = {dataAccessType};
+        if (opts.isApp) {
+            this.entryAppFile = file;
+            extraData = {
+                changedPagePathMap: CHANGED_PAGE_PATH_PLACEHOLDER
+            };
         }
 
-        if (this.isEnableFrameworkExtension('watch')) {
+        if (opts.isPage && config) {
+            let envConfig = config[this.envConfigKey];
+            let dataAccessType = envConfig && envConfig.data;
+            if (dataAccessType) {
+                if (!VALIDATED_DATA_TYPES.includes(dataAccessType)) {
+                    this.logger.warn('illegal quick app page data type:', dataAccessType);
+                }
+
+                extraData || (extraData = {});
+                extraData.dataAccessType = dataAccessType;
+            }
+        }
+
+        if (!opts.isApp && this.isEnableFrameworkExtension('watch')) {
             let watchCounter = 0;
             let content = file.content.toString();
             let watchApiCallRegexp = /\.\$watch(\s|\(|,|;|$)/g;
@@ -184,10 +317,17 @@ class BuildQuickAppManager extends BuildManager {
             }
 
             extraData || (extraData = {});
-            extraData.watcherCounter = watchCounter;
+            watchCounter && (extraData.watcherCounter = watchCounter);
         }
 
-        return extraData;
+        if (result && extraData) {
+            Object.assign(result, extraData);
+        }
+        else if (!result && extraData) {
+            result = extraData;
+        }
+
+        return result;
     }
 
     /**
@@ -213,6 +353,24 @@ class BuildQuickAppManager extends BuildManager {
             appConfigFile.compileReady = true;
             this.compile(appConfigFile);
         }
+
+        // update entry app options
+        let content = this.entryAppFile.content;
+        let info = this.changedPagePathMap; // used for router
+        if (info) {
+            let result = {};
+            Object.keys(info).forEach(k => {
+                let value = info[k];
+                result['/' + k] = '/' + value;
+            });
+            info = JSON.stringify(result);
+        }
+        else {
+            info = 'null';
+        }
+        this.entryAppFile.content = content.replace(
+            '"' + CHANGED_PAGE_PATH_PLACEHOLDER + '"', info
+        );
     }
 }
 

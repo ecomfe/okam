@@ -34,9 +34,6 @@ module.exports = {
         babel7: {
             extnames: ['js']
         },
-        cssImport: {
-            extnames: ['styl']
-        },
         postcss: {
             extnames: ['css', 'styl'],
             options: {

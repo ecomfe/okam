@@ -4,20 +4,16 @@
     <% use: pc-tpl-normal() %>
 <% /if %>
 
-<% if: ${script} === 'typescript' %>
-    <% use: pc-script-ts() %>
-<% else %>
-    <% use: pc-script-js() %>
-<% /if %>
+<% use: pc-script-js(script=${script}) %>
 
 <% if: ${style} === 'stylus' %>
     <% use: pc-stylus() %>
 <% elif: ${style} === 'less' %>
-    <% use: pc-less() %>
+    <% use: pc-css(style=${style}) %>
 <% elif: ${style} === 'scss' %>
-    <% use: pc-scss() %>
+    <% use: pc-css(style=${style}) %>
 <% else %>
-    <% use: pc-css() %>
+    <% use: pc-css(style=${style}) %>
 <% /if %>
 <% target: pc-tpl-normal %>
 <template>
@@ -37,7 +33,7 @@ view.my-counter-wrap
     )
 </template>
 <% target: pc-script-js %>
-<script>
+<script<% if: ${style} === 'typescript' %> lang="typescript"<% /if %>>
 import Counter from '../../components/Counter';
 
 export default {
@@ -52,30 +48,8 @@ export default {
     },
 
     methods: {
-        handleCounterChange() {
-            console.log('counter change...', arguments)
-        }
-    }
-};
-</script>
-<% target: pc-script-ts %>
-<script lang="typescript">
-import Counter from '../../components/Counter';
-
-export default {
-    config: {
-        // The page config defined in page.json
-        navigationBarTitleText: 'Counter',
-        backgroundColor: '#fff'
-    },
-
-    components: {
-        Counter
-    },
-
-    methods: {
-        handleCounterChange() {
-            console.log('counter change...', arguments)
+        handleCounterChange(...args) {
+            console.log('counter change...', args);
         }
     }
 };
@@ -83,37 +57,23 @@ export default {
 <% target: pc-stylus %>
 <style lang="stylus">
 .my-counter-wrap
-    min-height: 100vh
+    height: 100vh
     padding: 20px
     box-sizing: border-box
     background: #fff
+    -quick-flex-direction: column
+    -quick-align-items: center
 </style>
 
-<% target: pc-less %>
-<style lang="less">
-.my-counter-wrap {
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-    background: #fff;
-}
-</style>
-<% target: pc-scss %>
-<style lang="scss">
-.my-counter-wrap {
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-    background: #fff;
-}
-</style>
 <% target: pc-css %>
-<style>
+<style<% if: ${style} !== 'css' %> lang="${style}"<% /if %>>
 .my-counter-wrap {
-    min-height: 100vh;
+    height: 100vh;
     padding: 20px;
     box-sizing: border-box;
     background: #fff;
+    -quick-flex-direction: column;
+    -quick-align-items: center;
 }
 </style>
 
