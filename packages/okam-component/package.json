@@ -1,6 +1,6 @@
 {
   "name": "okam-component",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "description": "The okam components that provide the missing components for some platforms",
   "main": "index.js",
   "keywords": [
