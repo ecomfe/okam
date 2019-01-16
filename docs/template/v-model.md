@@ -1,6 +1,6 @@
 # v-model
 
-> `okam` 从 `okam-core: 0.4.8`， `okam-build: 0.4.11` 版本开始支持；
+> `okam` 从 `okam-core: 0.4.8`， `okam-build: 0.4.11` 版本开始支持
 
 提供对表单组件及自定义组件 `v-model` 支持，默认不开启，需在配置项中，配置 `v-model` 支持
 

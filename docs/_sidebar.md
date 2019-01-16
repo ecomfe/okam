@@ -1,6 +1,7 @@
 * 入门
 
     * [快速开始](intro/quickStart.md)
+    * [平台支持](intro/compare.md)
 
 * 小程序入口
 
