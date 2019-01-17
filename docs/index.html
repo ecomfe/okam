@@ -44,5 +44,16 @@
     </script>
     <script src="asset/docsify.min.js"></script>
     <script src="asset/search.min.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            document.querySelectorAll('.task-list-item input').forEach(
+                function (item) {
+                    item.addEventListener('click', function (e) {
+                        e.preventDefault();
+                    });
+                }
+            );
+        });
+    </script>
 </body>
 </html>
