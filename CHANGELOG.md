@@ -22,7 +22,11 @@
     * `watch` 模式下，不再 `watch` `node_modules` 下依赖文件 ([feed692](https://github.com/ecomfe/okam/commit/feed692))
 
 ### okam-cli@0.1.8
+* **新功能**
+    * 支持快应用 ([19ca00e](https://github.com/ecomfe/okam/commit/19ca00e))
 
+* **优化**
+    * 默认开启 `v-` 指令支持 ([19ca00e](https://github.com/ecomfe/okam/commit/19ca00e))
 
 ## 2019-01-11
 ### okam-core@0.4.8
