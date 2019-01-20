@@ -6,7 +6,7 @@
 'use strict';
 
 import assert from 'assert';
-import isEqual from 'core/extend/data/redux/equal';
+import isEqual from 'core/extend/data/equal';
 
 describe('redux equal check', function () {
     it('should check equal', () => {

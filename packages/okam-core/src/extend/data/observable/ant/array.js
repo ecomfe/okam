@@ -75,6 +75,28 @@ Object.keys(observableArray).forEach(k => {
     };
 });
 
+Object.assign(observableArray, {
+    sort(observer, rawSort, ...args) {
+        let rawData = observer.rawData;
+        rawSort.apply(rawData, args);
+
+        let result = rawSort.apply(this, args);
+        observer.set(null, rawData);
+
+        return result;
+    },
+
+    reverse(observer, rawReverse) {
+        let rawData = observer.rawData;
+        rawData.reverse();
+
+        let result = rawReverse.call(this);
+        observer.set(null, rawData);
+
+        return result;
+    }
+});
+
 export {
     observableArray as array,
     componentApi as component

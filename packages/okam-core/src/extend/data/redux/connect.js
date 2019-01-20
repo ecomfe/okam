@@ -7,7 +7,7 @@
 
 /* eslint-disable fecs-prefer-destructure */
 
-import isValueEqual from './equal';
+import isValueEqual from '../equal';
 
 function normalizeStoreComputed(stateMap) {
     let computed;

@@ -7,7 +7,11 @@
 
 import observable from './base';
 import initProps from './initProps';
+import proxyArrayApis from './array';
 
-observable.component.__initProps = initProps;
-
-export default observable;
+export default {
+    component: Object.assign({}, observable, {
+        __initProps: initProps,
+        proxyArrayApis
+    })
+};

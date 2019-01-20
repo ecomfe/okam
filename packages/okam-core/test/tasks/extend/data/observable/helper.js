@@ -5,20 +5,7 @@
 
 'use strict';
 
-import {observableArray, overrideArrayMethods} from 'core/extend/data/observable/array';
-import {array as antArray} from 'core/extend/data/observable/ant/array';
 import antComponent from 'core/ant/base/component';
-
-export function initAntObservableArray() {
-    let arrApis = Object.assign({}, observableArray, antArray);
-    overrideArrayMethods(arrApis, true);
-    overrideArrayMethods(arrApis, false);
-}
-
-export function resetObservableArray() {
-    overrideArrayMethods(observableArray, true);
-    overrideArrayMethods(observableArray, false);
-}
 
 export function fakeAntArrayAPIs() {
     const componentFakeMethods = [

@@ -5,21 +5,6 @@
 
 'use strict';
 
-import observable from '../base';
-// import {observableArray, overrideArrayMethods} from '../array';
-// import {component as swanApi, array as swanArray} from './array';
-import initProps from '../initProps';
-
-// observable.page = {
-//     methods: swanApi
-// };
-// Object.assign(observable.component.methods, swanApi);
-
-// override the Page array API, as for the native Array data operation API
-// only supported in page currently
-// let arrApis = Object.assign({}, observableArray, swanArray);
-// overrideArrayMethods(arrApis, true);
-
-observable.component.__initProps = initProps;
+import observable from '../index';
 
 export default observable;

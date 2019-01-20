@@ -41,6 +41,8 @@ export default class ComputedObserver {
         this.computed = this.initComputedProps(computedInfo);
         this.watchComputed = {};
 
+        ctx.data || (ctx.data = {});
+
         let watcher = this.handleDepChange.bind(this);
         ctx.$dataListener.on('change', watcher);
         this.computedCounter = 0;
@@ -331,9 +333,12 @@ export default class ComputedObserver {
             value = ctx.data[k];
         }
 
+        // maybe the computed prop is dependence on other computed props which
+        // has not collected deps yet, we need to call getter to collect deps
         if (!this.deps[k]) {
             let getter = this.computed[k].getter;
             value = getter.call(ctx, ctx);
+            // watch computed props is not view data, so don't put it to data
             watchInfo || (ctx.data[k] = value);
         }
 

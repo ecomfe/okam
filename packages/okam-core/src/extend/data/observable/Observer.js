@@ -5,8 +5,61 @@
 
 'use strict';
 
-import makeArrayObservable from './array';
 import {addDep, getDataSelector, addSelectorPath} from './helper';
+
+/**
+ * Update array item value
+ *
+ * @param {Observer} observer the observer
+ * @param {number} idx the index to update
+ * @param {*} value the value to set
+ */
+function updateArrayItem(observer, idx, value) {
+    observer.set(idx, value);
+    this[idx] = value;
+}
+
+/**
+ * Get the array item value
+ *
+ * @param {Observer} observer the observer
+ * @param {number} idx the index to get
+ * @return {*}
+ */
+function getArrayItem(observer, idx) {
+    return observer.get(idx);
+}
+
+/**
+ * Make array observable
+ *
+ * @param {Array} arr the array to observe
+ * @param {Observer} observer the observer
+ * @param {Object} proxyArrApis the array api to proxy
+ * @return {Array}
+ */
+function makeArrayObservable(arr, observer, proxyArrApis) {
+    // Here, not using __proto__ implementation, there are two import reasons:
+    // First, considering __proto__ will be deprecated and is not recommended to use
+    // Second, some plugins like weixin contact plugin will change array definition,
+    // the array instance __proto__ property does not contains any like `push`
+    // `pop` API, and these API only existed in the instance context.
+    // So, like the code as the following will not work correctly,
+    // a = []; // a.__proto__.push is not defined, a.push is defined
+    // a.__proto__.push = function () {};
+    // a.push(2); // always call the native push, not the override push method
+    // Therefor, using __proto__ to proxy the array method will not work
+
+    Object.keys(proxyArrApis).forEach(method => {
+        let rawMethod = arr[method];
+        arr[method] = proxyArrApis[method].bind(arr, observer, rawMethod);
+    });
+
+    arr.setItem = updateArrayItem.bind(arr, observer);
+    arr.getItem = getArrayItem.bind(arr, observer);
+
+    return arr;
+}
 
 /**
  * Proxy the data object to observe
@@ -47,12 +100,12 @@ export function proxyObject(observer, data, root) {
  *
  * @param {Observer} observer the observer to observe array
  * @param {Array} arr the array data to proxy
- * @param {boolean} isPage whether is page component
+ * @param {Object} proxyArrApis the array api to proxy
  * @return {Array}
  */
-export function proxyArray(observer, arr, isPage) {
+export function proxyArray(observer, arr, proxyArrApis) {
     let newArr = [];
-    makeArrayObservable(newArr, observer, isPage);
+    makeArrayObservable(newArr, observer, proxyArrApis);
 
     // XXX: copy array
     // we cannot proxy array element visited by index, so we should not proxy array element by default
@@ -157,7 +210,11 @@ export default class Observer {
         if (Array.isArray(value)) {
             paths || (paths = this.getPaths(k));
             let observer = new Observer(ctx, value, paths, this.isProps);
-            return (observeData[k] = proxyArray(observer, value, ctx.$isPage));
+            let proxyApis = ctx.__proxyArrayApis;
+            if (typeof proxyApis === 'function') {
+                proxyApis = ctx.__proxyArrayApis = proxyApis();
+            }
+            return (observeData[k] = proxyArray(observer, value, proxyApis));
         }
         else if (value && typeof value === 'object') {
             paths || (paths = this.getPaths(k));

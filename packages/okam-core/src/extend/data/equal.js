@@ -14,7 +14,7 @@
 
 'use strict';
 
-import {isPlainObject} from '../../../util/index';
+import {isPlainObject} from '../../util/index';
 
 function isShadowEqual(obj1, obj2) {
     let keys = Object.keys(obj1);
