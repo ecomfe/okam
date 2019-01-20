@@ -35,6 +35,7 @@ module.exports = {
      * ref 扩展：允许模板指定 ref 属性，组件实例 $refs 获取引用类似 Vue
      * watch: 支持 watch 配置 和 $watch API，依赖 data 扩展需要一起配置
      * redux: 支持 redux 状态管理库，依赖 data 扩展需要一起配置
+     * vuex: 支持 vuex 状态管理库，依赖 data 扩展需要一起配置
      * behavior: 支持组件包括 page 的 mixin 支持
      * filter: 支持 Vue filter 语法，filter 定义通过组件 filters 属性定义
      * 可选。e.g., ['data', 'broadcast', 'ref']
