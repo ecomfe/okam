@@ -17,26 +17,30 @@ import {clearBaseCache} from 'core/helper/factory';
 import reduxPlugin from 'core/extend/data/redux/index';
 import observable from 'core/extend/data/observable';
 import store from './store/index';
-import {fakeAppEnvAPIs} from 'test/helper';
+import {fakeAppEnvAPIs, fakeComponent} from 'test/helper';
 
-describe('behavior', function () {
+describe('Redux support', function () {
     let restoreAppEnv;
-
+    let MyComponent;
+    let rawGetCurrApp;
     beforeEach('init global App', function () {
         clearBaseCache();
-
+        MyComponent = fakeComponent();
         restoreAppEnv = fakeAppEnvAPIs('swan');
+        rawGetCurrApp = na.getCurrApp;
+
+        MyApp.use(observable);
+        MyApp.use(reduxPlugin);
     });
 
     afterEach('clear global App', function () {
         restoreAppEnv();
+        MyComponent = null;
+        na.getCurrApp = rawGetCurrApp;
         expect.restoreSpies();
     });
 
     it('should support using redux manage data for page', function (done) {
-        MyApp.use(observable);
-        MyApp.use(reduxPlugin);
-
         let rawGetCurrApp = na.getCurrApp;
         na.getCurrApp = function () {
             return {
@@ -109,6 +113,160 @@ describe('behavior', function () {
             });
         });
 
+    });
+
+    it('should remove store watcher when page hide or destroyed', function () {
+        na.getCurrApp = function () {
+            return {
+                $store: store
+            };
+        };
+
+        let spyHide = createSpy(() => {});
+        let spyShow = createSpy(() => {});
+        let instance = MyPage({
+            $store: {
+                computed: ['counter']
+            },
+            onHide: spyHide,
+            onShow: spyShow
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.onLoad();
+
+        assert(typeof instance.counter === 'number');
+        assert(typeof instance.__unsubscribeStore === 'function');
+
+        let spyUnsubscribe = createSpy(() => {});
+        instance.__unsubscribeStore = spyUnsubscribe;
+
+        instance.onHide();
+        expect(spyHide).toHaveBeenCalled();
+        assert(spyHide.calls.length === 1);
+        assert(instance.__unsubscribeStore === null);
+        expect(spyUnsubscribe).toHaveBeenCalled();
+
+        instance.$unsubscribeStoreChange();
+        assert(spyUnsubscribe.calls.length === 1);
+        assert(instance.__unsubscribeStore === null);
+
+        instance.onShow();
+        expect(spyShow).toHaveBeenCalled();
+        assert(spyShow.calls.length === 1);
+        let unsubscribeHandler = instance.__unsubscribeStore;
+        assert(typeof unsubscribeHandler === 'function');
+
+        instance.$subscribeStoreChange();
+        assert(instance.__unsubscribeStore === unsubscribeHandler);
+
+        spyUnsubscribe = createSpy(() => {});
+        instance.__unsubscribeStore = spyUnsubscribe;
+
+        instance.detached();
+
+        assert(instance.__unsubscribeStore === null);
+        assert(instance.$store === null);
+        expect(spyUnsubscribe).toHaveBeenCalled();
+    });
+
+    it('$unsubscribeStoreChange/$subscribeStoreChange', function () {
+        na.getCurrApp = function () {
+            return {
+                $store: store
+            };
+        };
+
+        let instance = MyPage({
+            $store: {
+                computed: ['counter']
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.onLoad();
+
+        assert(typeof instance.counter === 'number');
+        assert(typeof instance.__unsubscribeStore === 'function');
+
+        instance.$unsubscribeStoreChange();
+        assert(instance.__unsubscribeStore === null);
+
+        instance.$subscribeStoreChange();
+        assert(typeof instance.__unsubscribeStore === 'function');
+    });
+
+    it('should remove store watcher when component hide or destroyed', function () {
+        na.getCurrApp = function () {
+            return {
+                $store: store
+            };
+        };
+
+        let instance = MyComponent({
+            $store: {
+                computed: ['counter']
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.created();
+        instance.attached();
+        instance.ready();
+
+        assert(instance.onShow === undefined);
+        assert(instance.onHide === undefined);
+
+        assert(typeof instance.counter === 'number');
+        assert(typeof instance.__unsubscribeStore === 'function');
+
+        let spyUnsubscribe = createSpy(() => {});
+        instance.__unsubscribeStore = spyUnsubscribe;
+
+        instance.pageLifetimes.hide.call(instance);
+        assert(instance.__unsubscribeStore === null);
+        expect(spyUnsubscribe).toHaveBeenCalled();
+
+        instance.pageLifetimes.show.call(instance);
+        assert(typeof instance.__unsubscribeStore === 'function');
+
+        spyUnsubscribe = createSpy(() => {});
+        instance.__unsubscribeStore = spyUnsubscribe;
+
+        instance.detached();
+
+        assert(instance.__unsubscribeStore === null);
+        assert(instance.$store === null);
+        expect(spyUnsubscribe).toHaveBeenCalled();
+    });
+
+    it('should support $store function', function () {
+        na.getCurrApp = function () {
+            return {
+                $store: () => store
+            };
+        };
+
+        let instance = MyComponent({
+            $store: {
+                computed: ['counter']
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.created();
+        instance.attached();
+        instance.ready();
+
+        assert(typeof instance.counter === 'number');
     });
 
 });

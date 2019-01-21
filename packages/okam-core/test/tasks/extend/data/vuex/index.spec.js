@@ -25,7 +25,7 @@ import store6 from './store/store6';
 import Vuex, {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
 import {executeSequentially, fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
-describe('vuex', function () {
+describe('Vuex support', function () {
     let restoreAppEnv;
     let rawGetCurrApp;
     let MyComponent;
@@ -543,14 +543,78 @@ describe('vuex', function () {
         });
     });
 
-    it('should remove store watcher when component onHid or destroyed', function () {
+    it('should remove store watcher when page hide or destroyed', function () {
         na.getCurrApp = function () {
             return {
                 $store: store6
             };
         };
 
-        let instance = MyComponent({
+        let spyHide = createSpy(() => {});
+        let spyShow = createSpy(() => {});
+        let instance = MyPage({
+            computed: {
+                count() {
+                    return this.$store.state.count;
+                }
+            },
+            onHide: spyHide,
+            onShow: spyShow,
+            methods: {
+                ...mapActions([
+                    'increment'
+                ])
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.onLoad();
+
+        assert(instance.count === 0);
+        assert(typeof instance.__unsubscribeStore === 'function');
+
+        let spyUnsubscribe = createSpy(() => {});
+        instance.__unsubscribeStore = spyUnsubscribe;
+
+        instance.onHide();
+        expect(spyHide).toHaveBeenCalled();
+        assert(spyHide.calls.length === 1);
+        assert(instance.__unsubscribeStore === null);
+        expect(spyUnsubscribe).toHaveBeenCalled();
+
+        instance.$unsubscribeStoreChange();
+        assert(spyUnsubscribe.calls.length === 1);
+        assert(instance.__unsubscribeStore === null);
+
+        instance.onShow();
+        expect(spyShow).toHaveBeenCalled();
+        assert(spyShow.calls.length === 1);
+        let unsubscribeHandler = instance.__unsubscribeStore;
+        assert(typeof unsubscribeHandler === 'function');
+
+        instance.$subscribeStoreChange();
+        assert(instance.__unsubscribeStore === unsubscribeHandler);
+
+        spyUnsubscribe = createSpy(() => {});
+        instance.__unsubscribeStore = spyUnsubscribe;
+
+        instance.detached();
+
+        assert(instance.__unsubscribeStore === null);
+        assert(instance.$store === null);
+        expect(spyUnsubscribe).toHaveBeenCalled();
+    });
+
+    it('$unsubscribeStoreChange/$subscribeStoreChange', function () {
+        na.getCurrApp = function () {
+            return {
+                $store: store6
+            };
+        };
+
+        let instance = MyPage({
             computed: {
                 count() {
                     return this.$store.state.count;
@@ -563,9 +627,58 @@ describe('vuex', function () {
             }
         });
 
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.onLoad();
+
+        assert(instance.count === 0);
+        assert(typeof instance.__unsubscribeStore === 'function');
+
+        instance.$unsubscribeStoreChange();
+        assert(instance.__unsubscribeStore === null);
+
+        instance.$subscribeStoreChange();
+        assert(typeof instance.__unsubscribeStore === 'function');
+    });
+
+    it('should remove store watcher when component hide or destroyed', function () {
+        na.getCurrApp = function () {
+            return {
+                $store: store6
+            };
+        };
+
+        // let spyHide = createSpy(() => {});
+        // let spyShow = createSpy(() => {});
+        let instance = MyComponent({
+            computed: {
+                count() {
+                    return this.$store.state.count;
+                }
+            },
+            // pageLifetimes: {
+            //     show: spyShow,
+            //     hide: spyHide
+            // },
+            methods: {
+                ...mapActions([
+                    'increment'
+                ])
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
         instance.created();
         instance.attached();
         instance.ready();
+
+        assert(instance.onShow === undefined);
+        assert(instance.onHide === undefined);
+        // assert(instance.pageLifetimes.show === spyShow);
+        // assert(instance.pageLifetimes.hide === spyHide);
 
         assert(instance.count === 0);
         assert(typeof instance.__unsubscribeStore === 'function');
@@ -573,11 +686,11 @@ describe('vuex', function () {
         let spyUnsubscribe = createSpy(() => {});
         instance.__unsubscribeStore = spyUnsubscribe;
 
-        instance.onHide();
+        instance.pageLifetimes.hide.call(instance);
         assert(instance.__unsubscribeStore === null);
         expect(spyUnsubscribe).toHaveBeenCalled();
 
-        instance.onShow();
+        instance.pageLifetimes.show.call(instance);
         assert(typeof instance.__unsubscribeStore === 'function');
 
         spyUnsubscribe = createSpy(() => {});
@@ -611,10 +724,10 @@ describe('vuex', function () {
         assert(!!instance.$store);
         assert(instance.__unsubscribeStore === undefined);
 
-        instance.onHide();
+        instance.$unsubscribeStoreChange();
         assert(instance.__unsubscribeStore === undefined);
 
-        instance.onShow();
+        instance.$subscribeStoreChange();
         assert(instance.__unsubscribeStore === undefined);
 
         instance.$fireStoreChange();
@@ -624,5 +737,35 @@ describe('vuex', function () {
 
         assert(instance.__unsubscribeStore === undefined);
         assert(instance.$store === null);
+    });
+
+    it('should support $store function', function () {
+        na.getCurrApp = function () {
+            return {
+                $store: () => store6
+            };
+        };
+
+        let instance = MyComponent({
+            computed: {
+                count() {
+                    return this.$store.state.count;
+                }
+            },
+            methods: {
+                ...mapActions([
+                    'increment'
+                ])
+            }
+        });
+
+        let spySetData = createSpy(() => {});
+        instance.setData = spySetData;
+
+        instance.created();
+        instance.attached();
+        instance.ready();
+
+        assert(typeof instance.count === 'number');
     });
 });

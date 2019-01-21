@@ -11,7 +11,7 @@ import Vuex from 'vuex';
 import Vue from './Vue';
 import isValueEqual from '../equal';
 
-function onShow() {
+function subscribeStoreChange() {
     let computedKeys = Object.keys(this.$rawComputed || {});
     if (computedKeys.length && !this.__unsubscribeStore) {
         this.__unsubscribeStore = this.$store.subscribe(
@@ -20,7 +20,7 @@ function onShow() {
     }
 }
 
-function onHide() {
+function removeStoreChangeSubscribe() {
     let unsubscribe = this.__unsubscribeStore;
     if (unsubscribe) {
         unsubscribe();
@@ -35,7 +35,7 @@ function shouldUpdate(old, curr) {
 function onStoreChange() {
     let upKeys = Object.keys(this.$rawComputed || {});
     let updateComputed = this.__updateComputed;
-     /* istanbul ignore next */
+    /* istanbul ignore next */
     if (updateComputed && upKeys) {
         upKeys.forEach(k => updateComputed.call(this, k, shouldUpdate));
     }
@@ -55,7 +55,13 @@ export default {
          */
         beforeCreate() {
             let store = this.$app.$store;
+            if (typeof store === 'function') {
+                store = store.call(this);
+            }
+
             this.$fireStoreChange = onStoreChange.bind(this);
+            this.$subscribeStoreChange = subscribeStoreChange.bind(this);
+            this.$unsubscribeStoreChange = removeStoreChangeSubscribe.bind(this);
             this.$store = store;
 
             let computedInfo = this.$rawComputed || {};
@@ -72,31 +78,13 @@ export default {
         },
 
         /**
-         * OnShow hook for page component
-         *
-         * @private
-         */
-        onShow() {
-            onShow.call(this);
-        },
-
-        /**
-         * OnHide hook for page component
-         *
-         * @private
-         */
-        onHide() {
-            onHide.call(this);
-        },
-
-        /**
          * Page lifetimes hook for component
          *
          * @private
          */
         pageLifetimes: {
-            show: onShow,
-            hide: onHide
+            show: subscribeStoreChange,
+            hide: removeStoreChangeSubscribe
         },
 
         /**
@@ -105,8 +93,29 @@ export default {
          * @private
          */
         detached() {
-            onHide.call(this);
+            removeStoreChangeSubscribe.call(this);
             this.$store = null;
+        }
+    },
+
+    page: {
+
+        /**
+         * OnShow hook for page component
+         *
+         * @private
+         */
+        onShow() {
+            subscribeStoreChange.call(this);
+        },
+
+        /**
+         * OnHide hook for page component
+         *
+         * @private
+         */
+        onHide() {
+            removeStoreChangeSubscribe.call(this);
         }
     }
 };
