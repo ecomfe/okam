@@ -113,6 +113,9 @@ import store from './store';
 
 export default {
     config: {},
+
+    // 注入 store，虽然也可以 $store: store，但头条小程序实现上会拷贝 store 值，导致引用丢失，
+    // 如果要支持头条小程序，要求传递 function 形式：$store: () => store
     $store: () => store
 };
 ```

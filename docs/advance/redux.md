@@ -106,9 +106,13 @@ import store from './store';
 export default {
     config: {},
 
+    // okam-core@0.4.9 开始
     // 注入 store，虽然也可以 $store: store，但头条小程序实现上会拷贝 store 值，导致引用丢失，
     // 为了跟 Vuex 使用一致，建议统一传递 function 形式：$store: () => store
-    $store: () => store
+    $store: () => store,
+
+    // okam-core@0.4.9 之前
+    $store: store
 };
 ```
 
