@@ -7,7 +7,7 @@
 'use strict';
 
 const {PLAIN_OBJECT_REGEXP, DATA_BIND_REGEXP} = require('./constant');
-const {transformPipeFilter} = require('./filter');
+const {transformFilterSyntaxValue} = require('./filter');
 
 /**
  * Transform data binding syntax
@@ -37,16 +37,10 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
             }
         }
         else {
-            let filterOpts = config.filter;
-            let filterValue = filterOpts
-                ? transformPipeFilter(value, filterOpts, logger)
-                : value;
-            if (filterOpts && filterValue !== value) {
-                let filterAttrs = element._hasFilterAttrs || [];
-                element._hasFilterAttrs = filterAttrs;
-                filterAttrs.push(newName);
-            }
-            value = `{{${filterValue}}}`;
+            let newValue = transformFilterSyntaxValue(
+                element, {name: newName, value}, config, logger
+            );
+            value = `{{${newValue}}}`;
         }
     }
 

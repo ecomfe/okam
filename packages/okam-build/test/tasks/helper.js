@@ -15,6 +15,7 @@ const swanSyntax = require('okam/processor/template/plugins/syntax/swan-syntax-p
 const wxSyntax = require('okam/processor/template/plugins/syntax/wx-syntax-plugin');
 const antSyntax = require('okam/processor/template/plugins/syntax/ant-syntax-plugin');
 const ttSyntax = require('okam/processor/template/plugins/syntax/tt-syntax-plugin');
+const quickSyntax = require('okam/processor/template/plugins/syntax/quick-syntax-plugin');
 
 const html = require('okam/processor/template/plugins/tag-transform-plugin');
 const ref = require('okam/processor/template/plugins/ref-plugin');
@@ -22,6 +23,7 @@ const swanEventPlugin = require('okam/processor/template/plugins/event/swan-even
 const wxEventPlugin = require('okam/processor/template/plugins/event/wx-event-plugin');
 const antEventPlugin = require('okam/processor/template/plugins/event/ant-event-plugin');
 const ttEventPlugin = require('okam/processor/template/plugins/event/tt-event-plugin');
+const quickEventPlugin = require('okam/processor/template/plugins/event/quick-event-plugin');
 
 const swanModelPlugin = require('okam/processor/template/plugins/model/swan-model-plugin');
 const wxModelPlugin = require('okam/processor/template/plugins/model/wx-model-plugin');
@@ -123,6 +125,20 @@ const getDefaultTTPlugins = function () {
 };
 
 /**
+ * 获取默认的 quick 插件配置，使用函数形式避免缓存
+ *
+ * @return {Object} plugins config
+ */
+const getDefaultQuickPlugins = function () {
+    return [
+        vueSyntax,
+        quickSyntax,
+        quickEventPlugin,
+        ref
+    ];
+};
+
+/**
  * 获取默认的ant插件配置，使用函数形式避免缓存
  *
  * @return {Object} plugins config
@@ -145,7 +161,8 @@ const PLUGIN_MAP = {
     swan: getDefaultPlugins,
     wx: getDefaultWXPlugins,
     ant: getDefaultAntPlugins,
-    tt: getDefaultTTPlugins
+    tt: getDefaultTTPlugins,
+    quick: getDefaultQuickPlugins
 };
 
 /**

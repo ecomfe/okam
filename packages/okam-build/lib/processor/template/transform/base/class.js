@@ -13,8 +13,9 @@
 'use strict';
 
 const {PLAIN_OBJECT_REGEXP, SQUARE_BRACKETS_REGEXP} = require('./constant');
+const {transformFilterSyntaxValue} = require('./filter');
 
-module.exports = function (attrs, name, tplOpts, opts) {
+module.exports = function (attrs, name, tplOpts, opts, element) {
     let value = attrs[name];
     let arrToStr = opts && opts.arrToStr;
     if (typeof value === 'string') {
@@ -37,7 +38,11 @@ module.exports = function (attrs, name, tplOpts, opts) {
         }
     }
 
-    value = `{{${value}}}`;
+    let {config, logger} = tplOpts;
+    let newValue = transformFilterSyntaxValue(
+        element, {name: 'class', value}, config, logger
+    );
+    value = `{{${newValue}}}`;
 
     // add up static class and dynamic class when there is class attribute
     attrs.class = attrs.hasOwnProperty('class') ? `${attrs.class} ${value}` : value;
