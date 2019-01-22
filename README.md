@@ -34,7 +34,7 @@
     * `Vue` 数据操作语法，包括 `computed`、`watch` 支持
     * `Vue` 双向绑定 `v-model` 指令支持
     * `filter` 模板语法支持
-    * `Redux` 数据状态管理
+    * `Redux` / `Vuex` 数据状态管理
     * 模板组件 `ref` 引用支持
     * `Mixins` 支持
     * `Promise`、`Async`、`await` 语法支持
