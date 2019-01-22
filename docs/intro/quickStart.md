@@ -144,9 +144,9 @@ npm install
 
 ## 示例项目
 
-* 基础项目：[okam-template](https://github.com/ecomfe/okam-template)。
-* 使用 `redux` 的 todo 项目：[okam-todo](https://github.com/The-only/okam-todo)。
-* 更多示例，可以参考[awesome-okam](https://github.com/awesome-okam)。
+* 基础项目：[okam-template](https://github.com/ecomfe/okam-template)
+* 使用 `redux` 的 todo 项目：[okam-todo](https://github.com/The-only/okam-todo)
+* 更多示例，可以参考 [awesome-okam](https://github.com/awesome-okam)
 
 ## 开发规范
 

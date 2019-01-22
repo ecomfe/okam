@@ -14,15 +14,10 @@ import MyApp from 'core/swan/App';
 import {clearBaseCache} from 'core/helper/factory';
 import observable from 'core/extend/data/observable';
 import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
-import {resetObservableArray} from './helper';
 
 describe('observable array', function () {
     let MyComponent;
     let restoreAppEnv;
-
-    before('init observable array', function () {
-        resetObservableArray();
-    });
 
     beforeEach('init global App', function () {
         clearBaseCache();

@@ -5,7 +5,6 @@
 
 'use strict';
 
-import {getDataByPath} from '../../../../helper/data';
 import watchDataChange from './watch';
 
 /**

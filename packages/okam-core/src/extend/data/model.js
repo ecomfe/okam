@@ -21,6 +21,21 @@ function setData(ctx, expr, value) {
     ctx.setData(data);
 }
 
+/**
+ * Initialize the model value
+ *
+ * @inner
+ */
+function initModel() {
+
+    let isSupportObserve = this.$isSupportObserve;
+
+    if (typeof isSupportObserve === 'function') {
+        this.$isSupportObserve = isSupportObserve();
+    }
+
+}
+
 export default {
     component: {
         methods: {
@@ -64,12 +79,23 @@ export default {
         $init(isPage, options) {
             let isSupportObserve = options && options.isSupportObserve;
 
+            // 如果 false 直接返回 减少属性设置
             if (!isSupportObserve) {
                 return;
             }
 
             this._isSupportObserve = isSupportObserve;
             normalizeExtendProp(this, '_isSupportObserve', '$isSupportObserve', isPage);
+        },
+
+        /**
+         * The created hook
+         *
+         * @private
+         */
+        created() {
+            // init component model
+            initModel.call(this);
         }
     }
 };

@@ -6,7 +6,6 @@
 'use strict';
 
 const BuildManager = require('../BuildManager');
-const initNativeSwanProcessor = require('./init-native-swan-processor');
 const initWx2SwanProcessor = require('./init-wx2swan-processor');
 
 class BuildSwanAppManager extends BuildManager {
@@ -19,11 +18,6 @@ class BuildSwanAppManager extends BuildManager {
 
         const nativeOpts = buildConf.native;
         const defaultBabelProcessorName = this.defaultBabelProcessorName;
-
-        // register native swan processor
-        if (nativeOpts !== false) {
-            initNativeSwanProcessor(nativeOpts, defaultBabelProcessorName);
-        }
 
         // register wx2swan processors
         let wx2swanOpts = buildConf.wx2swan;

@@ -159,3 +159,19 @@ export function fakeAppEnvAPIs(appType) {
         base.$api = rawApi;
     };
 }
+
+export function executeSequentially(taskList, initDelay) {
+    let result = Promise.resolve();
+    taskList.forEach(task => {
+        let delay = task.delay || 0;
+        result = result.then(() => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    task();
+                    resolve();
+                }, delay);
+            });
+        });
+    });
+    return result.catch(ex => console.error(ex));
+}

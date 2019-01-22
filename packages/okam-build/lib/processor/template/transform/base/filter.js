@@ -53,6 +53,21 @@ function transformPipeFilter(value, filterOption, logger) {
     return callExpression;
 }
 
+function transformFilterSyntaxValue(element, attr, config, logger) {
+    let filterOpts = config.filter;
+    let {name, value} = attr;
+    let filterValue = filterOpts
+        ? transformPipeFilter(value, filterOpts, logger)
+        : value;
+    if (filterOpts && filterValue !== value) {
+        let filterAttrs = element._hasFilterAttrs || [];
+        element._hasFilterAttrs = filterAttrs;
+        filterAttrs.push(name);
+    }
+
+    return filterValue;
+}
+
 exports.FILTER_SYNTAX_REGEXP = FILTER_SYNTAX_REGEXP;
 
 exports.FILTER_NAME_WRAP_REGEXP = new RegExp(
@@ -62,7 +77,7 @@ exports.FILTER_NAME_WRAP_REGEXP = new RegExp(
     'g'
 );
 
-exports.transformPipeFilter = transformPipeFilter;
+exports.transformFilterSyntaxValue = transformFilterSyntaxValue;
 
 exports.transformTextNode = function (textNode, filterOptions, logger) {
     let data = textNode.data;

@@ -12,6 +12,7 @@ const templateProcessor = require('okam/processor/template/index');
 const wxFilterPlugin = require('okam/processor/template/plugins/filter/wx-filter-plugin');
 const swanFilterPlugin = require('okam/processor/template/plugins/filter/swan-filter-plugin');
 const antFilterPlugin = require('okam/processor/template/plugins/filter/ant-filter-plugin');
+const quickFilterPlugin = require('okam/processor/template/plugins/filter/quick-filter-plugin');
 
 describe('template filter transform', function () {
     it('should ignore not filter value', function () {
@@ -82,10 +83,67 @@ describe('template filter transform', function () {
         assert.equal(result.content, '<wxs src="./a.wxs" module="f0"></wxs><view s="{{f0.b(a,\'str\', 2)}}">{{f0.c(str)}}</view>');
     });
 
-    it('should convert ant filter value', function () {
+    it('should convert quick filter value', function () {
         const file = {
             path: 'test.js',
-            content: '<view :data-attr="a|b">{{ str|d| c}}</view>'
+            content: '<div><view :data-attr="a|b">{{ str|d| c}}</view>'
+                + '<view :style="size | b"></view>'
+                + '<view :class="item | abc | efg(true, 2)"></view></div>'
+        };
+
+        let opts = fakeProcessorOptions(null, null, 'quick');
+        opts.config.filter = {};
+        opts.config.plugins.push([
+            quickFilterPlugin, {filters: [{src: './a.filter.js', filters: ['b', 'c', 'd']}]}
+        ]);
+
+        let result = templateProcessor(file, opts);
+        assert.equal(
+            result.content,
+            '<div><view data-attr="{{f_b(a)}}"><text>{{f_c(f_d(str))}}</text></view><view style="{{f_b(size)}}"></view><view class="{{efg(abc(item),true, 2)}}"></view></div>'
+        );
+    });
+
+    it('should convert wx class/style filter value', function () {
+        const file = {
+            path: 'test.js',
+            content: '<view :class="a|b" :style="item|c(\'prefix\')">abc</view>'
+        };
+
+        let opts = fakeProcessorOptions(null, null, 'wx');
+        opts.config.filter = {};
+        opts.config.plugins.push([
+            wxFilterPlugin, {filters: [{src: './a.filter.js', filters: ['b', 'c', 'd']}]}
+        ]);
+        let result = templateProcessor(file, opts);
+        assert.equal(
+            result.content,
+            '<wxs src="./a.filter.js" module="f0"></wxs><view class="{{f0.b(a)}}" style="{{f0.c(item,\'prefix\')}}">abc</view>'
+        );
+    });
+
+    it('should convert swan class/style filter value', function () {
+        const file = {
+            path: 'test.js',
+            content: '<view :class="a|b" :style="style|c()|b(efg, true)">abc</view>'
+        };
+
+        let opts = fakeProcessorOptions(null, null, 'swan');
+        opts.config.filter = {};
+        opts.config.plugins.push([
+            swanFilterPlugin, {filters: [{src: './a.filter.js', filters: ['b', 'c', 'd']}]}
+        ]);
+        let result = templateProcessor(file, opts);
+        assert.equal(
+            result.content,
+            '<filter src="./a.filter.js" module="f0"></filter><view class="{{f0.b(a)}}" style="{{f0.b(f0.c(style),efg, true)}}">abc</view>'
+        );
+    });
+
+    it('should convert ant class/style filter value', function () {
+        const file = {
+            path: 'test.js',
+            content: '<view :style="value |d(has ? 2 : true)" :class="a|b">abc</view>'
         };
 
         let opts = fakeProcessorOptions(null, null, 'ant');
@@ -96,7 +154,7 @@ describe('template filter transform', function () {
         let result = templateProcessor(file, opts);
         assert.equal(
             result.content,
-            '<import-sjs from="./a.filter.js" name="f0"></import-sjs><view data-attr="{{f0.b(a)}}">{{f0.c(f0.d(str))}}</view>'
+            '<import-sjs from="./a.filter.js" name="f0"></import-sjs><view style="{{f0.d(value,has ? 2 : true)}}" class="{{f0.b(a)}}">abc</view>'
         );
     });
 });

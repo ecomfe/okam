@@ -46,6 +46,7 @@ const FRAMEWORK_EXTEND_PATH = {
         }
     },
     redux: 'extend/data/redux/index',
+    vuex: 'extend/data/vuex/index',
     model: 'extend/data/model',
     ref: {
         default: 'extend/ref/index',

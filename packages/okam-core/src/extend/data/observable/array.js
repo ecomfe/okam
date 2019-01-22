@@ -1,18 +1,16 @@
 /**
- * @file Array data update proxy
+ * @file Array proxy apis
  * @author sparklewhy@gmail.com
  */
 
 'use strict';
-
-// const hasProto = '__proto__' in {};
 
 /**
  * The default override Array APIs to proxy array data update
  *
  * @type {Object}
  */
-export const observableArray = {
+export default {
     push(observer, rawPush, ...items) {
         let rawData = observer.rawData;
         let idx = rawData.length;
@@ -94,89 +92,3 @@ export const observableArray = {
         return result;
     }
 };
-
-/**
- * The Page Array APIs to override
- *
- * @inner
- * @type {Object}
- */
-let overridePageArrApis = observableArray;
-
-/**
- * The component Array APIs to override
- *
- * @inner
- * @type {Object}
- */
-let overrideComponentArrApis = observableArray;
-
-/**
- * Extend the array operation methods
- *
- * @param {Object} arrApis the array methods to override
- * @param {boolean} isPage whether is page Array APIs to override
- */
-export function overrideArrayMethods(arrApis, isPage) {
-    if (isPage) {
-        overridePageArrApis = arrApis;
-    }
-    else {
-        overrideComponentArrApis = arrApis;
-    }
-}
-
-/**
- * Update array item value
- *
- * @param {Observer} observer the observer
- * @param {number} idx the index to update
- * @param {*} value the value to set
- */
-function updateArrayItem(observer, idx, value) {
-    observer.set(idx, value);
-    this[idx] = value;
-}
-
-/**
- * Get the array item value
- *
- * @param {Observer} observer the observer
- * @param {number} idx the index to get
- * @return {*}
- */
-function getArrayItem(observer, idx) {
-    return observer.get(idx);
-}
-
-/**
- * Make array observable
- *
- * @param {Array} arr the array to observe
- * @param {Observer} observer the observer
- * @param {boolean} isPage whether is page Array APIs to override
- * @return {Array}
- */
-export default function makeArrayObservable(arr, observer, isPage) {
-    // Here, not using __proto__ implementation, there are two import reasons:
-    // First, considering __proto__ will be deprecated and is not recommended to use
-    // Second, some plugins like weixin contact plugin will change array definition,
-    // the array instance __proto__ property does not contains any like `push`
-    // `pop` API, and these API only existed in the instance context.
-    // So, like the code as the following will not work correctly,
-    // a = []; // a.__proto__.push is not defined, a.push is defined
-    // a.__proto__.push = function () {};
-    // a.push(2); // always call the native push, not the override push method
-    // Therefor, using __proto__ to proxy the array method will not work
-
-    let overrideArrApis = isPage ? overridePageArrApis : overrideComponentArrApis;
-    Object.keys(overrideArrApis).forEach(method => {
-        let rawMethod = arr[method];
-        arr[method] = overrideArrApis[method].bind(arr, observer, rawMethod);
-    });
-
-    arr.setItem = updateArrayItem.bind(arr, observer);
-    arr.getItem = getArrayItem.bind(arr, observer);
-
-    return arr;
-}

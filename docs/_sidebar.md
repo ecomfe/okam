@@ -65,7 +65,9 @@
 
     * [样式 rpx 单位转换](advance/rpx.md)
 
-    * [状态管理](advance/state.md)
+    * [Redux 状态管理](advance/redux.md)
+
+    * [Vuex 状态管理](advance/vuex.md)
 
     * [特定平台代码](advance/platformSpecCode.md)
 

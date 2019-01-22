@@ -17,20 +17,12 @@ import {clearBaseCache} from 'core/helper/factory';
 import {setObservableContext} from 'core/extend/data/observable/base';
 import observable from 'core/extend/data/observable/ant';
 import {fakeAntComponent, fakeAppEnvAPIs} from 'test/helper';
-import {resetObservableArray, initAntObservableArray, fakeAntArrayAPIs} from '../helper';
+import {fakeAntArrayAPIs} from '../helper';
 
 describe('ant observable', function () {
     let MyComponent;
     let restoreAppEnv;
     let restoreAntArrayApi;
-
-    before('init observable array', function () {
-        initAntObservableArray();
-    });
-
-    after('restore observable array', function () {
-        resetObservableArray();
-    });
 
     beforeEach('init global App', function () {
         clearBaseCache();

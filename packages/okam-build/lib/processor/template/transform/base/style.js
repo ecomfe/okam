@@ -12,9 +12,10 @@
 
 'use strict';
 
+const {transformFilterSyntaxValue} = require('./filter');
 const {CURLY_BRACE_HAS_REGEXP} = require('./constant');
 
-module.exports = function (attrs, name, tplOpts) {
+module.exports = function (attrs, name, tplOpts, opts, element) {
     let value = attrs[name];
     if (typeof value === 'string') {
         value = value.trim();
@@ -23,12 +24,19 @@ module.exports = function (attrs, name, tplOpts) {
         value = '';
     }
 
+    let wrapCurlyBrace = false;
     if (CURLY_BRACE_HAS_REGEXP.test(value)) {
         value = transformObjStyle(value);
     }
     else {
-        value = `{{${value}}}`;
+        wrapCurlyBrace = true;
     }
+
+    let {config, logger} = tplOpts;
+    let newValue = transformFilterSyntaxValue(
+        element, {name: 'style', value}, config, logger
+    );
+    value = wrapCurlyBrace ? `{{${newValue}}}` : newValue;
 
     if (attrs.style) {
         attrs.style = attrs.style + ';' + value;

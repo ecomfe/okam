@@ -7,11 +7,14 @@
 
 'use strict';
 
-import connect from './connect';
+import Vuex from 'vuex';
+import Vue from './Vue';
+import isValueEqual from '../equal';
 
 function subscribeStoreChange() {
-    if (this.__storeChangeHandler && !this.__unsubscribeStore) {
-        this.__unsubscribeStore = this.$app.$store.subscribe(
+    let computedKeys = Object.keys(this.$rawComputed || {});
+    if (computedKeys.length && !this.__unsubscribeStore) {
+        this.__unsubscribeStore = this.$store.subscribe(
             this.$fireStoreChange
         );
     }
@@ -25,42 +28,53 @@ function removeStoreChangeSubscribe() {
     }
 }
 
-export default {
-    component: {
+function shouldUpdate(old, curr) {
+    return !isValueEqual(old, curr);
+}
 
-        /**
-         * Initialize component state and actions,
-         * connect the store with the component.
-         *
-         * @private
-         */
-        $init() {
-            let methods = this.methods;
-            methods.__storeChangeHandler = connect(this);
-        },
+function onStoreChange() {
+    let upKeys = Object.keys(this.$rawComputed || {});
+    let updateComputed = this.__updateComputed;
+    /* istanbul ignore next */
+    if (updateComputed && upKeys) {
+        upKeys.forEach(k => updateComputed.call(this, k, shouldUpdate));
+    }
+}
+
+// should use it at first, vuex store should be created after vuex plugin is enabled
+Vue.use(Vuex);
+
+export default {
+
+    component: {
 
         /**
          * The created hook when component created
          *
          * @private
          */
-        created() {
+        beforeCreate() {
             let store = this.$app.$store;
             if (typeof store === 'function') {
                 store = store.call(this);
             }
 
-            /* istanbul ignore next */
-            if (this.__storeChangeHandler) {
-                this.$fireStoreChange = this.__storeChangeHandler.bind(this);
+            this.$fireStoreChange = onStoreChange.bind(this);
+            this.$subscribeStoreChange = subscribeStoreChange.bind(this);
+            this.$unsubscribeStoreChange = removeStoreChangeSubscribe.bind(this);
+            this.$store = store;
+
+            let computedInfo = this.$rawComputed || {};
+            if (typeof computedInfo === 'function') {
+                this.$rawComputed = computedInfo = computedInfo();
+            }
+
+            let computedKeys = Object.keys(this.$rawComputed || {});
+            if (computedKeys.length) {
                 this.__unsubscribeStore = store.subscribe(
                     this.$fireStoreChange
                 );
-                this.$subscribeStoreChange = subscribeStoreChange.bind(this);
-                this.$unsubscribeStoreChange = removeStoreChangeSubscribe.bind(this);
             }
-            this.$store = store;
-            this.__state = store.getState();
         },
 
         /**
@@ -80,7 +94,6 @@ export default {
          */
         detached() {
             removeStoreChangeSubscribe.call(this);
-            this.__state = null;
             this.$store = null;
         }
     },
