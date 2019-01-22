@@ -1,28 +1,19 @@
 /**
- * @file Build swan smart program config
+ * @file Build wx mini program config
  * @author xxx
  */
 
 'use strict';
 
-const path = require('path');
-
-
-module.exports = {
-    verbose: false,
-    root: path.join(__dirname, '..'),
+const merge = require('../../../../').merge;
+module.exports = merge({}, require('./base.config'), {
     output: {
         dir: 'wx_dist',
         depDir: 'src/common'
     },
-    component: {
-        extname: 'vue'
-    },
-    framework: [
-        'data',
-        'watch',
-        'broadcast',
-        'ref'
-    ],
-    polyfill: []
-};
+    processors: {
+        babel7: {
+            extnames: 'js'
+        }
+    }
+});

@@ -48,3 +48,5 @@ npm run dev:clean # 删除构建产物，保留 project.swan.json 并进入 watc
 - event detail  微信与小程序不一致
 已解决： 框架兼容
 
+- wxs 未做兼容处理
+

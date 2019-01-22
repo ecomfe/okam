@@ -1,12 +1,12 @@
 /**
- * @file Build swan smart program config
+ * @file Build mini program base config
  * @author xxx
  */
 
 'use strict';
 
+/* eslint-disable fecs-properties-quote */
 const path = require('path');
-
 
 module.exports = {
     verbose: false,
@@ -15,16 +15,16 @@ module.exports = {
         dir: 'dist',
         depDir: 'src/common'
     },
-    source: {
-        // include: [/^src\/pages\/.*/]
-    },
     component: {
         extname: 'vue'
     },
     framework: [
         'data',
-        'watch',
-        'broadcast',
+        // 'watch',
+        // 'model',
+        // ['behavior', '{useNativeBehavior: true}'],
+        // 'broadcast',
+        // 'redux',
         'ref'
     ],
     polyfill: []
