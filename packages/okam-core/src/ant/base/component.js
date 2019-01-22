@@ -8,6 +8,12 @@
 import componentBase from '../../base/component';
 
 const antComponent = Object.assign({}, componentBase, {
+    beforeCreate() {
+        if (typeof this.createSelectorQuery !== 'function') {
+            this.createSelectorQuery = this.$api.createSelectorQuery;
+        }
+    },
+
     didMount() {
         this.created();
         this.attached();
