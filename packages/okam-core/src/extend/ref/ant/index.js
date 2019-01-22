@@ -19,15 +19,6 @@ const REF_DATA_ATTR = 'data-okam-ref';
 function initRefs() {
     this.$refs = {};
 
-    let refs = this.$rawRefData;
-    if (typeof refs === 'function') {
-        refs = refs();
-    }
-
-    if (!refs) {
-        return;
-    }
-
     let refInfo = this.props && this.props[REF_DATA_ATTR];
     let pageInstance = this.$page || this;
     let refComponents = pageInstance.__refComponents /* istanbul ignore next */ || {};
@@ -41,6 +32,15 @@ function initRefs() {
         else {
             refComponents[refInfo] = this;
         }
+    }
+
+    let refs = this.$rawRefData;
+    if (typeof refs === 'function') {
+        refs = refs();
+    }
+
+    if (!refs) {
+        return;
     }
 
     let result = {};
