@@ -1,5 +1,30 @@
 # ChangeLog
 
+## 2019-01-22
+### okam-core@0.4.10
+* **Bug修复**
+    * 修复 `支付宝小程序` 自定义组件 `createSelectorQuery` API 不存在问题，通过将接口定义直接代理到全局 `my.createSelectorQuery` 进行修复 ([950ac61](https://github.com/ecomfe/okam/commit/950ac61))
+    * 修复 `支付宝小程序` 事件参数 `event.target.dataset` 跟微信实现没有对齐，将 `event.target.targetDataset` 赋值给 `event.target.dataset`，原先 `dataset` 值通过 `event.currentTarget.dataset` 获取 ([671360f](https://github.com/ecomfe/okam/commit/671360f))
+    * 修复 `支付宝小程序` 自定义组件的 `ref` 信息丢失问题 ([68d7f42](https://github.com/ecomfe/okam/commit/68d7f42))
+    * 修复 `v-model` 指令支持，在判断是否使用了 `observable data` 扩展问题 ([2df6341](https://github.com/ecomfe/okam/commit/2df6341))
+
+* **新功能**
+    * 增加 `Vuex` 状态管理库支持 ([e945934](https://github.com/ecomfe/okam/commit/e945934))
+
+* **优化**
+    * `redux` 扩展增加 `$subscribeStoreChange` `$unsubscribeStoreChange` API，将 `onShow` / `oHide` 钩子逻辑移到页面组件扩展里 ([7243ca1](https://github.com/ecomfe/okam/commit/7243ca1))
+    * 优化 `observable array` 初始化逻辑 ([e945934](https://github.com/ecomfe/okam/commit/e945934))
+
+### okam-build@0.4.13
+* **Bug修复**
+    * 修复 `filter` 模板语法，`class` 和 `style` 支持缺失问题 ([28343e8](https://github.com/ecomfe/okam/commit/28343e8))
+
+* **新功能**
+    * 增加 `Vuex` 状态管理库支持 ([817532e](https://github.com/ecomfe/okam/commit/817532e))
+
+* **优化**
+    * 移除原生自定义组件事件参数适配 ([2948a9b](https://github.com/ecomfe/okam/commit/2948a9b))
+
 ## 2019-01-16
 ### okam-core@0.4.9
 * **Bug修复**
