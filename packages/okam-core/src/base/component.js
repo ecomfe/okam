@@ -164,12 +164,16 @@ export default {
                     );
                 }
 
+                // fix ant mini program event dataset diff
+                if (event.target.targetDataset) {
+                    event.target.dataset = event.target.targetDataset;
+                }
+
                 // trigger real handle methods
                 this[realHandler].apply(this, args);
             }
 
             this.__handlerModelProxy && this.__handlerModelProxy(event);
-
         }
     }
 };
