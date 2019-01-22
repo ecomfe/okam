@@ -7,8 +7,8 @@
 
 const transformClass = require('../base/class');
 
-module.exports = function (attrs, name, tplOpts, opts) {
+module.exports = function (attrs, name, tplOpts, opts, element) {
     transformClass(attrs, name, tplOpts, Object.assign({
         arrToStr: true
-    }, opts));
+    }, opts), element);
 };

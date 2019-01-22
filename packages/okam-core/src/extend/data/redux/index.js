@@ -9,7 +9,7 @@
 
 import connect from './connect';
 
-function onShow() {
+function subscribeStoreChange() {
     if (this.__storeChangeHandler && !this.__unsubscribeStore) {
         this.__unsubscribeStore = this.$app.$store.subscribe(
             this.$fireStoreChange
@@ -17,7 +17,7 @@ function onShow() {
     }
 }
 
-function onHide() {
+function removeStoreChangeSubscribe() {
     let unsubscribe = this.__unsubscribeStore;
     if (unsubscribe) {
         unsubscribe();
@@ -46,32 +46,21 @@ export default {
          */
         created() {
             let store = this.$app.$store;
+            if (typeof store === 'function') {
+                store = store.call(this);
+            }
+
+            /* istanbul ignore next */
             if (this.__storeChangeHandler) {
                 this.$fireStoreChange = this.__storeChangeHandler.bind(this);
                 this.__unsubscribeStore = store.subscribe(
                     this.$fireStoreChange
                 );
+                this.$subscribeStoreChange = subscribeStoreChange.bind(this);
+                this.$unsubscribeStoreChange = removeStoreChangeSubscribe.bind(this);
             }
             this.$store = store;
             this.__state = store.getState();
-        },
-
-        /**
-         * OnShow hook for page component
-         *
-         * @private
-         */
-        onShow() {
-            onShow.call(this);
-        },
-
-        /**
-         * OnHide hook for page component
-         *
-         * @private
-         */
-        onHide() {
-            onHide.call(this);
         },
 
         /**
@@ -80,8 +69,8 @@ export default {
          * @private
          */
         pageLifetimes: {
-            show: onShow,
-            hide: onHide
+            show: subscribeStoreChange,
+            hide: removeStoreChangeSubscribe
         },
 
         /**
@@ -90,9 +79,30 @@ export default {
          * @private
          */
         detached() {
-            onHide.call(this);
+            removeStoreChangeSubscribe.call(this);
             this.__state = null;
             this.$store = null;
+        }
+    },
+
+    page: {
+
+        /**
+         * OnShow hook for page component
+         *
+         * @private
+         */
+        onShow() {
+            subscribeStoreChange.call(this);
+        },
+
+        /**
+         * OnHide hook for page component
+         *
+         * @private
+         */
+        onHide() {
+            removeStoreChangeSubscribe.call(this);
         }
     }
 };

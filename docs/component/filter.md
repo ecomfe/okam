@@ -24,10 +24,12 @@
 * 模板里使用 `Vue` filter 管道语法进行 filter 使用
 * **注意：** `filters` 配置不支持 `mixin`
 
+**使用注意：** `filter` 语法在属性上不支持 `{{}}` 使用，因此必须使用 `Okam` 数据绑定语法：`:attr="value | filter"`，对于 `attr="{{value | filter}}"` 写法是不支持的。此外，不要在 `filter` 语法上使用各种复杂的表达式，比如 `:style="{fontSize: value | filter}"`，不支持跟其它表达式混用，只能用来定义 filter 语法。
+
 ```
 <template>
     <view class="filter-wrap">
-        <view>raw: {{str}}, filter: {{str | toUpperCase}}</view>
+        <view :class="obj | normalizeClass(flag)">raw: {{str}}, filter: {{str | toUpperCase}}</view>
         <filter-component :from="str|toUpperCase"></filter-component>
     </view>
 </template>
@@ -45,7 +47,9 @@ export default {
     },
 
     data: {
-        str: 'abc3r23'
+        str: 'abc3r23',
+        flag: true,
+        obj: {}
     },
 
     // 通过 filters 属性，声明过滤器，这部分定义最后会提取到自定义脚本文件，因此定义方式
@@ -53,6 +57,9 @@ export default {
     filters: {
         toUpperCase(str2) {
             return str2.toUpperCase();
+        },
+        normalizeClass(obj, flag) {
+            // do sth.
         }
     },
 

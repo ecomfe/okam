@@ -1,10 +1,12 @@
-# 状态管理
+# Redux 状态管理
 
-`okam` 支持使用 [redux](https://github.com/reduxjs/redux) 作为状态管理库，由于 [vuex](https://github.com/vuejs/vuex) 跟 [vue](https://github.com/vuejs/vue) 是耦合的，暂时不支持在 `okam` 框架下使用。
+`okam` 支持使用 [redux](https://github.com/reduxjs/redux) 作为状态管理库~~，由于 [vuex](https://github.com/vuejs/vuex) 跟 [vue](https://github.com/vuejs/vue) 是耦合的，暂时不支持在 `okam` 框架下使用~~。
 
 !> `快应用` `okam-core@0.4.8` 开始支持
 
-**注意：** 目前实现，在页面隐藏时候，组件的状态变更监听自动销毁，依赖原生自定义组件 `pageLifetimes` 提供的页面生命周期钩子 `hide`、`show`，因此有相应版本要求，具体可以查看[微信小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/component.html)、[百度小程序](http://smartprogram.baidu.com/docs/develop/framework/custom-component_comp/)，对于支付宝暂未有相应实现。
+**注意：** 在页面隐藏时候，`Redux store` 状态变更监听会自动销毁，基于 `onShow` `onHide` 钩子，对于自定义组件依赖原生自定义组件 `pageLifetimes` 提供的页面生命周期钩子 `hide`、`show`，因此有相应版本要求，具体可以查看[微信小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/component.html)、[百度小程序](http://smartprogram.baidu.com/docs/develop/framework/custom-component_comp/)，对于 `头条` `支付宝` `快应用` 暂未有相应实现。如果想保持一致性，可以自行通过 `$subscribeStoreChange` 和 `$unsubscribeStoreChange` API 进行 `Redux store` 状态变更监听和移除，重复调用不会有副作用。
+
+使用示例，可以参考项目 [TodoList](https://github.com/awesome-okam/okam-todo)。
 
 ## 安装依赖
 
@@ -104,7 +106,12 @@ import store from './store';
 export default {
     config: {},
 
-    // 注入 store
+    // okam-core@0.4.9 开始
+    // 注入 store，虽然也可以 $store: store，但头条小程序实现上会拷贝 store 值，导致引用丢失，
+    // 为了跟 Vuex 使用一致，建议统一传递 function 形式：$store: () => store
+    $store: () => store,
+
+    // okam-core@0.4.9 之前
     $store: store
 };
 ```
@@ -185,6 +192,9 @@ export default {
         }
     }
     ```
+* `$unsubscribeStoreChange()`: 如果页面隐藏时候，自定义组件的 store 状态变更监听建议也移除掉，考虑到不同平台对于 `pageLifetimes` 支持不同，可以手动调用该 API 进行状态监听移除，该方法重复调用不会有副作用
+
+* `$subscribeStoreChange()`: 用于开发者自行启用 store 状态变更监听，跟 `$unsubscribeStoreChange()` 配套使用
 
 ## 使用注意
 
