@@ -9,7 +9,6 @@ const {registerProcessor} = require('../../processor/type');
 const wxmlPlugin = require('../../processor/template/plugins/syntax/wx2swan-syntax-plugin');
 const wxssPlugin = require('../../processor/css/plugins/postcss-plugin-wx2swan');
 const jsPlugin = require('../../processor/js/plugins/babel-wx2swan-plugin');
-const adapterPlugin = require('../../processor/js/plugins/babel-native-swan-plugin');
 
 /**
  * Initialize wx component js processor
@@ -21,12 +20,12 @@ const adapterPlugin = require('../../processor/js/plugins/babel-native-swan-plug
  * @param {string} defaultBabelProcessorName default babel processor name
  */
 function initJsProcessor(opts, defaultBabelProcessorName) {
-    let plugins = (opts && opts.plugins) || [jsPlugin, adapterPlugin];
+    let plugins = (opts && opts.plugins) || [jsPlugin];
     registerProcessor({
         name: (opts && opts.processor) || defaultBabelProcessorName, // override existed processor
         hook: {
             before(file, options) {
-                if (file.isWxCompScript && !adapterPlugin.isAdapterModule(file.path)) {
+                if (file.isWxCompScript) {
                     options.plugins || (options.plugins = []);
                     options.plugins.push.apply(options.plugins, plugins);
                 }
@@ -45,7 +44,8 @@ function initJsProcessor(opts, defaultBabelProcessorName) {
 function initTplProcessor(opts) {
     registerProcessor({
         name: 'wxml2swan',
-        processor: 'view', // using the existed view processor
+        // using the existed view processor
+        processor: 'view',
         extnames: ['wxml'],
         rext: 'swan',
         options: opts || {
@@ -66,7 +66,8 @@ function initTplProcessor(opts) {
 function initStyleProcessor(opts) {
     registerProcessor({
         name: 'wxss2css',
-        processor: 'postcss', // using the existed postcss processor
+        // using the existed postcss processor
+        processor: 'postcss',
         extnames: ['wxss'],
         rext: 'css',
         options: opts || {
