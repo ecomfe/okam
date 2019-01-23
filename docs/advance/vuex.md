@@ -2,7 +2,7 @@
 
 `okam` 支持使用 [vuex](https://vuex.vuejs.org/) 作为状态管理库。
 
-!> `okam-core@0.4.10` 开始支持
+!> `okam-core@0.4.10` `okam-build@0.4.13` 开始支持
 
 **注意：** 在页面隐藏时候，`Vuex store` 状态变更监听会自动销毁，基于 `onShow` `onHide` 钩子，对于自定义组件依赖原生自定义组件 `pageLifetimes` 提供的页面生命周期钩子 `hide`、`show`，因此有相应版本要求，具体可以查看[微信小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/component.html)、[百度小程序](http://smartprogram.baidu.com/docs/develop/framework/custom-component_comp/)，对于 `头条` `支付宝` `快应用` 暂未有相应实现。如果想保持一致性，可以自行通过 `$subscribeStoreChange` 和 `$unsubscribeStoreChange` API 进行 `Redux store` 状态变更监听和移除，重复调用不会有副作用。
 

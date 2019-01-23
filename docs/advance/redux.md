@@ -192,9 +192,9 @@ export default {
         }
     }
     ```
-* `$unsubscribeStoreChange()`: 如果页面隐藏时候，自定义组件的 store 状态变更监听建议也移除掉，考虑到不同平台对于 `pageLifetimes` 支持不同，可以手动调用该 API 进行状态监听移除，该方法重复调用不会有副作用
+* `$unsubscribeStoreChange()`: `okam-core@0.4.10` 如果页面隐藏时候，自定义组件的 store 状态变更监听建议也移除掉，考虑到不同平台对于 `pageLifetimes` 支持不同，可以手动调用该 API 进行状态监听移除，该方法重复调用不会有副作用
 
-* `$subscribeStoreChange()`: 用于开发者自行启用 store 状态变更监听，跟 `$unsubscribeStoreChange()` 配套使用
+* `$subscribeStoreChange()`:  `okam-core@0.4.10` 用于开发者自行启用 store 状态变更监听，跟 `$unsubscribeStoreChange()` 配套使用
 
 ## 使用注意
 
