@@ -1,6 +1,8 @@
 /**
  * @file Build mini program base config
  * @author ${author|raw}
+ *
+ * @see https://ecomfe.github.io/okam/#/build/index
  */
 
 'use strict';
@@ -17,10 +19,10 @@ module.exports = {
         depDir: 'src/common'
     },
     component: {
-        // vue v- 前缀支持, 默认为 false
-        useVuePrefix: true,
         extname: '${sfcExt}',
         template: {
+            // vue v- 前缀支持, 默认为 false
+            useVuePrefix: true,
             // 标签转换配置项
             transformTags: {
             }
@@ -29,14 +31,14 @@ module.exports = {
     // 此处没用上的功能可自行精简
     framework: [
         'data',
-        // 依赖 data
+        // watch 依赖 data
         'watch',
-        // 快应用 不支持
+        // 快应用 不支持 model
         'model',
-        // touttiao 不支持
+        // 头条 不支持 filter
         'filter',
         <% if: ${redux} %>
-        // 依赖 data
+        // redux 依赖 data
         'redux',
         <% /if %>
         'behavior',
