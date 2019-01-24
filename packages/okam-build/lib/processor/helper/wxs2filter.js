@@ -13,10 +13,8 @@
  * @see https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxs/
  */
 
-function moduleExportHandle(content) {
+function wxs2filter(content) {
     return content.replace(/module\.exports\s*=/, 'export default');
 }
 
-module.exports = exports = {
-    moduleExportHandle
-};
+module.exports = exports = wxs2filter;

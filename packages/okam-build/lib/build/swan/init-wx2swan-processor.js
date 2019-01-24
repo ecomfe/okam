@@ -9,7 +9,7 @@ const {registerProcessor} = require('../../processor/type');
 const wxmlPlugin = require('../../processor/template/plugins/syntax/wx2swan-syntax-plugin');
 const wxssPlugin = require('../../processor/css/plugins/postcss-plugin-wx2swan');
 const jsPlugin = require('../../processor/js/plugins/babel-wx2swan-plugin');
-const {moduleExportHandle} = require('../../processor/helper/wxs2filter');
+const wxs2filter = require('../../processor/helper/wxs2filter');
 
 /**
  * Initialize wx component js processor
@@ -96,7 +96,7 @@ function initWxsProcessor(opts, defaultBabelProcessorName) {
             let content = file.content.toString();
 
             return {
-                content: moduleExportHandle(content)
+                content: wxs2filter(content)
             };
         },
         extnames: ['wxs'],

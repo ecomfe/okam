@@ -5,7 +5,7 @@
  */
 
 const path = require('path');
-const {moduleExportHandle} = require('../../../helper/wxs2filter');
+const wxs2filter = require('../../../helper/wxs2filter');
 
 module.exports = function transformWxsElement(element, tplOpts, opts) {
 
@@ -21,6 +21,7 @@ module.exports = function transformWxsElement(element, tplOpts, opts) {
         let wxsDepFile = addFile(wxsPath);
         wxsDepFile.isWxsScript = true;
         attribs.src = src.replace(/\.wxs/, '.filter.js');
+        return;
     }
 
     if (!children.length) {
@@ -29,6 +30,6 @@ module.exports = function transformWxsElement(element, tplOpts, opts) {
 
     children.forEach(item => {
         let content = item.data;
-        content && (item.data = moduleExportHandle(content));
+        content && (item.data = wxs2filter(content));
     });
 };
