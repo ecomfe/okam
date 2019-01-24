@@ -596,4 +596,77 @@ describe('na/api', function () {
 
     });
 
+    it('should waiting for init hook done when init hook return promise', function (done) {
+        let ctx = {
+            $api: {
+                api(opts) {
+                    let err = 'err233';
+                    setTimeout(() => {
+                        opts.fail && opts.fail(err);
+                        opts.complete && opts.complete(err);
+                    });
+                }
+            }
+        };
+
+        ctx.$api.api = promisify(ctx.$api.api);
+
+        let interceptConf = {
+            api: {
+                init(options) {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            options.a = 6;
+                            options.b = true;
+                            resolve();
+                        });
+                    });
+                },
+                done(err, data) {
+                    if (err) {
+                        return 'catch';
+                    }
+                    return data + '666';
+                }
+            }
+        };
+
+        let spyApi = spyOn(ctx.$api, 'api').andCallThrough();
+        let spyApiDone = spyOn(interceptConf.api, 'done').andCallThrough();
+
+        interceptApis(interceptConf, '$api', ctx);
+
+        let spyResolve = createSpy(() => {}).andCallThrough();
+        let spyReject = createSpy(() => {}).andCallThrough();
+        let spyFail = createSpy(() => {}).andCallThrough();
+        ctx.$api.api({a: 3, fail: spyFail}).then(
+            spyResolve, spyReject
+        );
+
+        setTimeout(() => {
+            assert(spyApi.calls.length === 1);
+            let args = spyApi.calls[0].arguments;
+            assert(args.length === 1);
+
+            let expectedKeys = ['a', 'b', 'fail', 'success'];
+            Object.keys(args[0]).forEach(k => assert(expectedKeys.includes(k)));
+            assert(args[0].a === 6);
+            assert(args[0].b === true);
+
+            let resErrInfo = 'catch';
+            assert(spyFail.calls.length === 1);
+            expect(spyFail).toHaveBeenCalledWith(resErrInfo);
+
+            expect(spyApiDone).toHaveBeenCalled();
+            assert(spyApiDone.calls.length === 1);
+            expect(spyApiDone.calls[0].arguments).toEqual(['err233', null, ctx]);
+
+            expect(spyReject).toNotHaveBeenCalled();
+            expect(spyResolve).toHaveBeenCalledWith(resErrInfo);
+            assert(spyResolve.calls.length === 1);
+
+            done();
+        }, 10);
+    });
+
 });
