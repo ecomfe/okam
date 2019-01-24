@@ -15,7 +15,33 @@ const {getEventSyntaxPlugin, getFilterSyntaxPlugin, getModelSyntaxPlugin} = requ
 const registerProcessor = require('./type').registerProcessor;
 const {isPromise} = require('../util').helper;
 const {toHyphen} = require('../util').string;
-const {relative, replaceFileName, getFileName, getRequirePath} = require('../util').file;
+const {
+    relative,
+    replaceFileName,
+    getFileName,
+    getRequirePath
+} = require('../util').file;
+
+/**
+ * The native component file ext names
+ *
+ * @const
+ * @type {Object}
+ */
+const COMPONENT_FILE_EXT_NAMES = {
+    wxml: 'isWxCompScript',
+    swan: 'isSwanCompScript',
+    axml: 'isAntCompScript',
+    ttml: 'isTTCompScript',
+    // not support quick script
+    ux: false,
+    acss: false,
+    ttss: false,
+    wxss: false,
+    css: false,
+    json: false,
+    js: false
+};
 
 function processConfigInfo(file, root, owner) {
     let config = file.config;
@@ -92,14 +118,44 @@ function processEntryScript(file, buildManager) {
     let pageFileMap = {};
     pages.forEach(
         p => {
-            let pageFullPath = path.resolve(file.dirname, p)
-                + '.' + componentExtname;
-            let pageFile = allFiles.getByFullPath(pageFullPath);
+            let pageDir = path.resolve(file.dirname, p);
+            let pageFile = allFiles.getByFullPath(`${pageDir}.${componentExtname}`);
+
+            // sfc first
             if (pageFile) {
                 pageFileMap[p] = pageFile;
                 pageFile.isPageComponent = true;
                 buildManager.addNeedBuildFile(pageFile);
                 allPageFiles.push(pageFile);
+            }
+
+            // handle native file
+            else {
+                let pageScriptFile = allFiles.getByFullPath(`${pageDir}.js`);
+                let pageType;
+
+                Object.keys(COMPONENT_FILE_EXT_NAMES).forEach(k => {
+                    pageFile = allFiles.getByFullPath(`${pageDir}.${k}`);
+
+                    let flagKey = COMPONENT_FILE_EXT_NAMES[k];
+
+                    if (typeof flagKey === 'string') {
+                        // add flag for native component script
+                        pageType = flagKey;
+                    }
+
+                    if (k === 'json') {
+                        pageFile.isComponentConfig = true;
+                        pageFile.component = pageScriptFile;
+                    }
+
+                    if (pageFile) {
+                        buildManager.addNeedBuildFile(pageFile);
+                        allPageFiles.push(pageFile);
+                    }
+                });
+
+                pageType && pageScriptFile && (pageScriptFile[pageType] = true);
             }
         }
     );

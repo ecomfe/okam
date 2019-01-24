@@ -10,7 +10,10 @@
     "build": "npm run clean && cross-env NODE_ENV=dev node scripts/build.js",
     "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
     "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
-    "dev:clean": "npm run dev -- --clean"
+    "dev:clean": "npm run dev -- --clean",
+    "dev:wx": "npm run dev -- --type wx",
+    "dev:wx:debug": "npm run dev:debug -- --type wx",
+    "dev:wx:clean": "npm run dev:wx -- --clean"
   },
   "devDependencies": {
     "cross-env": "^5.2.0"

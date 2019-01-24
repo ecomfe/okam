@@ -1,0 +1,27 @@
+<view class="hi-wrap">
+    <view>
+        <text class="hi-title">
+            HI...
+        </text>
+    </view>
+    <view>wxs1: {{m1.getMax([1,2,3,4])}}</view>
+
+    <wxs module="m2">
+        module.exports = {
+            toLowerCase: function(str) {
+                return str.toLowerCase();
+            }
+        }
+    </wxs>
+
+    <view>wxs2: {{m2.toLowerCase(str)}}</view>
+
+    <!-- <wxs module="m3">
+      var msg = "hello world";
+      module.exports.message = msg;
+    </wxs>
+
+    <view>wxs3: {{m3.message}}</view> -->
+</view>
+
+<wxs src="./index.wxs" module="m1"></wxs>

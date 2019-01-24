@@ -1,0 +1,14 @@
+module.exports = {
+    getMax: function(array) {
+
+        var max = undefined;
+
+        for (var i = 0; i < array.length; ++i) {
+            max = max === undefined
+                ? array[i]
+                : (max >= array[i] ? max : array[i]);
+        }
+
+        return max;
+    }
+};
