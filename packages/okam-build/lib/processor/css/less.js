@@ -5,7 +5,6 @@
 
 'use strict';
 
-const path = require('path');
 const less = require('less');
 
 module.exports = function (file, options) {

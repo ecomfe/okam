@@ -8,27 +8,10 @@
 const fs = require('fs');
 const path = require('path');
 const {file: fileUtil, string: strUtil} = require('../../util');
+const {COMPONENT_FILE_EXT_NAMES} = require('../helper/component');
 const {getFileName, getFileState} = fileUtil;
 const {toHyphen} = strUtil;
 const USING_COMPONENT_KEY = 'usingComponents';
-
-/**
- * The native component file ext names
- *
- * @const
- * @type {Object}
- */
-const COMPONENT_FILE_EXT_NAMES = {
-    wxml: 'isWxCompScript',
-    swan: 'isSwanCompScript',
-    axml: 'isAntCompScript',
-    ttml: 'isTTCompScript',
-    acss: false,
-    ttss: false,
-    wxss: false,
-    css: false,
-    js: false
-};
 
 /**
  * Initialize the file list information in the given directory.
@@ -88,8 +71,9 @@ function isFileInSourceDir(filePath, sourceDir) {
 function addComponentSameNameFiles(scriptFile, options) {
     const {dirname: currDir, path: relPath} = scriptFile;
     const scriptFileName = getFileName(relPath);
-    const {cache, addFile, sourceDir, getFileByFullPath} = options;
+    const {cache, addFile, sourceDir, getFileByFullPath, appType} = options;
     let cacheDirFiles = cache.getDirFileListInfo(currDir);
+    let fileExtNames = COMPONENT_FILE_EXT_NAMES[appType] || {};
 
     let jsonFile;
     let toAddFiles = [];
@@ -104,7 +88,7 @@ function addComponentSameNameFiles(scriptFile, options) {
             let fileObj = addFile(sameNameFiles[i]);
             let extname = fileObj.extname;
 
-            let flagKey = COMPONENT_FILE_EXT_NAMES[extname];
+            let flagKey = fileExtNames[extname];
             if (typeof flagKey === 'string') {
                 // add flag for native component script
                 scriptFile[flagKey] = true;
@@ -119,11 +103,11 @@ function addComponentSameNameFiles(scriptFile, options) {
         jsonFile = getFileByFullPath(`${filePathBase}.json`);
 
         if (jsonFile && !jsonFile.owner) {
-            Object.keys(COMPONENT_FILE_EXT_NAMES).forEach(k => {
+            Object.keys(fileExtNames).forEach(k => {
                 let f = getFileByFullPath(`${filePathBase}.${k}`);
                 if (f) {
                     toAddFiles.push(f.fullPath);
-                    let flagKey = COMPONENT_FILE_EXT_NAMES[k];
+                    let flagKey = fileExtNames[k];
                     // add flag for native component script
                     typeof flagKey === 'string' && (scriptFile[flagKey] = true);
                 }

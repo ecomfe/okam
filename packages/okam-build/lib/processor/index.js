@@ -8,7 +8,6 @@
 /* eslint-disable fecs-min-vars-per-destructure */
 /* eslint-disable fecs-prefer-destructure */
 
-const path = require('path');
 const {createFile} = require('./FileFactory');
 const {findMatchProcessor, getBuiltinProcessor} = require('./helper/processor');
 const {getEventSyntaxPlugin, getFilterSyntaxPlugin, getModelSyntaxPlugin} = require('./helper/init-view');
@@ -22,26 +21,7 @@ const {
     getRequirePath
 } = require('../util').file;
 
-/**
- * The native component file ext names
- *
- * @const
- * @type {Object}
- */
-const COMPONENT_FILE_EXT_NAMES = {
-    wxml: 'isWxCompScript',
-    swan: 'isSwanCompScript',
-    axml: 'isAntCompScript',
-    ttml: 'isTTCompScript',
-    // not support quick script
-    ux: false,
-    acss: false,
-    ttss: false,
-    wxss: false,
-    css: false,
-    json: false,
-    js: false
-};
+const {addProcessEntryPages} = require('./helper/component');
 
 function processConfigInfo(file, root, owner) {
     let config = file.config;
@@ -92,7 +72,7 @@ function processFilterInfo(file, owner, buildManager) {
 }
 
 function processEntryScript(file, buildManager) {
-    let {root, files: allFiles, componentExtname, logger} = buildManager;
+    let {root, files: allFiles, logger} = buildManager;
     let appConfig = file.config || {};
     file.config = appConfig;
 
@@ -116,48 +96,10 @@ function processEntryScript(file, buildManager) {
 
     let allPageFiles = [];
     let pageFileMap = {};
-    pages.forEach(
-        p => {
-            let pageDir = path.resolve(file.dirname, p);
-            let pageFile = allFiles.getByFullPath(`${pageDir}.${componentExtname}`);
 
-            // sfc first
-            if (pageFile) {
-                pageFileMap[p] = pageFile;
-                pageFile.isPageComponent = true;
-                buildManager.addNeedBuildFile(pageFile);
-                allPageFiles.push(pageFile);
-            }
-
-            // handle native file
-            else {
-                let pageScriptFile = allFiles.getByFullPath(`${pageDir}.js`);
-                let pageType;
-
-                Object.keys(COMPONENT_FILE_EXT_NAMES).forEach(k => {
-                    pageFile = allFiles.getByFullPath(`${pageDir}.${k}`);
-
-                    let flagKey = COMPONENT_FILE_EXT_NAMES[k];
-
-                    if (typeof flagKey === 'string') {
-                        // add flag for native component script
-                        pageType = flagKey;
-                    }
-
-                    if (k === 'json') {
-                        pageFile.isComponentConfig = true;
-                        pageFile.component = pageScriptFile;
-                    }
-
-                    if (pageFile) {
-                        buildManager.addNeedBuildFile(pageFile);
-                        allPageFiles.push(pageFile);
-                    }
-                });
-
-                pageType && pageScriptFile && (pageScriptFile[pageType] = true);
-            }
-        }
+    addProcessEntryPages(
+        pages, pageFileMap, allPageFiles,
+        file.dirname, buildManager
     );
 
     // resolve page path as new path if needed, currently only for quick app
