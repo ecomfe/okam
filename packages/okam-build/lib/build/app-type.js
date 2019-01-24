@@ -10,6 +10,7 @@ module.exports = [
     'wx',
     'ant',
     'tt',
-    'quick'
+    'quick',
+    'h5'
 ];
 

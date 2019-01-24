@@ -7,7 +7,6 @@
 
 const resolve = require('resolve');
 const pathUtil = require('path');
-const {file: fileUtil} = require('../util');
 
 function addResolveExtension(result, extensionName) {
     if (!extensionName.startsWith('.')) {

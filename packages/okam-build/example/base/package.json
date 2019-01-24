@@ -35,7 +35,12 @@
     "dev:quick:clean": "npm run dev:clean -- --type quick",
     "dev:quick:server": "npm run dev:server -- --type quick",
     "dev:quick:debug": "npm run dev:debug -- --type quick",
-    "prod:quick": "npm run prod -- --type quick"
+    "prod:quick": "npm run prod -- --type quick",
+    "dev:h5": "npm run dev -- --type h5",
+    "dev:h5:clean": "npm run dev:clean -- --type h5",
+    "dev:h5:server": "npm run dev:server -- --type h5",
+    "dev:h5:debug": "npm run dev:debug -- --type h5",
+    "prod:h5": "npm run prod -- --type h5"
   },
   "keywords": [
     "example"
