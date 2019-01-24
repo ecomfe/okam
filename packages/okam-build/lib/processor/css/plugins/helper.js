@@ -49,8 +49,12 @@ function getPlugin(plugin, builtin, root) {
             pluginHandler = customRequire(pluginName, root);
         }
     }
+    else {
+        pluginName = 'anonymous';
+    }
 
     return {
+        name: pluginName,
         handler: pluginHandler,
         options: pluginOpts
     };

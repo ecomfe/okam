@@ -74,14 +74,20 @@ module.exports = function (file, options) {
     }
 
     plugins = (plugins || []).map(
-        ({handler, options}) => handler(Object.assign({
-            allAppTypes,
-            appType,
-            styleExtname,
-            file,
-            resolve,
-            logger
-        }, options))
+        ({name, handler, options}) => {
+            let pluginOpts = Object.assign({
+                allAppTypes,
+                appType,
+                styleExtname,
+                filePath: file.path,
+                logger
+            }, options);
+
+            if (name === 'resource') {
+                Object.assign(pluginOpts, {file, resolve});
+            }
+            return handler(pluginOpts);
+        }
     );
     let {css} = postcss(plugins)
         .process(

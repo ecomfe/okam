@@ -16,11 +16,11 @@ function shouldIgnore(path) {
 }
 
 module.exports = postcss.plugin('postcss-plugin-px2rpx', function (opts = {}) {
-    let {file, ignore} = opts;
+    let {filePath, ignore} = opts;
     ignore || (ignore = shouldIgnore);
 
     return function (css, result) {
-        if (ignore(file.path)) {
+        if (ignore(filePath)) {
             return;
         }
 
