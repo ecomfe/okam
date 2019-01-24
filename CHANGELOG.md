@@ -1,8 +1,18 @@
 # ChangeLog
 
-## 2019-01-23
+## 2019-01-24
+
+### okam-build@0.4.14
 * **Bug修复**
-    * 修复模板 `useVuePrefix` 配置层级错误问题
+    * 修复 `postcss` `autoprefixer` 插件出现 JSON 序列化循环结构问题 ([baad1ee](https://github.com/ecomfe/okam/commit/baad1ee))
+
+
+## 2019-01-23
+
+### okam-core@0.1.9
+* **Bug修复**
+    * 修复模板 `useVuePrefix` 配置层级错误问题 ([0a66749](https://github.com/ecomfe/okam/commit/0a66749))
+
 
 ## 2019-01-22
 ### okam-core@0.4.10
