@@ -39,6 +39,7 @@ const COMPONENT_FILE_EXT_NAMES = {
     tt: {
         ttml: 'isTTCompScript',
         ttss: false,
+        json: false,
         js: false
     }
 };
@@ -81,13 +82,11 @@ function addProcessEntryPages(pages, pageFileMap, allPageFiles, fileDirname, bui
 
             Object.keys(fileExtNames).forEach(k => {
                 pageFile = allFiles.getByFullPath(`${pageDir}.${k}`);
-
-                let flagKey = fileExtNames[k];
-
                 if (!pageFile) {
                     return;
                 }
 
+                let flagKey = fileExtNames[k];
                 if (typeof flagKey === 'string') {
                     // add flag for native component script
                     pageType = flagKey;
