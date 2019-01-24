@@ -9,7 +9,7 @@
 
 ## 2019-01-23
 
-### okam-core@0.1.9
+### okam-cli@0.1.9
 * **Bug修复**
     * 修复模板 `useVuePrefix` 配置层级错误问题 ([0a66749](https://github.com/ecomfe/okam/commit/0a66749))
 
