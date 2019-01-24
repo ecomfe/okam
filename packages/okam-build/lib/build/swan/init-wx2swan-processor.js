@@ -9,6 +9,7 @@ const {registerProcessor} = require('../../processor/type');
 const wxmlPlugin = require('../../processor/template/plugins/syntax/wx2swan-syntax-plugin');
 const wxssPlugin = require('../../processor/css/plugins/postcss-plugin-wx2swan');
 const jsPlugin = require('../../processor/js/plugins/babel-wx2swan-plugin');
+const {moduleExportHandle} = require('../../processor/helper/wxs2filter');
 
 /**
  * Initialize wx component js processor
@@ -78,6 +79,32 @@ function initStyleProcessor(opts) {
     });
 }
 
+
+/**
+ * Initialize wxs js processor
+ *
+ * @inner
+ * @param {Object=} opts the options to init
+ * @param {string=} opts.processor the builtin processor name, by default `babel`
+ * @param {Array=} opts.plugins the processor plugins
+ * @param {string} defaultBabelProcessorName default babel processor name
+ */
+function initWxsProcessor(opts, defaultBabelProcessorName) {
+    registerProcessor({
+        name: 'wxs2filter',
+        processor(file, options) {
+            let content = file.content.toString();
+
+            return {
+                content: moduleExportHandle(content)
+            };
+        },
+        extnames: ['wxs'],
+        rext: 'filter.js'
+    });
+}
+
+
 /**
  * Init wx2swan processors
  *
@@ -88,7 +115,7 @@ function initStyleProcessor(opts) {
  * @param {string} defaultBabelProcessorName default babel processor name
  */
 function initProcessor(options = {}, defaultBabelProcessorName) {
-    let {js, css, tpl} = options;
+    let {js, css, tpl, wxs} = options;
 
     if (tpl !== false) {
         initTplProcessor(tpl);
@@ -100,6 +127,10 @@ function initProcessor(options = {}, defaultBabelProcessorName) {
 
     if (js !== false) {
         initJsProcessor(js, defaultBabelProcessorName);
+    }
+
+    if (wxs !== false) {
+        initWxsProcessor(js, defaultBabelProcessorName);
     }
 }
 

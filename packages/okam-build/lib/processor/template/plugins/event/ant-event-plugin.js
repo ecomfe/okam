@@ -11,12 +11,12 @@ const {EVENT_REGEXP, NOT_SUPPORT_MODIFIERS} = require('../../transform/base/cons
 const {transformMiniProgramEventType} = require('./event-helper');
 
 const NATIVE_EVENT_MAP = {
-    'tap': 'tap',
-    'touchstart': 'touchStart',
-    'touchmove': 'touchMove',
-    'touchend': 'touchEnd',
-    'touchcancel': 'touchCancel',
-    'longtap': 'longTap'
+    tap: 'tap',
+    touchstart: 'touchStart',
+    touchmove: 'touchMove',
+    touchend: 'touchEnd',
+    touchcancel: 'touchCancel',
+    longtap: 'longTap'
 };
 
 let antNotSupportModifier = NOT_SUPPORT_MODIFIERS.concat('stop');
@@ -77,9 +77,7 @@ module.exports = createSyntaxPlugin({
                     attrs,
                     name,
                     tplOpts,
-                    name => {
-                        return parseEventName(name, element, tplOpts, opts);
-                    }
+                    name => parseEventName(name, element, tplOpts, opts)
                 );
             }
         }

@@ -27,5 +27,10 @@ module.exports = {
         // 'redux',
         'ref'
     ],
-    polyfill: []
+    polyfill: [],
+    processors: {
+        babel7: {
+            extnames: 'js'
+        }
+    }
 };

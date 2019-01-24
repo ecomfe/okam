@@ -13,7 +13,7 @@
     "dev:clean": "npm run dev -- --clean",
     "dev:wx": "npm run dev -- --type wx",
     "dev:wx:debug": "npm run dev:debug -- --type wx",
-    "dev:wx:clean": "npm run clean -- --type wx"
+    "dev:wx:clean": "npm run dev:wx -- --clean"
   },
   "devDependencies": {
     "cross-env": "^5.2.0"

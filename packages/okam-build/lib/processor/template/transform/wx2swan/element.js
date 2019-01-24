@@ -7,6 +7,7 @@
 
 const {FOR_DIRECTIVES, CONDITION_DIRECTIVES} = require('./constant');
 const forIfTransform = require('./forIf');
+const wxsTransform = require('./wxs');
 
 /**
  * src 引入 后缀转换: import and inlcude
@@ -66,6 +67,10 @@ module.exports = {
     template: {
         match: 'template',
         transform: transformTemplateElement
+    },
+    wxs: {
+        match: 'wxs',
+        transform: wxsTransform
     },
     forIf: {
         match(element) {
