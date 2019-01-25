@@ -81,9 +81,14 @@ export default {
 
     $interceptApis: {
         request: {
-            init(options, ctx) {
+            async init(options, ctx) {
                 console.log('init options', options, ctx);
-                return options;
+                let result = await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve({abc: 6, s: true});
+                    });
+                });
+                options.data = result;
             },
             done(err, res, ctx) {
                 console.log('done...', err, res, ctx);
