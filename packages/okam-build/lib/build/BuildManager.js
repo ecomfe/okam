@@ -163,20 +163,22 @@ class BuildManager extends EventEmitter {
         this.addNewFileHandler = this.onAddNewFile.bind(this);
         files.on('addFile', this.addNewFileHandler);
 
-        let {output} = this.buildConf;
+        let {output, wx2swan, designWidth} = this.buildConf;
         this.compileContext = {
             cache: this.cache,
             resolve: npm.resolve.bind(null, this),
             addFile: this.addNewFile.bind(this),
             getFileByFullPath: this.getFileByFullPath.bind(this),
-            designWidth: this.buildConf.designWidth,
+            designWidth,
             appType: this.appType,
             allAppTypes,
             logger: this.logger,
             envConfigKey: this.envConfigKey,
             sourceDir,
             root,
-            output
+            output,
+            wx2swan,
+            componentExtname: this.componentExtname
         };
 
         this.initGlobalComponents(this.buildConf.component);

@@ -13,7 +13,7 @@ export default {
             // 组件是微信原生组件
             'pages/wxWxs',
             // swan native
-            // 'pages/swanNative/index',
+            'pages/swanNative/index',
             // wx native
             'pages/wxNative/index',
             // filter
