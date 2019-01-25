@@ -31,7 +31,18 @@ function transformCustomCompEvent(attrs, name, tplOpts, parseEventName) {
     });
 
     let methodName = attrs[name].trim();
-    methodName = methodName.replace(EVENT_HANDLE_REGEXP, '$1');
+    // methodName = methodName.replace(EVENT_HANDLE_REGEXP, '$1');
+
+    const matchArray = methodName.match(EVENT_HANDLE_REGEXP);
+    methodName = matchArray && matchArray[1] || '';
+    let methodArgs = matchArray && matchArray[2] || '';
+
+    if (methodArgs) {
+        logger.error(
+            `${file.path} template event method ${name}`,
+            `is not support with argument「${methodArgs}」 in ${appType} env`
+        );
+    }
 
     if (attrs.hasOwnProperty(eventAttrName)) {
         logger.warn(`${file.path} template attribute ${name} is conflicted with ${eventAttrName}`);
