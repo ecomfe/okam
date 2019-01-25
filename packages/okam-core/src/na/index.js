@@ -5,13 +5,20 @@
 
 'use strict';
 
-// NOTICE: After build this file content will replace by the specified app env
+// NOTICE: After build, this file content will be replaced by the specified app env
 //  module, like the following statement
 // export * from '../quick/env';
 
 let appEnv = {};
 let appGlobal = {};
-let api = {request: () => {}};
+let api = {
+    request(...args) {
+        // only for test
+        if (typeof global === 'object' && global && global.fakeRequest) {
+            return global.fakeRequest.apply(this, args);
+        }
+    }
+};
 let getAppApi = () => {};
 let getPagesApi = () => {};
 
