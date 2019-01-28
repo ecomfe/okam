@@ -6,4 +6,9 @@
         <button bindtap="handleTap">Click me</butotn>
     </view>
     <simple>SimpleSlot</simple>
+    <view>{{m1.message}}</view>
 </view>
+
+<wxs module="m1">
+  var msg = "hello world"; module.exports.message = msg;
+</wxs>

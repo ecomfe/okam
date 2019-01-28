@@ -69,7 +69,7 @@ export default {
 
         onCounterChange(e) {
             console.log('parent receive child counter change', e);
-            this.counter = e.detail;
+            this.counter = e.detail.value;
         },
 
         updateCounter() {

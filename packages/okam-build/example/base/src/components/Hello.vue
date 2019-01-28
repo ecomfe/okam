@@ -117,7 +117,9 @@ export default {
 
         changeCounter() {
             console.log('child trigger change counter...')
-            this.$emit('counterChange', 333);
+            this.$emit('counterChange', {
+                value: 333
+            });
         }
     }
 }

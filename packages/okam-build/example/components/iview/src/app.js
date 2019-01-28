@@ -8,7 +8,8 @@
 export default {
     config: {
         pages: [
-            'pages/index/index'
+            'pages/button/index',
+            'pages/index'
         ],
         // subPackages: [],
         window: {

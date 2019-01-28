@@ -6,31 +6,6 @@
 import {isFunction, isObject, isPromise, definePropertyValue} from '../util/index';
 
 /**
- * Execute API initialization hook
- *
- * @inner
- * @param {Function} init the initialization hook
- * @param {Array} args the API call arguments
- * @param {Object} ctx the extra call context for the hook
- */
-function hookAPIInit(init, args, ctx) {
-    // API init interception
-    if (isFunction(init)) {
-        let isArrArgs = false;
-        if (args.length > 1 || !isObject(args[0])) {
-            // convert as one array type argument to make the developer
-            // can modify the call arguments directly
-            args = [args];
-            isArrArgs = true;
-        }
-        init.apply(this, [...args, ctx]);
-
-        // restore args type
-        args = isArrArgs ? args[0] : args;
-    }
-}
-
-/**
  * Crate API done hook
  *
  * @inner
@@ -150,6 +125,82 @@ function interceptPromiseResponse(hasIntercepted, promise, doneHookInfo) {
 }
 
 /**
+ * Execute API initialization hook
+ *
+ * @inner
+ * @param {Function} init the initialization hook
+ * @param {Array} args the API call arguments
+ * @param {Object} ctx the extra call context for the hook
+ * @return {*}
+ */
+function hookAPIInit(init, args, ctx) {
+    // API init interception
+    if (isFunction(init)) {
+        if (args.length > 1 || !isObject(args[0])) {
+            // convert as one array type argument to make the developer
+            // can modify the call arguments directly
+            args = [args];
+        }
+        return init.apply(this, [...args, ctx]);
+    }
+}
+
+/**
+ * Execute API done hook
+ *
+ * @inner
+ * @param {Function} done the done hook
+ * @param {boolean} sync whether is sync API, if true, it will not hook the
+ *        API done result based the call arguments
+ * @param {Array} args the API call arguments
+ * @param {Object} ctx the extra call context for the hook
+ * @return {Object} return the api done hook info
+ */
+function hookAPIDone(done, sync, args, ctx) {
+    // API done interception
+    let hasDoneHook = isFunction(done);
+    let hasIntercepted = false;
+    let doneHookInfo;
+    if (hasDoneHook) {
+        doneHookInfo = createAPIDoneHook(done, ctx);
+        // intercept async API based the args: `success`/`fail`/`complete` callback
+        hasIntercepted = interceptAsyncAPIDone(sync, args, doneHookInfo.hook);
+    }
+
+    return {
+        hasDoneHook,
+        hasIntercepted,
+        doneHookInfo
+    };
+}
+
+/**
+ * Execute api
+ *
+ * @inner
+ * @param {Object} hookInfo the api done hook info
+ * @param {Function} rawApi the raw api definition
+ * @param {Array} args the API call arguments
+ * @return {*}
+ */
+function executeAPI(hookInfo, rawApi, args) {
+    // call API
+    let {hasDoneHook, hasIntercepted, doneHookInfo} = hookInfo;
+    let result = rawApi.apply(this, args);
+    if (hasDoneHook) {
+        // intercept the API call result
+        if (isPromise(result)) {
+            result = interceptPromiseResponse(hasIntercepted, result, doneHookInfo);
+        }
+        else if (!hasIntercepted) {
+            result = doneHookInfo.hook(null, result);
+        }
+    }
+
+    return result;
+}
+
+/**
  * Proxy API
  *
  * @inner
@@ -163,31 +214,20 @@ function proxyAPI(ctx, rawApi, apiOpts, ...args) {
     let {init, done, sync} = apiOpts;
 
     // API init interception
-    hookAPIInit(init, args, ctx);
+    let initResult = hookAPIInit(init, args, ctx);
 
-    // API done interception
-    let hasDoneHook = isFunction(done);
-    let hasIntercepted = false;
-    let doneHookInfo;
-    if (hasDoneHook) {
-        doneHookInfo = createAPIDoneHook(done, ctx);
-        // intercept async API based the args: `success`/`fail`/`complete` callback
-        hasIntercepted = interceptAsyncAPIDone(sync, args, doneHookInfo.hook);
+    if (isPromise(initResult)) {
+        return initResult.then(
+            () => {
+                let hookInfo = hookAPIDone(done, sync, args, ctx);
+                return executeAPI(hookInfo, rawApi, args);
+            }
+        );
     }
-
-    // call API
-    let result = rawApi.apply(this, args);
-    if (hasDoneHook) {
-        // intercept the API call result
-        if (isPromise(result)) {
-            result = interceptPromiseResponse(hasIntercepted, result, doneHookInfo);
-        }
-        else if (!hasIntercepted) {
-            result = doneHookInfo.hook(null, result);
-        }
+    else {
+        let hookInfo = hookAPIDone(done, sync, args, ctx);
+        return executeAPI(hookInfo, rawApi, args);
     }
-
-    return result;
 }
 
 /**

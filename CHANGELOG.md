@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 2019-01-25
+
+### okam-core@0.4.11
+* **新功能**
+    * 增加 API `init` 钩子增加异步处理支持 ([66ec172](https://github.com/ecomfe/okam/commit/66ec172))
+
+
 ## 2019-01-24
 
 ### okam-build@0.4.14

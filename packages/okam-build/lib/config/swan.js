@@ -49,9 +49,9 @@ module.exports = merge({}, baseConf, {
                 keepOriginalContent: true,
                 plugins: [['resource', {
                     tags: {
-                        import: true,
-                        include: true,
-                        filter: true
+                        'import': true,
+                        'include': true,
+                        'filter': true
                     }
                 }]]
             }
