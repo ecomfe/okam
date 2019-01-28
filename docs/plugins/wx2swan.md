@@ -18,9 +18,7 @@
 
 ``` swan.config.js
 {
-
     wx2swan: true
-
 }
 
 ```
@@ -127,8 +125,8 @@ module.exports = {
 ```
 * 页面常见组件库中使用到的 `getRelationNodes、relations` 不支持转换
 * 百度下，字体渲染：ios 真机正常 、android 不正常，因此字体不能正常使用
-* 转换存在的问题，原生问题需要手动修改或通过添加[特定平台代码](/advance/platformSpecCode)修改
+* 转换存在的问题，原生问题需要手动修改或通过添加[特定平台代码](/advance/platformSpecCode)进行修改
 
 
-### 线上示例
-[百度中使用微信小程序组件库 `iview` 的示例代码及支持总结](https://github.com/awesome-okam/okam-iview-example)
+### 代码示例
+* 百度小程序中使用 `iview` 的代码示例及支持情况总结，[okam-iview-example](https://github.com/awesome-okam/okam-iview-example)
