@@ -58,11 +58,11 @@ module.exports = createSyntaxPlugin({
             match: EVENT_REGEXP,
             transform(attrs, name, tplOpts, opts, element) {
 
-                let {customComponentTags} = opts || {};
+                let {customComponentTags = []} = opts || {};
 
                 // tt custom component don't support data-xxx
                 // origin component support
-                let transformEvent = customComponentTags
+                let transformEvent = customComponentTags.includes(element.name)
                     ? transformCustomCompEvent
                     : transformOriginEvent;
 
