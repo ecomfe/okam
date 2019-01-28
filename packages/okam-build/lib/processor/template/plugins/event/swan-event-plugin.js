@@ -19,9 +19,7 @@ module.exports = createSyntaxPlugin({
                     attrs,
                     name,
                     tplOpts,
-                    name => {
-                        return parseWxSwanEventName(name, element, tplOpts, opts);
-                    }
+                    name => parseWxSwanEventName(name, element, tplOpts, opts)
                 );
             }
         }

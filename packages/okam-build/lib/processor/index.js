@@ -8,14 +8,20 @@
 /* eslint-disable fecs-min-vars-per-destructure */
 /* eslint-disable fecs-prefer-destructure */
 
-const path = require('path');
 const {createFile} = require('./FileFactory');
 const {findMatchProcessor, getBuiltinProcessor} = require('./helper/processor');
 const {getEventSyntaxPlugin, getFilterSyntaxPlugin, getModelSyntaxPlugin} = require('./helper/init-view');
 const registerProcessor = require('./type').registerProcessor;
 const {isPromise} = require('../util').helper;
 const {toHyphen} = require('../util').string;
-const {relative, replaceFileName, getFileName, getRequirePath} = require('../util').file;
+const {
+    relative,
+    replaceFileName,
+    getFileName,
+    getRequirePath
+} = require('../util').file;
+
+const {addProcessEntryPages} = require('./helper/component');
 
 function processConfigInfo(file, root, owner) {
     let config = file.config;
@@ -66,7 +72,7 @@ function processFilterInfo(file, owner, buildManager) {
 }
 
 function processEntryScript(file, buildManager) {
-    let {root, files: allFiles, componentExtname, logger} = buildManager;
+    let {root, files: allFiles, logger} = buildManager;
     let appConfig = file.config || {};
     file.config = appConfig;
 
@@ -90,18 +96,10 @@ function processEntryScript(file, buildManager) {
 
     let allPageFiles = [];
     let pageFileMap = {};
-    pages.forEach(
-        p => {
-            let pageFullPath = path.resolve(file.dirname, p)
-                + '.' + componentExtname;
-            let pageFile = allFiles.getByFullPath(pageFullPath);
-            if (pageFile) {
-                pageFileMap[p] = pageFile;
-                pageFile.isPageComponent = true;
-                buildManager.addNeedBuildFile(pageFile);
-                allPageFiles.push(pageFile);
-            }
-        }
+
+    addProcessEntryPages(
+        pages, pageFileMap, allPageFiles,
+        file.dirname, buildManager
     );
 
     // resolve page path as new path if needed, currently only for quick app

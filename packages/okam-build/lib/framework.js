@@ -16,31 +16,31 @@ const FRAMEWORK_POLYFILL_BASE = FRAMEWORK_PATH_BASE + 'polyfill/';
  */
 const FRAMEWORK_EXTEND_PATH = {
     data: {
-        swan: 'extend/data/observable/swan/index',
-        ant: 'extend/data/observable/ant/index',
-        wx: 'extend/data/observable/wx/index',
-        tt: 'extend/data/observable/tt/index',
-        quick: 'extend/data/observable/quick/index',
-        default: 'extend/data/observable/index'
+        'swan': 'extend/data/observable/swan/index',
+        'ant': 'extend/data/observable/ant/index',
+        'wx': 'extend/data/observable/wx/index',
+        'tt': 'extend/data/observable/tt/index',
+        'quick': 'extend/data/observable/quick/index',
+        'default': 'extend/data/observable/index'
     },
     watch: {
-        default: 'extend/data/watch/index',
-        quick: 'extend/data/watch/quick/index'
+        'default': 'extend/data/watch/index',
+        'quick': 'extend/data/watch/quick/index'
     },
     broadcast: {
-        default: 'extend/broadcast/index',
-        quick: 'extend/broadcast/quick/index'
+        'default': 'extend/broadcast/index',
+        'quick': 'extend/broadcast/quick/index'
     },
     behavior: {
-        ant: {
+        'ant': {
             base: 'extend/behavior/ant/index',
             creator: 'extend/behavior/ant/Behavior'
         },
-        quick: {
+        'quick': {
             base: 'extend/behavior/quick/index',
             creator: 'extend/behavior/quick/Behavior'
         },
-        default: {
+        'default': {
             base: 'extend/behavior/index',
             creator: 'extend/behavior/Behavior'
         }
@@ -49,9 +49,9 @@ const FRAMEWORK_EXTEND_PATH = {
     vuex: 'extend/data/vuex/index',
     model: 'extend/data/model',
     ref: {
-        default: 'extend/ref/index',
-        ant: 'extend/ref/ant/index',
-        quick: 'extend/ref/quick/index'
+        'default': 'extend/ref/index',
+        'ant': 'extend/ref/ant/index',
+        'quick': 'extend/ref/quick/index'
     },
     filter: {
         wx: true,

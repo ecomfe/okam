@@ -1,0 +1,9 @@
+<view class="wrap">
+    <view class="mini-btn-content">
+        <view class="title">默认态</view>
+        <button type="primary" size="mini" class="mini-btn primary">
+            按钮
+        </button>
+        <button type="default" size="mini" class="mini-btn">按钮</button>
+    </view>
+</view>

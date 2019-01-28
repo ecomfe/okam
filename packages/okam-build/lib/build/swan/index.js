@@ -16,7 +16,6 @@ class BuildSwanAppManager extends BuildManager {
     initProcessor(buildConf) {
         super.initProcessor(buildConf);
 
-        const nativeOpts = buildConf.native;
         const defaultBabelProcessorName = this.defaultBabelProcessorName;
 
         // register wx2swan processors

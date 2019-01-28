@@ -9,7 +9,7 @@
 const path = require('path');
 
 module.exports = {
-    verbose: false,
+    verbose: true,
     root: path.join(__dirname, '..'),
     output: {
         dir: 'dist',
@@ -27,5 +27,10 @@ module.exports = {
         // 'redux',
         'ref'
     ],
-    polyfill: []
+    polyfill: [],
+    processors: {
+        babel7: {
+            extnames: 'js'
+        }
+    }
 };

@@ -65,10 +65,10 @@ const BUILTIN_PLUGINS = {
     tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
     vuePrefix: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
     ref: {
-        quick: [
+        'quick': [
             REF_PLUGIN_PATH, {useId: true}
         ],
-        default: [REF_PLUGIN_PATH]
+        'default': [REF_PLUGIN_PATH]
     },
     resource: path.join(PLUGIN_BASE_NAME, 'resource-plugin')
 };

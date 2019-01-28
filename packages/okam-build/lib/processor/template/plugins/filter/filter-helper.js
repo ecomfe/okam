@@ -1,6 +1,6 @@
 /**
  * @file Filter helper
- * @author wuhuiyao(wuhuiyao@baidu.com)
+ * @author sparklewhy@gmail.com
  */
 
 'use strict';
@@ -80,9 +80,10 @@ function insertFilterModule(filterTagOpts, root, tplOpts, options) {
     filters.forEach((item, index) => {
         let {src} = item;
         let name = item.name = 'f' + index;
-        let attrs = {};
-        attrs[filterTagOpts.srcAttrName] = src;
-        attrs[filterTagOpts.moduleAttrName] = name;
+        let attrs = {
+            [filterTagOpts.srcAttrName]: src,
+            [filterTagOpts.moduleAttrName]: name
+        };
         let filterNode = {
             type: 'tag',
             name: filterTagOpts.tag,
