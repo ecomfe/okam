@@ -1,92 +1,77 @@
 # 自定义组件互转
+page组件、自定义组件互转
 
-## okam-plugin-wx2swan
+## wx2swan
 
-当在百度小程序中想引入已有的微信小程序自定义时组件时 ，可通过引入及配置此插件来进行转换，其中，微信小程序自定义组件可为 [微信官方支持的开发第三方自定义组件](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/trdparty.html),
-也可为常规的 `npm` 包的写法；
+### 使用场景
 
-!>  限制：在百度小程序中引入微信自定义组件，不支持 `wxs`、`模板引用`，只做了语法上的转换；swan框架、API和组件功能上的差异，待原生小程序层支持中
+在开发百度小程序时，当前
 
+- okam 小程序项目中的页面或自定义组件语法为 微信小程序语法
+- 想在百度小程序中使用已有微信小程序自定义组件库
 
-### 安装
+### 使用方式
 
-`npm install okam-plugin-wx2swan --save-dev`
-
-
-### 配置
-
-swan.config.js 加上如下配置：
+* 第一步：配置：在 `swan.config.js` 构建文件中，设置如下构建项：
 
 
-``` javascript
+``` swan.config.js
 {
 
-    processors: {
-        // babel: {
-        //    extnames: ['js']
-        // },
-
-        wx2swan: {
-            // 注册 及 配置 wxml、wxss 文件转换
-            extnames: ['wxml', 'wxss']
-        }
-    },
-    rules: [
-        {
-            // 配置 js 文件转换
-            match(file) {
-                return file.isNpmWxCompScript;
-            },
-            processors: ['wx2swan']
-        }
-    ]
+    wx2swan: true
 
 }
 
 ```
 
-### 引用
-`page` 中的引入方式和其他自定义组件引入相同；
+* 第二步：引入使用
 
+假设：在开发百度小程序时，在 `index.okm` 中引入微信小程序组件库;
 
-```
-node_modules
+1.引入
+    * npm 引入：`npm install min-components --save-dev`，开发时将 `min-components` 换成真实的组件库包名;
+    * 本地引入：拷贝至 自身项目文件
 
-min-components
-├── components
-│   │
-│   ├── one
-│   │   ├── comp.js    comp 组件逻辑
-│   │   ├── comp.json  comp 组件配置
-│   │   ├── comp.wxml  comp 组件结构
-│   │   └── comp.wxss   comp 组件样式
-│   │ 
-│   └── another
-│       ├── comp.js    comp 组件逻辑
-│       ├── comp.json  comp 组件配置
-│       ├── comp.wxml  comp 组件结构
-│       └── comp.wxss   comp 组件样式
-├── index.js
-└── package.json         包的相关配置： name 、main
-
-src
-├── components
-│   │ 
-│   └── Hello.okm  Hello 组件逻辑、配置、结构、样式
-│ 
-├── pages
-│   ├── home
-│   │   └── index.okm        index 页面逻辑、配置、结构、样式
-│   └── other
-│       ├── detail1.okm      detail1 页面逻辑、配置、结构、样式
-│       └── detail2.okm      detail2 页面逻辑、配置、结构、样式
-├── app.js              小程序逻辑、公共配置
-└── app.css             小程序公共样式
+二选一，如有线上 `npm` 包，推荐使用 `npm` 引入方式以减少代码仓库体积大小，以及方便管理组件库的更新升级；
 
 ```
+.
+├──node_modules
+│   ├──min-components
+│   │   ├── components
+│   │   │   │
+│   │   │   ├── origin
+│   │   │   │   ├── comp.js    comp 组件逻辑
+│   │   │   │   ├── comp.json  comp 组件配置
+│   │   │   │   ├── comp.wxml  comp 组件结构
+│   │   │   │   └── comp.wxss   comp 组件样式
+│   │   │   │ 
+│   │   │   ├── okam
+│   │   │   │   └── comp.vue   okam 组件逻辑、配置、结构、样式
+│   │   │   │   
+│   │   │   └── another
+│   │   │     ├── comp.js    comp 组件逻辑
+│   │   │     ├── comp.json  comp 组件配置
+│   │   │     ├── comp.wxml  comp 组件结构
+│   │   │     └── comp.wxss   comp 组件样式
+│   │   ├── index.js
+│   │   └── package.json          包的相关配置： name 、main
+└──src
+    ├── components
+    │   │ 
+    │   └── Hello.okm  Hello 组件逻辑、配置、结构、样式
+    │ 
+    ├── pages
+    │   ├── home
+    │   │   └── index.okm        index 页面逻辑、配置、结构、样式
+    │   └── other
+    │       ├── detail1.okm      detail1 页面逻辑、配置、结构、样式
+    │       └── detail2.okm      detail2 页面逻辑、配置、结构、样式
+    ├── app.js              小程序逻辑、公共配置
+    └── app.css             小程序公共样式
+```
 
-在 `index.okm` 引入 `node_modules` 中的组件
-假设包名：`min-components` ，入口文件为 `index.js`
+* 2.使用：以下为 `npm 引入` 方式示例
 
 ```
 <template>
@@ -98,6 +83,7 @@ src
 </template>
 
 <script>
+// 根据 node_modules 中包名的路径来写对应路径，引用方式与 web 写法一致
 import OriginNpmWXComp from 'min-component/components/one/comp';
 
 export default {
@@ -121,3 +107,26 @@ export default {
 </style>
 
 ```
+### 使用限制
+
+* 在百度小程序中引入微信自定义组件时，只做语法上的基本转换，swan框架、API和组件功能上的差异，待原生小程序层支持
+* `wxs` 转 `filter`，仅简单支持以下格式，其他不支持
+
+```
+module.exports = {
+    fn1: function () {
+
+    },
+
+    fn2: funciton () {
+
+    }
+}
+```
+* 页面常见组件库中使用到的 `getRelationNodes、relations` 不支持转换
+* 百度下，字体渲染：ios 真机正常 、android 不正常，因此字体不能正常使用
+* 转换存在的问题，原生问题需要手动修改或通过添加[特定平台代码](/advance/platformSpecCode)修改
+
+
+### 线上示例
+[百度中使用微信小程序组件库 `iview` 的示例代码及支持总结](https://github.com/awesome-okam/okam-iview-example)
