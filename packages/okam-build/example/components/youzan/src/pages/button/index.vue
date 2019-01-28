@@ -40,6 +40,9 @@
 
 import VanButton from 'vant-weapp/dist/button/index';
 import DemoBlock from '../../components/DemoBlock';
+// node_modules 下 的单文件
+// import DemoBlock from 'vant-weapp/dist/vue/DemoBlock';
+
 
 export default {
     config: {

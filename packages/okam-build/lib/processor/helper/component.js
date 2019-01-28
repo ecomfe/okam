@@ -304,7 +304,7 @@ function getPageOriginFileExtnames(pageFileNotExt, buildManager) {
  * @param {Object} buildManager buildManager
  */
 function addProcessEntryPages(pages, pageFileMap, allPageFiles, fileDirname, buildManager) {
-    let {files: allFiles, componentExtname, logger, appType} = buildManager;
+    let {files: allFiles, componentExtname, logger, appType, root} = buildManager;
 
     pages.forEach(
         p => {
@@ -337,8 +337,9 @@ function addProcessEntryPages(pages, pageFileMap, allPageFiles, fileDirname, bui
 
             let missingMustFileExtnames = resultFilesInfo.missingMustFileExtnames;
             if (missingMustFileExtnames.length) {
+                let pageFile = path.relative(root, pageFileNotExt);
                 missingMustFileExtnames.forEach(ext => {
-                    logger.error(`missing page file: 「${pageFileNotExt}.${ext}」.`);
+                    logger.error(`missing page file: 「${pageFile}.${ext}」.`);
                 });
             }
 

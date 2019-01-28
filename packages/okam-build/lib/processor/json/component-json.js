@@ -5,6 +5,7 @@
 
 'use strict';
 
+const path = require('path');
 const {file: fileUtil, string: strUtil} = require('../../util');
 const {getFileName} = fileUtil;
 const {toHyphen} = strUtil;
@@ -27,6 +28,7 @@ function addComponentSameNameFiles(scriptFile, options) {
     let filePathBase = `${currDir}/${scriptFileName}`;
 
     const {
+        root,
         addFile,
         sourceDir,
         getFileByFullPath,
@@ -78,8 +80,9 @@ function addComponentSameNameFiles(scriptFile, options) {
     }
 
     if (missingMustFileExtnames.length) {
+        let compFile = path.relative(root, filePathBase);
         missingMustFileExtnames.forEach(ext => {
-            logger.error(`missing page file: 「${filePathBase}.${ext}」.`);
+            logger.error(`missing component file: 「${compFile}.${ext}」.`);
         });
     }
 }
