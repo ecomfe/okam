@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 2019-01-29
+
+### okam-build@0.4.17
+* **Bug修复**
+    * 修复 win7 下组件找不到路径的问题 ([a777996](https://github.com/ecomfe/okam/commit/a777996))
+
+
 ## 2019-01-28
 
 ### okam-build@0.4.16
