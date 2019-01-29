@@ -47,10 +47,12 @@ src
 <template>
     <view class="comp-page">
         <view class="title">原生自定义组件引入</view>
-        <origin-comp out-text="依赖 本项目中 原生的组件">
+        <origin-comp
+            @change="handleFn"
+            out-text="依赖 本项目中 原生的组件">
         </origin-comp>
 
-        <hello @click="handleClick"></hello>
+        <hello @click="handleFn"></hello>
     </view>
 </template>
 
@@ -72,7 +74,7 @@ export default {
     },
 
     methods: {
-        handleClick(e) {
+        handleFn(e) {
             console.log('event data', e.detail);
         }
     }
@@ -83,6 +85,11 @@ export default {
 </style>
 
 ```
+
+** 注意 **
+
+* 在页面中调用原生组件时可以直接使用 `okam` 支持的语法
+* 组件上的 `@change` 对应的是 自定义组件中的名为 `change` 事件
 
 ## 同平台
 
@@ -140,9 +147,13 @@ export default {
 <template>
     <view class="comp-page">
         <view class="title">原生自定义组件引入</view>
-        <origin-npm-comp out-text="依赖 min-componen 中的原生的组件">
+        <origin-npm-comp
+            out-text="依赖 min-componen 中的原生的组件"
+            @change="handleFn">
         </origin-npm-comp>
-        <okam-npm-comp out-text="依赖 min-componen 中的okam的组件">
+        <okam-npm-comp
+            out-text="依赖 min-componen 中的okam的组件"
+            @click="handleFn">
         </okam-npm-comp>
     </view>
 </template>
@@ -166,6 +177,9 @@ export default {
     },
 
     methods: {
+        handleFn(e) {
+            console.log('event data', e.detail);
+        }
     }
 };
 </script>
@@ -174,6 +188,11 @@ export default {
 </style>
 
 ```
+
+** 注意 **
+
+* 在页面中调用原生组件时可以直接使用 `okam` 支持的语法
+* 组件上的 `@change` 对应的是 自定义组件中的名为 `change` 事件
 
 ## 跨平台
 

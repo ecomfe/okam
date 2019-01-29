@@ -76,18 +76,24 @@ okam 中 对 npm 进行了适配支持，即满足 正常 npm 包 格式即可�
 
 * 2.使用：以下为 `npm 引入` 方式示例
 
+    * 在页面中调用原生组件时可以直接使用 `okam` 支持的语法
+    * 组件上的 `@change` 对应的是 自定义组件中的名为 `change` 事件
+
+
 ```
 <template>
     <view class="comp-page">
         <view class="title">原生自定义组件引入</view>
-        <origin-npm-wx-comp out-text="百度小程序中依赖 min-componen 中的微信原生的组件">
+        <origin-npm-wx-comp
+            @change="handleFn"
+            out-text="百度小程序中依赖 min-componen 中的微信原生的组件">
         </origin-npm-wx-comp>
     </view>
 </template>
 
 <script>
 // 根据 node_modules 中包名的路径来写对应路径，引用方式与 web 写法一致
-import OriginNpmWXComp from 'min-component/components/one/comp';
+import OriginNpmWXComp from 'min-component/components/origin/comp';
 
 export default {
     config: {
@@ -102,6 +108,9 @@ export default {
     },
 
     methods: {
+        handleFn(e) {
+            console.log('event data', e.detail);
+        }
     }
 };
 </script>
@@ -112,6 +121,7 @@ export default {
 ```
 
 * 第三步: `npm run dev`，查看 `dist` 目录可以看到微信转为百度小程序之后的代码
+
 
 ### 使用限制
 
