@@ -49,9 +49,9 @@
 
     * [Broadcast支持](component/broadcast.md)
 
-    * [原生及第三方自定义组件支持](component/nativeSupport.md)
+    * [原生组件支持](component/nativeSupport.md)
 
-    * [组件互转](plugins/wx2swan.md)
+    * [组件互转](component/transform.md)
 
     * [原生组件对齐](component/nativeComponent.md)
 
