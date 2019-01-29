@@ -10,7 +10,8 @@ const path = require('path');
 
 const {
     getFileName,
-    getFileState
+    getFileState,
+    relative: getRelative
 } = require('../../util').file;
 
 /**
@@ -119,7 +120,8 @@ function initDirFiles(dir, cache) {
 }
 
 function isFileInSourceDir(filePath, sourceDir) {
-    return filePath.indexOf(sourceDir + '/') === 0;
+    let newPath = filePath.replace(/\\/g, '/');
+    return newPath.indexOf(sourceDir + '/') === 0;
 }
 
 function isCompFileExists(filePath, compileContext) {
@@ -337,7 +339,7 @@ function addProcessEntryPages(pages, pageFileMap, allPageFiles, fileDirname, bui
 
             let missingMustFileExtnames = resultFilesInfo.missingMustFileExtnames;
             if (missingMustFileExtnames.length) {
-                let pageFile = path.relative(root, pageFileNotExt);
+                let pageFile = getRelative(pageFileNotExt, root);
                 missingMustFileExtnames.forEach(ext => {
                     logger.error(`missing page file: 「${pageFile}.${ext}」.`);
                 });
