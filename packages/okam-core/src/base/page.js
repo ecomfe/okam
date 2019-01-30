@@ -25,7 +25,10 @@ export default Object.assign({}, component, {
          *
          * @return {Object}
          */
-        this.createSelectorQuery = () => this.$api.createSelectorQuery();
+        if (!this.createSelectorQuery) {
+            this.createSelectorQuery = () => this.$api.createSelectorQuery();
+        }
+
 
         // call component create life cycle method
         this.created();
