@@ -19,7 +19,7 @@ export default Object.assign({}, component, {
         this.$isPage = true;
         this.$query = query || {};
 
-         /**
+        /**
          * Create selector query basing global API, this API like the
          * createSelectorQuery defined in the native component context.
          *
@@ -28,7 +28,6 @@ export default Object.assign({}, component, {
         if (!this.createSelectorQuery) {
             this.createSelectorQuery = () => this.$api.createSelectorQuery();
         }
-
 
         // call component create life cycle method
         this.created();
