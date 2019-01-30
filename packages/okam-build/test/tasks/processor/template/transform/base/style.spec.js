@@ -37,6 +37,15 @@ describe('style binding', function () {
             '<view style="height:10px;color:{{colorStyle}};font-size:{{fontStyle + \'px\'}}"></view>');
     });
 
+    it('should support style binding syntax which contains ternary expression', function () {
+        const file = {
+            content: '<div :style="{height: flag === \'true\' || flag === true ? height + \'px\' : \'20px\', width: flag ? \'10px\' : \'30px\'}"></div>'
+        };
+        const result = templateProcessor(file, fakeProcessorOptions());
+        assert.equal(result.content,
+            '<view style="height:{{flag === \'true\' || flag === true ? height + \'px\' : \'20px\'}};width:{{flag ? \'10px\' : \'30px\'}}"></view>');
+    });
+
     // 和对象语法走的同一个代码分支。转化的时候应避免内部[]被转化
     it('should transform style-data-binding with array that has object（数组语法）', function () {
         const file = {
