@@ -1,5 +1,16 @@
 # ChangeLog
 
+## 2019-01-30
+
+### okam-build@0.4.18
+* **Bug修复**
+    * 修复模板 `style` 绑定变量存在三元表达式转换后样式出错问题 ([b5c0e49](https://github.com/ecomfe/okam/commit/b5c0e49))
+
+### okam-core@0.4.12
+* **Bug修复**
+    * 修复页面组件 `createSelectorQuery` 新增扩展接口在 `微信小程序` SDK 版本 `2.1.3` 真机上出错问题 ([0bcb218](https://github.com/ecomfe/okam/commit/0bcb218))
+
+
 ## 2019-01-29
 
 ### okam-build@0.4.17
@@ -14,7 +25,10 @@
     * 修复 头条自定义组件不支持 `dataset` 获取不到 `data-` 属性值，导致事件处理不生效问题 ([a207ae7](https://github.com/ecomfe/okam/commit/a207ae7))
     * 优化 `component-json` 处理器，组件按需文件处理替代同名文件处理、添加文件缺失提示 ([b6ca35d](https://github.com/ecomfe/okam/commit/b6ca35d))
     * 优化 `wx2swan` 处理器, 添加`wxs` 支持，仅限 `module.exports={fn}` 支持 ([973c8f9](https://github.com/ecomfe/okam/commit/973c8f9))
+    
+* **新功能**
     * 新增 `pages` 支持原生页面写法、添加文件缺失提示 ([8a4f123](https://github.com/ecomfe/okam/commit/8a4f123))
+
 
 ## 2019-01-25
 
