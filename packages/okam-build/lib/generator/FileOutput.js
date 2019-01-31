@@ -91,7 +91,7 @@ function getComponentPartOutputFilePath(partFile, owner, options) {
         return;
     }
 
-    let filePath = owner.path;
+    let filePath = owner.resolvePath || owner.path;
     if (partFile.isJson) {
         partFile.rext = componentPartExtname.config;
     }
