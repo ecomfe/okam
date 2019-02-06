@@ -21,6 +21,7 @@ function getPlugin(plugin, builtin, root) {
     let pluginName = plugin;
     let pluginOpts;
     let pluginHandler = plugin;
+    const noInit = typeof plugin === 'function';
 
     if (Array.isArray(plugin)) {
         pluginName = plugin[0];
@@ -56,7 +57,8 @@ function getPlugin(plugin, builtin, root) {
     return {
         name: pluginName,
         handler: pluginHandler,
-        options: pluginOpts
+        options: pluginOpts,
+        noInit
     };
 }
 
