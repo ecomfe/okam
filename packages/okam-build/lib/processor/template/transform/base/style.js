@@ -5,6 +5,7 @@
  * eg
  * 1. :style="{ color: activeColor, fontSize: fontSize + 'px' }"
  * 2. :style="[{ color: activeColor, fontSize: fontSize + 'px' }]"
+ * 3. :style="{width, height}"
  *
  * @author sharonzd
  * @date 2018/8/23
@@ -68,19 +69,19 @@ function transformObjStyle(value, logger) {
     let result = [];
     stylePropValues.forEach(item => {
         let colonIdx = item.indexOf(':');
+        let styleProp;
+        let styleValue;
         if (colonIdx === -1) {
-            logger.error(
-                'invalidated template style binding value',
-                `\`${item}\``,
-                `in ${value}`
-            );
+            styleProp = item.trim();
+            styleValue = styleProp;
         }
         else {
-            let propName = item.substring(0, colonIdx)
-                .trim().replace(/([A-Z])/g, '-$1').toLowerCase();
-            let propValue = item.substr(colonIdx + 1).trim();
-            result.push(`${propName}:{{${propValue}}}`);
+            styleProp = item.substring(0, colonIdx).trim();
+            styleValue = item.substr(colonIdx + 1).trim();
         }
+
+        styleProp = styleProp.replace(/([A-Z])/g, '-$1').toLowerCase();
+        result.push(`${styleProp}:{{${styleValue}}}`);
     });
 
     return result.join(';');

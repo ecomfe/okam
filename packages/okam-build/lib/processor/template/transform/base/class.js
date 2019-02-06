@@ -6,7 +6,7 @@
  * 3. class="static" :class="[activeClass, errorClass]" -> class="static {{[activeClass, errorClass]}}
  * 4. class="static" :class="[isActive ? activeClass : '', errorClass]"  ->  class="static {{[isActive ? activeClass : '', errorClass]}}"
  * 5. class="static" :class="[{ active: isActive }, errorClass]" -> class="static {{[isActive ? 'active' : '', errorClass]}}
- *
+ * 6. :class="{active, test}" -> class="{{[active?'active':'', test?'test':'']}}"
  * @author sharonzd
  */
 
@@ -61,10 +61,15 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
 function transformObjClass(value, objToStr) {
     value = value.replace(/[\s*{}]/g, '').split(',').map(item => {
         const arr = item.split(':');
-        if (!arr[0].includes('\'')) {
-            arr[0] = `'${arr[0]}'`;
+        let key = arr[0];
+        let firstChar = key.charAt(0);
+        if (firstChar !== '\'' && firstChar !== '\"') {
+            key = `'${key}'`;
         }
-        let result = `${arr[1]}?${arr[0]}:''`;
+
+        // support object abbrev case: {a, b}
+        let expression = arr.length === 1 ? arr[0] : arr[1];
+        let result = `${expression}?${key}:''`;
 
         return objToStr ? `(${result})` : result;
     });

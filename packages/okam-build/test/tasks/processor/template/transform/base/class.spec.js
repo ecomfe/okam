@@ -74,4 +74,12 @@ describe('class binding', function () {
         const result = templateProcessor(file, fakeProcessorOptions());
         assert.equal(result.content, '<view class="static {{[isActive?\'active\':\'\',errorClass]}}"></view>');
     });
+
+    it('should transform abbrev class', function () {
+        const file = {
+            content: '<p class="static" :class="{active, show}"></p>'
+        };
+        const result = templateProcessor(file, fakeProcessorOptions());
+        assert.equal(result.content, '<view class="static {{[active?\'active\':\'\',show?\'show\':\'\']}}"></view>');
+    });
 });
