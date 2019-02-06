@@ -56,7 +56,7 @@ describe('style binding', function () {
             '<view style="color:{{colorStyle[item]}};font-size:{{fontStyle + \'px\'}};font-weight:{{\'bold\'}}"></view>');
     });
 
-    it.only('should support object abbrev style binding syntax', function () {
+    it('should support object abbrev style binding syntax', function () {
         const file = {
             content: '<div :style="{height, fontSize}"></div>'
         };
