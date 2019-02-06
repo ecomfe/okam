@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 2019-02-06
+
+### okam-build@0.4.19
+* **Bug修复**
+    * 修复模板 `style` `class` 对于对象简写语法支持：`:style="{width, height}"` [#35](https://github.com/ecomfe/okam/issues/35) ([cb3a4f0](https://github.com/ecomfe/okam/commit/cb3a4f0))
+    * 修复 `postcss` `plugins` 选项传递类似 `require('xx')(options)` 参数出错问题 [#36](https://github.com/ecomfe/okam/issues/36) ([12d554b](https://github.com/ecomfe/okam/commit/12d554b))
+
 ## 2019-01-30
 
 ### okam-build@0.4.18
