@@ -15,6 +15,7 @@
 
 const {transformFilterSyntaxValue} = require('./filter');
 const {CURLY_BRACE_HAS_REGEXP} = require('./constant');
+const {parseBindingStyleValue} = require('../helper/style');
 
 module.exports = function (attrs, name, tplOpts, opts, element) {
     let value = attrs[name];
@@ -28,7 +29,7 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
     let {config, logger} = tplOpts;
     let wrapCurlyBrace = false;
     if (CURLY_BRACE_HAS_REGEXP.test(value)) {
-        value = transformObjStyle(value, logger);
+        value = transformObjStyle(value);
     }
     else {
         wrapCurlyBrace = true;
@@ -55,34 +56,8 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
  *  [{ color: activeColor,fontWeight: 'bold'}, {fontSize: fontSize + 'px' }] -> color: activeColor, font-size: {{fontSize + 'px'}}
  *
  * @param {string} value   string to be transformed
- * @param {Object} logger the logger util
  * @return {string} transformed result
  */
-function transformObjStyle(value, logger) {
-    // 去掉首尾空格、去掉首尾方括号、去掉花括号，以`,`为分隔。将字符串重组为style的字面量语法
-    let stylePropValues = value
-        .trim()
-        .replace(/^\[|]$/g, '')
-        .replace(/[{}]/g, '')
-        .split(',');
-
-    let result = [];
-    stylePropValues.forEach(item => {
-        let colonIdx = item.indexOf(':');
-        let styleProp;
-        let styleValue;
-        if (colonIdx === -1) {
-            styleProp = item.trim();
-            styleValue = styleProp;
-        }
-        else {
-            styleProp = item.substring(0, colonIdx).trim();
-            styleValue = item.substr(colonIdx + 1).trim();
-        }
-
-        styleProp = styleProp.replace(/([A-Z])/g, '-$1').toLowerCase();
-        result.push(`${styleProp}:{{${styleValue}}}`);
-    });
-
-    return result.join(';');
+function transformObjStyle(value) {
+    return parseBindingStyleValue(value).join(';');
 }

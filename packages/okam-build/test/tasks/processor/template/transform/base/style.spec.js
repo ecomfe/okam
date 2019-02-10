@@ -64,4 +64,26 @@ describe('style binding', function () {
         assert.equal(result.content,
             '<view style="height:{{height}};font-size:{{fontSize}}"></view>');
     });
+
+    it('should support transform style binding syntax with comma', function () {
+        const file = {
+            content: '<div :style="{ transform: \'translate(-50%, -50%) rotate(\' + preview.rotate + \'deg)\', fontSize, \'font-size\': \'12px\' }"></div>'
+        };
+        const result = templateProcessor(file, fakeProcessorOptions());
+        assert.equal(
+            result.content,
+            '<view style="transform:{{\'translate(-50%, -50%) rotate(\' + preview.rotate + \'deg)\'}};font-size:{{fontSize}};\'font-size\':{{\'12px\'}}"></view>'
+        );
+    });
+
+    it('should support es6 template string style binding', function () {
+        const file = {
+            content: '<div :style="{fontSize: `${fontSize}px`, width}"></div>'
+        };
+        const result = templateProcessor(file, fakeProcessorOptions());
+        assert.equal(
+            result.content,
+            '<view style="font-size:{{\'\' + fontSize + \'px\'}};width:{{width}}"></view>'
+        );
+    });
 });
