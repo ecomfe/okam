@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 2019-02-10
+
+### okam-build@0.4.20
+* **Bug修复**
+    * 修复模板 `style` 绑定的样式值存在逗号，比如 `transform` 样式属性值转换会出错，同时增加 `ES6 Template String` 支持 [#37](https://github.com/ecomfe/okam/issues/37) ([9814fc7](https://github.com/ecomfe/okam/commit/9814fc7))
+
 ## 2019-02-06
 
 ### okam-build@0.4.19
