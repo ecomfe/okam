@@ -38,7 +38,7 @@ antComponent.methods = Object.assign({}, antComponent.methods, {
      */
     $emit(...args) {
         this.__beforeEmit && this.__beforeEmit(args);
-        this.$listener.emit.apply(this.$listener, args);
+        this.__eventListener.emit.apply(this.__eventListener, args);
 
         let eventProp = args[0];
         eventProp = 'on' + eventProp.charAt(0).toUpperCase() + eventProp.substr(1);

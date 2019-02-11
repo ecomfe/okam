@@ -35,7 +35,7 @@ export default {
         });
         Object.defineProperties(this, propDescriptors);
 
-        this.$listener = new EventListener();
+        this.__eventListener = new EventListener();
 
         // call beforeCreate hook
         this.beforeCreate && this.beforeCreate();
@@ -70,7 +70,7 @@ export default {
         // call beforeDestroy hook
         this.beforeDestroy && this.beforeDestroy();
 
-        this.$listener.off();
+        this.__eventListener.off();
         this.$isDestroyed = true; // add destroyed flag
 
         // call destroyed hook
@@ -86,7 +86,7 @@ export default {
          */
         $emit(...args) {
             this.__beforeEmit && this.__beforeEmit(args);
-            this.$listener.emit.apply(this.$listener, args);
+            this.__eventListener.emit.apply(this.__eventListener, args);
 
             let triggerEvent = this.triggerEvent;
             if (triggerEvent) {
@@ -101,7 +101,7 @@ export default {
          * @param {Function} handler the callback to listen
          */
         $on(eventName, handler) {
-            this.$listener.on(eventName, handler);
+            this.__eventListener.on(eventName, handler);
         },
 
         /**
@@ -114,7 +114,7 @@ export default {
          * @param {Function} handler the callback to listen
          */
         $off(eventName, handler) {
-            this.$listener.off(eventName, handler);
+            this.__eventListener.off(eventName, handler);
         },
 
         /**
@@ -125,7 +125,7 @@ export default {
          * @param {*} handler the event handler
          */
         $once(eventName, handler) {
-            this.$listener.once(eventName, handler);
+            this.__eventListener.once(eventName, handler);
         },
 
         /**
