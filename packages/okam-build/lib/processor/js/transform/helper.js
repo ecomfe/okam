@@ -10,6 +10,7 @@ const {
     getFrameworkExtendId,
     normalizeInternalBehavior
 } = require('../../../framework');
+const {getBabelParser} = require('../babel-parser-helper');
 
 const LEADING_COMMENT_TYPE = 'leadingComments';
 const TRAILING_COMMENT_TYPE = 'trailingComments';
@@ -268,12 +269,22 @@ exports.isVariableDefined = function (path, varName) {
  *
  * @param {Object} ast the code ast to generate
  * @param {Object} options the generation options
- * @param {boolean=} usingBabel6 whether using babel 6
  * @return {string}
  */
-exports.generateCode = function (ast, options, usingBabel6) {
-    let generate = usingBabel6
-        ? require('babel-generator').default
-        : require('@babel/generator').default;
-    return generate(ast, options);
+exports.generateCode = function (ast, options) {
+    let babel = getBabelParser();
+    return babel.generate(ast, options);
+};
+
+/**
+ * Generate ast based on the given code and code placeholder data
+ *
+ * @param {string} code the code to generate ast
+ * @param {Object=} data the code placeholder data
+ * @return {Object}
+ */
+exports.generateAst = function (code, data) {
+    let babel = getBabelParser();
+    let tpl = babel.template(code);
+    return tpl(data);
 };

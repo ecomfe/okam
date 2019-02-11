@@ -78,8 +78,6 @@
     </article>
 </template>
 <script>
-import moment from 'moment';
-
 export default {
     config: {
         navigationBarTitleText: 'Hello Okam Smart Program',

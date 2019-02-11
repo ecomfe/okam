@@ -1,5 +1,5 @@
 /**
- * @file The quick app single file component generator
+ * @file The Vue single file component generator for H5 App
  * @author sparklewhy@gmail.com
  */
 
@@ -7,30 +7,6 @@
 
 function wrapContent(wrapTag, file) {
     return `<${wrapTag}>\n${file.content.toString().trim()}\n</${wrapTag}>\n`;
-}
-
-function addImportComponents(tpl, componentConfig) {
-    componentConfig && Object.keys(componentConfig).forEach(k => {
-        let path = componentConfig[k];
-        tpl = `<import name="${k}" src="${path}"></import>\n` + tpl;
-    });
-    return tpl;
-}
-
-function getComponentConfig(files) {
-    let found;
-    files.some(item => {
-        if (item.isConfig) {
-            found = item;
-            return true;
-        }
-        return false;
-    });
-
-    if (found) {
-        let config = JSON.parse(found.content);
-        return config.usingComponents;
-    }
 }
 
 /**
@@ -52,10 +28,6 @@ function generateSFC(file, options) {
     }
 
     let result = '';
-    let componentConfig = file.isNativeComponent
-        ? file.importComponents
-        : getComponentConfig(subFiles);
-
     subFiles.forEach((item, idx) => {
         if (item.isScript) {
             result += wrapContent('script', item);
@@ -65,7 +37,6 @@ function generateSFC(file, options) {
         }
         else if (item.isTpl) {
             result += wrapContent('template', item);
-            result = addImportComponents(result, componentConfig);
         }
     });
 

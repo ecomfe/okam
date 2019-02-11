@@ -20,7 +20,7 @@ module.exports = merge({}, baseConf, {
         pathMap: {
             projectConfig: false,
             entryScript: 'main.js',
-            entryStyle: false,
+            entryStyle: 'main.css',
             appConfig: false
         },
 
@@ -57,19 +57,33 @@ module.exports = merge({}, baseConf, {
                 // 由于 Vue 不支持模板导入功能，页面组件路径可能会因为同一目录下存在
                 // 多个页面组件，而自动调整页面路径，为了避免 include/import 路径
                 // 重新计算找不到导入/引用的模板，这里不分析这两个标签定义的依赖资源
-                include: false,
-                import: false
+                'include': false,
+                'import': false
             }
         }
     },
 
     processors: {
+        // okam component parser
+        component: {
+            rext: 'vue',
+            options: {
+                parse: {pad: 'space'},
+                trim: true
+            }
+        },
+
         postcss: {
             extnames: ['css']
         }
     },
 
     rules: [
-
+        {
+            match(file) {
+                return file.isComponent;
+            },
+            processors: ['vueComponentGenerator']
+        }
     ]
 });

@@ -86,7 +86,7 @@ exports.extendAppFramework = function (t, path, bodyPath, baseClassName, opts) {
         );
     });
 
-    // insert the used extension import declaration statement
+    // insert the used extension import declaration statements
     let framework = opts.framework || [];
     let extendList = [];
     framework.forEach(name => {

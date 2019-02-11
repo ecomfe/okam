@@ -5,21 +5,29 @@
 
 'use strict';
 
-/* eslint-disable fecs-properties-quote */
-/* eslint-disable fecs-min-vars-per-destructure */
-
-const {merge} = require('../../../../util');
-const {element, attribute} = require('../base');
+const {CONDITION_DIRECTIVES} = require('../base/constant');
 
 module.exports = {
     element: {
-        // import: false,
-        // include: {
-        //     transform: require('./include')
-        // },
-        // tpl: {
-        //     transform: require('./tpl')
-        // },
+        include: {
+            match: 'include',
+            transform: require('../common/include')
+        },
+        tpl: {
+            match: 'tpl',
+            transform: require('../common/tpl')
+        }
     },
-    attribute: {}
+    attribute: {
+        if: {
+            match(name) {
+                return CONDITION_DIRECTIVES.includes(name);
+            },
+            transform: require('./condition')
+        },
+        for: {
+            match: 'for',
+            transform: require('./for')
+        }
+    }
 };

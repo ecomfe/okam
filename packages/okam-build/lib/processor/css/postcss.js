@@ -74,7 +74,10 @@ module.exports = function (file, options) {
     }
 
     plugins = (plugins || []).map(
-        ({name, handler, options}) => {
+        ({name, handler, options, noInit}) => {
+            if (noInit) {
+                return handler;
+            }
             let pluginOpts = Object.assign({
                 allAppTypes,
                 appType,

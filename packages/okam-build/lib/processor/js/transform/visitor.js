@@ -28,7 +28,15 @@ const componentTransformer = require('./component');
  * @return {Object}
  */
 function getCodeTraverseVisitors(t, initConfig, opts) {
-    let {isPage, isComponent, isBehavior, enableMixinSupport, filterOptions} = opts;
+    let {
+        isPage,
+        isComponent,
+        isBehavior,
+        enableMixinSupport,
+        filterOptions,
+        keepComponentsProp,
+        dataPropValueToFunc
+    } = opts;
     let hasComponents = isPage || isComponent;
     return {
         ObjectProperty(path) {
@@ -56,11 +64,16 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             else if (!isBehavior && hasComponents && keyName === 'components') {
                 // extract the using components information for page/component
                 let config = componentTransformer.getUsedComponentInfo(
-                    prop.value, path, t
+                    prop.value, path, t, keepComponentsProp
                 );
                 initConfig.components = config;
-                removeNode(t, path, {tail: true});
+                keepComponentsProp || removeNode(t, path, {tail: true});
 
+                path.skip();
+            }
+            if (dataPropValueToFunc && !isBehavior && keyName === 'data') {
+                // TODO:
+                // skip children traverse
                 path.skip();
             }
             else if (filterOptions && !isBehavior && keyName === 'filters') {
@@ -147,6 +160,7 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         );
     }
     else if (opts.isExtension) {
+        // do not throw exception for not object export extension
         return;
     }
     else {
@@ -165,14 +179,24 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         createImportDeclaration(baseClassName, opts.baseId, t)
     );
 
+    let routeConfName;
     if (opts.isApp) {
-        // insert the app extension use statements
+        // insert the app extension using statements
         appTransformer.extendAppFramework(
             t, path, bodyPath, baseClassName, opts
         );
+
+        let {routeConfigModId} = opts;
+        if (routeConfigModId) {
+            routeConfName = path.scope.generateUid('routeConfig');
+            bodyPath.insertBefore(
+                createImportDeclaration(routeConfName, routeConfigModId, t)
+            );
+        }
     }
 
     let callArgs = createInitCallArgs(declarationPath, config.config, opts, t);
+    routeConfName && callArgs.unshift(t.identifier(routeConfName));
     let needExport = opts.needExport || !opts.baseClass;
     let toReplacePath = needExport
         ? path.get('declaration')

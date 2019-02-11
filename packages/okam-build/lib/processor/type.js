@@ -134,6 +134,9 @@ const BUILTIN_PROCESSORS = {
     quickComponentGenerator: {
         processor: getProcessorPath('component/ux-generator')
     },
+    vueComponentGenerator: {
+        processor: getProcessorPath('component/vue-generator')
+    },
     quickComponent: {
         processor: getProcessorPath('component/ux-parser'),
         extnames: ['ux']

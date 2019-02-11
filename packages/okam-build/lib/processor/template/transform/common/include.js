@@ -1,5 +1,5 @@
 /**
- * @file Transform quick app include tpl syntax:
+ * @file Transform quick/H5 app include tpl syntax:
  *       <include src="../../common/tpl/include.tpl"/>
  * @author sparklewhy@gmail.com
  */
@@ -30,6 +30,7 @@ function getIncludeTemplateElement(tplFile) {
             return node;
         }
     }
+    return ast;
 }
 
 /**
@@ -63,7 +64,7 @@ module.exports = function (element, tplOpts, opts) {
     let inlineTplElement = getIncludeTemplateElement(includedTplFile);
 
     // add remove flag, remove <include src="xx" /> element
-    element.remove = true;
+    element.removed = true;
     removeEmptyTextNode(element.prev);
 
     if (!inlineTplElement

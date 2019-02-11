@@ -10,10 +10,10 @@
             <simple-component ref="myComponent"></simple-component>
         </view>
         <view>
-            <button for="item in arr" ref="forBtn">button-{{item}}</button>
+            <button for="(item, index) in arr" :key="index" ref="forBtn">button-{{item}}</button>
         </view>
         <view>
-            <simple-component for="item in arr" ref="forSimpleComponent">simple-component-{{item}}</simple-component>
+            <simple-component for="(item, index) in arr" :key="index" ref="forSimpleComponent">simple-component-{{item}}</simple-component>
         </view>
     </view>
 </template>

@@ -28,7 +28,7 @@
             <span :style="styleString">普通字符串</span>
 
             <h2>布尔属性</h2>
-            <view if="true" hi="{{true}}">hello im true</view>
+            <view if="true" :hi="true">hello im true</view>
             <view else></view>
             <button @click="handleButton" plain>plain=hello</button>
 
@@ -181,7 +181,7 @@
     </article>
 </template>
 <script>
-import moment from 'moment';
+// import moment from 'moment';
 
 export default {
     config: { // The page config defined in page.json

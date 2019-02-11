@@ -21,10 +21,12 @@ const FRAMEWORK_EXTEND_PATH = {
         'wx': 'extend/data/observable/wx/index',
         'tt': 'extend/data/observable/tt/index',
         'quick': 'extend/data/observable/quick/index',
+        'h5': true,
         'default': 'extend/data/observable/index'
     },
     watch: {
         'default': 'extend/data/watch/index',
+        'h5': true,
         'quick': 'extend/data/watch/quick/index'
     },
     broadcast: {
@@ -40,24 +42,35 @@ const FRAMEWORK_EXTEND_PATH = {
             base: 'extend/behavior/quick/index',
             creator: 'extend/behavior/quick/Behavior'
         },
+        'h5': true,
         'default': {
             base: 'extend/behavior/index',
             creator: 'extend/behavior/Behavior'
         }
     },
-    redux: 'extend/data/redux/index',
-    vuex: 'extend/data/vuex/index',
-    model: 'extend/data/model',
+    redux: {
+        'default': 'extend/data/redux/index'
+    },
+    vuex: {
+        'default': 'extend/data/vuex/index',
+        'h5': true
+    },
+    model: {
+        'default': 'extend/data/model',
+        'h5': true
+    },
     ref: {
         'default': 'extend/ref/index',
         'ant': 'extend/ref/ant/index',
-        'quick': 'extend/ref/quick/index'
+        'quick': 'extend/ref/quick/index',
+        'h5': true
     },
     filter: {
         wx: true,
         tt: true,
         swan: true,
         ant: true,
+        h5: true,
         quick: 'extend/filter/quick/index'
     }
 };
@@ -153,17 +166,21 @@ exports.getBaseId = function (appType, baseName) {
  * @return {string|boolean}
  */
 exports.getFrameworkExtendId = function (appType, extendName, getConstructor = false) {
-    let value = FRAMEWORK_EXTEND_PATH[extendName];
-    if (value && typeof value === 'object') {
-        value = value[appType] || value.default;
-    }
+    const extensionInfo = FRAMEWORK_EXTEND_PATH[extendName];
+    const defaultValue = extensionInfo && extensionInfo.default;
 
-    if (value == null) {
-        throw new Error(`unknown ${appType} framework extension: ${extendName}`);
+    let value;
+    if (extensionInfo && typeof extensionInfo === 'object') {
+        value = extensionInfo[appType];
     }
 
     if (typeof value === 'boolean') {
         return;
+    }
+
+    value || (value = defaultValue);
+    if (value == null) {
+        throw new Error(`unknown ${appType} framework extension: ${extendName}`);
     }
 
     if (typeof value === 'object') {

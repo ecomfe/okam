@@ -1,8 +1,8 @@
 <template lang="pug">
-    <article class="home-wrap">
-        <h1 class="page-title">{{title}}</h1>
-    </article>
     view.home-wrap
+        h1(
+            class="page-title"
+        ) {{title}}
         view(
             class="first-view"
         ) 测试数据渲染 #{name}!
@@ -12,10 +12,9 @@
             class="first-view"
         ) 测试绑定事件
 
-        view(class="second-view {{name}}") {{title}}swan数据绑定
+        view(:class="['second-view', name]") {{title}}swan数据绑定
         view.third-view.
             content is here when content is much more
-
 </template>
 <script>
 export default {

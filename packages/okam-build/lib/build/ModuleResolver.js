@@ -151,7 +151,7 @@ class ModuleResolver {
     resolve(requireModId, file, opts) {
         this.onResolve && this.onResolve(requireModId, file);
 
-        if (this.resolveFilter && this.resolveFilter(requireModId, this.appType)) {
+        if (this.resolveFilter && this.resolveFilter(requireModId, file, this.appType)) {
             return;
         }
 

@@ -77,7 +77,7 @@ function generateFilterCode(filterObjAst, t, options) {
         return '';
     }
 
-    let {format = 'es6', usingBabel6} = options || {};
+    let {format = 'es6'} = options || {};
     let ast;
     if (format === 'es6') {
         ast = generateES6ModuleFilterCode(filterObjAst, t);
@@ -88,7 +88,7 @@ function generateFilterCode(filterObjAst, t, options) {
 
     return generateCode(ast, {
         auxiliaryCommentBefore: 'Auto generated filter code by okam'
-    }, usingBabel6).code;
+    }).code;
 }
 
 exports.generateCode = generateFilterCode;

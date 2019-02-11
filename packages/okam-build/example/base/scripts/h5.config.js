@@ -16,7 +16,6 @@ const OUTPUT_DIR = 'h5_dist';
  * @type {Array.<string>}
  */
 const overridePropertySelectors = [
-    'framework',
     'component.template',
     'processors.postcss.options.plugins'
 ];
@@ -24,17 +23,22 @@ const overridePropertySelectors = [
 module.exports = merge({}, require('./base.config'), {
     output: {
         dir: OUTPUT_DIR,
-        depDir: false
+        depDir: {
+            node_modules: 'src/npm',
+            dep: 'src/npm'
+        }
     },
 
     polyfill: ['async'],
 
-    framework: [],
+    framework: ['filter'],
 
     component: {
         template: {
+            useVuePrefix: true,
             transformTags: {
-                'view': 'div'
+                'view': 'div',
+                'image': 'img'
             }
         }
     },
@@ -43,8 +47,34 @@ module.exports = merge({}, require('./base.config'), {
         postcss: {
             extnames: ['css', 'styl', 'less'],
             options: {
-                plugins: ['autoprefixer', 'env']
+                plugins: [
+                    [
+                        'autoprefixer',
+                        {
+                            browsers: [
+                                '> 1%',
+                                'last 2 versions',
+                                'not ie <= 8'
+                            ]
+                        }
+                    ],
+                    'postcss-url',
+                    'postcss-import-sync2',
+                    'env'
+                ]
             }
+        }
+    },
+
+    script: {
+        onBuildDone(opts) {
+            let cmd = 'build'; // (opts && opts.watch) ? 'watch' : 'build';
+            let options = {
+                cwd: path.join(__dirname, '..', OUTPUT_DIR)
+            };
+            return [
+                {cmd: `npm run ${cmd}`, options}
+            ];
         }
     }
 }, overridePropertySelectors);

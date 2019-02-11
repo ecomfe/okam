@@ -1,4 +1,4 @@
 
-export function hi() {
+export default function hi() {
 
 }

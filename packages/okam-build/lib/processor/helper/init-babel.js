@@ -167,6 +167,53 @@ function normalizeBabelPlugins(plugins, file, buildManager) {
 }
 
 /**
+ * Get script babel transform plugin
+ *
+ * @inner
+ * @param {Object} pluginOpts the default init plugin transform options
+ * @param {Object} file the file to transform
+ * @param {BuildManager} buildManager the build manager
+ * @param {string} type the script type
+ * @return {Array}
+ */
+function getTransformPlugin(pluginOpts, file, buildManager, type) {
+    const appBaseClass = buildManager.getOutputAppBaseClass();
+    const getInitOptions = buildManager.getAppBaseClassInitOptions.bind(
+        buildManager, file
+    );
+    const {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
+
+    let customOpts;
+    if (type === 'app') {
+        customOpts = {
+            framework,
+            registerApi: api,
+            baseClass: appBaseClass && appBaseClass.app,
+            routeConfigModId: buildManager.getAppRouterModuleId(),
+            getInitOptions
+        };
+
+        // polyfill using local variable is prior to global polyfill
+        localPolyfill || (customOpts.polyfill = polyfill);
+    }
+    else {
+        customOpts = {
+            filterOptions: buildManager.getFilterTransformOptions(),
+            tplRefs: file.tplRefs,
+            baseClass: appBaseClass && appBaseClass[type],
+            getInitOptions,
+            keepComponentsProp: !!buildManager.keepComponentsProp,
+            dataPropValueToFunc: !!buildManager.dataPropValueToFunc
+        };
+    }
+
+    return [
+        programPlugins[type],
+        Object.assign({}, pluginOpts, customOpts)
+    ];
+}
+
+/**
  * Initialize babel processor options
  *
  * @param {Object} file the file to process
@@ -186,52 +233,28 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     let configInitHandler = initConfigInfo.bind(
         null, buildManager, 'config', file
     );
-    let appBaseClass = buildManager.getOutputAppBaseClass();
     let pluginOpts = {
         appType: buildManager.appType,
-        config: configInitHandler
+        config: configInitHandler,
+        enableMixinSupport: buildManager.isEnableMixinSupport()
     };
-    let filterOptions = buildManager.getFilterTransformOptions();
-    let enableMixinSupport = buildManager.isEnableMixinSupport();
-    let {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
-    let getInitOptions = buildManager.getAppBaseClassInitOptions.bind(
-        buildManager, file
-    );
+    let {localPolyfill} = buildManager.buildConf;
     if (file.isEntryScript) {
-        Object.assign(pluginOpts, {
-            framework,
-            registerApi: api,
-            baseClass: appBaseClass && appBaseClass.app
-        });
-        // polyfill using local variable is prior to global polyfill
-        localPolyfill || (pluginOpts.polyfill = polyfill);
-        pluginOpts.getInitOptions = getInitOptions;
-        plugins.push([
-            programPlugins.app,
-            pluginOpts
-        ]);
+        plugins.push(getTransformPlugin(
+            pluginOpts, file, buildManager, 'app'
+        ));
     }
     else if (file.isPageScript) {
-        Object.assign(pluginOpts, {
-            enableMixinSupport,
-            filterOptions,
-            tplRefs: file.tplRefs,
-            baseClass: appBaseClass && appBaseClass.page,
-            getInitOptions
-        });
-        plugins.push([programPlugins.page, pluginOpts]);
+        plugins.push(getTransformPlugin(
+            pluginOpts, file, buildManager, 'page'
+        ));
     }
     else if (file.isComponentScript) {
-        Object.assign(pluginOpts, {
-            enableMixinSupport,
-            filterOptions,
-            tplRefs: file.tplRefs,
-            baseClass: appBaseClass && appBaseClass.component,
-            getInitOptions
-        });
-        plugins.push([programPlugins.component, pluginOpts]);
+        plugins.push(getTransformPlugin(
+            pluginOpts, file, buildManager, 'component'
+        ));
     }
-    else if (file.isBehavior) {
+    else if (!buildManager.ignoreBehaviorTransform && file.isBehavior) {
         plugins.push([programPlugins.behavior, pluginOpts]);
     }
 

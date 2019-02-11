@@ -5,8 +5,8 @@
             <view class="group-desc">以下将展示小程序开发框架能力</view>
         </view>
 
-        <view for="item, index in items" :key="item.name" class="group-bd">
-            <view class="item border-bottom {{item.open ? '' : 'item-close'}}" @click="toggleClick(index, item.path)">
+        <view for="(item, index) in items" :key="item.name" class="group-bd">
+            <view :class="['item', 'border-bottom', item.open ? '' : 'item-close']" @click="toggleClick(index, item.path)">
                 <image class="item-logo" :src="item.icon"></image>
                 <text class="item-desc">{{item.name}}</text>
                 <image if="item.path" class="item-logo item-toggle" src="../../common/img/goto.png"></image>
@@ -29,6 +29,8 @@ export default {
     },
 
     data: {
+        flag: true,
+        height: 100,
         items: [
             {
                 icon: '../../common/img/js.png',

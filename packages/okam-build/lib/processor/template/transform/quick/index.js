@@ -15,10 +15,10 @@ module.exports = {
     element: merge({}, element, {
         import: false,
         include: {
-            transform: require('./include')
+            transform: require('../common/include')
         },
         tpl: {
-            transform: require('./tpl')
+            transform: require('../common/tpl')
         },
         okamButton: {
             match: 'o-button',

@@ -1,5 +1,5 @@
 /**
- * @file Transform quick app import tpl syntax
+ * @file Transform quick/H5 app import tpl syntax
  * @author sparklewhy@gmail.com
  */
 

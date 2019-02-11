@@ -46,6 +46,9 @@ class BuildManager extends EventEmitter {
         this.envConfigKey = `_${appType}Env`;
         this.isDev = env === 'dev' || env === 'development';
         this.isProd = !env || env === 'prod' || env === 'production';
+        if (this.isProd) {
+            process.env.NODE_ENV = 'production';
+        }
 
         this.initBuildRules(buildConf);
 
@@ -268,10 +271,8 @@ class BuildManager extends EventEmitter {
     getFilterTransformOptions() {
         let enable = this.isEnableFilterSupport();
         if (enable) {
-            let isUsingBabel7 = this.defaultBabelProcessorName === 'babel7';
             return {
-                format: 'es6',
-                usingBabel6: !isUsingBabel7
+                format: 'es6'
             };
         }
         return null;
@@ -283,6 +284,15 @@ class BuildManager extends EventEmitter {
      * @return {?Array.<string>}
      */
     getModulePathKeepExtnames() {
+        return null;
+    }
+
+    /**
+     * Get the router config module id, if none, return null
+     *
+     * @return {?string}
+     */
+    getAppRouterModuleId() {
         return null;
     }
 

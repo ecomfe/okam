@@ -71,8 +71,26 @@ function processFilterInfo(file, owner, buildManager) {
     return filterFile;
 }
 
+function initRouterConfigFile(entryFile, buildManager) {
+    let routerFilePath = buildManager.getRouterFilePath
+        && buildManager.getRouterFilePath();
+    if (!routerFilePath) {
+        return;
+    }
+
+
+    let routerCode = buildManager.getAppRouteModuleCode();
+    let routerFile = createFile({
+        isVirtual: true,
+        data: routerCode,
+        path: routerFilePath
+    }, buildManager.root);
+    entryFile.addSubFile(routerFile);
+    buildManager.addNeedBuildFile(routerFile);
+}
+
 function processEntryScript(file, buildManager) {
-    let {root, files: allFiles, logger} = buildManager;
+    let {root, logger} = buildManager;
     let appConfig = file.config || {};
     file.config = appConfig;
 
@@ -114,10 +132,10 @@ function processEntryScript(file, buildManager) {
         return;
     }
     jsonFile.isAppConfig = true;
-
-    allFiles.push(jsonFile);
-
+    // allFiles.push(jsonFile);
     buildManager.addNeedBuildFile(jsonFile);
+
+    initRouterConfigFile(file, buildManager);
 }
 
 function processComponentScript(buildManager, file) {
