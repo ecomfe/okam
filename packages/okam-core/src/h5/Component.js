@@ -18,6 +18,8 @@ import componentBase from './base/component';
  * @return {Object}
  */
 export default function extendComponent(componentInfo, options) {
+    options || (options = {});
+    options.isH5 = true;
     return createComponent(
         componentInfo,
         componentBase,

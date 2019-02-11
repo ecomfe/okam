@@ -19,6 +19,8 @@ import pageBase from './base/page';
  * @return {Object}
  */
 export default function extendPage(pageInfo, options) {
+    options || (options = {});
+    options.isH5 = true;
     return createPage(
         pageInfo,
         pageBase,

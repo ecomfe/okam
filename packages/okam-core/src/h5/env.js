@@ -7,6 +7,7 @@
 
 /* global window:false */
 /* eslint-disable fecs-camelcase */
+import globalAPI from './api/index';
 
 /**
  * The app global object
@@ -27,7 +28,7 @@ export const appEnv = window;
  *
  * @type {Object}
  */
-export const api = {};
+export const api = globalAPI;
 
 /**
  * Get current app instance
@@ -35,7 +36,7 @@ export const api = {};
  * @return {Object}
  */
 export function getCurrApp() {
-    return null;
+    return window.__currOkamAppInstance;
 }
 
 /**
