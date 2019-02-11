@@ -7,7 +7,7 @@
 
 const path = require('path');
 const {file: fileUtil, string: strUtil} = require('../../util');
-const {getFileName} = fileUtil;
+const {getFileName, relative: getRelative} = fileUtil;
 const {toHyphen} = strUtil;
 const USING_COMPONENT_KEY = 'usingComponents';
 const {
@@ -25,7 +25,8 @@ const {
 function addComponentSameNameFiles(scriptFile, options) {
     const {dirname: currDir, path: relPath} = scriptFile;
     const scriptFileName = getFileName(relPath);
-    let filePathBase = `${currDir}/${scriptFileName}`;
+    // fullPath
+    let filePathBase = path.join(currDir, scriptFileName);
 
     const {
         root,
@@ -80,7 +81,7 @@ function addComponentSameNameFiles(scriptFile, options) {
     }
 
     if (missingMustFileExtnames.length) {
-        let compFile = path.relative(root, filePathBase);
+        let compFile = getRelative(filePathBase, root);
         missingMustFileExtnames.forEach(ext => {
             logger.error(`missing component file: 「${compFile}.${ext}」.`);
         });

@@ -49,7 +49,9 @@
 
     * [Broadcast支持](component/broadcast.md)
 
-    * [原生自定义组件支持](component/nativeSupport.md)
+    * [原生组件支持](component/nativeSupport.md)
+
+    * [组件互转](component/transform.md)
 
     * [原生组件对齐](component/nativeComponent.md)
 

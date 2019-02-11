@@ -5,6 +5,7 @@
  * eg
  * 1. :style="{ color: activeColor, fontSize: fontSize + 'px' }"
  * 2. :style="[{ color: activeColor, fontSize: fontSize + 'px' }]"
+ * 3. :style="{width, height}"
  *
  * @author sharonzd
  * @date 2018/8/23
@@ -14,6 +15,7 @@
 
 const {transformFilterSyntaxValue} = require('./filter');
 const {CURLY_BRACE_HAS_REGEXP} = require('./constant');
+const {parseBindingStyleValue} = require('../helper/style');
 
 module.exports = function (attrs, name, tplOpts, opts, element) {
     let value = attrs[name];
@@ -24,6 +26,7 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
         value = '';
     }
 
+    let {config, logger} = tplOpts;
     let wrapCurlyBrace = false;
     if (CURLY_BRACE_HAS_REGEXP.test(value)) {
         value = transformObjStyle(value);
@@ -32,7 +35,6 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
         wrapCurlyBrace = true;
     }
 
-    let {config, logger} = tplOpts;
     let newValue = transformFilterSyntaxValue(
         element, {name: 'style', value}, config, logger
     );
@@ -57,16 +59,5 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
  * @return {string} transformed result
  */
 function transformObjStyle(value) {
-    // 去掉首尾空格、去掉首尾方括号、去掉花括号，以`,`为分隔。将字符串重组为style的字面量语法
-    value = value
-        .trim()
-        .replace(/^\[|]$/g, '')
-        .replace(/[{}]/g, '')
-        .split(',')
-        .map(item => {
-            const arr = item.split(':');
-            arr[0] = arr[0].trim().replace(/([A-Z])/g, '-$1').toLowerCase();
-            return `${arr[0]}:{{${arr[1].trim()}}}`;
-        }).join(';');
-    return value;
+    return parseBindingStyleValue(value).join(';');
 }

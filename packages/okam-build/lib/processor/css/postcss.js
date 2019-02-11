@@ -78,6 +78,7 @@ module.exports = function (file, options) {
             if (noInit) {
                 return handler;
             }
+
             let pluginOpts = Object.assign({
                 allAppTypes,
                 appType,

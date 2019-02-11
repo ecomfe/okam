@@ -1,8 +1,51 @@
 # ChangeLog
 
+## 2019-02-10
+
+### okam-build@0.4.20
+* **Bug修复**
+    * 修复模板 `style` 绑定的样式值存在逗号，比如 `transform` 样式属性值转换会出错，同时增加 `ES6 Template String` 支持 [#37](https://github.com/ecomfe/okam/issues/37) ([9814fc7](https://github.com/ecomfe/okam/commit/9814fc7))
+
+## 2019-02-06
+
+### okam-build@0.4.19
+* **Bug修复**
+    * 修复模板 `style` `class` 对于对象简写语法支持：`:style="{width, height}"` [#35](https://github.com/ecomfe/okam/issues/35) ([cb3a4f0](https://github.com/ecomfe/okam/commit/cb3a4f0))
+    * 修复 `postcss` `plugins` 选项传递类似 `require('xx')(options)` 参数出错问题 [#36](https://github.com/ecomfe/okam/issues/36) ([12d554b](https://github.com/ecomfe/okam/commit/12d554b))
+
+## 2019-01-30
+
+### okam-build@0.4.18
+* **Bug修复**
+    * 修复模板 `style` 绑定变量存在三元表达式转换后样式出错问题 ([b5c0e49](https://github.com/ecomfe/okam/commit/b5c0e49))
+
+### okam-core@0.4.12
+* **Bug修复**
+    * 修复页面组件 `createSelectorQuery` 新增扩展接口在 `微信小程序` SDK 版本 `2.1.3` 真机上出错问题 ([0bcb218](https://github.com/ecomfe/okam/commit/0bcb218))
+
+
+## 2019-01-29
+
+### okam-build@0.4.17
+* **Bug修复**
+    * 修复 win7 下组件找不到路径的问题 ([a777996](https://github.com/ecomfe/okam/commit/a777996))
+
+
+## 2019-01-28
+
+### okam-build@0.4.16
+* **Bug修复**
+    * 修复 头条自定义组件不支持 `dataset` 获取不到 `data-` 属性值，导致事件处理不生效问题 ([a207ae7](https://github.com/ecomfe/okam/commit/a207ae7))
+    * 优化 `component-json` 处理器，组件按需文件处理替代同名文件处理、添加文件缺失提示 ([b6ca35d](https://github.com/ecomfe/okam/commit/b6ca35d))
+    * 优化 `wx2swan` 处理器, 添加`wxs` 支持，仅限 `module.exports={fn}` 支持 ([973c8f9](https://github.com/ecomfe/okam/commit/973c8f9))
+    
+* **新功能**
+    * 新增 `pages` 支持原生页面写法、添加文件缺失提示 ([8a4f123](https://github.com/ecomfe/okam/commit/8a4f123))
+
+
 ## 2019-01-25
 
-### okam-core@0.4.11
+### okam-core@0.4.15
 * **新功能**
     * 增加 API `init` 钩子增加异步处理支持 ([66ec172](https://github.com/ecomfe/okam/commit/66ec172))
 
@@ -18,7 +61,7 @@
 
 ### okam-cli@0.1.9
 * **Bug修复**
-    * 修复模板 `useVuePrefix` 配置层级错误问题 ([0a66749](https://github.com/ecomfe/okam/commit/0a66749))
+    * 修复 模板 `useVuePrefix` 配置层级错误问题 ([0a66749](https://github.com/ecomfe/okam/commit/0a66749))
 
 
 ## 2019-01-22

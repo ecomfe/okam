@@ -9,7 +9,7 @@
 const path = require('path');
 
 module.exports = {
-    verbose: true,
+    verbose: false,
     root: path.join(__dirname, '..'),
     output: {
         dir: 'dist',

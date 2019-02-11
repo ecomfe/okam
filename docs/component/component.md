@@ -186,7 +186,7 @@ export default {
 
     ```子组件
     <template>
-        <view>{{src}}</view>
+        <view>{{str}}</view>
     </template>
     <script>
     export default {

@@ -97,9 +97,21 @@ npm install
 
 ## 更新工具或项目包
 
-更新 cli: `okam upgrade self`
+升级 `cli (okam-cli)`
 
-将 项目中 okam 依赖 更新为最新版本依赖:  `cd <项目Root> && okam upgrade project`，替换成自己的 Okam 项目路径
+```
+okam upgrade self
+
+```
+
+升级 项目中 `okam 依赖(okam-build、okam-core、okam-xxx)`
+
+```
+// 替换成自己的 Okam 项目路径
+cd <项目Root>
+
+okam upgrade project
+```
 
 ## 目录结构
 

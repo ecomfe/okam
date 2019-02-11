@@ -269,6 +269,12 @@ module.exports = {
 
 ```
 
+### wx2swan
+`boolean` 将 微信小程序转成百度小程序，默认为 `false`
+
+* `boolean`, `true` 开启, `false` 不开启，只在构建类型为 `swan` 下有效，目前只是进行基础转换，支持内容[详见 wx2swan](component/transform.md?id=wx2swan)
+
+
 ### component
 `Object` 单文件组件的配置
 
