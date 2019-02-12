@@ -153,12 +153,14 @@ class BuildManager extends EventEmitter {
         let {
             root,
             sourceDir,
+            noParse,
             files,
             buildFiles
         } = loadProcessFiles(this.buildConf, this.logger);
 
         this.files = files;
         this.root = root;
+        this.noParse = noParse;
         this.sourceDir = sourceDir;
         this.babelConfig = babelUtil.readBabelConfig(root);
         this.waitingBuildFiles = buildFiles;
@@ -296,6 +298,21 @@ class BuildManager extends EventEmitter {
         return null;
     }
 
+    initFileParseOptions(file) {
+        let noParse = this.noParse;
+        let isNoParse = false;
+        if (noParse instanceof RegExp) {
+            isNoParse = noParse.test(file.path);
+        }
+        else if (typeof noParse === 'function') {
+            isNoParse = noParse(file.path);
+        }
+
+        if (isNoParse) {
+            file.noParse = true;
+        }
+    }
+
     /**
      * Compile file
      *
@@ -311,6 +328,7 @@ class BuildManager extends EventEmitter {
         let {watch: isWatchMode} = this.buildConf;
 
         try {
+            this.initFileParseOptions(file);
             processor.compile(file, this);
         }
         catch (ex) {

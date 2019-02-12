@@ -60,11 +60,13 @@ exports.resolve = function (buildManager, file, requireModId) {
     cacheResolveModIds || (file.resolvedModIds = cacheResolveModIds = {});
     let resolveModInfo = cacheResolveModIds[requireModId];
     if (resolveModInfo) {
-        return resolveModInfo.id;
+        let {id, noKeepRequire} = resolveModInfo;
+        return noKeepRequire ? {modId: id, noKeepRequire: true} : id;
     }
 
     let resolveOpts;
-    if (file.isStyle || file.isTpl) {
+    const isStyleTplFile = file.isStyle || file.isTpl;
+    if (isStyleTplFile) {
         resolveOpts = {
             extensions: []
         };
@@ -88,18 +90,32 @@ exports.resolve = function (buildManager, file, requireModId) {
     file.isTTCompScript && (depFile.isTTCompScript = true);
 
     let rebaseRelPath = file.resolvePath || file.path;
+    let isRequireStaticAsset = depFile.isImg || depFile.isStyle;
     let resolveModId = getRequirePath(
         depFile.resolvePath || depFile.path,
         rebaseRelPath,
-        (file.isStyle || file.isTpl) ? true : buildManager.getModulePathKeepExtnames()
+        (isStyleTplFile || isRequireStaticAsset)
+            ? true : buildManager.getModulePathKeepExtnames()
     );
+
+    let noKeepRequire;
+    if (!buildManager.isH5App && !isStyleTplFile && isRequireStaticAsset) {
+        noKeepRequire = true;
+    }
 
     let cacheInfo = {
         id: resolveModId,
+        noKeepRequire,
         file: depFile
     };
     cacheResolveModIds[requireModId] = cacheInfo;
     cacheResolveModIds[resolveModId] = cacheInfo;
 
+    if (noKeepRequire) {
+        return {
+            modId: resolveModId,
+            noKeepRequire: true
+        };
+    }
     return resolveModId;
 };

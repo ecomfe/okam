@@ -26,6 +26,17 @@ function tryToResolveRequireModId(t, path, state) {
 
     let modId = source.value;
     let newModId = resolveRequireId(modId);
+    let noKeepRequire;
+    if (newModId && typeof newModId === 'object') {
+        noKeepRequire = newModId.noKeepRequire;
+        newModId = newModId.modId;
+    }
+
+    if (noKeepRequire) {
+        path.remove();
+        return;
+    }
+
     if (newModId && newModId !== modId) {
         let requireIdNode = path.get('source');
         requireIdNode.replaceWith(
@@ -64,11 +75,20 @@ module.exports = function ({types: t}) {
 
                 let modId = args[0].value;
                 let newModId = resolveRequireId(modId);
+                let noKeepRequire;
+                if (newModId && typeof newModId === 'object') {
+                    noKeepRequire = newModId.noKeepRequire;
+                    newModId = newModId.modId;
+                }
                 if (newModId && newModId !== modId) {
                     let requireIdNode = path.get('arguments.0');
-                    requireIdNode.replaceWith(
+                    let toUpNode = noKeepRequire ? path.node : requireIdNode;
+                    toUpNode.replaceWith(
                         t.stringLiteral(newModId)
                     );
+                }
+                else if (noKeepRequire) {
+                    path.replaceWith(path.get('arguments.0'));
                 }
             },
 

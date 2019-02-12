@@ -130,7 +130,7 @@ function addExtraIncludeFiles(includeGlob, initBuildFiles, fileFactory) {
 
 function loadProcessFiles(options, logger) {
     let rootDir = options.root;
-    let {dir, exclude, include} = options.source;
+    let {dir, exclude, include, noParse} = options.source;
     if (!dir) {
         logger.error('missing the source dir config information');
         return;
@@ -159,9 +159,11 @@ function loadProcessFiles(options, logger) {
         }
     });
 
+    let {depDir: rebaseDepDir, pathMap: outputPathMap} = options.output || {};
     let fileFactory = new FileFactory({
         root: rootDir,
-        rebaseDepDir: (options.output || {}).depDir,
+        rebaseDepDir,
+        outputPathMap,
         entryStyle,
         entryScript,
         projectConfig,
@@ -184,6 +186,7 @@ function loadProcessFiles(options, logger) {
     return {
         root: rootDir,
         sourceDir,
+        noParse,
         files: fileFactory,
         buildFiles: initBuildFiles
     };

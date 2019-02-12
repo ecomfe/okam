@@ -132,7 +132,7 @@ function processEntryScript(file, buildManager) {
         return;
     }
     jsonFile.isAppConfig = true;
-    // allFiles.push(jsonFile);
+    buildManager.files.initFileResolvePath(jsonFile);
     buildManager.addNeedBuildFile(jsonFile);
 
     initRouterConfigFile(file, buildManager);

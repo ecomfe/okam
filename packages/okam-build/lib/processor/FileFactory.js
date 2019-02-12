@@ -17,7 +17,7 @@ const {
     isJSON: isJsonType,
     isImg: isImgType
 } = require('./type');
-const {relative} = require('../util').file;
+const {relative, replaceFileName} = require('../util').file;
 
 const {DEFAULT_DEP_DIR_NAME, resolveDepModuleNewPath} = require('./helper/npm');
 
@@ -179,6 +179,7 @@ class FileFactory extends EventEmitter {
      * @param {Object} options create options
      * @param {string} options.root the file root
      * @param {string} options.rebaseDepDir the rebase dir of the dep file
+     * @param {Object} options.outputPathMap the output file path map
      * @param {string|RegExp} options.entryStyle the entry style pattern
      * @param {string|RegExp} options.entryScript the entry script pattern
      * @param {string|RegExp} options.projectConfig the projectConfig pattern
@@ -255,6 +256,35 @@ class FileFactory extends EventEmitter {
         return result;
     }
 
+    initFileResolvePath(file) {
+        const outputPathMap = this.options.outputPathMap;
+        let filePath = file.path;
+        if (file.isProjectConfig) {
+            filePath = replaceFileName(filePath, outputPathMap.projectConfig);
+        }
+        else if (file.isEntryScript) {
+            filePath = replaceFileName(filePath, outputPathMap.entryScript);
+        }
+        else if (file.isEntryStyle) {
+            filePath = replaceFileName(filePath, outputPathMap.entryStyle);
+        }
+        else if (file.isAppConfig) {
+            filePath = replaceFileName(filePath, outputPathMap.appConfig);
+        }
+        else {
+            return;
+        }
+
+        if (!filePath) {
+            file.release = false;
+        }
+        else {
+            file.resolvePath = filePath;
+            file.rext = filePath.substr(filePath.lastIndexOf('.') + 1);
+        }
+        return true;
+    }
+
     /**
      * Add new file
      *
@@ -279,9 +309,7 @@ class FileFactory extends EventEmitter {
         let result = isUnshift ? this.unshift(f) : this.push(f);
         if (result) {
             let newPath = this.resolveFileNewPath(f.path);
-            if (newPath) {
-                f.resolvePath = newPath;
-            }
+            newPath && (f.resolvePath = newPath);
 
             /**
              * @event addFile
@@ -346,6 +374,8 @@ class FileFactory extends EventEmitter {
         if (file.extname === componentExtname) {
             file.isComponent = true;
         }
+
+        this.initFileResolvePath(file);
 
         return file;
     }

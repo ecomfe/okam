@@ -55,6 +55,8 @@ class BuildH5AppManager extends BuildManager {
             return rawResolverFilter && rawResolverFilter.apply(null, args);
         };
 
+        this.isH5App = true;
+
         // keep components property for Vue component
         this.keepComponentsProp = true;
 

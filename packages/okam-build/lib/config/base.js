@@ -151,7 +151,14 @@ module.exports = {
          *
          * @type {Array.<string|RegExp>}
          */
-        include: [/^project\.\w+$/]
+        include: [/^project\.\w+$/],
+
+        /**
+         * 不解析编译处理的文件定义，支持传入不解析的文件路径的正则或者 function
+         *
+         * @type {RegExp|function(filePath):boolean}
+         */
+        noParse: null
     },
 
     /**

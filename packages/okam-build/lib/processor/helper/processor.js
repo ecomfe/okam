@@ -247,9 +247,9 @@ function addScriptDefaultBabelProcessor(file, buildManager, processors) {
 }
 
 function findMatchProcessor(file, rules, buildManager) {
-    let logger = buildManager.logger;
-    let matchProcessors = [];
-    let unknownProcessors = [];
+    const logger = buildManager.logger;
+    const matchProcessors = [];
+    const unknownProcessors = [];
 
     rules || (rules = []);
     for (let r = 0, rLen = rules.length; r < rLen; r++) {
