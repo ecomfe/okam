@@ -15,7 +15,11 @@ const {
     removeComments
 } = require('./helper');
 const appTransformer = require('./app');
-const componentTransformer = require('./component');
+const {
+    getUsedMixinModulePaths,
+    getUsedComponentInfo,
+    convertDataPropObjectValueToFunction
+} = require('./component');
 
 /**
  * Traverse the module definition information and extract the `config` information
@@ -54,7 +58,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             }
             else if (enableMixinSupport && keyName === 'mixins') {
                 // extract the mixins information for page/component
-                let mixins = componentTransformer.getUsedMixinModulePaths(
+                let mixins = getUsedMixinModulePaths(
                     prop.value, path, t, opts
                 );
                 initConfig.mixins = mixins;
@@ -63,7 +67,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             }
             else if (!isBehavior && hasComponents && keyName === 'components') {
                 // extract the using components information for page/component
-                let config = componentTransformer.getUsedComponentInfo(
+                let config = getUsedComponentInfo(
                     prop.value, path, t, keepComponentsProp
                 );
                 initConfig.components = config;
@@ -72,7 +76,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
                 path.skip();
             }
             if (dataPropValueToFunc && !isBehavior && keyName === 'data') {
-                // TODO:
+                convertDataPropObjectValueToFunction(prop, t);
                 // skip children traverse
                 path.skip();
             }

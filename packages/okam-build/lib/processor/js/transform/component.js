@@ -207,3 +207,18 @@ exports.getUsedMixinModulePaths = function (node, path, t, opts) {
     return mixinModulePaths;
 };
 
+/**
+ * Convert data property object value type to function type
+ *
+ * @param {Object} propNode the object property node to convert
+ * @param {Object} t the babel type definition
+ */
+exports.convertDataPropObjectValueToFunction = function (propNode, t) {
+    if (!t.isObjectExpression(propNode.value)) {
+        return;
+    }
+
+    propNode.value = t.functionExpression(
+        t.identifier('data'), [], t.blockStatement([t.returnStatement(propNode.value)])
+    );
+};
