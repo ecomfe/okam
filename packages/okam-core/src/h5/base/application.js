@@ -36,6 +36,10 @@ export default {
         // init extension api
         initApi.call(this);
 
+        // inject router instance
+        const initRouterInstance = this.$api._initRouterInstance;
+        initRouterInstance && initRouterInstance(this.$router);
+
         // init onShow/onHide listener
         this.__removeVisibilityChange = bindVisibilityChange(isHide => {
             if (isHide) {

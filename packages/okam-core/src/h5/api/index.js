@@ -8,11 +8,13 @@
 import createSelectorQuery from './createSelectorQuery';
 import systemApi from './system';
 import requestApi from './request';
+import routerApi from './router';
 
 export default Object.assign(
     {
         createSelectorQuery
     },
     systemApi,
-    requestApi
+    requestApi,
+    routerApi
 );
