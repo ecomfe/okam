@@ -1,16 +1,17 @@
 <template>
     <view class="group">
         <view class="group-hd">
-            <image class="group-logo" src="../../common/img/logo.png"></image>
+            <image class="group-logo" src="../../common/img/logo.png" />
             <view class="group-desc">以下将展示小程序开发框架能力</view>
         </view>
 
         <view for="(item, index) in items" :key="item.name" class="group-bd">
             <view :class="['item', 'border-bottom', item.open ? '' : 'item-close']" @click="toggleClick(index, item.path)">
-                <image class="item-logo" :src="item.icon"></image>
+                <image class="item-logo" :src="item.icon" />
                 <text class="item-desc">{{item.name}}</text>
-                <image if="item.path" class="item-logo item-toggle" src="../../common/img/goto.png"></image>
-                <image else class="item-logo item-toggle" :src="item.open ? '../../common/img/close.png' : '../../common/img/open.png'"></image>
+                <image class="item-logo item-toggle" src="../../common/img/goto.png" if="item.path" />
+                <image class="item-logo item-toggle" src="../../common/img/close.png" else-if="item.open" />
+                <image class="item-logo item-toggle" src="../../common/img/open.png" else />
             </view>
             <view if="item.open">
                 <view class="sub-item border-bottom" for="subItem in item.list" :key="subItem.subName" @click="oneItemClick(subItem.path)">
@@ -22,7 +23,6 @@
     </view>
 </template>
 <script>
-
 export default {
     config: {
         navigationBarTitleText: 'OKAM 开发框架示例'
@@ -33,7 +33,7 @@ export default {
         height: 100,
         items: [
             {
-                icon: '../../common/img/js.png',
+                icon: require('../../common/img/js.png'),
                 name: '语言',
                 open: false,
                 list: [
@@ -45,7 +45,7 @@ export default {
             },
             {
                 name: '模板',
-                icon: '../../common/img/template.png',
+                icon: require('../../common/img/template.png'),
                 open: false,
                 list: [
                     {
@@ -76,7 +76,7 @@ export default {
             },
             {
                 name: '组件',
-                icon: '../../common/img/component.png',
+                icon: require('../../common/img/component.png'),
                 open: false,
                 list: [
                     {
@@ -103,7 +103,7 @@ export default {
             },
             {
                 name: '数据操作',
-                icon: '../../common/img/data.png',
+                icon: require('../../common/img/data.png'),
                 open: false,
                 list: [
                     {
@@ -133,7 +133,7 @@ export default {
                 ]
             },
             {
-                icon: '../../common/img/more.png',
+                icon: require('../../common/img/more.png'),
                 name: '其他',
                 open: false,
                 list: [
@@ -169,8 +169,10 @@ export default {
 
             // 子项展开与收起
             let items = this.items;
+            let upItem = items[index];
             // this.setData(`items[${index}].open`, !items[index].open)
-            this.items.getItem(index).open = !items[index].open;
+            items.splice(index, 1, Object.assign(upItem, {open: !upItem.open}));
+            // this.items.getItem(index).open = !items[index].open;
         }
     }
 };

@@ -7,6 +7,7 @@
 
 import store from './store/index';
 // import a from 'a';
+import './app.styl';
 
 export default {
     // the app config defined in app.json

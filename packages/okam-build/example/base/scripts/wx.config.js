@@ -13,8 +13,7 @@ module.exports = merge({}, require('./base.config'), {
         // depDir: 'src/common'
     },
     localPolyfill: [
-        'async',
-        'promise'
+        'async'
     ],
     framework: ['filter'],
     dev: {
