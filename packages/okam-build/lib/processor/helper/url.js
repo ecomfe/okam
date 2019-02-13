@@ -5,8 +5,8 @@
 
 'use strict';
 
-const HTTP_PROTOCOL_REGEXP = /^https?\:\/\//;
-const URL_REGEXP = /^[\w\.\/\-]+$/;
+const HTTP_PROTOCOL_REGEXP = /^(https?\:)?\/\//;
+const URL_REGEXP = /^~?[\w\.\/\-]+$/;
 
 function getUrlInfo(url) {
     let queryIdx = url.indexOf('?');
@@ -32,6 +32,18 @@ function getUrlInfo(url) {
     };
 }
 
+exports.normalizeUrlPath = function (urlPath) {
+    let firstChar = urlPath.charAt(0);
+    if (firstChar === '~') {
+        return urlPath.substr(1); // resolve module using node_modules and alias support
+    }
+
+    if (firstChar !== '.') {
+        urlPath = './' + urlPath; // ensure the module resolve correctly
+    }
+    return urlPath;
+};
+
 exports.resolveUrlPath = function (url, file, resolver, logger) {
     url = url.trim();
 
@@ -48,10 +60,7 @@ exports.resolveUrlPath = function (url, file, resolver, logger) {
         return;
     }
 
-    if (pathname.charAt(0) !== '.') {
-        pathname = './' + pathname;
-    }
-
+    pathname = exports.normalizeUrlPath(pathname);
     let resolvePath = resolver(file, pathname);
     if (!resolvePath) {
         return;

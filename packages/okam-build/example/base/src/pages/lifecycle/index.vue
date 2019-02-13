@@ -46,11 +46,14 @@ export default {
     }
 };
 </script>
-<style lang="stylus">
-.title
-    display: block
-    width: 100%
-    padding: 20px 0
-    text-align: center
+<style>
+@import 'style/index.css';
+
+.title {
+    display: block;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+}
 
 </style>
