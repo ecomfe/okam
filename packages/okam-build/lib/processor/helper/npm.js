@@ -91,9 +91,13 @@ exports.resolve = function (buildManager, file, requireModId) {
 
     let rebaseRelPath = file.resolvePath || file.path;
     let isRequireStaticAsset = depFile.isImg || depFile.isStyle;
+    let depFilePath = depFile.resolvePath || depFile.path;
+    if (depFile.isStyle && file.isScript) {
+        depFilePath = fileUtil.replaceExtname(depFilePath, depFile.rext || 'css');
+    }
+
     let resolveModId = getRequirePath(
-        depFile.resolvePath || depFile.path,
-        rebaseRelPath,
+        depFilePath, rebaseRelPath,
         (isStyleTplFile || isRequireStaticAsset)
             ? true : buildManager.getModulePathKeepExtnames()
     );
