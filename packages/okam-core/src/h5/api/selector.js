@@ -418,6 +418,14 @@ class SelectorQuery {
     }
 }
 
-export default function createSelectorQuery() {
-    return new SelectorQuery();
-}
+export default {
+
+    /**
+     * Create selector query
+     *
+     * @return {SelectorQuery}
+     */
+    createSelectorQuery() {
+        return new SelectorQuery();
+    }
+};

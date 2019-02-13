@@ -13,6 +13,11 @@ import {detectPlatform} from '../util/ua';
 const navigator = window.navigator;
 const ua = navigator.userAgent;
 
+/**
+ * Get system info sync
+ *
+ * @return {Object}
+ */
 function getSystemInfoSync() {
     const info = detectPlatform(ua);
     return Object.assign(info, {
@@ -30,14 +35,20 @@ function getSystemInfoSync() {
     });
 }
 
+/**
+ * Get system info
+ *
+ * @params {Object} options the get options
+ * @param {Function=} options.success the success callback
+ * @param {Function=} options.fail the fail callback
+ * @param {Function=} options.complete the done callback whatever is
+ *        success or fail.
+ */
 function getSystemInfo(options) {
     const {success, complete} = options || {};
-    new Promise(resolve => {
-        const info = getSystemInfoSync();
-        typeof success === 'function' && success(info);
-        typeof complete === 'function' && complete(info);
-        resolve(info);
-    });
+    const info = getSystemInfoSync();
+    typeof success === 'function' && success(info);
+    typeof complete === 'function' && complete(info);
 }
 
 export default {

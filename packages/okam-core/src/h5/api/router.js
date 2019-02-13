@@ -85,6 +85,11 @@ export default {
     navigateTo,
 
     /**
+     * Switch tab
+     */
+    switchTab: navigateTo,
+
+    /**
      * Redirect to the specified url.
      */
     redirectTo: navigateTo

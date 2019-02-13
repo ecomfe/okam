@@ -5,16 +5,18 @@
 
 'use strict';
 
-import createSelectorQuery from './createSelectorQuery';
+import selectorApi from './selector';
 import systemApi from './system';
 import requestApi from './request';
 import routerApi from './router';
+import storageApi from './storage';
+import toastApi from './ui/toast';
 
 export default Object.assign(
-    {
-        createSelectorQuery
-    },
+    selectorApi,
     systemApi,
     requestApi,
-    routerApi
+    routerApi,
+    storageApi,
+    toastApi
 );
