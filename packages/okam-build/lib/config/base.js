@@ -464,10 +464,6 @@ module.exports = {
              * @return {boolean}
              */
             match(file) {
-                if (file.isStyle && file.extname !== 'css' && !file.isEntryStyle && !file.owner) {
-                    // 默认不处理非入口样式及单文件组件的样式文件
-                    return false;
-                }
                 return !!file.processor;
             },
 

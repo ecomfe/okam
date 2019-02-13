@@ -491,6 +491,7 @@ class BuildManager extends EventEmitter {
         rext && (file.rext = rext);
         ast && (file.ast = ast);
 
+        const isStyleCompiled = file.isStyle;
         deps && deps.forEach(item => {
             this.logger.debug('add dep', item);
             if (!pathUtil.isAbsolute(item)) {
@@ -501,6 +502,11 @@ class BuildManager extends EventEmitter {
             }
 
             let depFile = this.files.addFile(item);
+            // not need to compile the preprocess style file dependence style files again
+            if (isStyleCompiled && depFile.isStyle && depFile.extname !== 'css') {
+                depFile.compiled = true;
+            }
+
             file.addDeps(depFile.path);
             this.addNeedBuildFile(depFile);
         });
