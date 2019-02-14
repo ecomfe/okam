@@ -33,6 +33,8 @@
 
 * 构建配置 `localPolyfill` 引入 `promise` 会导致 `IOS` 下预览出错，目前所有小程序都是默认支持 `Promise`，因此不再需要做 `promise` `polyfill`，解决办法删掉该 `promise` 配置项即可修复，具体原因不详。
 
+* 不支持 `icon` 上绑事件
+
 ## 百度小程序
 
 * 自定义组件中的图片路径是相对于引用页面的，这是实现问题，最新版本会在 `2019.1.3` [修复上线](https://smartprogram.baidu.com/forum/topic/show/64967)。因此对于此情况，想多平台生效，可以将路径设置为 相对于 小程序项目目录的 绝对路径，如: `'/common/img/x.png'`, 具体路径，视自己项目情况而定。
@@ -41,3 +43,14 @@
     * [2018.11.23](https://smartprogram.baidu.com/forum/topic/show/64420)
     * [2018.12.14](https://smartprogram.baidu.com/forum/topic/show/64967)
 
+* 字体图标 真机ios正常，安卓不正常
+
+## 头条小程序
+
+* `input` 原生组件 `maxlength`，不支持 -1 为无限制
+
+* 自定义组件上挂的 `data-` 取不到
+
+* 自定义事件 值只能是对象类型
+
+* 自定义组件内 监听 `capture` 事件 会执行两遍, 一遍 `page` 上的同名函数，一遍 `component` 上的函数
