@@ -239,12 +239,15 @@ class FileFactory extends EventEmitter {
             return;
         }
 
+        // considering npm dependencies maybe installed in
+        // the parent dir of the current project root, so here should remove `../`
+        const testPath = filePath.replace(/^(\.\.\/)+/, '');
         let result;
         Object.keys(rebaseDir).some(originalDir => {
             let newDir = rebaseDir[originalDir];
-            if (filePath.indexOf(originalDir) === 0) {
+            if (testPath.indexOf(originalDir) === 0) {
                 result = resolveDepModuleNewPath(
-                    filePath, originalDir, newDir
+                    testPath, originalDir, newDir
                 );
                 return true;
             }

@@ -118,7 +118,7 @@ function initBuildOptions(appType, options, cliOpts = {}) {
         buildConf.server = false;
     }
 
-    const rootDir = buildConf.root || process.cwd();
+    const rootDir = path.resolve(process.cwd(), buildConf.root || '.');
     buildConf.root = rootDir;
 
     // init output config
