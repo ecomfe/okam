@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 2019-02-14
+
+### okam-build@0.4.21
+* **Bug修复**
+    * 修复 `okam-core` 依赖安装在项目源码根目录的父级目录依赖处理问题 ([cf16dfd](https://github.com/ecomfe/okam/commit/cf16dfd))
+
 ## 2019-02-10
 
 ### okam-build@0.4.20
