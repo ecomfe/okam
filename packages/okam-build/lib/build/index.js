@@ -45,7 +45,10 @@ function startBuild(buildConf, clear) {
         buildManager.clear();
     }
 
-    startDevServer(buildConf, buildManager);
+    if (!buildManager.hasDevServer) {
+        startDevServer(buildConf, buildManager);
+    }
+
     let doneHandler = function () {
         startFileChangeMonitor(buildConf, buildManager);
     };

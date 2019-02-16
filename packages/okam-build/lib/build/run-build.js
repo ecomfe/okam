@@ -56,10 +56,13 @@ function buildProject(timer, buildConf, buildManager) {
     ).then(
         doneHandler
     ).then(
-        () => {
-            runBuildDoneHook(buildManager, onBuildDone);
-        }
-    ).catch(doneHandler);
+        () => buildManager.runPostBuild && buildManager.runPostBuild()
+    ).then(
+        () => runBuildDoneHook(buildManager, onBuildDone)
+    ).catch(err => {
+        logger.error('build error happen', err.stack || err);
+        doneHandler();
+    });
 }
 
 /**

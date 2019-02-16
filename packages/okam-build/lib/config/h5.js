@@ -10,6 +10,10 @@ const baseConf = require('./base');
 
 module.exports = merge({}, baseConf, {
 
+    source: {
+        noParse: /\/vue|vue\-router|vuex\//
+    },
+
     output: {
 
         /**
@@ -85,5 +89,19 @@ module.exports = merge({}, baseConf, {
             },
             processors: ['vueComponentGenerator']
         }
-    ]
+    ],
+
+    resolve: {
+        alias: {
+            vue$: 'vue/dist/vue.runtime.common.dev.js'
+        }
+    },
+
+    prod: {
+        resolve: {
+            alias: {
+                vue$: 'vue/dist/vue.runtime.esm.js'
+            }
+        }
+    }
 });

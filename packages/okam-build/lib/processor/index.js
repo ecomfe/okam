@@ -119,6 +119,8 @@ function processEntryScript(file, buildManager) {
         pages, pageFileMap, allPageFiles,
         file.dirname, buildManager
     );
+    // add home page flag
+    allPageFiles[0].isHomePage = true;
 
     // resolve page path as new path if needed, currently only for quick app
     if (buildManager.resolvePageNewPath) {
@@ -170,8 +172,6 @@ function processFile(file, processor, buildManager) {
         return;
     }
 
-    rext && (file.rext = rext);
-
     if (isPromise(result)) {
         buildManager.addAsyncTask(file, result);
         return;
@@ -181,6 +181,8 @@ function processFile(file, processor, buildManager) {
         compileComponent(result, file, buildManager);
         result = {content: file.content};
     }
+
+    result.rext || (result.rext = rext);
     buildManager.updateFileCompileResult(file, result);
 }
 

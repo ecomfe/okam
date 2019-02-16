@@ -210,7 +210,7 @@ exports.isScript = function (extname) {
     return SCRIPT_EXT_NAMES.includes(extname);
 };
 
-const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg'];
+const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg', 'ico'];
 exports.IMG_EXT_NAMES = IMG_EXT_NAMES;
 exports.isImg = function (extname) {
     return IMG_EXT_NAMES.includes(extname);

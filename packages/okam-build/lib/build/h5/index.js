@@ -6,8 +6,10 @@
 'use strict';
 
 const BuildManager = require('../BuildManager');
+const {normalizeMiddlewares} = require('../../server/helper');
 const {file: fileUtil} = require('../../util');
 const {getRequirePath} = fileUtil;
+const buildByWebpack = require('./webpack/build');
 
 function getPageComponentName(modId, existedName) {
     let parts = modId.split('/');
@@ -56,6 +58,9 @@ class BuildH5AppManager extends BuildManager {
         };
 
         this.isH5App = true;
+
+        // using webpack dev server
+        this.hasDevServer = true;
 
         // keep components property for Vue component
         this.keepComponentsProp = true;
@@ -134,12 +139,48 @@ class BuildH5AppManager extends BuildManager {
             // routerItem += padding(8, `props: {title: '${config.title}}'`);
             routerItem += padding(4, '}');
             routerList.push(routerItem);
+
+            if (item.isHomePage) {
+                this.homePagePath = routePath;
+            }
         });
 
         let routerConfigStr = `\n\n\nexport default [\n${routerList.join(',\n')}\n];\n`;
         return '/* Auto generated router config code by okam */\n\n'
             + importPageComponents.join('\n') + routerConfigStr;
 
+    }
+
+    /**
+     * Run the post build
+     *
+     * @return {Promise}
+     */
+    runPostBuild() {
+        const {output, server, webpack} = this.buildConf;
+        let devServerMws;
+        if (server) {
+            const {port, middlewares} = server;
+            webpack.devServer = Object.assign({}, webpack.devServer);
+            if (port && !webpack.devServer.port) {
+                webpack.devServer.port = port;
+            }
+
+            devServerMws = normalizeMiddlewares(middlewares, this.root);
+        }
+        else {
+            delete webpack.devServer;
+        }
+
+        const options = {
+            server,
+            webpack,
+            devServerMws,
+            root: this.root,
+            sourceDir: output.dir,
+            homePath: this.homePagePath || '/'
+        };
+        return buildByWebpack(this.isDev, options, this.logger);
     }
 }
 
