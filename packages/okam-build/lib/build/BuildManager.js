@@ -111,6 +111,12 @@ class BuildManager extends EventEmitter {
 
         let {rules: baseRules, processors: baseProcessors} = buildConf;
         let {rules, processors} = extraConf || {};
+        if (extraConf) {
+            delete extraConf.rules;
+            delete extraConf.processors;
+        }
+        buildConf = merge(buildConf, extraConf);
+        this.buildConf = buildConf;
 
         rules && (rules = [].concat(baseRules, rules));
         this.rules = rules || baseRules || [];
@@ -488,7 +494,7 @@ class BuildManager extends EventEmitter {
         let {rext, content, deps, sourceMap, ast} = compileResult;
         file.compiled = true;
         file.content = content;
-        rext && (file.rext = rext);
+        rext && !file.rext && (file.rext = rext);
         ast && (file.ast = ast);
 
         const isStyleCompiled = file.isStyle;
