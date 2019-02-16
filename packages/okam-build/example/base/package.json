@@ -5,16 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "init": "npm i && ln -s ../../../../okam-core node_modules && ln -s ../../../../okam-component node_modules",
+    "init": "npm i && ln -nsf ../../../../okam-core node_modules && ln -nsf ../../../../okam-component node_modules",
     "clean": "rm -rf dist/",
     "clean:wx": "rm -rf wx_dist/",
     "clean:ant": "rm -rf ant_dist/",
     "clean:tt": "rm -rf tt_dist/",
     "clean:quick": "rm -rf quick_dist/",
-    "dev": "cross-env NODE_ENV=dev node scripts/build.js --watch",
-    "dev:clean": "cross-env NODE_ENV=dev node scripts/build.js --watch --clean",
-    "dev:server": "cross-env NODE_ENV=dev node scripts/build.js --watch --server",
-    "dev:debug": "cross-env NODE_ENV=dev node --inspect-brk scripts/build.js --watch",
+    "dev": "cross-env NODE_ENV=dev NODE_PATH=./node_modules node scripts/build.js --watch",
+    "dev:clean": "cross-env NODE_ENV=dev NODE_PATH=./node_modules node scripts/build.js --watch --clean",
+    "dev:server": "cross-env NODE_ENV=dev NODE_PATH=./node_modules node scripts/build.js --watch --server",
+    "dev:debug": "cross-env NODE_ENV=dev NODE_PATH=./node_modules node --inspect-brk scripts/build.js --watch",
     "prod": "node scripts/build.js --clean",
     "dev:wx": "npm run dev -- --type wx",
     "dev:wx:clean": "npm run dev:clean -- --type wx",
@@ -36,11 +36,12 @@
     "dev:quick:server": "npm run dev:server -- --type quick",
     "dev:quick:debug": "npm run dev:debug -- --type quick",
     "prod:quick": "npm run prod -- --type quick",
-    "dev:h5": "npm run dev -- --type h5",
-    "dev:h5:clean": "npm run dev:clean -- --type h5",
+    "dev:h5": "npm run dev:server -- --type h5",
+    "dev:h5:clean": "npm run dev:clean -- --server --type h5",
     "dev:h5:server": "npm run dev:server -- --type h5",
     "dev:h5:debug": "npm run dev:debug -- --type h5",
-    "prod:h5": "npm run prod -- --type h5"
+    "prod:h5": "npm run prod -- --type h5",
+    "start:h5": "cross-env NODE_ENV=dev NODE_PATH=./node_modules node scripts/h5/build.js"
   },
   "keywords": [
     "example"
@@ -49,15 +50,34 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.10",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "vue": "^2.6.6",
+    "vue-router": "^3.0.2"
   },
   "devDependencies": {
-    "connect": "^3.6.6",
+    "autoresponse": "^0.3.0",
+    "babel-loader": "^8.0.5",
+    "cliui": "^4.1.0",
+    "copy-webpack-plugin": "^4.6.0",
     "cross-env": "^5.2.0",
-    "okam-plugin-tinyimg": "^0.1.0",
+    "css-loader": "^2.1.0",
+    "file-loader": "^3.0.1",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "okam-plugin-tinyimg": "^0.1.4",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss-import-sync2": "^1.1.0",
     "postcss-url": "^8.0.0",
-    "promise-polyfill": "^8.1.0"
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "url-loader": "^1.1.2",
+    "vue-loader": "^15.6.2",
+    "vue-style-loader": "^4.1.2",
+    "webpack": "^4.29.4",
+    "webpack-bundle-analyzer": "^3.0.4",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.2.1"
   }
 }

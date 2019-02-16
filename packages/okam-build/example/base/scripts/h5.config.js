@@ -63,15 +63,9 @@ module.exports = merge({}, require('./base.config'), {
         }
     },
 
-    script: {
-        onBuildDone(opts) {
-            let cmd = 'build'; // (opts && opts.watch) ? 'watch' : 'build';
-            let options = {
-                cwd: path.join(__dirname, '..', OUTPUT_DIR)
-            };
-            return [
-                {cmd: `npm run ${cmd}`, options}
-            ];
+    webpack: {
+        htmlPlugin: {
+            template: path.join(__dirname, 'h5/index.html')
         }
     }
 }, overridePropertySelectors);

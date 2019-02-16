@@ -12,9 +12,6 @@ const {defaultH5TagToMiniProgram} = require('../../../');
 module.exports = {
     verbose: false,
     root: path.join(__dirname, '..'),
-    source: {
-        noParse: /\/vue|vue\-router|vuex\//
-    },
     output: {
         dir: 'dist',
         depDir: {
@@ -114,14 +111,13 @@ module.exports = {
     ],
 
     server: {
-        port: 9090,
-        type: 'connect'
-        // middlewares: [{
-        //     name: 'autoresponse',
-        //     options: {
-
-        //     }
-        // }]
+        port: 8080,
+        middlewares: [{
+            name: 'autoresponse',
+            options: {
+                post: true
+            }
+        }]
     },
 
     dev: {

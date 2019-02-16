@@ -29,6 +29,9 @@ module.exports = {
     ],
     polyfill: [],
     processors: {
+        // postcss: {
+        //     extnames: ['styl', 'less']
+        // },
         babel7: {
             extnames: 'js'
         }
