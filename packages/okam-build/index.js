@@ -11,5 +11,6 @@ const {h5ToMiniProgram, miniProgramToH5} = require('./lib/util/tag-map');
 exports.reverseTagMap = require('./lib/util/tag-transform-helper');
 exports.defaultH5TagToMiniProgram = h5ToMiniProgram;
 exports.defaultMiniProgramTagToH5 = miniProgramToH5;
+exports.runH5Compile = require('./lib/build/h5/webpack/build');
 exports.merge = require('./lib/util').merge;
 exports.run = require('./lib/build');

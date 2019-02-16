@@ -5,8 +5,6 @@
 
 'use strict';
 
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
 const {colors, logger: defaultLogger} = require('../../../util');
 const net = require('../../../server/net');
 
@@ -98,6 +96,7 @@ function getWebpackConfig(isDev, options) {
             };
         }
 
+        const WebpackDevServer = require('webpack-dev-server');
         WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOpts);
     }
 
@@ -128,6 +127,7 @@ function buildH5App(isDev, options, logger) {
     delete webpackConfig.devServer;
 
     // create compiler
+    const webpack = require('webpack');
     const compiler = webpack(webpackConfig);
 
     // enable progress
@@ -136,6 +136,7 @@ function buildH5App(isDev, options, logger) {
     // create dev server
     let server;
     if (devServerOpts) {
+        const WebpackDevServer = require('webpack-dev-server');
         server = new WebpackDevServer(compiler, devServerOpts);
     }
     else {

@@ -173,7 +173,6 @@ class BuildH5AppManager extends BuildManager {
         }
 
         const options = {
-            server,
             webpack,
             devServerMws,
             root: this.root,
