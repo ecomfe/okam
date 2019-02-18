@@ -13,8 +13,6 @@
 - [x] [百度小程序](https://smartprogram.baidu.com/docs/introduction/enter_application/)
 - [x] [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/)
 - [x] [支付宝小程序](https://docs.alipay.com/mini/developer/getting-started)
-- [x] [头条小程序](https://developer.toutiao.com/docs/)
-- [x] [快应用](https://www.quickapp.cn/)
 - [ ] H5 `待支持`
 
 ### 功能特性
