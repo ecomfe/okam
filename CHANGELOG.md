@@ -1,5 +1,19 @@
 # ChangeLog
 
+## 2019-02-20
+
+### okam-core@0.4.14
+* **Bug修复**
+    * 修复 `Vuex` store 里引用类型修改比如 `array` 修改没能正确触发视图更新问题 ([358ad30](https://github.com/ecomfe/okam/commit/358ad30))
+    * 修复 `支付宝` 自定义组件发射自定义事件，引用的自定义组件没有声明事件监听报错问题 ([ee7d68b](https://github.com/ecomfe/okam/commit/ee7d68b))
+
+
+## 2019-02-14
+
+### okam-build@0.4.21
+* **Bug修复**
+    * 修复 `okam-core` 依赖安装在项目源码根目录的父级目录依赖处理问题 ([cf16dfd](https://github.com/ecomfe/okam/commit/cf16dfd))
+
 ## 2019-02-10
 
 ### okam-build@0.4.20
@@ -38,7 +52,7 @@
     * 修复 头条自定义组件不支持 `dataset` 获取不到 `data-` 属性值，导致事件处理不生效问题 ([a207ae7](https://github.com/ecomfe/okam/commit/a207ae7))
     * 优化 `component-json` 处理器，组件按需文件处理替代同名文件处理、添加文件缺失提示 ([b6ca35d](https://github.com/ecomfe/okam/commit/b6ca35d))
     * 优化 `wx2swan` 处理器, 添加`wxs` 支持，仅限 `module.exports={fn}` 支持 ([973c8f9](https://github.com/ecomfe/okam/commit/973c8f9))
-    
+
 * **新功能**
     * 新增 `pages` 支持原生页面写法、添加文件缺失提示 ([8a4f123](https://github.com/ecomfe/okam/commit/8a4f123))
 

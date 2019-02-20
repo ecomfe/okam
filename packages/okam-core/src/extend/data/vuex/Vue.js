@@ -6,9 +6,17 @@
 import watch from '../watch/index';
 import observable from '../observable/index';
 import proxyArrayApis from '../observable/array';
+import {addDep} from '../observable/helper';
 
 const observableComp = observable.component;
 const watchComp = watch.component;
+
+const getCallbacks = [];
+const setCallbacks = [];
+function handleDataGetSet(isGet, paths, newVal, oldVal) {
+    const callbacks = isGet ? getCallbacks : setCallbacks;
+    callbacks.forEach(item => item.call(null, paths, newVal, oldVal));
+}
 
 /* eslint-disable fecs-prefer-class */
 /**
@@ -31,6 +39,10 @@ function Vue(options) {
     // avoid methods defined on methods, so here pass `true`
     observableComp.$init.call(instance, true);
     watchComp.$init.call(instance, true);
+
+    // init inner data get/set listener
+    instance.__onDataGet = handleDataGetSet.bind(instance, true);
+    instance.__onDataSet = handleDataGetSet.bind(instance, false);
 
     instance.created();
 
@@ -97,6 +109,39 @@ Vue.use = function (plugin) {
     else if (typeof plugin === 'function') {
         plugin.apply(null, args);
     }
+};
+
+Vue.initDataGetSet = function (instance) {
+    // init get/set callback
+    const currGetCallback = paths => {
+        let deps = instance.__deps;
+        deps && addDep(deps, paths);
+    };
+    getCallbacks.push(currGetCallback);
+
+    const currSetCallback = (paths, newVal, oldVal) => {
+        let listener = instance && instance.$dataListener;
+        listener && listener.emit('change', newVal, oldVal, paths);
+    };
+    setCallbacks.push(currSetCallback);
+
+    // init callback dispose
+    let removeSetGetListener = () => {
+        let idx = getCallbacks.indexOf(currGetCallback);
+        idx !== -1 && getCallbacks.splice(idx, 1);
+
+        idx = getCallbacks.indexOf(currSetCallback);
+        idx !== -1 && setCallbacks.splice(idx, 1);
+    };
+    let rawDetached = instance.detached;
+    instance.detached = () => {
+        removeSetGetListener();
+
+        rawDetached && rawDetached.call(instance);
+        instance = null;
+    };
+
+    return removeSetGetListener;
 };
 
 export default Vue;

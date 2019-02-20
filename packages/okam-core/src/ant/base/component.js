@@ -43,7 +43,7 @@ antComponent.methods = Object.assign({}, antComponent.methods, {
         let eventProp = args[0];
         eventProp = 'on' + eventProp.charAt(0).toUpperCase() + eventProp.substr(1);
         let eventHandler = this.props[eventProp];
-        eventHandler.call(this, args[1]);
+        eventHandler != null && eventHandler.call(this, args[1]);
     }
 });
 

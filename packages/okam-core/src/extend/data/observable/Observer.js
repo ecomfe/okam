@@ -199,6 +199,7 @@ export default class Observer {
     get(k) {
         let ctx = this.ctx;
         let paths = this.addDep(k);
+        ctx.__onDataGet && ctx.__onDataGet(paths || this.getPaths(k));
 
         let observeData = this.observableData;
         let value = observeData[k];
@@ -250,7 +251,10 @@ export default class Observer {
      * @param {Array.<string>} paths the change data paths
      */
     notifyWatcher(newVal, oldVal, paths) {
-        let listener = this.ctx.$dataListener;
+        let ctx = this.ctx;
+        ctx.__onDataSet && ctx.__onDataSet(paths, newVal, oldVal);
+
+        let listener = ctx.$dataListener;
         listener && listener.emit('change', newVal, oldVal, paths);
     }
 

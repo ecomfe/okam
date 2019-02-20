@@ -145,7 +145,7 @@ class BuildManager extends EventEmitter {
         }
 
         // replace module okam-core/na/index.js content using specified app env module
-        if (file.path === 'node_modules/okam-core/src/na/index.js') {
+        if (file.path.indexOf('node_modules/okam-core/src/na/index.js') !== -1) {
             let naEnvModuleId = `../${this.appType}/env`;
             file.content = `'use strict;'\nexport * from '${naEnvModuleId}';\n`;
             this.envFileUpdated = true;
