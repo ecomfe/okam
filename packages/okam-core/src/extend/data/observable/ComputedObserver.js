@@ -296,7 +296,10 @@ export default class ComputedObserver {
      * @param {Array.<string>} paths the change data paths
      */
     notifyWatcher(newVal, oldVal, paths) {
-        let listener = this.ctx.$dataListener;
+        let ctx = this.ctx;
+        ctx.__onDataSet && ctx.__onDataSet(paths, newVal, oldVal);
+
+        let listener = ctx.$dataListener;
         listener && listener.emit('change', newVal, oldVal, paths);
     }
 
@@ -343,6 +346,7 @@ export default class ComputedObserver {
         }
 
         this.addDep(k);
+        ctx.__onDataGet && ctx.__onDataGet([k]);
 
         return value;
     }

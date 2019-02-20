@@ -69,11 +69,14 @@ describe('Vuex support', function () {
                 arrLen() {
                     return store.state.arr.length;
                 },
+                myArr() {
+                    return store.state.arr;
+                },
                 ...mapState({
                     // arrow functions can make the code very succinct!
                     count2: state => (state.count + 10),
 
-                    // passing the string value 'count' is same as `state => state.count`
+                    // passing the string value 'count' is the same as `state => state.count`
                     countAlias: 'count',
 
                     count3(state) {
@@ -119,8 +122,10 @@ describe('Vuex support', function () {
         assert(page.count2 === 10);
         assert(page.count3 === 1);
         assert(page.a === 1);
+        assert(page.arrLen === 0);
         assert(page.countAlias === page.count);
         assert(page.countPlusLocalState === 1);
+        expect(page.myArr).toEqual([]);
 
         let task1 = () => {
             expect(spySetData).toHaveBeenCalled();
@@ -129,6 +134,7 @@ describe('Vuex support', function () {
             expect(args.slice(0, args.length - 1)).toEqual([{
                 a: 1,
                 arrLen: 0,
+                myArr: [],
                 count: 0,
                 count2: 10,
                 count3: 1,
@@ -150,6 +156,7 @@ describe('Vuex support', function () {
             assert(page.countPlusLocalState === 3);
             assert(page.a === 2);
             assert(page.arrLen === 1);
+            expect(page.myArr).toEqual([2]);
             expect(page.$store.state).toEqual({
                 count: 2, obj: {a: 2}, arr: [2]
             });
@@ -164,7 +171,8 @@ describe('Vuex support', function () {
                 countAlias: 2,
                 countPlusLocalState: 3,
                 a: 2,
-                arrLen: 1
+                arrLen: 1,
+                myArr: [2]
             }]);
 
             page.num = 10;
@@ -524,6 +532,7 @@ describe('Vuex support', function () {
 
         instance.addModule();
         instance.changeDynamicModuleState();
+        instance.$fireStoreChange();
 
         expect(instance.$store.state).toEqual({
             count: 0,
@@ -531,12 +540,14 @@ describe('Vuex support', function () {
             dynamicModule: {num: 3}
         });
 
+        instance.changeDynamicModuleState();
+
         setTimeout(() => {
             expect(spySetData).toHaveBeenCalled();
             assert(spySetData.calls.length === 1);
             let args = spySetData.calls[0].arguments;
             expect(args.slice(0, args.length - 1)).toEqual([{
-                count: 3
+                count: 4
             }]);
 
             done();

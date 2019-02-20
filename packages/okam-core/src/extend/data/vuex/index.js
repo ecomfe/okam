@@ -9,14 +9,11 @@
 
 import Vuex from 'vuex';
 import Vue from './Vue';
-import isValueEqual from '../equal';
 
 function subscribeStoreChange() {
     let computedKeys = Object.keys(this.$rawComputed || {});
     if (computedKeys.length && !this.__unsubscribeStore) {
-        this.__unsubscribeStore = this.$store.subscribe(
-            this.$fireStoreChange
-        );
+        this.__unsubscribeStore = Vue.initDataGetSet(this);
     }
 }
 
@@ -28,16 +25,12 @@ function removeStoreChangeSubscribe() {
     }
 }
 
-function shouldUpdate(old, curr) {
-    return !isValueEqual(old, curr);
-}
-
 function onStoreChange() {
     let upKeys = Object.keys(this.$rawComputed || {});
     let updateComputed = this.__updateComputed;
     /* istanbul ignore next */
     if (updateComputed && upKeys) {
-        upKeys.forEach(k => updateComputed.call(this, k, shouldUpdate));
+        upKeys.forEach(k => updateComputed.call(this, k));
     }
 }
 
@@ -69,12 +62,7 @@ export default {
                 this.$rawComputed = computedInfo = computedInfo();
             }
 
-            let computedKeys = Object.keys(this.$rawComputed || {});
-            if (computedKeys.length) {
-                this.__unsubscribeStore = store.subscribe(
-                    this.$fireStoreChange
-                );
-            }
+            subscribeStoreChange.call(this);
         },
 
         /**
