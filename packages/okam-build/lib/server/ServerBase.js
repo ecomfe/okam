@@ -5,8 +5,7 @@
 
 'use strict';
 
-const colors = require('../util').colors;
-const net = require('./net');
+const {net, colors} = require('../util');
 
 class ServerBase {
     constructor({port, logger, middlewares, dep}) {

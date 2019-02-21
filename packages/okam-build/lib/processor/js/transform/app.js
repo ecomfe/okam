@@ -5,11 +5,47 @@
 
 'use strict';
 
+const {isPlainObject} = require('../../../util').lang;
 const {
     createImportDeclaration,
-    getFrameworkExtendId,
-    createSimpleObjectExpression
+    getFrameworkExtendId
 } = require('./helper');
+
+function createAPIRegisterArg(apiConf, t) {
+    let props = [];
+    Object.keys(apiConf).forEach(k => {
+        let {name, moduleName, spread} = apiConf[k];
+        let node;
+        if (spread) {
+            node = t.spreadElement(moduleName);
+        }
+        else {
+            node = t.objectProperty(
+                t.identifier(`'${name}'`),
+                moduleName
+            );
+        }
+        props.push(node);
+    });
+
+    return props.length ? t.objectExpression(props) : null;
+}
+
+function createRegisterAPIStatement(t, appClassName, apiArg, override) {
+    let args = [apiArg];
+    override && args.push(t.booleanLiteral(true));
+    let stmt = t.expressionStatement(
+        t.callExpression(
+            t.memberExpression(
+                t.identifier(appClassName),
+                t.identifier('registerApi')
+            ),
+            args
+        )
+    );
+
+    return stmt;
+}
 
 /**
  * Create `App.use(xx)` using extension statement
@@ -45,26 +81,53 @@ function registerAppExtendAPI(t, path, bodyPath, baseClassName, apis) {
     }
 
     let registerApiConfig = {};
+    let overrideApis = [];
     Object.keys(apis).forEach(apiName => {
         let apiPath = apis[apiName];
+        let spread = false;
+        let override = false;
+        if (isPlainObject(apiPath)) {
+            spread = apiPath.spread;
+            override = apiPath.override;
+            apiPath = apiPath.modId;
+        }
+
+        if (typeof apiPath !== 'string') {
+            throw new Error(`api build config ${apiName} missing modId`);
+        }
+
         let registerApiName = path.scope.generateUid(apiName);
         bodyPath.insertBefore(
             createImportDeclaration(registerApiName, apiPath, t)
         );
-        registerApiConfig[apiName] = t.identifier(registerApiName);
+
+        let conf = {
+            name: apiName,
+            moduleName: t.identifier(registerApiName),
+            spread
+        };
+        if (override) {
+            overrideApis.push(conf.moduleName);
+        }
+        else {
+            registerApiConfig[apiName] = conf;
+        }
     });
 
-    let apiExpression = createSimpleObjectExpression(registerApiConfig, t);
-    let registerApiStatement = t.expressionStatement(
-        t.callExpression(
-            t.memberExpression(
-                t.identifier(baseClassName),
-                t.identifier('registerApi')
-            ),
-            [apiExpression]
-        )
-    );
-    path.insertBefore(registerApiStatement);
+    overrideApis.forEach(item => {
+        let registerApiStatement = createRegisterAPIStatement(
+            t, baseClassName, item, true
+        );
+        path.insertBefore(registerApiStatement);
+    });
+
+    let apiArg = createAPIRegisterArg(registerApiConfig, t);
+    if (apiArg) {
+        let registerApiStatement = createRegisterAPIStatement(
+            t, baseClassName, apiArg
+        );
+        path.insertBefore(registerApiStatement);
+    }
 }
 
 /**

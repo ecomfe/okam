@@ -38,6 +38,7 @@ exports.resolveDepModuleNewPath = function (oldPath, moduleDir, rebaseDepDir) {
     // remove `src` to fix toutiao cannot init correctly
     return result.replace(/\\/g, '/').replace('/src/', '/')
         .replace('/okam-core/', '/okam/')
+        .replace('/okam-api-h5/', '/oapi/')
         .replace('/okam-component/', '/ocom/')
         .replace('/@babel/runtime/helpers/', '/babel/');
 };

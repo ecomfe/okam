@@ -55,6 +55,13 @@ module.exports = merge({}, baseConf, {
         appBaseClass: null
     },
 
+    api: {
+        defaultH5Api: {
+            modId: 'okam-api-h5',
+            override: true
+        }
+    },
+
     component: {
         template: {
             resourceTags: {

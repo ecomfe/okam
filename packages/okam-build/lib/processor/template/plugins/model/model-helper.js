@@ -13,7 +13,6 @@ const EVENT_PREFIX = {
 
 const {toHyphen} = require('../../../../util').string;
 
-
 /**
  * 事件名获取
  *

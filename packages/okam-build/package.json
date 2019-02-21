@@ -4,8 +4,14 @@
   "description": "The build tool for Okam develop framework",
   "main": "index.js",
   "keywords": [
+    "h5",
+    "web",
+    "quick app",
+    "toutiao",
     "swan",
     "wx",
+    "alipay",
+    "weapp",
     "okam",
     "mini program",
     "build"
@@ -27,7 +33,7 @@
     "url": "https://github.com/ecomfe/okam/issues"
   },
   "dependencies": {
-    "chokidar": "^2.0.4",
+    "chokidar": "^2.1.2",
     "glob": "^7.1.3",
     "hash-sum": "^1.0.2",
     "htmlparser2": "^3.9.2",
@@ -37,13 +43,13 @@
     "resolve": "^1.8.1",
     "rimraf": "^2.6.2",
     "vue-template-compiler": "^2.6.6",
-    "yargs-parser": "^11.0.0"
+    "yargs-parser": "^13.0.0"
   },
   "engine": {
-    "node": ">= 6"
+    "node": ">= 8"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.0",
     "nyc": "^13.1.0"
   }
 }

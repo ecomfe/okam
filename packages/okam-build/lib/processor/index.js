@@ -12,7 +12,7 @@ const {createFile} = require('./FileFactory');
 const {findMatchProcessor, getBuiltinProcessor} = require('./helper/processor');
 const {getEventSyntaxPlugin, getFilterSyntaxPlugin, getModelSyntaxPlugin} = require('./helper/init-view');
 const registerProcessor = require('./type').registerProcessor;
-const {isPromise} = require('../util').helper;
+const {isPromise} = require('../util').lang;
 const {toHyphen} = require('../util').string;
 const {
     relative,

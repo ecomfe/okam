@@ -6,10 +6,7 @@
 'use strict';
 
 const helper = require('okam-helper');
-
-function isPlainObject(obj) {
-    return toString.call(obj) === '[object Object]';
-}
+const {isPlainObject} = helper.lang;
 
 function doMerge(target, source, selector, doNotMergeSelectors) {
     if (doNotMergeSelectors && doNotMergeSelectors.includes(selector)) {

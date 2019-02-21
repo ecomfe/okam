@@ -9,7 +9,7 @@ const BuildManager = require('../BuildManager');
 const {normalizeMiddlewares} = require('../../server/helper');
 const {file: fileUtil} = require('../../util');
 const {getRequirePath} = fileUtil;
-const buildByWebpack = require('./webpack/build');
+const buildByWebpack = require('okam-build-h5');
 
 function getPageComponentName(modId, existedName) {
     let parts = modId.split('/');

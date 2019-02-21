@@ -5,6 +5,7 @@
 
 'use strict';
 
+const {isPlainObject} = require('../../../util').lang;
 const {
     getBaseId,
     getFrameworkExtendId,
@@ -139,7 +140,7 @@ function createNode(value, t) {
         return t.arrayExpression(elements);
     }
 
-    if (Object.prototype.toString.call(value) === '[object Object]') {
+    if (isPlainObject(value)) {
         let props = [];
         Object.keys(value).forEach(k => {
             let node = createNode(value[k], t);

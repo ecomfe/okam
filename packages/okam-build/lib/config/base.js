@@ -53,6 +53,14 @@ module.exports = {
      * {
      *    'audio': '@system.audio', // 导入外部依赖
      *    'myRequest': './common/request', // 相对模块，相对于项目源目录
+     *    defaultApi: { // 重写默认环境提供的 API，直接覆盖默认的环境 API
+     *       modId: 'my-apis',
+     *       override: true
+     *    },
+     *    spreadApi: { // 展开导出的 API，用于返回的 API 包含多个 API 情况
+     *       modId: './common/apis',
+     *       spread: true
+     *    }
      * }
      *
      * key: 为对应要导出的 api 名称，value 为对应的该 API 的实现

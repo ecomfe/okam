@@ -8,14 +8,14 @@
 const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
-const {helper, file: fileUtil} = require('../util');
+const {os, file: fileUtil} = require('../util');
 
 class CacheManager {
     constructor(options) {
         this.memCache = {
             dirFileInfo: {}
         };
-        this.cacheDir = options.cacheDir || path.join(helper.getUserHomeDir(), '.okam');
+        this.cacheDir = options.cacheDir || path.join(os.getUserHomeDir(), '.okam');
     }
 
     setDirFileListInfo(dir, info) {
