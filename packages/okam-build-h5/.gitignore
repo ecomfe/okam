@@ -1,0 +1,11 @@
+dist
+example/**/package-lock.json
+test/**/package-lock.json
+test/example/
+test/test.js
+wx_dist
+ant_dist
+tt_dist
+quick_dist
+h5_dist
+node_modules

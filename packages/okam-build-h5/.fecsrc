@@ -1,0 +1,13 @@
+{
+    "eslint": {
+        "env": {
+            "node": true,
+            "browser": false
+        },
+
+        "rules": {
+            "fecs-no-require": -1,
+            "no-console": 0
+        }
+    }
+}
