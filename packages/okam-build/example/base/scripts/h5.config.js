@@ -7,7 +7,6 @@
 
 const path = require('path');
 const {defaultMiniProgramTagToH5, merge} = require('../../../');
-
 const OUTPUT_DIR = 'h5_dist';
 
 /**
@@ -66,6 +65,15 @@ module.exports = merge({}, require('./base.config'), {
     webpack: {
         htmlPlugin: {
             template: path.join(__dirname, 'h5/index.html')
+        },
+        mergeOptions: {
+            resolveLoader: {
+                modules: [
+                    // 确保软链 okam-build-h5 能正确找到 loader 定义
+                    path.join(require.resolve('okam-build-h5'), '..', 'node_modules'),
+                    'node_modules'
+                ]
+            }
         }
     }
 }, overridePropertySelectors);

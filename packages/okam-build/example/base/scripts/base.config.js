@@ -33,6 +33,9 @@ module.exports = {
             transformTags: defaultH5TagToMiniProgram
         }
     },
+    api: {
+        hi: './api/hi.js'
+    },
     framework: [
         'data',
         'watch',

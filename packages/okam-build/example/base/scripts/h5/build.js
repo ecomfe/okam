@@ -6,7 +6,7 @@
 'use strict';
 
 const path = require('path');
-const {runH5Compile} = require('../../../../');
+const runH5Compile = require('okam-build-h5');
 
 const isDev = true;
 runH5Compile(isDev, {
