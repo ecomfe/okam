@@ -13,7 +13,7 @@ import expect, {createSpy} from 'expect';
 import requestInit, {setMaxRequestNumber} from 'core/wx/request';
 import naRequest from 'core/na/request';
 
-describe('wx/request', () => {
+describe('wx/request', function () {
     let rawFakeRequest = global.fakeRequest;
     before(() => {
         requestInit();
