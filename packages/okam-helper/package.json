@@ -4,8 +4,6 @@
   "description": "The build helper for Okam develop framework",
   "main": "index.js",
   "keywords": [
-    "swan",
-    "wx",
     "okam",
     "mini program",
     "build",
@@ -30,6 +28,6 @@
     "node": ">= 6"
   },
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^6.0.0"
   }
 }

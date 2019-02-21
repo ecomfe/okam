@@ -1,24 +1,9 @@
 /**
- * @file The other misc helper utilities
+ * @file The other misc utilities
  * @author sparklewhy@gmail.com
  */
 
 'use strict';
-
-exports.getUserHomeDir = function () {
-    const os = require('os');
-    return os.homedir();
-};
-
-/**
- * Check the given object whether is Promise instance
- *
- * @param {Object} obj the object to check
- * @return {boolean}
- */
-exports.isPromise = function (obj) {
-    return obj && typeof obj.then === 'function' && typeof obj.catch === 'function';
-};
 
 /**
  * Generated the given data md5 digest

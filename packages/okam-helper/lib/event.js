@@ -1,5 +1,5 @@
 /**
- * @file event utilities
+ * @file Event utilities
  * @author sparklewhy@gmail.com
  */
 

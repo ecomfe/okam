@@ -6,9 +6,9 @@
 'use strict';
 
 import assert from 'assert';
-import helper from '../../lib/helper';
+import misc from '../../lib/misc';
 
-describe('Helper', function () {
+describe('Misc', function () {
 
 });
 
