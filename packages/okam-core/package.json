@@ -5,7 +5,12 @@
   "main": "src/index.js",
   "keywords": [
     "swan",
+    "weapp",
     "wx",
+    "toutiao",
+    "quick app",
+    "h5",
+    "web",
     "okam",
     "mini program",
     "framework"
@@ -24,11 +29,11 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.0",
     "nyc": "^13.0.1",
     "promise-polyfill": "^8.0.0",
     "redux": "^4.0.1",
-    "regenerator-runtime": "^0.12.1",
+    "regenerator-runtime": "^0.13.1",
     "vuex": "^3.1.0"
   }
 }

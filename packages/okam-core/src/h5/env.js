@@ -7,7 +7,6 @@
 
 /* global window:false */
 /* eslint-disable fecs-camelcase */
-import globalAPI from './api/index';
 
 /**
  * The app global object
@@ -28,7 +27,7 @@ export const appEnv = window;
  *
  * @type {Object}
  */
-export const api = globalAPI;
+export const api = {};
 
 /**
  * Get current app instance
