@@ -161,11 +161,8 @@ export default {
      *        success or fail.
      */
     getStorageInfo(options) {
-        let opts = Object.assign({}, options, {
-            normalizeRes(data) {
-                return data;
-            }
-        });
+        /* eslint-disable fecs-camelcase */
+        let opts = Object.assign({_spread: true}, options);
         processAsyncApiCallback('getStorageInfo', getStorageInfoSync, [], opts);
     },
 

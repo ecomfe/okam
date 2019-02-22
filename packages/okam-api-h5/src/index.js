@@ -11,6 +11,10 @@ import requestApi from './request';
 import routerApi from './router';
 import storageApi from './storage';
 import toastApi from './ui/toast';
+import navApi from './navigator';
+import phoneApi from './phone';
+import networkApi from './network';
+import windowApi from './window';
 
 export default Object.assign(
     selectorApi,
@@ -18,5 +22,9 @@ export default Object.assign(
     requestApi,
     routerApi,
     storageApi,
-    toastApi
+    toastApi,
+    navApi,
+    phoneApi,
+    networkApi,
+    windowApi
 );
