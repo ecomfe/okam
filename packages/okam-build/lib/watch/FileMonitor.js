@@ -68,7 +68,7 @@ class FileWatcher extends EventEmitter {
         }
 
         this.watchFiles = files.filter(path => {
-            if (path.startsWith('node_modules/')) {
+            if (process.env.OKAM_ENV !== 'dev' && path.startsWith('node_modules/')) {
                 return false;
             }
             return true;
