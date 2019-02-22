@@ -130,7 +130,7 @@ export default {
                     },
                     {
                         subName: 'v-html 支持',
-                        path: 'data/html'
+                        path: 'data/vhtml'
                     }
                 ]
             },

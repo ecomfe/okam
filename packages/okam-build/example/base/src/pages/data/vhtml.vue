@@ -23,6 +23,10 @@
                 <view>支付宝不支持 string 类型</view>
             </ant-env>
         </view>
+        <view class="example-item">
+            <view class="sub-title">v-html 支持</view>
+            <div v-html="arrayTag">inner</div>
+        </view>
     </view>
 </template>
 
