@@ -35,7 +35,11 @@ export default {
             'pages/broadcast/index',
             'pages/filter/index',
             'pages/sfc/index',
-            'pages/sfc/separate'
+            'pages/sfc/separate',
+            'pages/api/index',
+            'pages/api/navTitle',
+            'pages/api/network',
+            'pages/api/window'
         ],
         subPackages: [
             {

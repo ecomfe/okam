@@ -33,6 +33,11 @@ export default {
         height: 100,
         items: [
             {
+                icon: require('../../common/img/api.png'),
+                name: 'API',
+                path: 'api/index'
+            },
+            {
                 icon: require('../../common/img/js.png'),
                 name: '语言',
                 open: false,
