@@ -28,6 +28,7 @@ export default {
             'pages/data/array',
             'pages/data/watch',
             'pages/data/model',
+            'pages/data/vhtml',
             'pages/todos/todoList',
             'pages/todos/counter',
             'pages/behavior/index',
