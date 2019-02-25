@@ -53,6 +53,9 @@ module.exports = {
         modules: ['node_modules', path.join(__dirname, '../dep')]
     },
     processors: {
+        babel7: {
+            extnames: 'js'
+        },
         pug: {
             options: {
                 doctype: 'xml',

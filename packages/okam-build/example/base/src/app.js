@@ -9,6 +9,11 @@ import store from './store/index';
 // import a from 'a';
 import './app.styl';
 
+if (process.env.APP_TYPE === 'h5') {
+    require('normalize.css');
+    require('okam-component-h5/src/index.css');
+}
+
 export default {
     // the app config defined in app.json
     config: {

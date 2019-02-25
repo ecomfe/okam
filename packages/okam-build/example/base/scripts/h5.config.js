@@ -55,7 +55,7 @@ module.exports = merge({}, require('./base.config'), {
                         }
                     ],
                     'postcss-url',
-                    'postcss-import-sync2',
+                    // 'postcss-import-sync2',
                     'env'
                 ]
             }

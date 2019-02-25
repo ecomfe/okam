@@ -1,7 +1,7 @@
 <template>
     <view>
         <text class="title">Hello</text>
-        <button for="item in 5" @click="onClickView(item)">{{item}}</button>
+        <button for="item in 5" key="index" @click="onClickView(item)">{{item}}</button>
     </view>
 </template>
 
@@ -13,7 +13,6 @@ export default {
         backgroundColor: '#fff'
     },
     data: {
-        title: 'Typescript 测试',
         count: 0
     },
     beforeCreate() {
