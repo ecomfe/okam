@@ -11,6 +11,7 @@
     * 安装依赖
 
         ```shell
+        npm i
         npm run init # 会自动安装所有包的依赖以及建立内部包之间依赖的软链接
         ```
 
@@ -36,6 +37,7 @@
 
     ```shell
     lerna add okam-build --scope=okam-cli # 为 okam-cli 增加 okam-build 依赖
+    lerna add mocha --scope=okam-core --dev # 为 okam-core 增加 mocha 开发依赖
     ```
 
 ### 代码提交规范
