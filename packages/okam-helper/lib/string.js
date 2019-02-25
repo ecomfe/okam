@@ -26,7 +26,7 @@ exports.padZero = function (value, bitNum) {
 };
 
 /**
- * Convert the name to hyphen separated name.
+ * Convert the name to hyphen separated name (kebab-case).
  * E.g., 'Abc' => 'abc', 'MyHome' => 'my-home'
  *
  * @param {string} name the name to be converted
@@ -36,6 +36,20 @@ exports.toHyphen = function (name) {
     return name.replace(
         /[A-Z]/g,
         (match, key) => (key === 0 ? '' : '-') + match.toLowerCase()
+    );
+};
+
+/**
+ * Convert the kebab-case to CamelCase
+ * E.g., 'abc' => 'Abc', 'my-home' => 'MyHome'
+ *
+ * @param {string} name the name to be converted
+ * @return {string}
+ */
+exports.toCamelCase = function (name) {
+    return name.replace(
+        /(?:^|\-)(\w)/g,
+        (match, c) => c.toUpperCase()
     );
 };
 
