@@ -12,7 +12,9 @@
   ],
   "scripts": {
     "prepublish": "npm run lint",
-    "lint": "fecs ./src index.js --reporter=baidu --rule"
+    "lint": "fecs ./src --reporter=baidu --rule",
+    "test": "mochapack --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\"",
+    "test:debug": "node --inspect-brk ./node_modules/mochapack/lib/cli/index --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\""
   },
   "license": "MIT",
   "repository": "ecomfe/okam",
@@ -20,8 +22,19 @@
     "url": "https://github.com/ecomfe/okam/issues"
   },
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.29",
     "cross-env": "^5.2.0",
     "mocha": "^6.0.0",
-    "nyc": "^13.0.1"
+    "jsdom": "^13.2.0",
+    "jsdom-global": "^3.0.2",
+    "mochapack": "^1.0.0",
+    "vue-loader": "^15.6.4",
+    "webpack": "^4.29.5",
+    "vue-template-compiler": "^2.6.7"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "vue": "^2.6.7",
+    "weui": "^1.1.3"
   }
 }
