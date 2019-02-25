@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 2019-02-25
+
+### okam-build@0.4.22
+* **新功能**
+    * 增加 `v-html` 支持 ([071554d](https://github.com/ecomfe/okam/commit/071554d))
+
 ## 2019-02-20
 
 ### okam-core@0.4.14
