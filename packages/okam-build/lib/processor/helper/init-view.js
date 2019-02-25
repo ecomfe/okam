@@ -64,6 +64,7 @@ const BUILTIN_PLUGINS = {
     model: getModelSyntaxPlugin,
     tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
     vuePrefix: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
+    vhtml: path.join(PLUGIN_BASE_NAME, 'v-html-plugin'),
     ref: {
         'quick': [
             REF_PLUGIN_PATH, {useId: true}
@@ -217,6 +218,10 @@ function initViewTransformOptions(file, processOpts, buildManager) {
     plugins = normalizeViewPlugins(appType, plugins);
     let isSupportRef = buildManager.isEnableRefSupport();
     isSupportRef && addBuiltinPlugin('ref', appType, plugins);
+
+    let isSupportVHtml = buildManager.isEnableVHtmlSupport();
+    isSupportVHtml && addBuiltinPlugin('vhtml', appType, plugins);
+
     addBuiltinPlugin('resource', appType, plugins, true);
 
     processOpts.plugins = plugins;

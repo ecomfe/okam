@@ -482,6 +482,10 @@ class BuildManager extends EventEmitter {
         return this.isEnableFrameworkExtension('model');
     }
 
+    isEnableVHtmlSupport() {
+        return this.isEnableFrameworkExtension('vhtml');
+    }
+
     getProcessFileCount() {
         return this.files ? this.files.length : 0;
     }

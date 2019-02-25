@@ -26,6 +26,10 @@ module.exports = merge({}, require('./base.config'), {
         }
     },
 
+    api: {
+        htmlToNodes: 'mini-html-parser2'
+    },
+
     dev: {
         // processors: {
         //     postcss: {

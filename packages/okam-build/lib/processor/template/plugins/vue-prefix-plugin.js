@@ -44,7 +44,7 @@ const DIRECTIVES_REGEXP = {
  * @const
  */
 const DIRECTIVES_NOT_SUPPORT = [
-    'v-text', 'v-html',
+    'v-text',
     'v-show', 'v-pre',
     'v-cloak', 'v-once'
 ];
@@ -56,7 +56,8 @@ const DIRECTIVES_NOT_SUPPORT = [
  * @const
  */
 const DIRECTIVES_FRAMEWORK_SUPPORT = {
-    'v-model': 'model'
+    'v-model': 'model',
+    'v-html': 'vhtml'
 };
 
 function getNewAttrKey(attr) {
@@ -96,11 +97,11 @@ module.exports = {
                 return;
             }
 
-            let maySupportAttr = DIRECTIVES_FRAMEWORK_SUPPORT[key];
-            if (maySupportAttr && framework.indexOf(maySupportAttr) < 0) {
+            let supportByFramework = DIRECTIVES_FRAMEWORK_SUPPORT[key];
+            if (supportByFramework && framework.indexOf(supportByFramework) < 0) {
                 logger.error(`${file.path} template attribute ${key} not support`);
                 logger.warn(
-                    `you can try to add '${maySupportAttr}' in build`,
+                    `you can try to add '${supportByFramework}' in build`,
                     'config `framework` to enable'
                 );
                 return;

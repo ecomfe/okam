@@ -134,6 +134,10 @@ export default {
                     {
                         subName: 'v-model属性',
                         path: 'data/model',
+                    },
+                    {
+                        subName: 'v-html 支持',
+                        path: 'data/vhtml'
                     }
                 ]
             },

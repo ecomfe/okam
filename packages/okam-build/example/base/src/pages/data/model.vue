@@ -1,5 +1,5 @@
 <template>
-    <view class="data-watch-wrap">
+    <view class="data-model-wrap">
         <view class="example-item">
             <view class="sub-title">不支持内容</view>
             <view>不支持 mode 指令, inputVal: {{inputVal}}</view>
@@ -207,7 +207,7 @@ export default {
 </script>
 
 <style lang="stylus">
-.data-watch-wrap
+.data-model-wrap
     position: relative
     padding: 20px
     box-sizing: border-box

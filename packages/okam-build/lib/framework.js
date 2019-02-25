@@ -65,6 +65,9 @@ const FRAMEWORK_EXTEND_PATH = {
         'quick': 'extend/ref/quick/index',
         'h5': true
     },
+    vhtml: {
+        'default': true
+    },
     filter: {
         wx: true,
         tt: true,
