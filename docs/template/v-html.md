@@ -48,7 +48,7 @@
 }
 ```
 
-* 第二步：如果需要支持支付宝平台， `npm install mini-html-parser2 --save-dev`
+* 第二步：如果需要支持支付宝平台， `npm install mini-html-parser2 --save`
 ``` ant.config.js
 {
     api: {

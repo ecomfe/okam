@@ -44,6 +44,7 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.10",
+    "mini-html-parser2": "^0.1.0",
     "moment": "^2.22.2",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0"
@@ -51,7 +52,6 @@
   "devDependencies": {
     "connect": "^3.6.6",
     "cross-env": "^5.2.0",
-    "mini-html-parser2": "^0.1.0",
     "okam-plugin-tinyimg": "^0.1.0",
     "postcss-url": "^8.0.0",
     "promise-polyfill": "^8.1.0"
