@@ -5,15 +5,15 @@
 
 'use strict';
 
-const {createSyntaxPlugin} = require('./helper');
+const {createSyntaxPlugin} = require('../helper');
 
 const propName = 'nodes';
 
-function transfromVHtml(attrs, name, tplOpts, opts, element) {
+function transformVHtml(attrs, name, tplOpts, opts, element) {
     const {logger, file, appType} = tplOpts;
 
     if (appType === 'quick') {
-        logger.warn('not support v-html in quick env');
+        logger.warn('not support v-html in quick app');
         return;
     }
 
@@ -38,7 +38,7 @@ module.exports = createSyntaxPlugin({
     attribute: {
         html: {
             match: 'v-html',
-            transform: transfromVHtml
+            transform: transformVHtml
         }
     }
 });

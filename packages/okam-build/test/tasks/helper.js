@@ -30,7 +30,7 @@ const wxModelPlugin = require('okam/processor/template/plugins/model/wx-model-pl
 const antModelPlugin = require('okam/processor/template/plugins/model/ant-model-plugin');
 const ttModelPlugin = require('okam/processor/template/plugins/model/tt-model-plugin');
 
-const vhtmlPlugin = require('okam/processor/template/plugins/v-html-plugin');
+const vhtmlPlugin = require('okam/processor/template/plugins/vhtml/default-vhtml-plugin');
 
 
 const defaultTags = {

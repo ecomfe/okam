@@ -177,11 +177,11 @@ exports.getFrameworkExtendId = function (appType, extendName, getConstructor = f
         value = extensionInfo[appType];
     }
 
+    (value == null) && (value = defaultValue);
     if (typeof value === 'boolean') {
         return;
     }
 
-    value || (value = defaultValue);
     if (value == null) {
         throw new Error(`unknown ${appType} framework extension: ${extendName}`);
     }

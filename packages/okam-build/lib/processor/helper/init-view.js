@@ -40,6 +40,19 @@ function getModelSyntaxPlugin(appType) {
 }
 
 /**
+ * Get v-html syntax transformation plugin
+ *
+ * @param {string} appType the app type to transform
+ * @return {string}
+ */
+function getVHtmlSyntaxPlugin(appType) {
+    if (appType !== 'h5') {
+        appType = 'default';
+    }
+    return path.join(PLUGIN_BASE_NAME, 'vhtml', `${appType}-vhtml-plugin`);
+}
+
+/**
  * Get template syntax transformation plugin
  *
  * @inner
@@ -62,9 +75,9 @@ const BUILTIN_PLUGINS = {
     syntax: getTemplateSyntaxPlugin,
     eventSync: getEventSyntaxPlugin,
     model: getModelSyntaxPlugin,
+    vhtml: getVHtmlSyntaxPlugin,
     tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
     vuePrefix: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
-    vhtml: path.join(PLUGIN_BASE_NAME, 'v-html-plugin'),
     ref: {
         'quick': [
             REF_PLUGIN_PATH, {useId: true}
@@ -251,3 +264,4 @@ module.exports = exports = initViewTransformOptions;
 exports.getEventSyntaxPlugin = getEventSyntaxPlugin;
 exports.getFilterSyntaxPlugin = getFilterSyntaxPlugin;
 exports.getModelSyntaxPlugin = getModelSyntaxPlugin;
+exports.getVHtmlSyntaxPlugin = getVHtmlSyntaxPlugin;
