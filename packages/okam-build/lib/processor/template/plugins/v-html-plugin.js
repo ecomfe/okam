@@ -10,7 +10,12 @@ const {createSyntaxPlugin} = require('./helper');
 const propName = 'nodes';
 
 function transfromVHtml(attrs, name, tplOpts, opts, element) {
-    const {logger, file} = tplOpts;
+    const {logger, file, appType} = tplOpts;
+
+    if (appType === 'quick') {
+        logger.warn('not support v-html in quick env');
+        return;
+    }
 
     let vhtmlValue = attrs['v-html'];
     if (!vhtmlValue) {
