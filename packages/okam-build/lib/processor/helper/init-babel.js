@@ -228,6 +228,11 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
 
     // init plugins
     let plugins = normalizeBabelPlugins(processorOpts.plugins, file, buildManager);
+    if (processorOpts.ignoreDefaultOptions) {
+        delete processorOpts.ignoreDefaultOptions;
+        processorOpts.plugins = plugins;
+        return processorOpts;
+    }
 
     // init app/page/component transform plugin
     let configInitHandler = initConfigInfo.bind(

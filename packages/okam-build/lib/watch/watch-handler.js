@@ -25,7 +25,7 @@ function compileFile(buildManager, file, releaseFiles) {
     releaseFiles.processFileNum += 1;
     if (file.isImg) {
         file.allowRelease = true;
-        // xxx: skip image file rebuild to avoid rebuild repeatedly
+        // xxx: skip image file rebuild to avoid rebuild in frequency
         file.processing || releaseFiles.add(file);
         return;
     }
@@ -69,6 +69,8 @@ function rebuildFiles(file, buildManager) {
 
     buildManager.on('buildFileDone', addReleaseFile);
     compileFile(buildManager, file, releaseFiles);
+    buildManager.updateRouterFileContent
+        && buildManager.updateRouterFileContent(timer);
     buildManager.removeListener('buildFileDone', addReleaseFile);
 
     if (outputFiles.length) {
@@ -77,6 +79,8 @@ function rebuildFiles(file, buildManager) {
             () => logger.info(
                 'rebuild',
                 colors.cyan(releaseFiles.processFileNum),
+                'output',
+                colors.cyan(outputFiles.length),
                 'files done:',
                 colors.grey(timer.tick())
             )

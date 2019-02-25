@@ -78,15 +78,13 @@ function initRouterConfigFile(entryFile, buildManager) {
         return;
     }
 
-
-    let routerCode = buildManager.getAppRouteModuleCode();
     let routerFile = createFile({
         isVirtual: true,
-        data: routerCode,
+        data: '/* none */',
         path: routerFilePath
     }, buildManager.root);
     entryFile.addSubFile(routerFile);
-    buildManager.addNeedBuildFile(routerFile);
+    buildManager.routerFile = routerFile;
 }
 
 function processEntryScript(file, buildManager) {
@@ -161,29 +159,36 @@ function processComponentScript(buildManager, file) {
  * @param {BuildManager} buildManager the build manager
  */
 function processFile(file, processor, buildManager) {
+    file.processing = true;
+
     let {compileContext, logger} = buildManager;
     let {handler, options: opts, rext} = processor;
     logger.debug(`compile file ${file.path}, using ${processor.name}: `, opts);
 
-    let result = handler(file, Object.assign({
-        config: opts
-    }, compileContext));
-    if (!result) {
-        return;
-    }
+    try {
+        let result = handler(file, Object.assign({
+            config: opts
+        }, compileContext));
 
-    if (isPromise(result)) {
-        buildManager.addAsyncTask(file, result);
-        return;
-    }
+        if (result && isPromise(result)) {
+            buildManager.addAsyncTask(file, result);
+            return;
+        }
+        else if (result && result.isSfcComponent) {
+            compileComponent(result, file, buildManager);
+            result = {content: file.content};
+        }
 
-    if (result.isSfcComponent) {
-        compileComponent(result, file, buildManager);
-        result = {content: file.content};
+        if (result) {
+            result.rext || (result.rext = rext);
+            buildManager.updateFileCompileResult(file, result);
+        }
     }
-
-    result.rext || (result.rext = rext);
-    buildManager.updateFileCompileResult(file, result);
+    catch (ex) {
+        file.processing = false;
+        throw ex;
+    }
+    file.processing = false;
 }
 
 /**
@@ -203,7 +208,11 @@ function compile(file, buildManager) {
         processFile(file, processors[i], buildManager);
     }
 
-    if (file.isEntryScript) {
+    if (!processors.length) {
+        // force set the file compiled if none processors available
+        file.compiled = true;
+    }
+    else if (file.isEntryScript) {
         processEntryScript(file, buildManager);
     }
     else if (file.isPageScript || file.isComponentScript) {
@@ -230,15 +239,24 @@ function getCustomComponentTags(config) {
 }
 
 function getImportComponents(file, globalComponents, allTags) {
+    if (!allTags) {
+        return;
+    }
+
     let result = {};
     globalComponents && Object.keys(globalComponents).forEach(k => {
         if (allTags[k]) {
             let {isNpmMod, modPath} = globalComponents[k];
+            let modId = modPath;
             if (!isNpmMod) {
-                modPath = getRequirePath(modPath, file.fullPath);
+                modId = getRequirePath(modPath, file.fullPath);
             }
 
-            result[k] = modPath;
+            result[k] = {
+                id: modId,
+                isNpmMod,
+                modPath
+            };
         }
     });
     return Object.keys(result).length ? result : null;

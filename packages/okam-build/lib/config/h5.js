@@ -8,6 +8,10 @@
 const merge = require('../util').merge;
 const baseConf = require('./base');
 
+function isOkamComponentFile(file) {
+    return file.path.indexOf('okam-component-h5') !== -1;
+}
+
 module.exports = merge({}, baseConf, {
 
     source: {
@@ -64,13 +68,12 @@ module.exports = merge({}, baseConf, {
 
     component: {
         template: {
-            resourceTags: {
-                // 由于 Vue 不支持模板导入功能，页面组件路径可能会因为同一目录下存在
-                // 多个页面组件，而自动调整页面路径，为了避免 include/import 路径
-                // 重新计算找不到导入/引用的模板，这里不分析这两个标签定义的依赖资源
-                'include': false,
-                'import': false
+            transformTags: {
+                'button': 'o-button'
             }
+        },
+        global: {
+            'o-button': 'ocomp/Button'
         }
     },
 
@@ -86,6 +89,18 @@ module.exports = merge({}, baseConf, {
 
         postcss: {
             extnames: ['css']
+        },
+
+        view: {
+            hook: {
+                before(file, options) {
+                    if (isOkamComponentFile(file)) {
+                        options.ignoreDefaultOptions = true;
+                        options.keepOriginalContent = true;
+                        options.plugins = ['resource'];
+                    }
+                }
+            }
         }
     },
 
@@ -100,15 +115,8 @@ module.exports = merge({}, baseConf, {
 
     resolve: {
         alias: {
-            vue$: 'vue/dist/vue.runtime.common.dev.js'
-        }
-    },
-
-    prod: {
-        resolve: {
-            alias: {
-                vue$: 'vue/dist/vue.runtime.esm.js'
-            }
+            'vue$': 'vue/dist/vue.runtime.esm.js',
+            'ocomp/': 'okam-component-h5/src/'
         }
     }
 });

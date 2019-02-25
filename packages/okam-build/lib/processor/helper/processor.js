@@ -183,7 +183,13 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
         processorOpts = merge({}, defaultOpts, processorOpts);
     }
 
-    let isNativeViewProcessor = processorName === 'nativeView';
+    // call before hook
+    let hook = result.hook;
+    if (hook && typeof hook.before === 'function') {
+        hook.before(file, processorOpts);
+    }
+
+    const isNativeView = processorName === 'nativeView';
 
     // init babel transform extra options
     let isUsingBabelProcessor = hasBabelProcessor(referProcessorName || processorName);
@@ -192,21 +198,16 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
             file, processorOpts, buildManager
         );
     }
-    else if (processorName === 'view' || isNativeViewProcessor) {
+    else if (processorName === 'view' || isNativeView) {
+        isNativeView && (processorOpts.ignoreDefaultOptions = true);
         processorOpts = initViewProcessorOptions(
-            file, processorOpts, buildManager, isNativeViewProcessor
+            file, processorOpts, buildManager
         );
     }
 
     let handler = result.processor;
     if (typeof handler === 'string') {
         handler = customRequire(handler);
-    }
-
-    // call before hook
-    let hook = result.hook;
-    if (hook && typeof hook.before === 'function') {
-        hook.before(file, processorOpts);
     }
 
     return {

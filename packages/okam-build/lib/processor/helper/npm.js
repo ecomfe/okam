@@ -39,7 +39,7 @@ exports.resolveDepModuleNewPath = function (oldPath, moduleDir, rebaseDepDir) {
     return result.replace(/\\/g, '/').replace('/src/', '/')
         .replace('/okam-core/', '/okam/')
         .replace('/okam-api-h5/', '/oapi/')
-        .replace('/okam-component/', '/ocom/')
+        .replace(/\/okam\-component(\-h5)?\//, '/ocom/')
         .replace('/@babel/runtime/helpers/', '/babel/');
 };
 
@@ -50,7 +50,7 @@ exports.resolveDepModuleNewPath = function (oldPath, moduleDir, rebaseDepDir) {
  * @param {BuildManager} buildManager the build manager
  * @param {Object} file the file to host the required module id
  * @param {string} requireModId the required module id or resource path to resolve
- * @return {?string}
+ * @return {?string|Object}
  */
 exports.resolve = function (buildManager, file, requireModId) {
     if (!requireModId) {

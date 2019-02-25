@@ -87,7 +87,7 @@ function addBuiltinPlugin(pluginName, appType, plugins, insertAtTop) {
     if (typeof pluginInfo === 'object') {
         pluginInfo = pluginInfo[appType] || pluginInfo.default;
     }
-    pluginInfo = normalizeViewPlugins([pluginInfo], appType)[0];
+    pluginInfo = normalizeViewPlugins(appType, [pluginInfo])[0];
 
     let plugin = Array.isArray(pluginInfo) ? pluginInfo[0] : pluginInfo;
     let hasBuiltinPlugin = plugins.some(
@@ -102,11 +102,11 @@ function addBuiltinPlugin(pluginName, appType, plugins, insertAtTop) {
  * Normalize the view transformation plugins
  *
  * @inner
- * @param {Array.<string|Object>} plugins the plugins to normalize
  * @param {string} appType the appType to transform
+ * @param {Array.<string|Object>} plugins the plugins to normalize
  * @return {Array.<Object>}
  */
-function normalizeViewPlugins(plugins, appType) {
+function normalizeViewPlugins(appType, plugins) {
     return plugins.map(pluginInfo => {
         let pluginItem = pluginInfo;
         let pluginOptions;
@@ -188,15 +188,15 @@ function handleOnFilter(file, filterName) {
  *           tag() {} // refer to the ref plugin implementation
  *        }
  * @param {BuildManager} buildManager the build manager
- * @param {boolean=} isNativeView whether is native view transformation
  * @return {Object}
  */
-function initViewTransformOptions(file, processOpts, buildManager, isNativeView) {
-    let plugins = processOpts.plugins;
+function initViewTransformOptions(file, processOpts, buildManager) {
+    let {plugins, ignoreDefaultOptions} = processOpts;
     let {appType, componentConf, buildConf} = buildManager;
-    if (isNativeView) {
+    if (ignoreDefaultOptions) {
+        delete processOpts.ignoreDefaultOptions;
         return Object.assign({}, processOpts, {
-            plugins: normalizeViewPlugins(plugins, appType)
+            plugins: normalizeViewPlugins(appType, plugins)
         });
     }
 
@@ -214,7 +214,7 @@ function initViewTransformOptions(file, processOpts, buildManager, isNativeView)
         }
     }
 
-    plugins = normalizeViewPlugins(plugins, appType);
+    plugins = normalizeViewPlugins(appType, plugins);
     let isSupportRef = buildManager.isEnableRefSupport();
     isSupportRef && addBuiltinPlugin('ref', appType, plugins);
     addBuiltinPlugin('resource', appType, plugins, true);

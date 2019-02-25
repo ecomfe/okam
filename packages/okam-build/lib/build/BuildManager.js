@@ -66,7 +66,8 @@ class BuildManager extends EventEmitter {
      */
     initGlobalComponents(componentConf) {
         this.globalComponents = initGlobalComponents(
-            this.appType, componentConf, this.sourceDir
+            componentConf,
+            pathUtil.join(this.root, this.sourceDir)
         );
     }
 
@@ -217,7 +218,7 @@ class BuildManager extends EventEmitter {
      *        by default false
      */
     addNeedBuildFile(file, force = false) {
-        if (!force && file.compiled) {
+        if ((!force && file.compiled) || file.processing) {
             return;
         }
 
@@ -412,7 +413,7 @@ class BuildManager extends EventEmitter {
             return Promise.reject('error happen');
         }
 
-        this.onBuildDone && this.onBuildDone();
+        this.onBuildDone && this.onBuildDone(t);
 
         logger.info('process files done:', colors.gray(timer.tick()));
         return Promise.resolve();
@@ -532,7 +533,6 @@ class BuildManager extends EventEmitter {
     }
 
     addAsyncTask(file, promise) {
-        file.processing = true;
         promise.then(
             null,
             err => {

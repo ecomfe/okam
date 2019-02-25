@@ -5,7 +5,7 @@
 
 'use strict';
 
-function isValidatedStylePropSeperator(value, startIdx, commaIdx) {
+function isValidatedStylePropSeparator(value, startIdx, commaIdx) {
     let leftBraceNum = 0;
     let rightBraceNum = 0;
 
@@ -85,7 +85,7 @@ exports.parseBindingStyleValue = function (bindingValue) {
             styleProp = value.substr(startIdx);
             startIdx = value.length;
         }
-        else if (isValidatedStylePropSeperator(value, startIdx, match.index)) {
+        else if (isValidatedStylePropSeparator(value, startIdx, match.index)) {
             styleProp = value.substring(startIdx, match.index);
             startIdx = match.index + 1;
         }

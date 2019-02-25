@@ -123,7 +123,7 @@ function isComponentFile(f) {
 }
 
 function addFileOutputTask(allTasks, options, file) {
-    if (file.release === false || file.processing) {
+    if (file.release === false) {
         return;
     }
 

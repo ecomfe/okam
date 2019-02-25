@@ -109,7 +109,7 @@ module.exports = merge({}, baseConf, {
             }
         },
         global: {
-            'o-button': 'okam/button/index'
+            'o-button': 'okam-component/src/quick/button/index'
         }
     },
 

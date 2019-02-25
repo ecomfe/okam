@@ -7,9 +7,14 @@
 
 const BuildManager = require('../BuildManager');
 const {normalizeMiddlewares} = require('../../server/helper');
-const {file: fileUtil} = require('../../util');
+const {file: fileUtil, string: strUtil} = require('../../util');
 const {getRequirePath} = fileUtil;
 const buildByWebpack = require('okam-build-h5');
+const {registerProcessor} = require('../../processor/type');
+
+function isOkamComponentFile(file) {
+    return file.path.indexOf('okam-component-h5') !== -1;
+}
 
 function getPageComponentName(modId, existedName) {
     let parts = modId.split('/');
@@ -43,6 +48,7 @@ class BuildH5AppManager extends BuildManager {
     constructor(buildConf) {
         super(buildConf);
 
+        // ignore router module resolve
         let resolver = this.resolver;
         let rawResolverFilter = resolver.resolveFilter;
         resolver.resolveFilter = (...args) => {
@@ -70,6 +76,26 @@ class BuildH5AppManager extends BuildManager {
 
         // do not transform behavior(mixin) file
         this.ignoreBehaviorTransform = true;
+    }
+
+    /**
+     * @override
+     */
+    initProcessor(buildConf) {
+        super.initProcessor(buildConf);
+
+        // ignore okam-component-h5 component transform, dep analysis is needed
+        registerProcessor({
+            name: this.defaultBabelProcessorName, // override existed processor
+            hook: {
+                before(file, options) {
+                    if (isOkamComponentFile(file)) {
+                        options.ignoreDefaultOptions = true;
+                        options.plugins = ['dep'];
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -113,12 +139,13 @@ class BuildH5AppManager extends BuildManager {
     }
 
     /**
-     * Get app router info
+     * Generate app router code
      *
-     * @return {string}
+     * @private
+     * @return {Object}
      */
-    getAppRouteModuleCode() {
-        let routerFilePath = this.getRouterFilePath();
+    generateAppRouteCode() {
+        let routerFile = this.routerFile;
         let importPageComponents = [];
         let routerList = [];
         let existedPageComponentName = {};
@@ -127,8 +154,7 @@ class BuildH5AppManager extends BuildManager {
                 return;
             }
 
-            let pageFilePath = item.path;
-            let pageModId = getRequirePath(pageFilePath, routerFilePath);
+            let pageModId = getRequirePath(item.path, routerFile.path);
             let pageName = getPageComponentName(pageModId, existedPageComponentName);
             importPageComponents.push(`import ${pageName} from '${pageModId}';`);
 
@@ -145,10 +171,114 @@ class BuildH5AppManager extends BuildManager {
             }
         });
 
-        let routerConfigStr = `\n\n\nexport default [\n${routerList.join(',\n')}\n];\n`;
-        return '/* Auto generated router config code by okam */\n\n'
-            + importPageComponents.join('\n') + routerConfigStr;
+        return {
+            importCode: importPageComponents,
+            routerList
+        };
+    }
 
+    /**
+     * Generate app global component registration code
+     *
+     * @private
+     * @return {Object}
+     */
+    generateGlobalComponentRegistrationCode() {
+        let result = {};
+        this.files.forEach(item => {
+            item.subFiles && item.subFiles.forEach(subItem => {
+                if (subItem.injectComponents) {
+                    Object.assign(result, subItem.injectComponents);
+                }
+            });
+
+            item.injectComponents
+                && Object.assign(result, item.injectComponents);
+        });
+
+        const routerFile = this.routerFile;
+        let importCode = [
+            'import Vue from \'vue\';'
+        ];
+        let declareCode = [];
+        Object.keys(result).forEach(k => {
+            let {isNpmMod, modPath} = result[k];
+            let id = isNpmMod
+                ? modPath
+                : getRequirePath(modPath, routerFile.fullPath);
+            let compName = strUtil.toCamelCase(k);
+            importCode.push(`import ${compName} from '${id}';`);
+            declareCode.push(`Vue.component('${k}', ${compName});`);
+        });
+
+        return {
+            importCode,
+            declareCode
+        };
+    }
+
+    /**
+     * Init router file module code
+     *
+     * @private
+     * @return {boolean} return true if init successfully
+     */
+    initRouterFileCode() {
+        let {
+            importCode,
+            routerList
+        } = this.generateAppRouteCode();
+
+        let {
+            importCode: importComponentCode,
+            declareCode
+        } = this.generateGlobalComponentRegistrationCode();
+
+        let code = importCode.concat(importComponentCode, declareCode);
+        code.push('\n');
+        code.push('\n');
+
+        let routerCode = `export default [\n${routerList.join(',\n')}\n];`;
+        code.push(routerCode);
+        code.push('\n');
+
+        code = '/* Auto generated router config code by okam */\n\n'
+            + code.join('\n');
+
+        if (this.routerFile.rawContent !== code) {
+            this.routerFile.content = code;
+            this.routerFile.rawContent = code;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Update router file content
+     *
+     * @param {Timer=} t the timer
+     * @return {boolean} return true if update successfully
+     */
+    updateRouterFileContent(t) {
+        if (!this.initRouterFileCode()) {
+            return false;
+        }
+
+        this.addNeedBuildFile(this.routerFile, true);
+
+        // build files that need to compile
+        this.buildDependencies(t);
+        return true;
+    }
+
+    /**
+     * Processor the app config after build done
+     *
+     * @param {Timer=} t the timer
+     */
+    onBuildDone(t) {
+        this.updateRouterFileContent(t);
     }
 
     /**
