@@ -20,6 +20,11 @@ function createPartFile(ownerFile, partInfo, opts) {
         file.resolvePath = replaceExtname(resolvePath, file.extname);
     }
 
+    if (file.isStyle) {
+        file.scoped = partInfo.scoped;
+    }
+
+
     ownerFile.addSubFile(file);
 
     return file;

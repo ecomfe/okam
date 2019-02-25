@@ -6,7 +6,11 @@
 'use strict';
 
 function wrapContent(wrapTag, file) {
-    return `<${wrapTag}>\n${file.content.toString().trim()}\n</${wrapTag}>\n`;
+    let tagAttrs = '';
+    if (file.isStyle && file.scoped) {
+        tagAttrs = ' scoped';
+    }
+    return `<${wrapTag}${tagAttrs}>\n${file.content.toString().trim()}\n</${wrapTag}>\n`;
 }
 
 /**
