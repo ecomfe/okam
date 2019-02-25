@@ -56,6 +56,6 @@ describe('template processor: v- prefix plugin of template', function () {
             content: '<div v-html="backButton" v-model="data" v-show="false"></div>'
         };
         let result = templateProcessor(file, fakeProcessorOptions());
-        assert(result.content === '<view v-html="backButton" v-model="data" v-show="false"></view>');
+        assert(result.content === '<rich-text v-model="data" v-show="false" nodes="{{backButton}}"></rich-text>');
     });
 });

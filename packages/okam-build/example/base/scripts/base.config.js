@@ -81,6 +81,7 @@ module.exports = {
         'data',
         'watch',
         'model',
+        'vhtml',
         ['behavior', '{useNativeBehavior: true}'],
         'broadcast',
         'redux',

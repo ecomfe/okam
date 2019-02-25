@@ -53,6 +53,9 @@ const FRAMEWORK_EXTEND_PATH = {
         'ant': 'extend/ref/ant/index',
         'quick': 'extend/ref/quick/index'
     },
+    vhtml: {
+        'default': true
+    },
     filter: {
         wx: true,
         tt: true,

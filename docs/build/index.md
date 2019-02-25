@@ -37,6 +37,7 @@
 
 * `data`: 支持 `vue` 数据操作方式 及 `computed`
 * `model`: 提供 `v-model` 支持 (要求：`okam-build: 0.4.11`, `okam-core: 0.4.8`)
+* `vhtml`: 提供 `v-html` 支持 (要求：`okam-build: 0.4.22`)
 * `watch`: 提供 `watch` 属性 和 `$watch` API 支持，依赖 `data`
 * `broadcast`: 支持广播事件
 * `ref`: 允许模板指定 `ref` 属性，组件实例 `$refs` 获取引用，类似 Vue
@@ -46,7 +47,7 @@
 
 ```javascript
 {
-    framework: ['data', 'watch', 'model', 'broadcast', 'ref', 'redux', 'behavior', 'filter']
+    framework: ['data', 'watch', 'model', 'vhtml', 'broadcast', 'ref', 'redux', 'behavior', 'filter']
 }
 ```
 

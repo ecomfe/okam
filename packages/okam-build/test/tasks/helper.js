@@ -30,6 +30,8 @@ const wxModelPlugin = require('okam/processor/template/plugins/model/wx-model-pl
 const antModelPlugin = require('okam/processor/template/plugins/model/ant-model-plugin');
 const ttModelPlugin = require('okam/processor/template/plugins/model/tt-model-plugin');
 
+const vhtmlPlugin = require('okam/processor/template/plugins/v-html-plugin');
+
 
 const defaultTags = {
     div: 'view',
@@ -75,6 +77,7 @@ const MODEL_MAP = {
 const getDefaultPlugins = function () {
     return [
         vueSyntax,
+        vhtmlPlugin,
         swanSyntax,
         swanEventPlugin,
         [swanModelPlugin, {
@@ -94,6 +97,7 @@ const getDefaultPlugins = function () {
 const getDefaultWXPlugins = function () {
     return [
         vueSyntax,
+        vhtmlPlugin,
         wxSyntax,
         wxEventPlugin,
         [wxModelPlugin, {
@@ -113,6 +117,7 @@ const getDefaultWXPlugins = function () {
 const getDefaultTTPlugins = function () {
     return [
         vueSyntax,
+        vhtmlPlugin,
         ttSyntax,
         ttEventPlugin,
         [ttModelPlugin, {
@@ -132,6 +137,7 @@ const getDefaultTTPlugins = function () {
 const getDefaultQuickPlugins = function () {
     return [
         vueSyntax,
+        vhtmlPlugin,
         quickSyntax,
         quickEventPlugin,
         ref
@@ -146,6 +152,7 @@ const getDefaultQuickPlugins = function () {
 const getDefaultAntPlugins = function () {
     return [
         vueSyntax,
+        vhtmlPlugin,
         antSyntax,
         antEventPlugin,
         [antModelPlugin, {
@@ -185,7 +192,7 @@ const fakeProcessorOptions = function (tagNames, myPlugins, appType = 'swan') {
         }),
         root: path.join(__dirname, '..'),
         config: {
-            framework: ['data', 'model'],
+            framework: ['data', 'model', 'vhtml'],
             template: {
                 modelMap: Object.assign({}, MODEL_MAP[appType]),
                 transformTags: tagNames || defaultTags
