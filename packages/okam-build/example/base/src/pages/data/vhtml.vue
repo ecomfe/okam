@@ -24,8 +24,11 @@
             </ant-env>
         </view>
         <view class="example-item">
-            <view class="sub-title">v-html 支持</view>
-            <div v-html="arrayTag">inner</div>
+            <view class="sub-title">v-html 多平台 arrayData 支持</view>
+            <div v-html="arrayTag"></div>
+
+            <view class="sub-title">v-html 多平台 string 支持</view>
+            <div v-html="nodes"></div>
         </view>
     </view>
 </template>
@@ -35,7 +38,7 @@ import ModelComponent from '../../components/ModelComponent';
 import SpModelComponent from '../../components/SpModelComponent';
 
 let htmlData = {
-    divTag: '<div class="desc">div 标签</div>xxxxx<br>需要换行了',
+    divTag: '<div class="desc">div 标签</div>',
     aTag: '<a class="link" href="www.baidu.com">a 百度</a><div>div 标签</div>',
     viewTag: '<view class="desc">view 标签</view>',
     imgTag: '<img class="desc" src="https://b.bdstatic.com/searchbox/icms/other/img/ico-share.png" /> img 标签',
@@ -66,7 +69,19 @@ export default {
             type: 'text',
             text: 'Hello&nbsp;World! This is a text node.'
           }]
-        }]
+        }],
+        nodes: process.env.APP_TYPE === 'ant' ? [] : htmlData.divTag
+    },
+
+    onLoad() {
+        if (process.env.APP_TYPE === 'ant') {
+            this.$api.htmlToNodes(htmlData.divTag, (err, nodes) => {
+                if (!err) {
+                    this.setData({nodes});
+                    // this.nodes = nodes;
+                }
+            });
+        }
     },
 
     methods: {

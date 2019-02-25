@@ -31,6 +31,8 @@
 
     * [v-model 支持](template/v-model.md)
 
+    * [v-html 支持](template/v-html.md)
+
 * 组件
 
     * [开发模式](component/sfc.md)
