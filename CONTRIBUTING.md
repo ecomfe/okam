@@ -38,6 +38,7 @@
     ```shell
     lerna add okam-build --scope=okam-cli # 为 okam-cli 增加 okam-build 依赖
     lerna add mocha --scope=okam-core --dev # 为 okam-core 增加 mocha 开发依赖
+    lerna link # 重新建立管理的包的软链
     ```
 
 ### 代码提交规范
