@@ -145,16 +145,6 @@ function hasBabelDepPlugin(plugins) {
  * @return {Array}
  */
 function normalizeBabelPlugins(plugins, file, buildManager) {
-    if (typeof plugins === 'function') {
-        plugins = plugins(file);
-    }
-
-    plugins = plugins ? [].concat(plugins) : [];
-    if (!hasBabelDepPlugin(plugins)) {
-        // add npm resolve plugin
-        plugins.push(DEP_PLUGIN_NAME);
-    }
-
     return (plugins || []).map(item => {
         if (typeof item === 'string') {
             let result = BUILTIN_PLUGINS[item];
@@ -227,12 +217,28 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
     );
 
     // init plugins
-    let plugins = normalizeBabelPlugins(processorOpts.plugins, file, buildManager);
+    let plugins = processorOpts.plugins || [];
+    if (typeof plugins === 'function') {
+        plugins = plugins(file) || [];
+        Array.isArray(plugins) || (plugins = [plugins]);
+    }
+
     if (processorOpts.ignoreDefaultOptions) {
         delete processorOpts.ignoreDefaultOptions;
-        processorOpts.plugins = plugins;
+        processorOpts.plugins = normalizeBabelPlugins(
+            plugins, file, buildManager
+        );
         return processorOpts;
     }
+
+    if (!hasBabelDepPlugin(plugins)) {
+        // add npm resolve plugin
+        plugins.push(DEP_PLUGIN_NAME);
+    }
+
+    plugins = normalizeBabelPlugins(
+        plugins, file, buildManager
+    );
 
     // init app/page/component transform plugin
     let configInitHandler = initConfigInfo.bind(

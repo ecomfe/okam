@@ -19,6 +19,7 @@ const ModuleResolver = require('./ModuleResolver');
 const allAppTypes = require('./app-type');
 const cleanBuild = require('./clean-build');
 const initGlobalComponents = require('./global-component');
+const {registerProcessor} = require('../processor/type');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
@@ -93,6 +94,20 @@ class BuildManager extends EventEmitter {
         this.defaultBabelProcessorName = getDefaultBabelProcessor(
             buildConf.processors
         );
+
+        // register dead code remove processor
+        registerProcessor({
+            name: 'removeDeadCode',
+            processor: this.defaultBabelProcessorName,
+            extnames: ['js'],
+            order: 1, // ensure this processor executed in priority
+            options: {
+                ignoreDefaultOptions: true,
+                plugins: [
+                    'minify-dead-code-elimination'
+                ]
+            }
+        });
     }
 
     /**

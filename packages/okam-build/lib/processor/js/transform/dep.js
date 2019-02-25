@@ -82,7 +82,7 @@ module.exports = function ({types: t}) {
                 }
                 if (newModId && newModId !== modId) {
                     let requireIdNode = path.get('arguments.0');
-                    let toUpNode = noKeepRequire ? path.node : requireIdNode;
+                    let toUpNode = noKeepRequire ? path : requireIdNode;
                     toUpNode.replaceWith(
                         t.stringLiteral(newModId)
                     );

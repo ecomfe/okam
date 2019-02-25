@@ -121,12 +121,14 @@ const BUILTIN_PROCESSORS = {
     babel: {
         processor: getProcessorPath('js/babel-parser'),
         deps: 'babel-core',
-        rext: 'js'
+        rext: 'js',
+        order: 10
     },
     babel7: {
         processor: getProcessorPath('js/babel7-parser'),
         deps: '@babel/core',
-        rext: 'js'
+        rext: 'js',
+        order: 10
     },
     component: {
         processor: getProcessorPath('component/sfc-parser')

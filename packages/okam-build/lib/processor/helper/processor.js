@@ -247,6 +247,23 @@ function addScriptDefaultBabelProcessor(file, buildManager, processors) {
     }
 }
 
+function addMatchedProcessor(target, processors) {
+    if (!Array.isArray(processors)) {
+        processors = [processors];
+    }
+
+    // ensure the replacement processor to be executed ahead of the time
+    // and ensure the dead code can be removed by the babel processor afterwards
+    processors.forEach(item => {
+        if (item.name === 'replacement') {
+            target.unshift(item);
+        }
+        else {
+            target.push(item);
+        }
+    });
+}
+
 function findMatchProcessor(file, rules, buildManager) {
     const logger = buildManager.logger;
     const matchProcessors = [];
@@ -275,11 +292,8 @@ function findMatchProcessor(file, rules, buildManager) {
                 }
 
                 let result = getProcessor(item, file, buildManager);
-                if (Array.isArray(result)) {
-                    matchProcessors.push.apply(matchProcessors, result);
-                }
-                else if (result) {
-                    matchProcessors.push(result);
+                if (result) {
+                    addMatchedProcessor(matchProcessors, result);
                 }
                 else {
                     unknownProcessors.push({ruleIndex: r, processorIndex: k});
