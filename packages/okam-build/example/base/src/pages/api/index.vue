@@ -145,7 +145,6 @@ export default {
         flex: 1
         margin-left: 20px
         font-size: 16px
-        font-weight: 600
 
 .list-group-content
     display: flex
