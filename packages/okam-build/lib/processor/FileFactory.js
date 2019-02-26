@@ -62,7 +62,6 @@ function addSubFile(file) {
 
     this.subFiles || (this.subFiles = []);
     if (!this.subFiles.includes(file)) {
-        file.isSubFile = true;
         file.owner = this;
         this.subFiles.push(file);
     }
@@ -83,14 +82,9 @@ function resetFile() {
         this.isAnalysedComponents = false;
     }
 
-    if (this.isSubFile) {
-        this.content = this.rawContent;
-    }
-    else {
-        this.rawContent = null;
-        this.content = null;
-        this.ast && (this.ast = null);
-    }
+    this.rawContent = null;
+    this.content = null;
+    this.ast && (this.ast = null);
 }
 
 function getFileStream() {
@@ -401,10 +395,10 @@ class FileFactory extends EventEmitter {
 
     hasDep(depFilePath, file, processed) {
         let {path, deps, subFiles} = file;
-        if (processed[path]) {
-            return false;
+        let isDep = processed[path];
+        if (isDep !== undefined) {
+            return isDep;
         }
-        processed[path] = true;
 
         let depList = deps || [];
         for (let i = 0, len = depList.length; i < len; i++) {
@@ -424,15 +418,16 @@ class FileFactory extends EventEmitter {
             if (depFilePath === depPath
                 || this.hasDep(depFilePath, depFile, processed)
             ) {
+                processed[path] = true;
                 return true;
             }
         }
 
-        return (subFiles || []).some(
+        return (processed[path] = (subFiles || []).some(
             item => this.hasDep(
                 depFilePath, item, processed
             )
-        );
+        ));
     }
 
     getFilesByDep(depFilePath) {

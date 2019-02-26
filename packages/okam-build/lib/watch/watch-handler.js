@@ -8,6 +8,24 @@
 const path = require('path');
 const {colors, Timer} = require('../util');
 
+function filterChangedFiles(depFile, changedFiles) {
+    let result = [];
+    changedFiles.forEach(item => {
+        if (depFile.isStyle) {
+            if (item.isStyle || item.isComponent) {
+                result.push(item);
+            }
+        }
+        else if (depFile.isTpl) {
+            item.isComponent && result.push(item);
+        }
+        else if (depFile.isScript) {
+            item.isComponent && result.push(item);
+        }
+    });
+    return result;
+}
+
 function compileFile(buildManager, file, releaseFiles) {
     let logger = buildManager.logger;
     typeof file === 'string' && (file = buildManager.createFile(file));
@@ -31,13 +49,13 @@ function compileFile(buildManager, file, releaseFiles) {
     }
 
     // analyse the style file dependence and determine which style file need to recompile
-    if (file.isStyle && !file.owner) {
+    if (file.isStyle || file.isScript || file.isTpl) {
         // TODO init dep map global to search file by dep effectively
-        let changeFiles = buildManager.getFilesByDep(file.path);
-        logger.debug(file.path, 'changeFiles:' + changeFiles.length);
-
-        if (changeFiles.length) {
-            changeFiles.forEach(
+        let changedFiles = buildManager.getFilesByDep(file.path);
+        logger.debug(file.path, 'changedFiles:' + changedFiles.length);
+        changedFiles = filterChangedFiles(file, changedFiles);
+        if (changedFiles.length) {
+            changedFiles.forEach(
                 item => compileFile(buildManager, item, releaseFiles)
             );
             return;
