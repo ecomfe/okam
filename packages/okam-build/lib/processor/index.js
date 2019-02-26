@@ -176,7 +176,7 @@ function processFile(file, processor, buildManager) {
         }
         else if (result && result.isSfcComponent) {
             compileComponent(result, file, buildManager);
-            result = {content: file.content};
+            result = {content: file.content, deps: result.deps};
         }
 
         if (result) {

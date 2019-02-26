@@ -9,7 +9,7 @@ const compiler = require('vue-template-compiler');
 const {replaceExtname} = require('../../util').file;
 const helper = require('./helper');
 
-function createPartFile(ownerFile, partInfo, opts) {
+function createPartFile(ownerFile, partInfo, opts, deps) {
     let file = helper.getComponentPartFile(partInfo, opts);
     if (!file) {
         return;
@@ -26,6 +26,8 @@ function createPartFile(ownerFile, partInfo, opts) {
 
 
     ownerFile.addSubFile(file);
+
+    !file.isVirtual && deps.push(file.fullPath);
 
     return file;
 }
@@ -46,7 +48,7 @@ function createPartFile(ownerFile, partInfo, opts) {
  * @return {Object}
  */
 function parse(file, options) {
-    let {root, config} = options;
+    let {root, config, getFileByFullPath} = options;
     let parseOpts = Object.assign({}, {pad: 'line'}, config && config.parse);
     let result = compiler.parseComponent(
         file.content.toString(), parseOpts
@@ -54,26 +56,30 @@ function parse(file, options) {
 
     let {customBlocks} = result;
 
+    let deps = [];
     let {fullPath: filePath} = file;
     let tplFile = createPartFile(file, result.template, {
         isTemplate: true,
         root,
+        getFileByFullPath,
         filePath
-    });
+    }, deps);
 
     let scriptFile = createPartFile(file, result.script, {
         isScript: true,
         root,
+        getFileByFullPath,
         filePath
-    });
+    }, deps);
 
     let styleFiles = result.styles.map(
         (item, index) => createPartFile(file, item, {
             isStyle: true,
             index,
             root,
+            getFileByFullPath,
             filePath
-        })
+        }, deps)
     );
 
     // fix pad line missing when lang is set in script part
@@ -90,6 +96,7 @@ function parse(file, options) {
     }
 
     return {
+        deps,
         isSfcComponent: true,
         customBlocks,
         tpl: tplFile,
