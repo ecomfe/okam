@@ -55,7 +55,7 @@
     "mini-html-parser2": "^0.1.0",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "vue": "^2.6.6",
+    "vue": "^2.6.7",
     "vue-router": "^3.0.2"
   },
   "devDependencies": {
