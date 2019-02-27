@@ -15,7 +15,32 @@ class CacheManager {
         this.memCache = {
             dirFileInfo: {}
         };
+        this.localCache = null;
         this.cacheDir = options.cacheDir || path.join(helper.getUserHomeDir(), '.okam');
+        this.localCacheFile = '.meta';
+    }
+
+    setProjectCreateTime(projectId, timestamp) {
+        this.localCache.projectInfo[projectId] = {createTime: timestamp};
+        this.cacheFile(JSON.stringify(this.localCache), this.localCacheFile);
+    }
+
+    getProjectInfo(projectId) {
+        if (!this.localCache) {
+            let content = this.readCacheFile(this.localCacheFile);
+            if (content) {
+                try {
+                    content = JSON.parse(content.toString());
+                }
+                catch (ex) {
+                    content = null;
+                }
+            }
+
+            content || (content = {projectInfo: {}});
+            this.localCache = content;
+        }
+        return this.localCache.projectInfo[projectId];
     }
 
     setDirFileListInfo(dir, info) {

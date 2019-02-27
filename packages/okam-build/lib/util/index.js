@@ -109,6 +109,32 @@ exports.removeUndefinedAttributes = function (obj) {
     return result;
 };
 
+/**
+ * Get version info async
+ *
+ * @param {string} command the command to execute
+ * @param {Function} callback the get done callback
+ */
+exports.getVersionAsync = function (command, callback) {
+    require('child_process').exec(command, (err, stdin, stderr) => {
+        if (err && err.code === 127) {
+            err.notFound = true;
+            return callback(err);
+        }
+
+        if (err) {
+            let execError = new Error(
+                `Execute ${command} failed: ${err.message || err.toString()}`
+            );
+            stderr && (execError.stderr = stderr.trim());
+
+            return callback(execError);
+        }
+
+        return callback(null, stdin.toString().split('\n')[0].trim());
+    });
+};
+
 exports.babel = require('./babel');
 
 Object.assign(exports, helper);

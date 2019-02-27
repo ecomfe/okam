@@ -93,15 +93,20 @@ function runBuild(buildConf, buildManager) {
     }
 
     // load build files
-    buildManager.loadFiles();
+    let result = buildManager.loadFiles();
+    if (!(result instanceof Promise)) {
+        result = Promise.resolve();
+    }
 
-    logger.info('load process files done, file count:',
-        colors.cyan(buildManager.getProcessFileCount()) + ', load time:',
-        colors.gray(timer.tick())
-    );
-    logger.info('build for', colors.cyan(buildManager.getBuildEnv()), 'env');
+    return result.then(() => {
+        logger.info('load process files done, file count:',
+            colors.cyan(buildManager.getProcessFileCount()) + ', load time:',
+            colors.gray(timer.tick())
+        );
+        logger.info('build for', colors.cyan(buildManager.getBuildEnv()), 'env');
 
-    return buildProject(timer, buildConf, buildManager);
+        return buildProject(timer, buildConf, buildManager);
+    });
 }
 
 module.exports = exports = runBuild;
