@@ -113,6 +113,7 @@ function getWebpackConfig(isDev, options) {
  * @param {Object=} options.webpack the custom webpack build config, the detail
  *        option please refer webpack.base.conf.js
  * @param {string=} options.homePath the home page path
+ * @param {Function=} options.hookConfig modify webpack config hook
  * @param {Object=} logger the logger util
  * @return {Promise}
  */
@@ -122,6 +123,7 @@ function buildH5App(isDev, options, logger) {
     }));
 
     const webpackConfig = getWebpackConfig(isDev, options, logger);
+    options.hookConfig && options.hookConfig(webpackConfig);
     const devServerOpts = webpackConfig.devServer;
     delete webpackConfig.devServer;
 
