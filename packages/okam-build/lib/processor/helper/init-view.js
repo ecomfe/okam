@@ -205,6 +205,13 @@ function handleOnFilter(file, filterName) {
  * @return {Object}
  */
 function initViewTransformOptions(file, processOpts, buildManager) {
+    if (file.noTransform || (file.owner && file.owner.noTransform)) {
+        processOpts = Object.assign({}, processOpts);
+        processOpts.ignoreDefaultOptions = true;
+        processOpts.keepOriginalContent = true;
+        processOpts.plugins = ['resource'];
+    }
+
     let {plugins, ignoreDefaultOptions} = processOpts;
     let {appType, componentConf, buildConf} = buildManager;
     if (ignoreDefaultOptions) {

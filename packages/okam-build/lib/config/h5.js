@@ -8,14 +8,15 @@
 const merge = require('../util').merge;
 const baseConf = require('./base');
 
-function isOkamComponentFile(file) {
-    return file.path.indexOf('okam-component-h5') !== -1;
+function isOkamComponentFile(filePath) {
+    return filePath.indexOf('okam-component-h5') !== -1;
 }
 
 module.exports = merge({}, baseConf, {
 
     source: {
-        noParse: /\/vue|vue\-router|vuex\//
+        noParse: /\/(vue|vue\-router|vuex)\//,
+        noTransform: isOkamComponentFile
     },
 
     output: {
@@ -89,18 +90,6 @@ module.exports = merge({}, baseConf, {
 
         postcss: {
             extnames: ['css']
-        },
-
-        view: {
-            hook: {
-                before(file, options) {
-                    if (isOkamComponentFile(file)) {
-                        options.ignoreDefaultOptions = true;
-                        options.keepOriginalContent = true;
-                        options.plugins = ['resource'];
-                    }
-                }
-            }
         }
     },
 

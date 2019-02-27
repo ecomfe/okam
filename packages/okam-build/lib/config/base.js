@@ -162,11 +162,21 @@ module.exports = {
         include: [/^project\.\w+$/],
 
         /**
-         * 不解析编译处理的文件定义，支持传入不解析的文件路径的正则或者 function
+         * 不解析编译处理的文件定义，基本可以认为文件内容不会做任何解析转换处理
+         * 支持 glob pattern 或者 传入不解析的文件路径的正则或者 function
+         * 优先级高于 noTransform
          *
-         * @type {RegExp|function(filePath):boolean}
+         * @type {string|RegExp|function(filePath):boolean}
          */
-        noParse: null
+        noParse: null,
+
+        /**
+         * 不转换处理的文件定义，但会解析文件内容，比如 js 会解析依赖
+         * 支持 glob pattern 或者 传入不解析的文件路径的正则或者 function
+         *
+         * @type {string|RegExp|function(filePath):boolean}
+         */
+        noTransform: null
     },
 
     /**

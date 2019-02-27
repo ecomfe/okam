@@ -212,6 +212,12 @@ function getTransformPlugin(pluginOpts, file, buildManager, type) {
  * @return {Object}
  */
 function initBabelProcessorOptions(file, processorOpts, buildManager) {
+    if (file.noTransform || (file.owner && file.owner.noTransform)) {
+        processorOpts = Object.assign({}, processorOpts);
+        processorOpts.ignoreDefaultOptions = true;
+        processorOpts.plugins = ['dep'];
+    }
+
     processorOpts = Object.assign(
         {}, buildManager.babelConfig, processorOpts
     );

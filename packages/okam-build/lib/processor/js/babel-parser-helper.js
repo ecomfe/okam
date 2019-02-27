@@ -84,12 +84,6 @@ exports.getBabelParser = function () {
  * @return {{content: string, sourceMap: string}}
  */
 exports.compile = function (file, options, babelVersion = 6) {
-    if (file.noParse) {
-        return {
-            content: file.content
-        };
-    }
-
     let babel = initBabelParser(babelVersion);
     let config = Object.assign(
         {babelrc: false, ast: true},

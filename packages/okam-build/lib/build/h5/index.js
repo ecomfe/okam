@@ -81,26 +81,6 @@ class BuildH5AppManager extends BuildManager {
     /**
      * @override
      */
-    initProcessor(buildConf) {
-        super.initProcessor(buildConf);
-
-        // ignore okam-component-h5 component transform, dep analysis is needed
-        registerProcessor({
-            name: this.defaultBabelProcessorName, // override existed processor
-            hook: {
-                before(file, options) {
-                    if (isOkamComponentFile(file)) {
-                        options.ignoreDefaultOptions = true;
-                        options.plugins = ['dep'];
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * @override
-     */
     getFilterTransformOptions() {
         // do not transform filters syntax
         return;

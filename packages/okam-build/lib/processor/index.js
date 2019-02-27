@@ -166,9 +166,11 @@ function processFile(file, processor, buildManager) {
     logger.debug(`compile file ${file.path}, using ${processor.name}: `, opts);
 
     try {
-        let result = handler(file, Object.assign({
-            config: opts
-        }, compileContext));
+        let result = file.noParse
+            ? {content: file.content}
+            : handler(file, Object.assign({
+                config: opts
+            }, compileContext));
 
         if (result && isPromise(result)) {
             buildManager.addAsyncTask(file, result);
