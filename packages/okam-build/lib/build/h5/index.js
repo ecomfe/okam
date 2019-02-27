@@ -309,6 +309,18 @@ class BuildH5AppManager extends BuildManager {
             sourceDir: output.dir,
             homePath: this.homePagePath || '/'
         };
+
+        // disable webpack post build
+        if (webpack && webpack.disabled) {
+            return;
+        }
+
+        // using custom webpack build
+        if (typeof webpack === 'function') {
+            return webpack(this.isDev, options, this.logger);
+        }
+
+        // using builtin webpack build
         return buildByWebpack(this.isDev, options, this.logger);
     }
 }
