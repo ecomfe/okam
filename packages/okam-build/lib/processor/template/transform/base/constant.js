@@ -7,7 +7,7 @@
 
 exports.DATA_BIND_REGEXP = /^:/;
 exports.CURLY_BRACE_HAS_REGEXP = /{[\s\S]*}/;
-exports.SQUARE_BRACKETS_REGEXP = /^\[.*\]$/;
+exports.SQUARE_BRACKETS_REGEXP = /^\[[\s\S]*\]$/;
 exports.BRACKET_REGEXP = /\(|\)/g;
 exports.EVENT_REGEXP = /^@/;
 exports.EVENT_HANDLE_REGEXP = /^(\w+)\s*(?:\((.+)?\))?$/;

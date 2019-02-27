@@ -1,5 +1,15 @@
 # ChangeLog
 
+## 2019-02-27
+
+### okam-build@0.4.23
+
+* **Bug修复**
+    * 修复模板语法 `style` 绑定的变量存在换行解析有误 ([17eb1cd](https://github.com/ecomfe/okam/commit/17eb1cd))
+
+* **新功能**
+    * 增加 `.frameworkinfo` 文件用于 `百度小程序` ([bce74a3](https://github.com/ecomfe/okam/commit/bce74a3))
+
 ## 2019-02-25
 
 ### okam-build@0.4.22
