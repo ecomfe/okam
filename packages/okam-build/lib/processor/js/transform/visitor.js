@@ -183,24 +183,28 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         createImportDeclaration(baseClassName, opts.baseId, t)
     );
 
-    let routeConfName;
     if (opts.isApp) {
         // insert the app extension using statements
         appTransformer.extendAppFramework(
             t, path, bodyPath, baseClassName, opts
         );
-
-        let {routeConfigModId} = opts;
-        if (routeConfigModId) {
-            routeConfName = path.scope.generateUid('routeConfig');
-            bodyPath.insertBefore(
-                createImportDeclaration(routeConfName, routeConfigModId, t)
-            );
-        }
     }
 
     let callArgs = createInitCallArgs(declarationPath, config.config, opts, t);
-    routeConfName && callArgs.unshift(t.identifier(routeConfName));
+
+    // add h5 app router config argument
+    let {routeConfigModId} = opts;
+    if (routeConfigModId) {
+        let routerExpression = t.memberExpression(
+            t.callExpression(
+                t.identifier('require'),
+                [t.stringLiteral(routeConfigModId)]
+            ),
+            t.identifier('default')
+        );
+        callArgs.unshift(routerExpression);
+    }
+
     let needExport = opts.needExport || !opts.baseClass;
     let toReplacePath = needExport
         ? path.get('declaration')
