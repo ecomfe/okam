@@ -89,6 +89,21 @@ class BuildH5AppManager extends BuildManager {
     /**
      * @override
      */
+    isEnableRefSupport() {
+        // Vue support ref, so okam does not need to do anything
+        return false;
+    }
+
+    /**
+     * @override
+     */
+    getAppBaseClassInitOptions(file, config, opts) {
+        return null;
+    }
+
+    /**
+     * @override
+     */
     getAppRouterModuleId() {
         let appRouterModId = this.appRouterModId;
         if (!appRouterModId) {

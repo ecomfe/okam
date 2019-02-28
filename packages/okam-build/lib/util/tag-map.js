@@ -52,13 +52,3 @@ exports.h5ToMiniProgram = {
     // string
     img: 'image'
 };
-
-exports.miniProgramToH5 = {
-    view: 'div',
-    text: 'span',
-    navigator: {
-        tag: 'a',
-        url: 'href'
-    },
-    image: 'img'
-};
