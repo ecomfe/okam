@@ -6,7 +6,7 @@
 'use strict';
 
 const path = require('path');
-const {defaultMiniProgramTagToH5, merge} = require('../../../');
+const {merge} = require('../../../');
 const OUTPUT_DIR = 'h5_dist';
 
 /**
@@ -35,7 +35,14 @@ module.exports = merge({}, require('./base.config'), {
     component: {
         template: {
             useVuePrefix: true,
-            transformTags: defaultMiniProgramTagToH5
+            transformTags: {
+                a: {
+                    tag: 'navigator',
+                    href: 'url'
+                },
+                text: 'span',
+                image: 'img'
+            }
         }
     },
 

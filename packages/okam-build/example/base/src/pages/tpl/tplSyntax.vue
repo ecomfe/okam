@@ -83,7 +83,7 @@
                 for and if when {{item}}
             </view>
 
-            <block for="item,index in [false,true,false]" :key="item" if="item" hello="hello">
+            <block for="item,index in [false,true,false]" if="item" hello="hello">
                 <span>block 为父元素，for 和 if 共存：</span>
                 <span>i'm from</span>
                 for and if when {{item}}
