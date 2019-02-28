@@ -19,6 +19,8 @@ import {isSimpleType} from './util/lang';
  */
 const NOT_SUPPORT_PROPS = ['id', 'class', 'style'];
 
+const HAS_VIEWPORT_OPTS_FIELDS = ['rect', 'size', 'scrollOffset'];
+
 /**
  * The validated fields to query
  *
@@ -35,7 +37,7 @@ const VALIDATED_FIELDS = {
      * @return {Object}
      */
     dataset(elem) {
-        return Object.assign({}, elem.dataset);
+        return {dataset: Object.assign({}, elem.dataset)};
     },
 
     /**
@@ -178,6 +180,8 @@ function queryMatchElements(isMatchRootElement, element, selector, selectAll) {
     let findElemList;
     if (selectAll) {
         findElemList = element.querySelectorAll(selector);
+        // convert to array
+        findElemList && (findElemList = Array.prototype.slice.call(findElemList));
         isMatchRootElement && findElemList.unshift(element);
     }
     else {
@@ -212,15 +216,20 @@ function checkElementMatchSelector(element, selector) {
  * @inner
  * @param {HTMLElement} element the root element
  * @param {Object} fields the fields to query
- * @param {string} selector the element selector
+ * @param {boolean} isViewport whether is viewport element
  * @return {Object}
  */
-function queryElementFields(element, fields, selector) {
+function queryElementFields(element, fields, isViewport) {
     let result = {};
     Object.keys(fields).forEach(k => {
-        let info = fields[k];
+        let fieldOpts = fields[k];
+        if (HAS_VIEWPORT_OPTS_FIELDS.indexOf(k) !== -1) {
+            fieldOpts = isViewport;
+        }
+
+        let info = VALIDATED_FIELDS[k];
         if (typeof info === 'function') {
-            Object.assign(result, info(element));
+            Object.assign(result, info(element, fieldOpts));
         }
         else {
             result[k] = element[k];
@@ -288,17 +297,39 @@ function execQuery(options) {
             let result;
             if (selectAll) {
                 result = elements.map(
-                    item => queryElementFields(item, fields, selector)
+                    item => queryElementFields(item, fields, selectViewport)
                 );
             }
             else {
-                result = queryElementFields(elements, fields, selector);
+                result = queryElementFields(elements, fields, selectViewport);
             }
 
             callback && callback(result);
             resolve(result);
         });
     });
+}
+
+function queryFields(needValidate, fieldInfo, callback) {
+    let queryFields = needValidate ? {} : fieldInfo;
+    needValidate && Object.keys(fieldInfo).forEach(k => {
+        let type = VALIDATED_FIELDS[k];
+        if (type) {
+            queryFields[k] = fieldInfo[k];
+        }
+        else {
+            console.warn('unknown query field', k);
+        }
+    });
+
+    this._query._addQuery({
+        selector: this._selector,
+        selectAll: this._isSelectAll,
+        component: this._component,
+        fields: queryFields,
+        callback
+    });
+    return this._query;
 }
 
 /**
@@ -315,61 +346,24 @@ class NodesRef {
     }
 
     fields(fieldInfo) {
-        let queryFields = {};
-        Object.keys(fieldInfo).forEach(k => {
-            let type = VALIDATED_FIELDS[k];
-            if (type) {
-                queryFields[k] = fieldInfo[k];
-            }
-            else {
-                console.warn('unknown query field', k);
-            }
-        });
-
-        this._query._addQuery({
-            selector: this._selector,
-            selectAll: this._isSelectAll,
-            component: this._component,
-            fields: queryFields
-        });
-        return this._query;
+        return queryFields.call(this, true, fieldInfo);
     }
 
     boundingClientRect(callback) {
-        this._query._addQuery({
-            selector: this._selector,
-            selectAll: this._isSelectAll,
-            component: this._component,
-            fields: {
-                id: true,
-                dataset: true,
-                left: true,
-                right: true,
-                top: true,
-                bottom: true,
-                width: true,
-                height: true
-            },
-            callback
-        });
-
-        return this._query;
+        return queryFields.call(this, false, {
+            id: true,
+            dataset: true,
+            rect: true,
+            size: true
+        }, callback);
     }
 
     scrollOffset(callback) {
-        this._query._addQuery({
-            selector: this._selector,
-            selectAll: this._isSelectAll,
-            component: this._component,
-            fields: {
-                id: true,
-                dataset: true,
-                scrollLeft: true,
-                scrollTop: true
-            },
-            callback
-        });
-        return this._query;
+        return queryFields.call(this, false, {
+            id: true,
+            dataset: true,
+            scrollOffset: true
+        }, callback);
     }
 
     context(callback) {
