@@ -8,10 +8,15 @@
 </template>
 <script>
 import classnames from 'classnames';
-
-const NO_HOVER_CLASS = 'none';
+import getHoverMixin from './mixins/hover';
 
 export default {
+    mixins: [getHoverMixin({
+        defaultHoverClass: 'button-hover',
+        defaultHoverStartTime: 20,
+        defaultHoverStayTime: 70
+    })],
+
     props: {
         size: {
             type: String,
@@ -33,25 +38,7 @@ export default {
             type: Boolean,
             default: false
         },
-        formType: String,
-        hoverClass: { // pass `none` no clicked style
-            type: String,
-            default: 'button-hover'
-        },
-        hoverStartTime: {
-            type: Number,
-            default: 20
-        },
-        hoverStayTime: {
-            type: Number,
-            default: 70
-        }
-    },
-
-    data() {
-        return {
-            hover: false
-        };
+        formType: String
     },
 
     computed: {
@@ -59,11 +46,11 @@ export default {
             let plain = this.plain;
             let disabled = this.disabled;
             let type = this.type;
-            let hoverClass = this.hoverClass || '';
+            let hoverClass = this.getHoverClass() || '';
             return classnames(
                 'weui-btn',
                 {
-                    [`${hoverClass}`]: this.hover && this.hasHoverClass(),
+                    [`${hoverClass}`]: this.hover,
                     [`weui-btn_plain-${type}`]: plain,
                     [`weui-btn_${type}`]: !plain && type,
                     'weui-btn_mini': this.size === 'mini',
@@ -74,48 +61,7 @@ export default {
         }
     },
 
-    beforeDestroy() {
-        this.clearTimers();
-    },
-
     methods: {
-        clearTimers() {
-            clearTimeout(this.showHoverTimer);
-            clearTimeout(this.hideHoverTimer);
-        },
-
-        hasHoverClass() {
-            return !this.disabled && this.hoverClass
-              && (this.hoverClass !== NO_HOVER_CLASS);
-        },
-
-        onTouchstart(e) {
-            this.$emit('touchstart', e);
-            let hasHoverState = this.hasHoverClass();
-            if (!hasHoverState) {
-                return;
-            }
-
-            this.clearTimers();
-            this.showHoverTimer = setTimeout(
-                () => (this.hover = true),
-                this.hoverStartTime
-            );
-        },
-
-        onTouchend(e) {
-            this.$emit('touchend', e);
-            let hasHoverState = this.hasHoverClass();
-            if (!hasHoverState) {
-                return;
-            }
-
-            this.hideHoverTimer = setTimeout(
-                () => (this.hover = false),
-                this.hoverStayTime
-            );
-        },
-
         onClick(e) {
             this.$emit('click', e);
         }

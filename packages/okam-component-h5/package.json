@@ -24,16 +24,17 @@
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.29",
     "cross-env": "^5.2.0",
-    "mocha": "^6.0.0",
     "jsdom": "^13.2.0",
     "jsdom-global": "^3.0.2",
+    "mocha": "^6.0.0",
     "mochapack": "^1.0.0",
     "vue-loader": "^15.6.4",
-    "webpack": "^4.29.5",
-    "vue-template-compiler": "^2.6.7"
+    "vue-template-compiler": "^2.6.7",
+    "webpack": "^4.29.5"
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "okam-api-h5": "^0.1.0",
     "vue": "^2.6.7",
     "weui": "^1.1.3"
   }
