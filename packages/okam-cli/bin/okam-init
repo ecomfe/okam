@@ -8,7 +8,8 @@ program
 
 const args = program.args
 const project = new Project({
-    dirName: args[0]
+    dirName: args[0],
+    pkgName: args[1]
 });
 
 project.create();

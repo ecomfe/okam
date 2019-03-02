@@ -10,9 +10,11 @@ const semver = require('semver');
 const execSync = require('child_process').execSync;
 const ora = require('ora');
 const Etpl = require('./utils/etpl');
-const isEmptyDir = require('./utils').isEmptyDir;
+const {isEmptyDir, validateDir} = require('./utils');
 const BaseTemplate = require('../templates/index');
+const OnlineTemplate = require('../templates/onlineTemplate');
 const {promptUpdateCli, promptList, setPromptsValue} = require('./utils/prompts');
+const {downloadOfficialZip} = require('./download');
 
 class Project {
     constructor(options) {
@@ -78,6 +80,45 @@ class Project {
 
         console.log(chalk.green('Create a new okam project'));
 
+        const config = this.conf;
+
+        // isOfficialZip
+        if (/@okam\/.*/.test(config.dirName || '')) {
+
+            let rs = validateDir(config.pkgName);
+
+            // 这里的返回值是 string / boolean =.=
+            if (rs !== true) {
+                console.log(chalk.red(rs));
+                return;
+            }
+
+            const spinner = ora(`download template ${config.dirName}`).start();
+            let remoteDirName = config.dirName.replace('@okam/', '');
+
+            // use official template
+            downloadOfficialZip(
+                remoteDirName,
+                config.pkgName,
+                {
+                    extract: true
+                }
+            ).then(() => {
+                spinner.stop();
+
+                new OnlineTemplate(this, this.conf, {});
+            }).catch(e => {
+                spinner.stop();
+                if (e.statusCode === 404) {
+                    console.log(chalk.red(`Unrecongnized template: '${remoteDirName}'.`));
+                }
+                else if (e) {
+                    console.log(chalk.red(`Failed to download repo ${remoteDirName}: ${e.message.trim()}`));
+                }
+            });
+            return;
+        }
+
         this.ask().then(answers => {
             const date = new Date();
             this.conf = Object.assign(this.conf, answers);
@@ -94,7 +135,7 @@ class Project {
         if (dirName && fs.existsSync(dirName) && (!isEmptyDir(dirName))) {
             this.conf.dirName = '';
             setPromptsValue(prompts, 'projectName', {
-                message: 'The target directory is existed, change another name：'
+                message: 'The target directory is existed, please change another name：'
             });
         }
         else if (dirName) {

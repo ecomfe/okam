@@ -4,6 +4,7 @@
   "description": "The cli tool for Okam develop framework",
   "main": "index.js",
   "scripts": {
+    "lint": "fecs ./src index.js --reporter=baidu --rule",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,6 +31,7 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
+    "download": "^7.1.0",
     "etpl": "^3.2.0",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.0",
