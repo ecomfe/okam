@@ -19,10 +19,10 @@ else if (typeof document.webkitHidden !== 'undefined') {
     hidden = 'webkitHidden';
     visibilityChange = 'webkitvisibilitychange';
 }
-else if (typeof document.msHidden !== 'undefined') {
-    hidden = 'msHidden';
-    visibilityChange = 'msvisibilitychange';
-}
+// else if (typeof document.msHidden !== 'undefined') {
+//     hidden = 'msHidden';
+//     visibilityChange = 'msvisibilitychange';
+// }
 
 /**
  * Bind page visibility change listener
