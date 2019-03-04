@@ -24,17 +24,19 @@ function findMatchTransformer(transformers, value, matchItem) {
     let found;
     transformers.some(item => {
         let match = item.match;
-        let isMatch = false;
-        let type = typeof match;
-        if (type === 'string') {
-            isMatch = match === value;
-        }
-        else if (type === 'function') {
-            isMatch = match(matchItem);
-        }
-        else {
-            // default RegExp
-            isMatch = match.test('' + value);
+        let isMatch = !match;
+        if (!isMatch) {
+            let type = typeof match;
+            if (type === 'string') {
+                isMatch = match === value;
+            }
+            else if (type === 'function') {
+                isMatch = match(matchItem);
+            }
+            else {
+                // default RegExp
+                isMatch = match.test('' + value);
+            }
         }
 
         if (isMatch) {
@@ -152,13 +154,15 @@ exports.transform = transform;
  */
 exports.createSyntaxPlugin = function (transformers) {
     let {element, attribute, text} = transformers;
+    const textTransformers = normalizeTransformers(text);
+    const tagTransformer = {
+        element: normalizeTransformers(element),
+        attribute: normalizeTransformers(attribute)
+    };
 
     return {
         tag(...args) {
-            args.unshift({
-                element: normalizeTransformers(element),
-                attribute: normalizeTransformers(attribute)
-            });
+            args.unshift(tagTransformer);
             return transform.apply(this, args);
         },
 
@@ -167,7 +171,7 @@ exports.createSyntaxPlugin = function (transformers) {
                 return;
             }
 
-            args.unshift(normalizeTransformers(text));
+            args.unshift(textTransformers);
             return transformTextNode.apply(this, args);
         }
     };

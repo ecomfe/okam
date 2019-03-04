@@ -264,20 +264,25 @@ function getImportComponents(file, globalComponents, allTags) {
     return Object.keys(result).length ? result : null;
 }
 
+function compileNativeComponent(component, buildManager) {
+    let scriptFile = component.script;
+    if (scriptFile) {
+        compile(scriptFile, buildManager);
+    }
+
+    let styleFiles = component.styles || [];
+    styleFiles.forEach(item => compile(item, buildManager));
+}
+
 /**
  * Get need to import filter modules
  *
  * @inner
  * @param {Array.<string>} usedFilters the used filter names
  * @param {Object} scriptFile the script file to declare the local filter
- * @param {BuildManager} buildManager the build manager
  * @return {?Array.<Object>}
  */
-function getImportFilterModules(usedFilters, scriptFile, buildManager) {
-    if (!usedFilters) {
-        return;
-    }
-
+function getImportFilterModules(usedFilters, scriptFile) {
     let filterModules = [];
     let {file: filterFile, filterNames: definedFilters} = scriptFile.filters || {};
     let hasFilterUsed = definedFilters && usedFilters.some(item => {
@@ -292,7 +297,7 @@ function getImportFilterModules(usedFilters, scriptFile, buildManager) {
     }
 
     if (filterFile) {
-        let src = relative(filterFile.path, scriptFile.dirname);
+        let src = relative(filterFile.fullPath, scriptFile.dirname);
         if (src.charAt(0) !== '.') {
             src = './' + src;
         }
@@ -305,14 +310,42 @@ function getImportFilterModules(usedFilters, scriptFile, buildManager) {
     return filterModules;
 }
 
-function compileNativeComponent(component, buildManager) {
-    let scriptFile = component.script;
-    if (scriptFile) {
-        compile(scriptFile, buildManager);
+function compileComponentTpl(tplFile, scriptFile, buildManager) {
+    const {appType} = buildManager;
+
+    // init tpl event transform plugin
+    const customComponentTags = getCustomComponentTags(scriptFile.config);
+    const tplPlugins = [
+        [getEventSyntaxPlugin(appType), {customComponentTags}]
+    ];
+
+    // init tpl filter transform plugin
+    let filters = tplFile.filters;
+    if (buildManager.isEnableFilterSupport() && filters) {
+        tplPlugins.push([
+            getFilterSyntaxPlugin(appType),
+            {filters: getImportFilterModules(filters, scriptFile)}
+        ]);
     }
 
-    let styleFiles = component.styles || [];
-    styleFiles.forEach(item => compile(item, buildManager));
+    // init model transform plugin
+    if (buildManager.isEnableModelSupport()) {
+        let {componentConf} = buildManager;
+        let templateConf = (componentConf && componentConf.template) || {};
+        tplPlugins.push([
+            getModelSyntaxPlugin(appType),
+            {
+                customComponentTags,
+                modelMap: templateConf.modelMap
+            }
+        ]);
+    }
+
+    // execute template transform
+    let tplProcessor = getBuiltinProcessor('view', {
+        plugins: tplPlugins
+    });
+    processFile(tplFile, tplProcessor, buildManager);
 }
 
 function compileComponent(component, file, buildManager) {
@@ -351,45 +384,8 @@ function compileComponent(component, file, buildManager) {
         );
         compile(scriptFile, buildManager);
 
-        // init tpl transform plugins
-        let customComponentTags = getCustomComponentTags(scriptFile.config);
-        let tplPlugins = [
-            [
-                getEventSyntaxPlugin(buildManager.appType),
-                {customComponentTags}
-            ]
-        ];
-
-        let enableFilter = buildManager.isEnableFilterSupport();
-        if (enableFilter) {
-            let filterModules = getImportFilterModules(
-                tplFile.filters, scriptFile, buildManager
-            );
-            filterModules && tplPlugins.push([
-                getFilterSyntaxPlugin(buildManager.appType),
-                {filters: filterModules}
-            ]);
-        }
-
-        // 在事件处理之后处理
-        let enableModel = buildManager.isEnableModelSupport();
-        if (enableModel) {
-            let {componentConf} = buildManager;
-            let templateConf = (componentConf && componentConf.template) || {};
-            tplPlugins.push([
-                getModelSyntaxPlugin(buildManager.appType),
-                {
-                    customComponentTags,
-                    modelMap: templateConf.modelMap
-                }
-            ]);
-        }
-
-        // transform template event/filter syntax
-        let tplProcessor = getBuiltinProcessor('view', {
-            plugins: tplPlugins
-        });
-        processFile(tplFile, tplProcessor, buildManager);
+        // compile template again
+        compileComponentTpl(tplFile, scriptFile, buildManager);
     }
 
     let styleFiles = component.styles || [];

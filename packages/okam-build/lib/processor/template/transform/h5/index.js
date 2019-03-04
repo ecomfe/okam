@@ -5,7 +5,8 @@
 
 'use strict';
 
-const {CONDITION_DIRECTIVES} = require('../base/constant');
+const {CONDITION_DIRECTIVES, ENV_ELEMENT_REGEXP} = require('../base/constant');
+const transformEnvElement = require('../base/env');
 
 module.exports = {
     element: {
@@ -16,6 +17,12 @@ module.exports = {
         tpl: {
             match: 'tpl',
             transform: require('../common/tpl')
+        },
+        env: {
+            match(element) {
+                return ENV_ELEMENT_REGEXP.test(element.name);
+            },
+            transform: transformEnvElement
         }
     },
     attribute: {

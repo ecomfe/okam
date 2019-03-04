@@ -49,11 +49,13 @@ const FRAMEWORK_EXTEND_PATH = {
         }
     },
     redux: {
-        'default': 'extend/data/redux/index'
+        'default': 'extend/data/redux/index',
+        'h5': 'extend/data/redux/h5/index'
     },
     vuex: {
         'default': 'extend/data/vuex/index',
-        'h5': true
+        'quick': 'extend/data/vuex/quick/index',
+        'h5': 'extend/data/vuex/h5/index'
     },
     model: {
         'default': 'extend/data/model',

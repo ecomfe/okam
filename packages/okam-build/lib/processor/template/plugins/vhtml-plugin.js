@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {createSyntaxPlugin} = require('../helper');
+const {createSyntaxPlugin} = require('./helper');
 
 const propName = 'nodes';
 

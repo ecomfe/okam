@@ -295,7 +295,7 @@ class BuildManager extends EventEmitter {
      * @return {?Object}
      */
     getFilterTransformOptions() {
-        let enable = this.isEnableFilterSupport();
+        let enable = !this.isNativeSupportVue() && this.isEnableFilterSupport();
         if (enable) {
             return {
                 format: 'es6'
@@ -425,7 +425,7 @@ class BuildManager extends EventEmitter {
         // build files that need to compile
         let buildFail = this.buildDependencies(t);
         if (buildFail) {
-            return Promise.reject('error happen');
+            return Promise.reject('build fail');
         }
 
         this.onBuildDone && this.onBuildDone(t);
@@ -466,24 +466,33 @@ class BuildManager extends EventEmitter {
         });
     }
 
+    isNativeSupportVue() {
+        return false;
+    }
+
     isEnableRefSupport() {
-        return this.isEnableFrameworkExtension('ref');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('ref');
     }
 
     isEnableMixinSupport() {
-        return this.isEnableFrameworkExtension('behavior');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('behavior');
     }
 
     isEnableFilterSupport() {
-        return this.isEnableFrameworkExtension('filter');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('filter');
     }
 
     isEnableModelSupport() {
-        return this.isEnableFrameworkExtension('model');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('model');
     }
 
     isEnableVHtmlSupport() {
-        return this.isEnableFrameworkExtension('vhtml');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('vhtml');
     }
 
     getProcessFileCount() {

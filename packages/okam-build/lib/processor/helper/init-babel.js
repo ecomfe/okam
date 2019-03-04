@@ -187,13 +187,14 @@ function getTransformPlugin(pluginOpts, file, buildManager, type) {
         localPolyfill || (customOpts.polyfill = polyfill);
     }
     else {
+        const isVue = buildManager.isNativeSupportVue();
         customOpts = {
             filterOptions: buildManager.getFilterTransformOptions(),
             tplRefs: file.tplRefs,
             baseClass: appBaseClass && appBaseClass[type],
             getInitOptions,
-            keepComponentsProp: !!buildManager.keepComponentsProp,
-            dataPropValueToFunc: !!buildManager.dataPropValueToFunc
+            keepComponentsProp: isVue,
+            dataPropValueToFunc: isVue
         };
     }
 
@@ -271,7 +272,7 @@ function initBabelProcessorOptions(file, processorOpts, buildManager) {
             pluginOpts, file, buildManager, 'component'
         ));
     }
-    else if (!buildManager.ignoreBehaviorTransform && file.isBehavior) {
+    else if (file.isBehavior) {
         plugins.push([programPlugins.behavior, pluginOpts]);
     }
 

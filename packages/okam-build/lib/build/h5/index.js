@@ -10,11 +10,6 @@ const {normalizeMiddlewares} = require('../../server/helper');
 const {file: fileUtil, string: strUtil} = require('../../util');
 const {getRequirePath} = fileUtil;
 const buildByWebpack = require('okam-build-h5');
-const {registerProcessor} = require('../../processor/type');
-
-function isOkamComponentFile(file) {
-    return file.path.indexOf('okam-component-h5') !== -1;
-}
 
 function getPageComponentName(modId, existedName) {
     let parts = modId.split('/');
@@ -66,39 +61,14 @@ class BuildH5AppManager extends BuildManager {
         this.isH5App = true;
 
         // using webpack dev server
-        this.hasDevServer = true;
-
-        // keep components property for Vue component
-        this.keepComponentsProp = true;
-
-        // covert component data property value to function type
-        this.dataPropValueToFunc = true;
-
-        // do not transform behavior(mixin) file
-        this.ignoreBehaviorTransform = true;
+        this.usingCustomDevServer = true;
     }
 
     /**
      * @override
      */
-    getFilterTransformOptions() {
-        // do not transform filters syntax
-        return;
-    }
-
-    /**
-     * @override
-     */
-    isEnableRefSupport() {
-        // Vue support ref, so okam does not need to do anything
-        return false;
-    }
-
-    /**
-     * @override
-     */
-    getAppBaseClassInitOptions(file, config, opts) {
-        return null;
+    isNativeSupportVue() {
+        return true;
     }
 
     /**
@@ -205,6 +175,10 @@ class BuildH5AppManager extends BuildManager {
             importCode.push(`import ${compName} from '${id}';`);
             declareCode.push(`Vue.component('${k}', ${compName});`);
         });
+
+        if (!declareCode.length) {
+            importCode = [];
+        }
 
         return {
             importCode,

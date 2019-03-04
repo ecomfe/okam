@@ -45,7 +45,7 @@ function startBuild(buildConf, clear) {
         buildManager.clear();
     }
 
-    if (!buildManager.hasDevServer) {
+    if (!buildManager.usingCustomDevServer) {
         startDevServer(buildConf, buildManager);
     }
 
