@@ -15,7 +15,7 @@ function isOkamComponentFile(filePath) {
 module.exports = merge({}, baseConf, {
 
     source: {
-        noParse: /\/node_modules\/(vue|vue\-router|vuex)\//,
+        noParse: /node_modules\/(vue|vue\-router|vuex)\//,
         noTransform: isOkamComponentFile
     },
 

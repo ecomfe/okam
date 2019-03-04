@@ -59,6 +59,8 @@ function buildProject(timer, buildConf, buildManager) {
         () => buildManager.runPostBuild && buildManager.runPostBuild()
     ).then(
         () => {
+            // do not return the run result, which may lead to
+            // the outside watch task cannot trigger
             runBuildDoneHook(buildManager, onBuildDone);
         }
     ).catch(err => {
