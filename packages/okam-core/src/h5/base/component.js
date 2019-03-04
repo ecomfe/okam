@@ -42,6 +42,15 @@ export default {
          * @return {Object}
          */
         this.createSelectorQuery = () => this.$api.createSelectorQuery().in(this);
+
+        // override the emit api to ensure the event args structure is the same
+        // as the mini program
+        const rawEmit = this.$emit;
+        this.$emit = (...args) => {
+            let eventArg = args[1];
+            args[1] = {detail: eventArg};
+            rawEmit.apply(this, args);
+        };
     },
 
         /**
