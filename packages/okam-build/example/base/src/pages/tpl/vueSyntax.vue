@@ -34,7 +34,7 @@
             <div class="example">
                 <div v-if="2<1"> 2 &lt; 1  </div>
                 <div v-if="2<1"> 2  </div>
-                <div v-elif="1===3">1===3</div>
+                <div v-else-if="1===3">1===3</div>
                 <div v-else-if="2===3">2===3</div>
                 <div v-else>3</div>
             </div>

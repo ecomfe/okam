@@ -118,19 +118,19 @@ export default {
 
         let newObj = {a: 3};
         this.setData({obj: newObj}, () => {
-            console.log('after done newObj', newObj, newObj === this.data.obj);
+            console.log('after done newObj', newObj, newObj === this.obj);
         });
-        console.log('before done newObj', newObj, this.data.obj, newObj === this.data.obj);
+        console.log('before done newObj', newObj, this.obj, newObj === this.obj);
     },
 
     methods: {
         onToggleDone(id) {
             this.oldTodos = this.$store.getState().todos;
-            console.log('before toggle done', this.todos, this.oldTodos === this.data.todos)
+            console.log('before toggle done', this.todos, this.oldTodos === this.todos)
             this.toggle(id);
-            console.log('after toggle done', this.todos, this.oldTodos === this.data.todos)
+            console.log('after toggle done', this.todos, this.oldTodos === this.todos)
             setTimeout(() => {
-                console.log('after toggle success', this.todos, this.oldTodos === this.data.todos)
+                console.log('after toggle success', this.todos, this.oldTodos === this.todos)
             }, 300)
         },
 
