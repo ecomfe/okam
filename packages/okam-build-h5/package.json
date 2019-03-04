@@ -19,6 +19,9 @@
   "bugs": {
     "url": "https://github.com/ecomfe/okam/issues"
   },
+  "peerDependencies": {
+    "okam-build": "^0.4.23"
+  },
   "dependencies": {
     "babel-loader": "^8.0.5",
     "cliui": "^4.1.0",
