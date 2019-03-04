@@ -20,7 +20,7 @@ function filterChangedFiles(depFile, changedFiles) {
             item.isComponent && result.push(item);
         }
         else if (depFile.isScript) {
-            item.isComponent && result.push(item);
+            item.isComponent && depFile.owner && result.push(item);
         }
     });
     return result;

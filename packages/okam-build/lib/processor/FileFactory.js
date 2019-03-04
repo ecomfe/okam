@@ -72,7 +72,12 @@ function resetFile() {
         return;
     }
 
-    this.subFiles && (this.subFiles = []);
+    let subFiles = this.subFiles;
+    if (subFiles && subFiles.length) {
+        subFiles.forEach(item => item.reset());
+        this.subFiles = [];
+    }
+
     this.deps && (this.deps = []);
     this.compiled = false;
     this.refs && (this.refs = null);
