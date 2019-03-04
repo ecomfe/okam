@@ -13,7 +13,7 @@
   "scripts": {
     "prepublish": "npm run lint",
     "lint": "fecs ./src --reporter=baidu --rule",
-    "test": "mochapack --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\"",
+    "test": "node ./node_modules/mochapack/lib/cli/index --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\"",
     "test:debug": "node --inspect-brk ./node_modules/mochapack/lib/cli/index --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\""
   },
   "license": "MIT",
@@ -34,6 +34,8 @@
     "mochapack": "^1.0.0",
     "vue-loader": "^15.6.4",
     "vue-template-compiler": "^2.6.7",
+    "vue": "^2.6.7",
+    "vue-router": "^3.0.2",
     "webpack": "^4.29.5"
   },
   "dependencies": {
