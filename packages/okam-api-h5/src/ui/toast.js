@@ -16,8 +16,8 @@ let hideTimer;
 
 const TOAST_ICON_CLASS = 'okam-api-toast-icon';
 const TOAST_IMG_CLASS = 'okam-api-toast-image';
-const TOAST_SUCCESS_ICON_CLASS = 'okam-icon-success_no_circle';
-const TOAST_LOADING_ICON_CLASS = 'okam-api-loading';
+const TOAST_SUCCESS_ICON_CLASS = 'weui-icon-success-no-circle'; // 'okam-icon-success_no_circle';
+const TOAST_LOADING_ICON_CLASS = 'weui-loading'; // 'okam-api-loading';
 const TOAST_MAST_CLASS = 'okam-api-toast-mask';
 const TOAST_TEMPLATE = `
     <div class="${TOAST_MAST_CLASS}"></div>

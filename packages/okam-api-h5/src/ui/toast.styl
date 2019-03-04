@@ -1,15 +1,18 @@
 /**
- * @file Toast style
+ * @file Toast style. Dependence on weui style definition: https://github.com/Tencent/weui.
  * @author sparklewhy@gmail.com
  */
 
-@require './loading.styl'
-@require './icon.styl'
+/*@require './loading.styl'
+@require './icon.styl'*/
 
 $-okam-api-toast-zindex := 10000
 
 .okam-api-toast
     transition: opacity 0.1s linear
+    .weui-loading
+        width: 50px
+        height: @width
 
 .okam-api-toast-mask
     position: fixed
@@ -50,7 +53,7 @@ $-okam-api-toast-zindex := 10000
 
 .okam-api-toast-icon
     margin: 6px auto
-    &.okam-icon-success_no_circle
+    &.weui-icon-success-no-circle
         font-size: 50px
         color: #fff
 
