@@ -38,6 +38,10 @@ export default {
                     {
                         subName: '设置界面标题',
                         path: 'api/navTitle'
+                    },
+                    {
+                        subName: '交互',
+                        path: 'api/interaction'
                     }
                 ]
             },
