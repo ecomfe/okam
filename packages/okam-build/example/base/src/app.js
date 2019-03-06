@@ -49,7 +49,8 @@ export default {
             'pages/api/interaction',
             'pages/api/animation',
             'pages/api/image',
-            'pages/api/websocket'
+            'pages/api/websocket',
+            'pages/api/scroll'
         ],
         subPackages: [
             {

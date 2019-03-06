@@ -76,6 +76,10 @@ export default {
                     {
                         subName: 'WebSocket',
                         path: 'api/websocket'
+                    },
+                    {
+                        subName: 'Scroll',
+                        path: 'api/scroll'
                     }
                 ]
             }

@@ -11,7 +11,7 @@
             <button plain class="op-btn" type="button" @click="clearLog">清理日志</button>
         </view>
         <view class="result-msg">
-            <view class="msg-item" v-for="item in msgList">{{item}}</view>
+            <view class="msg-item" v-for="item in msgList" :key="item">{{item}}</view>
         </view>
     </view>
 </template>
