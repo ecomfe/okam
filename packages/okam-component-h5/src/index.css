@@ -1,5 +1,5 @@
 @import '~weui/dist/style/weui.min.css';
 
-.weui-btn+.weui-btn {
+.weui-btn + .weui-btn {
     margin-top: 0;
 }

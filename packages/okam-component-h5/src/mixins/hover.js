@@ -40,7 +40,7 @@ export default function getHoverMixin(options) {
                 if (!this.disabled && hoverClass
                   && (hoverClass !== NO_HOVER_CLASS)) {
                     return hoverClass;
-                };
+                }
             },
 
             clearTimers() {
