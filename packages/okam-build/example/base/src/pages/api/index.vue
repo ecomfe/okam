@@ -42,6 +42,14 @@ export default {
                     {
                         subName: '交互',
                         path: 'api/interaction'
+                    },
+                    {
+                        subName: '动画',
+                        path: 'api/animation'
+                    },
+                    {
+                        subName: '图片',
+                        path: 'api/image'
                     }
                 ]
             },

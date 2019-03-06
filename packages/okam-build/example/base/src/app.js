@@ -46,7 +46,9 @@ export default {
             'pages/api/navTitle',
             'pages/api/network',
             'pages/api/window',
-            'pages/api/interaction'
+            'pages/api/interaction',
+            'pages/api/animation',
+            'pages/api/image'
         ],
         subPackages: [
             {

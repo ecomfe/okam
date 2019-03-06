@@ -5,6 +5,9 @@
             <button type="warn" @click="showCustomIconToast">自定义 Icon showToast</button>
             <button type="default" @click="showLoadingToast">Loading showToast</button>
         </view>
+        <view class="show-action">
+            <button type="primary" @click="showActionSheet">showActionSheet</button>
+        </view>
     </view>
 </template>
 <script>
@@ -34,6 +37,19 @@ export default {
             this.$api.showToast({
                 title: 'Loading Toast',
                 icon: 'loading'
+            });
+        },
+
+        showActionSheet() {
+            this.$api.showActionSheet({
+                itemList: ['选我', '测试111', 'test'],
+                itemColor: 'red',
+                success(res) {
+                    console.log('action success', res)
+                },
+                fail(res) {
+                    console.log('action fail', res)
+                }
             });
         }
     }
