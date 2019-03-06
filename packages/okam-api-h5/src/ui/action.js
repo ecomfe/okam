@@ -62,10 +62,7 @@ function cancelActionSheet() {
 function handleItemClick(e) {
     let tapIndex =  +e.currentTarget.dataset.tapIndex;
     execAsyncApiCallback(
-        'showActionSheet',
-        /* eslint-disable fecs-camelcase */
-        Object.assign({_spread: true}, currProcessOption),
-        null, {tapIndex}
+        'showActionSheet', currProcessOption, null, {tapIndex}, true
     );
     hideActionSheet();
 }

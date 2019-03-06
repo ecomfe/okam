@@ -64,11 +64,10 @@ export default {
      */
     getNetworkType(options) {
         /* eslint-disable fecs-camelcase */
-        let opts = Object.assign({_spread: true}, options);
         processAsyncApiCallback(
             'getNetworkType',
             getNetworkTypeSync,
-            [], opts
+            [], options, true
         );
     },
 

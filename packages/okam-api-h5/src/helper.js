@@ -13,18 +13,18 @@
  * @param {Function=} options.success the success callback when sync api execute successfully
  * @param {Function=} options.fail the fail callback when sync api execute fail
  * @param {Function=} options.complete the sync api execute done callback
- * @param {Function|Boolean=} options._spread the custom response data normalization
  * @param {?err} err the err info when execute async api fail
  * @param {?*} data the async api response data
+ * @param {Function|Boolean=} spread the custom response data normalization
  */
-export function execAsyncApiCallback(apiName, options, err, data) {
+export function execAsyncApiCallback(apiName, options, err, data, spread) {
     let errMsg = `${apiName}:`;
     let isFail = err != null;
     errMsg += (isFail ? 'fail' : 'ok');
     err && (errMsg += ' ' + err);
 
     /* eslint-disable fecs-camelcase */
-    let {success, fail, complete, _spread} = options || {};
+    let {success, fail, complete} = options || {};
     if (isFail) {
         let res = {errMsg};
         fail && fail(res);
@@ -33,9 +33,9 @@ export function execAsyncApiCallback(apiName, options, err, data) {
     }
 
     let res = {};
-    if (_spread) {
-        if (typeof _spread === 'function') {
-            res = _spread(data);
+    if (spread) {
+        if (typeof spread === 'function') {
+            res = spread(data);
         }
         else {
             res = data;
@@ -63,20 +63,16 @@ export function execAsyncApiCallback(apiName, options, err, data) {
  * });
  *
  * processAsyncApiCallback('test', api, [], {
- *     _spread: true, // spread
  *     complete(res) {
  *         // res: {a: 3, errMsg: 'test:ok'}
  *     }
- * });
+ * }, true); // spread
  *
  * processAsyncApiCallback('test', api, [], {
- *     _spread(res) { // custom format
- *        return {myData: res};
- *     },
  *     complete(res) {
  *         // res: {myData: {a: 3}, errMsg: 'test:ok'}
  *     }
- * });
+ * }, res => {return {myData: res}}); // custom format
  * </code>
  *
  *
@@ -87,9 +83,10 @@ export function execAsyncApiCallback(apiName, options, err, data) {
  * @param {Function=} options.success the success callback when sync api execute successfully
  * @param {Function=} options.fail the fail callback when sync api execute fail
  * @param {Function=} options.complete the sync api execute done callback
- * @param {Function|Boolean=} options._spread the custom response data normalization
+ * @param {Function|Boolean=} spread the custom response data normalization
+ * @return {*}
  */
-export function processAsyncApiCallback(apiName, api, args, options) {
+export function processAsyncApiCallback(apiName, api, args, options, spread) {
     let err = null;
     let data;
     try {
@@ -99,5 +96,6 @@ export function processAsyncApiCallback(apiName, api, args, options) {
         err = ex.toString();
     }
 
-    execAsyncApiCallback(apiName, options, err, data);
+    execAsyncApiCallback(apiName, options, err, data, spread);
+    return data;
 }

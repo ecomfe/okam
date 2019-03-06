@@ -56,8 +56,7 @@ export default {
             processAsyncApiCallback(
                 'chooseImage',
                 getImgData.bind(null, e), [],
-                /* eslint-disable fecs-camelcase */
-                Object.assign({_spread: true}, options)
+                options, true
             );
         };
 

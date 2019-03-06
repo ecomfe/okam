@@ -57,11 +57,8 @@ function toggleModal(show, elem) {
 
 function execCallback(isCancel) {
     execAsyncApiCallback(
-        'showModal',
-        /* eslint-disable fecs-camelcase */
-        Object.assign({_spread: true}, currProcessOption),
-        null,
-        {cancel: isCancel, confirm: !isCancel}
+        'showModal', currProcessOption, null,
+        {cancel: isCancel, confirm: !isCancel}, true
     );
 }
 

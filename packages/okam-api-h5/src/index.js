@@ -20,6 +20,7 @@ import animateApi from './animation';
 import imgApi from './image';
 import actionSheetApi from './ui/action';
 import modalApi from './ui/modal';
+import wsApi from './ws';
 
 export default Object.assign(
     selectorApi,
@@ -35,5 +36,6 @@ export default Object.assign(
     animateApi,
     imgApi,
     actionSheetApi,
-    modalApi
+    modalApi,
+    wsApi
 );
