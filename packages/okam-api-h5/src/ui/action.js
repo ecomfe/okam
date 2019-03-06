@@ -11,15 +11,17 @@ import {execAsyncApiCallback} from '../helper';
 
 const FADE_IN_CLASS = 'okam-api-fade-in';
 const FADE_OUT_CLASS = 'okam-api-fade-out';
-const CLASS_PREFIX = 'weui-actionsheet';
-const ACTION_TOGGLE_CLASS = `${CLASS_PREFIX}_toggle`;
+
+const ACTION_SHEET_CLASS = 'weui-actionsheet';
+const ACTION_TOGGLE_CLASS = 'weui-actionsheet_toggle';
 const ACTION_MASK_CLASS = 'weui-mask';
-const ACTION_MENU_CLASS = `${CLASS_PREFIX}__menu`;
-const ACTION_MENU_ITEM_CLASS = `${CLASS_PREFIX}__cell`;
-const ACTION_CANCEL_CLASS = `${CLASS_PREFIX}__action`;
+const ACTION_MENU_CLASS = 'weui-actionsheet__menu';
+const ACTION_MENU_ITEM_CLASS = 'weui-actionsheet__cell';
+const ACTION_CANCEL_CLASS = 'weui-actionsheet__action';
+
 const ACTION_SHEET_TPL = `
 <div class="${ACTION_MASK_CLASS}"></div>
-<div class="${CLASS_PREFIX}">
+<div class="${ACTION_SHEET_CLASS}">
     <div class="${ACTION_MENU_CLASS}"></div>
     <div class="${ACTION_CANCEL_CLASS}">
         <div class="${ACTION_MENU_ITEM_CLASS}">取消</div>
@@ -32,7 +34,7 @@ let currProcessOption;
 let animationTimer;
 
 function toggleMask(show) {
-    let maskElem = actionSheetElem.querySelector('.' + ACTION_MASK_CLASS);
+    let maskElem = actionSheetElem.querySelector(`.${ACTION_MASK_CLASS}`);
     maskElem.style.opacity = show ? 1 : 0;
     if (show) {
         maskElem.className = `${FADE_IN_CLASS} ${ACTION_MASK_CLASS}`;
@@ -47,8 +49,8 @@ function toggleMask(show) {
 }
 
 function hideActionSheet() {
-    let menuWrapElem = actionSheetElem.querySelector('.' + CLASS_PREFIX);
-    menuWrapElem.className = CLASS_PREFIX;
+    let menuWrapElem = actionSheetElem.querySelector(`.${ACTION_SHEET_CLASS}`);
+    menuWrapElem.className = ACTION_SHEET_CLASS;
     toggleMask(false);
 }
 
@@ -73,10 +75,10 @@ function createActionSheet() {
     el.innerHTML = ACTION_SHEET_TPL;
     document.body.appendChild(el);
 
-    let maskElem = el.querySelector('.' + ACTION_MASK_CLASS);
+    let maskElem = el.querySelector(`.${ACTION_MASK_CLASS}`);
     maskElem.onclick = cancelActionSheet;
 
-    let cancelElem = el.querySelector('.' + ACTION_CANCEL_CLASS);
+    let cancelElem = el.querySelector(`.${ACTION_CANCEL_CLASS}`);
     cancelElem.onclick = cancelActionSheet;
 
     return el;
@@ -101,7 +103,8 @@ export default {
             actionSheetElem = createActionSheet();
         }
 
-        let menuElem = actionSheetElem.querySelector('.' + ACTION_MENU_CLASS);
+        // init action menu items
+        let menuElem = actionSheetElem.querySelector(`.${ACTION_MENU_CLASS}`);
         let {itemList, itemColor} = options;
         menuElem.style.color = itemColor || '#000';
         menuElem.innerHTML = '';
@@ -115,10 +118,11 @@ export default {
             menuElem.appendChild(elem);
         });
 
+        // show action sheet
         toggleMask(true);
 
         let menuWrap = menuElem.parentElement;
-        menuWrap.className = CLASS_PREFIX + ' ' + ACTION_TOGGLE_CLASS;
+        menuWrap.className = ACTION_SHEET_CLASS + ' ' + ACTION_TOGGLE_CLASS;
 
         animationTimer && clearTimeout(animationTimer);
         animationTimer = null;

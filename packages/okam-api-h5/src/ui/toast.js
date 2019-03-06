@@ -17,12 +17,14 @@ let animationTimer;
 
 const FADE_IN_CLASS = 'okam-api-fade-in';
 const FADE_OUT_CLASS = 'okam-api-fade-out';
+
 const TOAST_CLASS = 'okam-api-toast';
 const TOAST_ICON_CLASS = 'okam-api-toast-icon';
 const TOAST_IMG_CLASS = 'okam-api-toast-image';
 const TOAST_SUCCESS_ICON_CLASS = 'weui-icon-success-no-circle';
 const TOAST_LOADING_ICON_CLASS = 'weui-loading';
 const TOAST_MAST_CLASS = 'weui-mask_transparent';
+
 const TOAST_TEMPLATE = `
     <div class="${TOAST_MAST_CLASS}"></div>
     <div class="okam-api-toast-content">
@@ -49,12 +51,14 @@ function initToastElem() {
 
 function showToastSync(options) {
     const toastElem = initToastElem();
+    /* eslint-disable fecs-camelcase */
     let {
         title,
         icon = 'success',
         image,
         duration,
-        mask
+        mask,
+        _loading
     } = options || {};
 
     // up toast title
@@ -78,7 +82,7 @@ function showToastSync(options) {
     maskElem.style.display = mask ? 'block' : 'none';
 
     // show toast
-    duration = (duration && parseInt(duration, 10)) || 1500;
+
     toastElem.className = `${FADE_IN_CLASS} ${TOAST_CLASS}`;
     toastElem.style.opacity = 1;
     toastElem.style.display = 'block';
@@ -88,7 +92,10 @@ function showToastSync(options) {
 
     hideTimer && clearTimeout(hideTimer);
     hideTimer = null;
-    hideTimer = setTimeout(hideToast, duration);
+    if (!_loading) {
+        duration = (duration && parseInt(duration, 10)) || 1500;
+        hideTimer = setTimeout(hideToast, duration);
+    }
 }
 
 /**
@@ -138,5 +145,40 @@ function hideToast(options) {
 
 export default {
     showToast,
-    hideToast
+    hideToast,
+
+    /**
+     * Show loading
+     *
+     * @param {Object} options the options to show
+     * @param {string} options.title the toast title
+     * @param {boolean=} options.mask whether show mask to disable user interaction,
+     *        by default false, optional
+     * @param {Function=} options.success the success callback
+     * @param {Function=} options.fail the fail callback
+     * @param {Function=} options.complete the done callback whatever is
+     *        success or fail.
+     */
+    showLoading(options) {
+        let opts = Object.assign({}, options, {
+            icon: 'loading',
+            image: null,
+            /* eslint-disable fecs-camelcase */
+            _loading: true
+        });
+        processAsyncApiCallback('showLoading', showToastSync, [opts], opts);
+    },
+
+    /**
+     * Hide loading
+     *
+     * @param {Object=} options the options
+     * @param {Function=} options.success the success callback
+     * @param {Function=} options.fail the fail callback
+     * @param {Function=} options.complete the done callback whatever is
+     *        success or fail.
+     */
+    hideLoading(options) {
+        processAsyncApiCallback('hideLoading', hideToastSync, [], options);
+    }
 };
