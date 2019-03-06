@@ -21,6 +21,7 @@ import imgApi from './image';
 import actionSheetApi from './ui/action';
 import modalApi from './ui/modal';
 import wsApi from './ws';
+import scrollApi from './scroll';
 
 export default Object.assign(
     selectorApi,
@@ -37,5 +38,6 @@ export default Object.assign(
     imgApi,
     actionSheetApi,
     modalApi,
-    wsApi
+    wsApi,
+    scrollApi
 );
