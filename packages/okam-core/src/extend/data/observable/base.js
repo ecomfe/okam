@@ -293,24 +293,6 @@ export default {
                 this.__dataUpTaskNum++;
                 nextTick(this.__executeDataUpdate);
             }
-        },
-
-        /**
-         * Set the view data. It'll not update the view immediately, it's deferred
-         * to execute when enter the next event loop.
-         *
-         * @private
-         * @param {string|Object} obj the data to set or the path to set
-         * @param {*=} value the new value to set, optional
-         */
-        $setData(obj, value) {
-            console.warn('cannot call this API directly, it is private and will be deprecated in future');
-
-            if (typeof obj === 'string') {
-                obj = {[obj]: value};
-            }
-
-            this.__setViewData(obj);
         }
     }
 };
