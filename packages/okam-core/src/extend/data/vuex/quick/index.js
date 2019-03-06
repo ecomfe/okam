@@ -66,7 +66,7 @@ export default {
                 store = store.call(this);
             }
 
-            this.$dataListener = {
+            this.__dataListener = {
                 emit: (type, newVal, oldVal, paths) => {
                     let p = normalizeDepDataPath(paths);
                     this.__handleDataChange(p, true);

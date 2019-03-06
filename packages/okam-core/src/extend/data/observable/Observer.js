@@ -254,7 +254,7 @@ export default class Observer {
         let ctx = this.ctx;
         ctx.__onDataSet && ctx.__onDataSet(paths, newVal, oldVal);
 
-        let listener = ctx.$dataListener;
+        let listener = ctx.__dataListener;
         listener && listener.emit('change', newVal, oldVal, paths);
     }
 

@@ -168,7 +168,7 @@ export default {
         this.__nextTickCallback = this.__notifySetDataDone.bind(this);
         this.__executeDataUpdate = this.__doDataUpdate.bind(this);
 
-        this.$dataListener = new EventListener();
+        this.__dataListener = new EventListener();
         this.__propsObserver = makePropsObservable(this);
         this.__dataObserver = makeDataObservable(this);
 
@@ -189,8 +189,8 @@ export default {
         this.__setDataQueue = null;
         this.__upDoneCallbackQueue = null;
 
-        this.$dataListener.dispose();
-        this.$dataListener = null;
+        this.__dataListener.dispose();
+        this.__dataListener = null;
         this.__computedObserver && this.__computedObserver.dispose();
         this.__propsObserver = this.__dataObserver = this.__computedObserver = null;
     },

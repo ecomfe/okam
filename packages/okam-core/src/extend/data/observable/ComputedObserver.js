@@ -44,7 +44,7 @@ export default class ComputedObserver {
         ctx.data || (ctx.data = {});
 
         let watcher = this.handleDepChange.bind(this);
-        ctx.$dataListener.on('change', watcher);
+        ctx.__dataListener.on('change', watcher);
         this.computedCounter = 0;
         this.notifyWatchQueues = [];
     }
@@ -299,7 +299,7 @@ export default class ComputedObserver {
         let ctx = this.ctx;
         ctx.__onDataSet && ctx.__onDataSet(paths, newVal, oldVal);
 
-        let listener = ctx.$dataListener;
+        let listener = ctx.__dataListener;
         listener && listener.emit('change', newVal, oldVal, paths);
     }
 

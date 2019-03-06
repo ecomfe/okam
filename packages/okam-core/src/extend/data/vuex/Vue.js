@@ -145,7 +145,7 @@ Vue.initDataGetSet = function (instance, customAddDep) {
     getCallbacks.push(currGetCallback);
 
     const currSetCallback = (paths, newVal, oldVal) => {
-        let listener = instance && instance.$dataListener;
+        let listener = instance && instance.__dataListener;
         listener && listener.emit('change', newVal, oldVal, paths);
     };
     setCallbacks.push(currSetCallback);
