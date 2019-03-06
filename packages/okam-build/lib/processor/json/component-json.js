@@ -83,7 +83,7 @@ function addComponentSameNameFiles(scriptFile, options) {
     if (missingMustFileExtnames.length) {
         let compFile = getRelative(filePathBase, root);
         missingMustFileExtnames.forEach(ext => {
-            logger.error(`missing component file: 「${compFile}.${ext}」.`);
+            logger.error(`missing component file: ${compFile}.${ext}`);
         });
     }
 }

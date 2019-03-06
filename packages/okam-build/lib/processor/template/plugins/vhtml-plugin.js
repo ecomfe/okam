@@ -24,8 +24,8 @@ function transformVHtml(attrs, name, tplOpts, opts, element) {
 
     if (attrs[propName]) {
         logger.warn(
-            `${file.path} template attribute 「v-html="${attrs[name]}"」`,
-            `is conflicted with 「${propName}」on element <${element.name}>`
+            `${file.path} template attribute v-html="${attrs[name]}"`,
+            `is conflicted with ${propName} on element <${element.name}>`
         );
     }
 

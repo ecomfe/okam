@@ -324,7 +324,7 @@ function addProcessEntryPages(pages, pageFileMap, allPageFiles, fileDirname, bui
 
             // not support quick
             if (appType === 'quick') {
-                logger.error(`missing page file: 「${pageFileNotExt}.${componentExtname}」.`);
+                logger.error(`missing page file: ${pageFileNotExt}.${componentExtname}`);
                 return;
             }
 
@@ -341,7 +341,7 @@ function addProcessEntryPages(pages, pageFileMap, allPageFiles, fileDirname, bui
             if (missingMustFileExtnames.length) {
                 let pageFile = getRelative(pageFileNotExt, root);
                 missingMustFileExtnames.forEach(ext => {
-                    logger.error(`missing page file: 「${pageFile}.${ext}」.`);
+                    logger.error(`missing page file: ${pageFile}.${ext}`);
                 });
             }
 

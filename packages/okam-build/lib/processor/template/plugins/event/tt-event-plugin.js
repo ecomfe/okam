@@ -40,7 +40,7 @@ function transformCustomCompEvent(attrs, name, tplOpts, parseEventName) {
     if (methodArgs) {
         logger.error(
             `${file.path} template event method ${name}`,
-            `is not support with argument「${methodArgs}」 in ${appType} env`
+            `is not support with argument ${methodArgs} in ${appType} env`
         );
     }
 
