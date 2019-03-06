@@ -811,25 +811,25 @@ describe('observable', function () {
         });
     });
 
-    it('should support passing two args for $setData', function (done) {
-        MyApp.use(observable);
-        let instance = MyComponent({
-            data: {
-                a: {b: 1}
-            }
-        });
+    // it('should support passing two args for $setData', function (done) {
+    //     MyApp.use(observable);
+    //     let instance = MyComponent({
+    //         data: {
+    //             a: {b: 1}
+    //         }
+    //     });
 
-        let spySetData = createSpy(() => {});
-        instance.setData = spySetData;
+    //     let spySetData = createSpy(() => {});
+    //     instance.setData = spySetData;
 
-        instance.created();
-        instance.$setData('a.b', 6);
-        setTimeout(() => {
-            expect(spySetData).toHaveBeenCalled();
-            expect(spySetData.calls[0].arguments[0]).toEqual({'a.b': 6});
-            done();
-        });
-    });
+    //     instance.created();
+    //     instance.$setData('a.b', 6);
+    //     setTimeout(() => {
+    //         expect(spySetData).toHaveBeenCalled();
+    //         expect(spySetData.calls[0].arguments[0]).toEqual({'a.b': 6});
+    //         done();
+    //     });
+    // });
 
     it('should call nextTick callback when update data done', function (done) {
         MyApp.use(observable);
