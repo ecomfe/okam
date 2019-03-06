@@ -13,12 +13,16 @@ import {processAsyncApiCallback} from '../helper';
 
 let toastElem;
 let hideTimer;
+let animationTimer;
 
+const FADE_IN_CLASS = 'okam-api-fade-in';
+const FADE_OUT_CLASS = 'okam-api-fade-out';
+const TOAST_CLASS = 'okam-api-toast';
 const TOAST_ICON_CLASS = 'okam-api-toast-icon';
 const TOAST_IMG_CLASS = 'okam-api-toast-image';
-const TOAST_SUCCESS_ICON_CLASS = 'weui-icon-success-no-circle'; // 'okam-icon-success_no_circle';
-const TOAST_LOADING_ICON_CLASS = 'weui-loading'; // 'okam-api-loading';
-const TOAST_MAST_CLASS = 'okam-api-toast-mask';
+const TOAST_SUCCESS_ICON_CLASS = 'weui-icon-success-no-circle';
+const TOAST_LOADING_ICON_CLASS = 'weui-loading';
+const TOAST_MAST_CLASS = 'weui-mask_transparent';
 const TOAST_TEMPLATE = `
     <div class="${TOAST_MAST_CLASS}"></div>
     <div class="okam-api-toast-content">
@@ -36,7 +40,7 @@ const TOAST_TEMPLATE = `
 function initToastElem() {
     if (!toastElem) {
         toastElem = document.createElement('div');
-        toastElem.className = 'okam-api-toast';
+        toastElem.className = TOAST_CLASS;
         toastElem.innerHTML = TOAST_TEMPLATE.trim();
         document.body.appendChild(toastElem);
     }
@@ -54,7 +58,7 @@ function showToastSync(options) {
     } = options || {};
 
     // up toast title
-    toastElem.querySelector('.okam-api-toast-title').innerText = title || '';
+    toastElem.querySelector('.okam-api-toast-title').textContent = title || '';
     let iconElem = toastElem.querySelector(`.${TOAST_ICON_CLASS}`);
 
     // up toast icon/image
@@ -66,7 +70,7 @@ function showToastSync(options) {
         let iconClass = icon === 'loading'
             ? TOAST_LOADING_ICON_CLASS : TOAST_SUCCESS_ICON_CLASS;
         iconElem.className = [TOAST_ICON_CLASS, iconClass].join(' ');
-        iconElem.style.removeProperty('backgroundImage');
+        iconElem.style.removeProperty('background-image');
     }
 
     // up toast mask
@@ -75,12 +79,16 @@ function showToastSync(options) {
 
     // show toast
     duration = (duration && parseInt(duration, 10)) || 1500;
+    toastElem.className = `${FADE_IN_CLASS} ${TOAST_CLASS}`;
     toastElem.style.opacity = 1;
     toastElem.style.display = 'block';
 
+    animationTimer && clearTimeout(animationTimer);
+    animationTimer = null;
+
     hideTimer && clearTimeout(hideTimer);
     hideTimer = null;
-    setTimeout(hideToast, duration);
+    hideTimer = setTimeout(hideToast, duration);
 }
 
 /**
@@ -110,11 +118,9 @@ function hideToastSync() {
         return;
     }
 
+    toastElem.className = `${FADE_OUT_CLASS} ${TOAST_CLASS}`;
     toastElem.style.opacity = 0;
-    hideTimer && clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => {
-        toastElem.style.display = 'none';
-    }, 100);
+    animationTimer = setTimeout(() => (toastElem.style.display = 'none'), 200);
 }
 
 /**

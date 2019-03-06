@@ -3,29 +3,14 @@
  * @author sparklewhy@gmail.com
  */
 
-/*@require './loading.styl'
-@require './icon.styl'*/
-
-$-okam-api-toast-zindex := 10000
-
 .okam-api-toast
-    transition: opacity 0.1s linear
     .weui-loading
         width: 50px
         height: @width
 
-.okam-api-toast-mask
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    z-index: $-okam-api-toast-zindex
-    background: transparent
-
 .okam-api-toast-content
     position: fixed
-    z-index: $-okam-api-toast-zindex + 1
+    z-index: 5000
     top: 50%
     left: 50%
     transform: translate(-50%, -50%)

@@ -5,6 +5,7 @@
 
 'use strict';
 
+import './ui/common/base.styl';
 import selectorApi from './selector';
 import systemApi from './system';
 import requestApi from './request';
@@ -15,6 +16,9 @@ import navApi from './navigator';
 import phoneApi from './phone';
 import networkApi from './network';
 import windowApi from './window';
+import animateApi from './animation';
+import imgApi from './image';
+import actionSheetApi from './ui/action';
 
 export default Object.assign(
     selectorApi,
@@ -26,5 +30,8 @@ export default Object.assign(
     navApi,
     phoneApi,
     networkApi,
-    windowApi
+    windowApi,
+    animateApi,
+    imgApi,
+    actionSheetApi
 );

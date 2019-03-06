@@ -1,0 +1,23 @@
+@require './variable.styl'
+
+@keyframes fadeIn
+    0%
+        opacity: 0
+
+    to
+        opacity: 1
+
+.okam-api-fade-in
+    animation-duration: 200ms
+    animation-name: fadeIn
+
+@keyframes fadeOut
+    0%
+        opacity: 1
+
+    to
+        opacity: 0
+
+.okam-api-fade-out
+    animation-duration: 200ms
+    animation-name: fadeOut
