@@ -70,13 +70,14 @@ module.exports = merge({}, baseConf, {
     component: {
         template: {
             transformTags: {
-                'button': 'o-button',
+                'button': 'obutton',
                 block: 'template',
-                view: 'div'
+                view: 'oview'
             }
         },
         global: {
-            'o-button': 'ocomp/Button',
+            'obutton': 'ocomp/Button',
+            'oview': 'ocomp/View',
             'navigator': 'ocomp/Navigator'
         }
     },

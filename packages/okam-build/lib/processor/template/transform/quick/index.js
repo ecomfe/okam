@@ -21,7 +21,7 @@ module.exports = {
             transform: require('../common/tpl')
         },
         okamButton: {
-            match: 'o-button',
+            match: 'obutton',
             transform: require('./button')
         },
         text: {

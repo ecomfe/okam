@@ -51,7 +51,7 @@ function processElementTextData(element, tplOpts) {
     let transformTags = config && config.template && config.template.transformTags;
     // the okam-component button implementation cannot using
     // text wrapper, so here using span for button type
-    let wrapElemName = transformTags && transformTags[element.name] === 'o-button'
+    let wrapElemName = transformTags && transformTags[element.name] === 'obutton'
         ? 'span' : 'text';
     textNodes.forEach(({index, node}) => wrapTextData(element, index, node, wrapElemName));
 }
