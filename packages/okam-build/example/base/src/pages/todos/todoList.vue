@@ -16,7 +16,8 @@
                     class="todo-input" @blur="onInputDone" @confirm="onInputDone"/>
             </view>
             <view class="empty-tip" if="!filterList.length">无</view>
-            <view @click="onToggleDone(item.id)" for="item, index in filterList"
+            <view @click="onToggleDone(item.id)"
+                for="item, index in filterList" :key="item.id"
                 :class="[item.completed ? 'done' : '', 'todo-item']" else>
                 <text class="todo-content">{{item.text}}</text>
                 <icon size="16" class="op-btn" type="clear" @click.stop="onRemoveTodo(item.id)"/>
