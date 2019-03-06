@@ -72,6 +72,10 @@ export default {
                     {
                         subName: '窗口',
                         path: 'api/window'
+                    },
+                    {
+                        subName: 'WebSocket',
+                        path: 'api/websocket'
                     }
                 ]
             }
