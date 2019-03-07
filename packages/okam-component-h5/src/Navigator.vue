@@ -66,7 +66,7 @@ export default {
             this.$emit('click', e);
         }
     }
-}
+};
 </script>
 <style scoped>
 .navigator {

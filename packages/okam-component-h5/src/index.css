@@ -3,3 +3,9 @@
 .weui-btn + .weui-btn {
     margin-top: 0;
 }
+
+[class*=" weui-icon-"]:before,
+[class^="weui-icon-"]:before {
+    margin-left: 0;
+    margin-right: 0;
+}

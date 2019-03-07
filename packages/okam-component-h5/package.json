@@ -13,6 +13,7 @@
   "scripts": {
     "prepublish": "npm run lint",
     "lint": "fecs ./src --reporter=baidu --rule",
+    "vuelint": "fecs ./src --reporter=baidu --rule --type=vue",
     "test": "node ./node_modules/mochapack/lib/cli/index --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\"",
     "test:debug": "node --inspect-brk ./node_modules/mochapack/lib/cli/index --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\""
   },

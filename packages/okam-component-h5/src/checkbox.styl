@@ -1,0 +1,17 @@
+.weui-cells_checkbox.disabled
+
+    .weui-check + .weui-icon-checked
+        background: #e1e1e1
+        border-radius: 100%
+        width: 23px
+        height: @width
+
+        &:before
+            transform: scale(0)
+
+    .weui-check:checked + .weui-icon-checked
+        &:before
+            display: block
+            color: #adadad
+            content: '\EA08'
+            transform: scale(.65)
