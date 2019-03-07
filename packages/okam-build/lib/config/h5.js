@@ -70,15 +70,22 @@ module.exports = merge({}, baseConf, {
     component: {
         template: {
             transformTags: {
-                'button': 'obutton',
+                button: 'obutton',
                 block: 'template',
-                view: 'oview'
+                view: 'oview',
+                text: 'otext'
             }
         },
         global: {
             'obutton': 'ocomp/Button',
             'oview': 'ocomp/View',
-            'navigator': 'ocomp/Navigator'
+            'otext': 'ocomp/Text',
+            'navigator': 'ocomp/Navigator',
+            'checkbox-group': 'ocomp/CheckboxGroup',
+            'checkbox': 'ocomp/Checkbox',
+            'radio-group': 'ocomp/RadioGroup',
+            'radio': 'ocomp/Radio',
+            'icon': 'ocomp/Icon'
         }
     },
 

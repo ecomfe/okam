@@ -421,7 +421,7 @@ class FileFactory extends EventEmitter {
             }
 
             if (depFilePath === depPath
-                || this.hasDep(depFilePath, depFile, processed)
+                || (depFile.isStyle && this.hasDep(depFilePath, depFile, processed))
             ) {
                 processed[path] = true;
                 return true;

@@ -5,12 +5,29 @@
 
 'use strict';
 
+const {file: fileUtil} = require('../../util');
+const {getRequirePath, replaceExtname} = fileUtil;
+
 function wrapContent(wrapTag, file) {
     let tagAttrs = '';
     if (file.isStyle && file.scoped) {
         tagAttrs = ' scoped';
     }
-    return `<${wrapTag}${tagAttrs}>\n${file.content.toString().trim()}\n</${wrapTag}>\n`;
+
+    if (file.isVirtual || file.isTpl) {
+        return `<${wrapTag}${tagAttrs}>\n${file.content.toString().trim()}\n</${wrapTag}>\n`;
+    }
+
+    file.release = true;
+    let ownerFile = file.owner;
+    let srcPath = getRequirePath(
+        file.resolvePath || file.path, ownerFile.resolvePath || ownerFile.path,
+        true
+    );
+
+    let rext = file.isStyle ? 'css' : 'js';
+    srcPath = replaceExtname(srcPath, file.rext || rext);
+    return `<${wrapTag}${tagAttrs} src="${srcPath}"></${wrapTag}>\n`;
 }
 
 /**

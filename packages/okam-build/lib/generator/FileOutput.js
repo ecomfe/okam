@@ -62,26 +62,28 @@ function getOutputPath(filePath, file, options) {
 
 function getComponentPartOutputFilePath(partFile, owner, options) {
     let {componentPartExtname} = options;
-    if (!componentPartExtname) {
+    if (!componentPartExtname && !partFile.release) {
         return;
     }
 
     let filePath = owner.resolvePath || owner.path;
-    if (partFile.isJson) {
-        partFile.rext = componentPartExtname.config;
-    }
-    else if (partFile.isFilter) {
-        partFile.rext = '';
-        filePath = partFile.path;
-    }
-    else if (partFile.isScript) {
-        partFile.rext = componentPartExtname.script;
-    }
-    else if (partFile.isStyle) {
-        partFile.rext = componentPartExtname.style;
-    }
-    else if (partFile.isTpl) {
-        partFile.rext = componentPartExtname.tpl;
+    if (componentPartExtname) {
+        if (partFile.isJson) {
+            partFile.rext = componentPartExtname.config;
+        }
+        else if (partFile.isFilter) {
+            partFile.rext = '';
+            filePath = partFile.path;
+        }
+        else if (partFile.isScript) {
+            partFile.rext = componentPartExtname.script;
+        }
+        else if (partFile.isStyle) {
+            partFile.rext = componentPartExtname.style;
+        }
+        else if (partFile.isTpl) {
+            partFile.rext = componentPartExtname.tpl;
+        }
     }
 
     return getOutputPath(filePath, partFile, options);
