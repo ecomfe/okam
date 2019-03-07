@@ -38,6 +38,11 @@ export default {
                 path: 'api/index'
             },
             {
+                icon: require('../../common/img/ui.png'),
+                name: '基础组件',
+                path: 'components/index'
+            },
+            {
                 icon: require('../../common/img/js.png'),
                 name: '语言',
                 open: false,

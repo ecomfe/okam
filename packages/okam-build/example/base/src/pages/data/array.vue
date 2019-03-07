@@ -3,7 +3,7 @@
         <button @click="changeComponentProp">Change component prop</button>
         <data-component :title="title" :from="from" :obj="obj" :myName="myName" @hello="handleHello"></data-component>
         <view class="click-tip" if="clicked">You click me~</view>
-        <view>PageArr: <text for="item in arr">{{item}},</text></view>
+        <view>PageArr: <text for="item in arr" :key="item">{{item}},</text></view>
         <view><button @click="onPush">Push</button></view>
         <view><button @click="onPush2">Push2</button></view>
         <view><button @click="onPop">Pop</button></view>

@@ -1,8 +1,8 @@
 <template>
-    <view class="api-home-wrap">
+    <view class="component-home-wrap">
         <view class="banner">
             <image class="banner-logo" src="../../common/img/okam.png"></image>
-            <text class="banner-desc">Okam 小程序开发框架 API 演示示例</text>
+            <text class="banner-desc">Okam 小程序开发框架 Component 演示示例</text>
         </view>
         <view for="item, index in items" :key="item.name" :class="['list-group', index === items.length - 1 ? 'list-group-last' : '']">
             <view :class="['list-group-title', item.open ? '' : 'list-group-close']" @click="toggleClick(index, item.path)">
@@ -25,62 +25,47 @@
 import {api, appEnv} from 'okam';
 export default {
     config: {
-        title: 'OKAM 开发框架 API 示例'
+        title: 'OKAM 开发框架 Component 示例'
     },
 
     data: {
         items: [
             {
-                name: '界面',
+                name: '基础',
                 icon: require('../../common/img/ui.png'),
                 open: false,
                 list: [
                     {
-                        subName: '设置界面标题',
-                        path: 'api/navTitle'
+                        subName: 'Text',
+                        path: 'text'
                     },
                     {
-                        subName: '交互',
-                        path: 'api/interaction'
-                    },
-                    {
-                        subName: '动画',
-                        path: 'api/animation'
-                    },
-                    {
-                        subName: '图片',
-                        path: 'api/image'
+                        subName: 'Icon',
+                        path: 'icon'
                     }
                 ]
             },
             {
-                name: '系统',
+                name: '表单',
                 icon: require('../../common/img/ui.png'),
                 open: false,
                 list: [
                     {
-                        subName: '网络信息',
-                        path: 'api/network'
+                        subName: '复选框',
+                        path: 'checkbox'
+                    },
+                    {
+                        subName: '单选框',
+                        path: 'radio'
                     }
                 ]
             },
             {
-                name: '其它',
+                name: '视图',
                 icon: require('../../common/img/ui.png'),
                 open: false,
                 list: [
-                    {
-                        subName: '窗口',
-                        path: 'api/window'
-                    },
-                    {
-                        subName: 'WebSocket',
-                        path: 'api/websocket'
-                    },
-                    {
-                        subName: 'Scroll',
-                        path: 'api/scroll'
-                    }
+
                 ]
             }
         ]
@@ -90,7 +75,7 @@ export default {
 
         oneItemClick(viewPath) {
             this.$api.navigateTo({
-                url: '/pages/' + viewPath
+                url: '/pages/components/' + viewPath
             });
         },
 
@@ -98,7 +83,7 @@ export default {
             // 无子项直接跳转
             if (navPath) {
                 this.$api.navigateTo({
-                    url: '/pages/' + navPath
+                    url: '/pages/components/' + navPath
                 });
                 return;
             }
@@ -113,7 +98,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.api-home-wrap
+.component-home-wrap
     display: flex
     flex-direction: column
     font-size: 14px

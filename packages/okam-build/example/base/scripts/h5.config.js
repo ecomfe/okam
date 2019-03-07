@@ -40,7 +40,7 @@ module.exports = merge({}, require('./base.config'), {
                     tag: 'navigator',
                     href: 'url'
                 },
-                text: 'span',
+                // text: 'span',
                 image: 'img'
             }
         }

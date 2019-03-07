@@ -50,7 +50,12 @@ export default {
             'pages/api/animation',
             'pages/api/image',
             'pages/api/websocket',
-            'pages/api/scroll'
+            'pages/api/scroll',
+            'pages/components/index',
+            'pages/components/text',
+            'pages/components/checkbox',
+            'pages/components/icon',
+            'pages/components/radio'
         ],
         subPackages: [
             {
