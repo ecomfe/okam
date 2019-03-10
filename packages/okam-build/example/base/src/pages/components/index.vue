@@ -67,6 +67,17 @@ export default {
                 list: [
 
                 ]
+            },
+            {
+                name: '媒体',
+                icon: require('../../common/img/ui.png'),
+                open: false,
+                list: [
+                    {
+                        subName: '图片',
+                        path: 'image'
+                    }
+                ]
             }
         ]
     },

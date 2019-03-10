@@ -39,9 +39,9 @@ module.exports = merge({}, require('./base.config'), {
                 a: {
                     tag: 'navigator',
                     href: 'url'
-                },
+                }
                 // text: 'span',
-                image: 'img'
+                // image: 'img'
             }
         }
     },
