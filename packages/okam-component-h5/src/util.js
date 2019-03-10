@@ -55,3 +55,56 @@ export function throttle(fn, delay, noTrailing) {
         }
     };
 }
+
+/**
+ * Normalize the style value unit
+ *
+ * @param {string|number} val the value to normalize
+ * @return {string}
+ */
+export function unitStyle(val) {
+    if (typeof val === 'number' || /^\d+$/.test(val)) {
+        return `${val}px`;
+    }
+    return val || 0;
+}
+
+
+// /**
+//  * Add class
+//  *
+//  * @param {HTMLElement} element the target element
+//  * @param {string} className the class name to add
+//  */
+// export function addClass(element, className) {
+//     if (element.classList) {
+//         element.classList.add(className);
+//     }
+//     else {
+//         let classes = element.className.split(/\s+/);
+//         if (classes.indexOf(className) === -1) {
+//             classes.push(className);
+//         }
+//         element.className = classes.join(' ');
+//     }
+// }
+
+// /**
+//  * Remove class
+//  *
+//  * @param {HTMLElement} element the target element
+//  * @param {string} className the class name to remove
+//  */
+// export function removeClass(element, className) {
+//     if (element.classList) {
+//         element.classList.remove(className);
+//     }
+//     else {
+//         let classes = element.className.split(/\s+/);
+//         let foundIdx = classes.indexOf(className);
+//         if (foundIdx !== -1) {
+//             classes.splice(foundIdx, 1);
+//         }
+//         element.className = classes.join(' ');
+//     }
+// }

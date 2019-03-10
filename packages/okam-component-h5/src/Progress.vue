@@ -7,7 +7,7 @@
     </div>
 </template>
 <script>
-import {unitStyle, addClass, removeClass} from './util';
+import {unitStyle} from './util';
 
 export default {
     props: {
@@ -124,8 +124,7 @@ export default {
 
                 clearTimeout(this.animationTimer);
                 this.animationTimer = setTimeout(
-                    () => (this.disableActive = false)
-                    0
+                    () => (this.disableActive = false), 0
                 );
             }
         }
