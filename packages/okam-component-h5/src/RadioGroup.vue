@@ -2,9 +2,10 @@
     <div><slot></slot></div>
 </template>
 <script>
-let counter = 0;
+import {uuid} from './util';
+
 function getUniqueName() {
-    return `radio-group-${counter++}`;
+    return uuid('radio-group-');
 }
 
 function initRadio(vm, radio, index) {

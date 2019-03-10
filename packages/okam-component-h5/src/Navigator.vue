@@ -10,7 +10,7 @@ import router from 'okam-api-h5/src/router';
 
 export default {
     mixins: [getHoverMixin({
-        defaultHoverClass: 'navigator-hover',
+        defaultHoverClass: 'okam-navigator-hover',
         defaultHoverStartTime: 50,
         defaultHoverStayTime: 60
     })],
@@ -30,7 +30,7 @@ export default {
             if (clazz) {
                 clazz += ' ';
             }
-            clazz += 'navigator';
+            clazz += 'okam-navigator';
             return clazz;
         }
     },
@@ -68,12 +68,12 @@ export default {
     }
 };
 </script>
-<style scoped>
-.navigator {
+<style>
+.okam-navigator {
     text-decoration: none;
     display: block;
 }
-.navigator-hover {
+.okam-navigator-hover {
     background-color: rgba(0, 0, 0, 0.1);
     opacity: 0.7;
 }

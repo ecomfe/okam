@@ -68,10 +68,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-/* .button-hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    opacity: 0.7;
-} */
-</style>

@@ -2,9 +2,10 @@
     <div><slot></slot></div>
 </template>
 <script>
-let counter = 0;
+import {uuid} from './util';
+
 function getUniqueName() {
-    return `checkbox-group-${counter++}`;
+    return uuid('checkbox-group-');
 }
 
 function initCheckbox(vm, checkbox, index) {

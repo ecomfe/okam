@@ -1,5 +1,5 @@
 <template>
-    <span :class="['weui-cells_checkbox', disabled ? 'disabled' : '']">
+    <span :class="['weui-cells_checkbox', disabled ? 'okam-checkbox-disabled' : '']">
         <input class="weui-check" type="radio" @change="onChecked"
             :disabled="disabled" :value="value"
             :name="groupName || name || ''" :checked="checked"/>

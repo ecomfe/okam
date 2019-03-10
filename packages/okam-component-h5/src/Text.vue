@@ -13,15 +13,17 @@ export default {
 
     computed: {
         classNames() {
-            return this.selectable ? 'text text-selectable' : 'text';
+            let value = ['okam-text'];
+            this.selectable && value.push('okam-text-selectable');
+            return value;
         }
     }
 };
 </script>
-<style lang="stylus" scoped>
-.text
+<style lang="stylus">
+.okam-text
     user-select: none
-.text-selectable
+.okam-text-selectable
     user-select: text
 </style>
 
