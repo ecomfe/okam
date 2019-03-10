@@ -162,10 +162,7 @@ function getBaseConfig(options, defaultOpts) {
                 {
                     test: /\.vue$/,
                     loader: 'vue-loader',
-                    options: Object.assign({
-                        compilerOptions: {
-                        }
-                    }, loader.vue)
+                    options: loader.vue
                 },
                 {
                     test: /\.js$/,
