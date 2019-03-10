@@ -377,6 +377,7 @@ module.exports = {
              *
              * {
              *    img: 'src',
+             *    video: ['src', 'poster'], // 指定多个资源属性
              *    import: true, // 设为 true，默认为 src 属性获取依赖的资源
              *    include: false // 设为 false，不会分析该标签的依赖资源
              * }

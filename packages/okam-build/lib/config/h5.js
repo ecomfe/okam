@@ -73,7 +73,8 @@ module.exports = merge({}, baseConf, {
                 button: 'obutton',
                 block: 'template',
                 view: 'oview',
-                text: 'otext'
+                text: 'otext',
+                image: 'oimage'
             }
         },
         global: {
@@ -85,7 +86,8 @@ module.exports = merge({}, baseConf, {
             'checkbox': 'ocomp/Checkbox',
             'radio-group': 'ocomp/RadioGroup',
             'radio': 'ocomp/Radio',
-            'icon': 'ocomp/Icon'
+            'icon': 'ocomp/Icon',
+            'oimage': 'ocomp/Image'
         }
     },
 
@@ -117,6 +119,16 @@ module.exports = merge({}, baseConf, {
         alias: {
             'vue$': 'vue/dist/vue.runtime.esm.js',
             'ocomp/': 'okam-component-h5/src/'
+        }
+    },
+
+    webpack: {
+        loader: {
+            vue: {
+                transformAssetUrls: {
+                    oimage: 'src'
+                }
+            }
         }
     }
 });
