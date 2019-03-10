@@ -42,6 +42,10 @@ export default {
                     {
                         subName: 'Icon',
                         path: 'icon'
+                    },
+                    {
+                        subName: 'Progress',
+                        path: 'progress'
                     }
                 ]
             },

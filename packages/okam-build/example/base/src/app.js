@@ -56,7 +56,8 @@ export default {
             'pages/components/checkbox',
             'pages/components/icon',
             'pages/components/radio',
-            'pages/components/image'
+            'pages/components/image',
+            'pages/components/progress'
         ],
         subPackages: [
             {
