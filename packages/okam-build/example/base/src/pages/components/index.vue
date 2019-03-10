@@ -69,7 +69,10 @@ export default {
                 icon: require('../../common/img/ui.png'),
                 open: false,
                 list: [
-
+                    {
+                        subName: '滚动视图',
+                        path: 'scrollview'
+                    }
                 ]
             },
             {
