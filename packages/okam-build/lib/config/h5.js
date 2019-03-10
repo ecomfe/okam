@@ -74,7 +74,8 @@ module.exports = merge({}, baseConf, {
                 block: 'template',
                 view: 'oview',
                 text: 'otext',
-                image: 'oimage'
+                image: 'oimage',
+                progress: 'oprogress'
             }
         },
         global: {
@@ -87,7 +88,9 @@ module.exports = merge({}, baseConf, {
             'radio-group': 'ocomp/RadioGroup',
             'radio': 'ocomp/Radio',
             'icon': 'ocomp/Icon',
-            'oimage': 'ocomp/Image'
+            'oimage': 'ocomp/Image',
+            'oprogress': 'ocomp/Progress',
+            'scroll-view': 'ocomp/ScrollView'
         }
     },
 
