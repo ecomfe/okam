@@ -203,7 +203,7 @@ class BuildH5AppManager extends BuildManager {
             declareCode
         } = this.generateGlobalComponentRegistrationCode();
 
-        let code = importCode.concat(importComponentCode, declareCode);
+        let code = importComponentCode.concat(importCode, declareCode);
         code.push('\n');
         code.push('\n');
 
