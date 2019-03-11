@@ -218,9 +218,9 @@ export default {
 .okam-scroll-view-scrollx
     overflow-x: auto
     overflow-y: hidden
+    white-space: nowrap
 
 .okam-scroll-view-scrolly
     overflow-x: hidden
     overflow-y: auto
 </style>
-

@@ -37,7 +37,6 @@ export default {
         },
 
         onChecked(e) {
-            this.currChecked = true;
             this.$emit('change', e);
         }
     }
