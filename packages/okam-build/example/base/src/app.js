@@ -59,7 +59,8 @@ export default {
             'pages/components/image',
             'pages/components/progress',
             'pages/components/scrollview',
-            'pages/components/switch'
+            'pages/components/switch',
+            'pages/components/slider'
         ],
         subPackages: [
             {

@@ -65,6 +65,10 @@ export default {
                     {
                         subName: '开关选择器',
                         path: 'switch'
+                    },
+                    {
+                        subName: '滑块选择器',
+                        path: 'slider'
                     }
                 ]
             },
