@@ -3,7 +3,7 @@
         <div class="weui-progress__bar" :style="barStyle">
             <div ref="innerBar" :class="innerBarClassNames" :style="innerBarStyle"></div>
         </div>
-        <div v-show="showInfo" class="weui-progress__opr" :style="progressInfoStyle">{{ activeWidth }}</div>
+        <div v-show="showInfo" class="weui-progress__opr" :style="progressInfoStyle">{{activeWidth}}</div>
     </div>
 </template>
 <script>
