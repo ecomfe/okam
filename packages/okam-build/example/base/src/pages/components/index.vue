@@ -61,6 +61,10 @@ export default {
                     {
                         subName: '单选框',
                         path: 'radio'
+                    },
+                    {
+                        subName: '开关选择器',
+                        path: 'switch'
                     }
                 ]
             },

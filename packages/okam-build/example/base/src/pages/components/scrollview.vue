@@ -117,7 +117,6 @@ export default {
 
     .scroll-view_H
         height: 150px
-        white-space: nowrap
 
     .scroll-view-item,
     .scroll-view-item_H

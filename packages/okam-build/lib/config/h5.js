@@ -75,7 +75,8 @@ module.exports = merge({}, baseConf, {
                 view: 'oview',
                 text: 'otext',
                 image: 'oimage',
-                progress: 'oprogress'
+                progress: 'oprogress',
+                switch: 'oswitch'
             }
         },
         global: {
@@ -90,7 +91,8 @@ module.exports = merge({}, baseConf, {
             'icon': 'ocomp/Icon',
             'oimage': 'ocomp/Image',
             'oprogress': 'ocomp/Progress',
-            'scroll-view': 'ocomp/ScrollView'
+            'scroll-view': 'ocomp/ScrollView',
+            'oswitch': 'ocomp/Switch'
         }
     },
 

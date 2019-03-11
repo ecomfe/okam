@@ -120,7 +120,8 @@ class BuildH5AppManager extends BuildManager {
             }
 
             let pageModId = getRequirePath(item.path, routerFile.path);
-            let pageName = getPageComponentName(pageModId, existedPageComponentName);
+            // ensure not reserved words is used, so here add underscore as prefix
+            let pageName = '_' + getPageComponentName(pageModId, existedPageComponentName);
             importPageComponents.push(`import ${pageName} from '${pageModId}';`);
 
             let routePath = pageModId.replace('./', '/');

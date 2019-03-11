@@ -58,7 +58,8 @@ export default {
             'pages/components/radio',
             'pages/components/image',
             'pages/components/progress',
-            'pages/components/scrollview'
+            'pages/components/scrollview',
+            'pages/components/switch'
         ],
         subPackages: [
             {
