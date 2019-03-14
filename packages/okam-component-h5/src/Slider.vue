@@ -135,6 +135,9 @@ export default {
                 return;
             }
 
+            e.stopPropagation();
+            e.preventDefault();
+
             this.oldValue = this.currValue;
             this.barWidth = this.$refs.slider.clientWidth;
             this.startX = e.changedTouches[0].clientX;
@@ -145,9 +148,6 @@ export default {
                 return;
             }
 
-            e.stopPropagation();
-            e.preventDefault();
-
             let endX = e.changedTouches[0].clientX;
             this.updateSliderValue(this.oldValue, this.startX, endX);
             this.$emit('changing', {detail: {value: this.currValue}});
@@ -157,6 +157,9 @@ export default {
             if (this.disabled) {
                 return;
             }
+
+            e.stopPropagation();
+            e.preventDefault();
 
             let endX = e.changedTouches[0].clientX;
             this.updateSliderValue(this.oldValue, this.startX, endX);
