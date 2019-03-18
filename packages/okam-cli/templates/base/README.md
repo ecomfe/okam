@@ -27,9 +27,7 @@ ${description}
 
     * `npm run dev:server`：    带 watch && 开发 Server 开发模式
 
-    * `npm run build`：         删掉构建重新构建（没有 watch && 开发 Server）
-
-    * `npm run prod`：          生产环境构建
+    * `npm run prod`：          生产环境构建（没有 watch && 开发 Server）
 
 * 微信小程序运行命令
 
@@ -39,7 +37,7 @@ ${description}
 
     * `npm run dev:wx:server`： 带 watch && 开发 Server 开发模式
 
-    * `npm run prod:wx`：       微信小程序生产环境构建
+    * `npm run prod:wx`：       微信小程序生产环境构建（没有 watch && 开发 Server）
 
 * 支付宝小程序运行命令
 
@@ -49,7 +47,7 @@ ${description}
 
     * `npm run dev:ant:server`：带 watch && 开发 Server 开发模式
 
-    * `npm run prod:ant`：      微信小程序生产环境构建
+    * `npm run prod:ant`：      微信小程序生产环境构建（没有 watch && 开发 Server）
 
 * 头条小程序运行命令
 
@@ -59,7 +57,7 @@ ${description}
 
     * `npm run dev:tt:server`：带 watch && 开发 Server 开发模式
 
-    * `npm run prod:tt`：      微信小程序生产环境构建
+    * `npm run prod:tt`：      微信小程序生产环境构建（没有 watch && 开发 Server）
 
 
 * 快应用小程序运行命令
@@ -70,7 +68,7 @@ ${description}
 
     * `npm run dev:quick:server`：带 watch && 开发 Server 开发模式
 
-    * `npm run prod:quick`：      快应用小程序生产环境构建
+    * `npm run prod:quick`：      快应用小程序生产环境构建（没有 watch && 开发 Server）
 
 ### 注意
 
