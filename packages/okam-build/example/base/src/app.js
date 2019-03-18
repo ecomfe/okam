@@ -60,7 +60,14 @@ export default {
             'pages/components/progress',
             'pages/components/scrollview',
             'pages/components/switch',
-            'pages/components/slider'
+            'pages/components/slider',
+            'pages/components/swiper',
+            'pages/components/input',
+            'pages/components/textarea',
+            'pages/components/picker',
+            'pages/components/form',
+            'pages/components/richText',
+            'pages/components/video'
         ],
         subPackages: [
             {

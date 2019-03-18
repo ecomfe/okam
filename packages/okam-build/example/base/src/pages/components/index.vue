@@ -46,6 +46,10 @@ export default {
                     {
                         subName: 'Progress',
                         path: 'progress'
+                    },
+                    {
+                        subName: 'RichText',
+                        path: 'richText'
                     }
                 ]
             },
@@ -69,6 +73,22 @@ export default {
                     {
                         subName: '滑块选择器',
                         path: 'slider'
+                    },
+                    {
+                        subName: '输入框',
+                        path: 'input'
+                    },
+                    {
+                        subName: '多行输入框',
+                        path: 'textarea'
+                    },
+                    {
+                        subName: '选择器',
+                        path: 'picker'
+                    },
+                    {
+                        subName: 'Form',
+                        path: 'form'
                     }
                 ]
             },
@@ -80,6 +100,10 @@ export default {
                     {
                         subName: '滚动视图',
                         path: 'scrollview'
+                    },
+                    {
+                        subName: '滑块视图',
+                        path: 'swiper'
                     }
                 ]
             },
@@ -91,6 +115,10 @@ export default {
                     {
                         subName: '图片',
                         path: 'image'
+                    },
+                    {
+                        subName: '视频',
+                        path: 'video'
                     }
                 ]
             }
