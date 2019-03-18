@@ -368,24 +368,27 @@ function compileComponent(component, file, buildManager) {
             scriptFile.isComponentScript = true;
         }
 
-        // pass the refs info defined in tpl to script
-        scriptFile.tplRefs = tplFile.refs;
+        if (tplFile) {
+            // pass the refs info defined in tpl to script
+            scriptFile.tplRefs = tplFile.refs;
 
-        // init global components used by the component
-        scriptFile.injectComponents = getImportComponents(
-            scriptFile,
-            buildManager.globalComponents,
-            tplFile.tags,
-        );
-        buildManager.logger.debug(
-            scriptFile.path,
-            'inject components',
-            scriptFile.injectComponents
-        );
+            // init global components used by the component
+            scriptFile.injectComponents = getImportComponents(
+                scriptFile,
+                buildManager.globalComponents,
+                tplFile.tags,
+            );
+            buildManager.logger.debug(
+                scriptFile.path,
+                'inject components',
+                scriptFile.injectComponents
+            );
+        }
+
         compile(scriptFile, buildManager);
 
         // compile template again
-        compileComponentTpl(tplFile, scriptFile, buildManager);
+        tplFile && compileComponentTpl(tplFile, scriptFile, buildManager);
     }
 
     let styleFiles = component.styles || [];
