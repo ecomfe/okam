@@ -1,12 +1,18 @@
 <template>
     <input class="weui-input" :value="value == null ? '' : value"
         :disabled="disabled" :type="inputType" :autofocus="focus"
-        :maxlength="allowInputMaxLen" :placeholder="placeholder || ''" v-bind="$attrs"
+        :maxlength="allowInputMaxLen" :placeholder="placeholder || ''"
+        :name="name || ''" v-bind="$attrs"
         @input="onInput" @focus="onFocus" @blur="onBlur" @change="onChange" @keydown.enter="onEnter" />
 </template>
 <script>
+import formField from './mixins/formField';
+
 export default {
+    mixins: [formField],
+
     props: {
+        name: String,
         value: String,
         type: {
             type: String,
@@ -118,6 +124,14 @@ export default {
                     value: e.target.value
                 }
             });
+        },
+
+        getFieldValue() {
+            return this.$el.value;
+        },
+
+        resetFieldValue() {
+            this.$el.value = '';
         }
     }
 };

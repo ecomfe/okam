@@ -2,7 +2,7 @@
     <div :class="classNames" @scroll="onScroll"><slot></slot></div>
 </template>
 <script>
-import {throttle, unitStyle} from './util';
+import {throttle} from './util';
 
 export default {
     props: {
@@ -182,7 +182,7 @@ export default {
                 scrollLeft,
                 scrollTop,
                 scrollWidth,
-                scrollHeight,
+                scrollHeight
             } = e.target;
 
             const deltaX = oldScrollLeft - scrollLeft;

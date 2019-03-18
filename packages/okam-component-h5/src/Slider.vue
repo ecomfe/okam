@@ -11,8 +11,13 @@
     </div>
 </template>
 <script>
+import formField from './mixins/formField';
+
 export default {
+    mixins: [formField],
+
     props: {
+        name: String,
         min: {
             type: Number,
             default: 0
@@ -174,6 +179,15 @@ export default {
             let {left} = e.target.getBoundingClientRect();
             this.barWidth = this.$refs.slider.clientWidth;
             this.updateSliderValue(this.min, left, e.clientX);
+            this.$emit('change', {detail: {value: this.currValue}});
+        },
+
+        getFieldValue() {
+            return this.currValue;
+        },
+
+        resetFieldValue() {
+            this.currValue = this.min;
         }
     }
 };

@@ -5,7 +5,11 @@
         @input="onInput" @focus="onFocus" @blur="onBlur" @change="onChange" />
 </template>
 <script>
+import formField from './mixins/formField';
+
 export default {
+    mixins: [formField],
+
     props: {
         value: String,
         type: {
@@ -154,6 +158,14 @@ export default {
                     value: e.target.value
                 }
             });
+        },
+
+        getFieldValue() {
+            return this.$el.value;
+        },
+
+        resetFieldValue() {
+            this.$el.value = '';
         }
     }
 };

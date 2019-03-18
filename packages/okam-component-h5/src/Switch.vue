@@ -1,15 +1,20 @@
 <template>
     <input :class="classNames" :style="styleValue" type="checkbox"
-        :disabled="disabled" :checked="checked" @change="onChange" />
+        :disabled="disabled" :checked="currChecked" @change="onChange" />
 </template>
 <script>
+import formField from './mixins/formField';
+
 const TYPE_CLASS_MAP = {
     switch: 'switch',
     checkbox: 'check'
 };
 
 export default {
+    mixins: [formField],
+
     props: {
+        name: String,
         checked: {
             type: Boolean,
             default: false
@@ -64,6 +69,14 @@ export default {
                     value: this.currChecked
                 }
             });
+        },
+
+        getFieldValue() {
+            return this.currChecked;
+        },
+
+        resetFieldValue() {
+            this.currChecked = false;
         }
     }
 };
