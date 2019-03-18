@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 2019-03-18
+
+### okam-cli@0.1.11
+* **新功能**
+    * 新增 UI 组件开发模板支持 ([ae54590](https://github.com/ecomfe/okam/commit/ae54590))
+
 ## 2019-02-27
 
 ### okam-build@0.4.23
