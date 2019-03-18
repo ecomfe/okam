@@ -10,8 +10,8 @@
 import {execAsyncApiCallback} from '../helper';
 import {renderTpl} from './common/helper';
 
-const FADE_IN_CLASS = 'okam-api-fade-in';
-const FADE_OUT_CLASS = 'okam-api-fade-out';
+const FADE_IN_CLASS = 'weui-animate-fade-in';
+const FADE_OUT_CLASS = 'weui-animate-fade-out';
 
 const MASK_CLASS = 'weui-mask';
 const MODAL_CLASS = 'weui-dialog';

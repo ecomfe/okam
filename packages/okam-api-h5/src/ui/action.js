@@ -9,8 +9,8 @@
 
 import {execAsyncApiCallback} from '../helper';
 
-const FADE_IN_CLASS = 'okam-api-fade-in';
-const FADE_OUT_CLASS = 'okam-api-fade-out';
+const FADE_IN_CLASS = 'weui-animate-fade-in';
+const FADE_OUT_CLASS = 'weui-animate-fade-out';
 
 const ACTION_SHEET_CLASS = 'weui-actionsheet';
 const ACTION_TOGGLE_CLASS = 'weui-actionsheet_toggle';

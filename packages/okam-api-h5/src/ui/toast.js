@@ -15,8 +15,8 @@ let toastElem;
 let hideTimer;
 let animationTimer;
 
-const FADE_IN_CLASS = 'okam-api-fade-in';
-const FADE_OUT_CLASS = 'okam-api-fade-out';
+const FADE_IN_CLASS = 'weui-animate-fade-in';
+const FADE_OUT_CLASS = 'weui-animate-fade-out';
 
 const TOAST_CLASS = 'okam-api-toast';
 const TOAST_ICON_CLASS = 'okam-api-toast-icon';
