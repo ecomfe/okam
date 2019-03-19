@@ -12,7 +12,7 @@
         <button plain class="add-todo-btn" @click="onAddTodo">增加 Todo</button>
         <view class="todo-list">
             <view class="todo-item new-item" if="addNew">
-                <input focus="true" placeholder="输入 Todo 项内容" type="text"
+                <input focus placeholder="输入 Todo 项内容" type="text"
                     class="todo-input" @blur="onInputDone" @confirm="onInputDone"/>
             </view>
             <view class="empty-tip" if="!filterList.length">无</view>

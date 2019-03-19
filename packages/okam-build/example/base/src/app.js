@@ -51,6 +51,7 @@ export default {
             'pages/api/image',
             'pages/api/websocket',
             'pages/api/scroll',
+            'pages/api/tab',
             'pages/components/index',
             'pages/components/text',
             'pages/components/checkbox',
@@ -88,6 +89,35 @@ export default {
             backgroundTextStyle: 'light',
             enablePullDownRefresh: false,
             backgroundColor: '#211E2E'
+        },
+        tabBar: {
+            color: '#2196F3',
+            selectedColor: '#f44336',
+            backgroundColor: '#ccc',
+            // borderStyle: 'white', // 'black',
+            // position: 'top', // 'bottom',
+            list: [
+                {
+                    pagePath: 'pages/home/index',
+                    text: '首页',
+                    iconPath: 'common/img/data.png',
+                    selectedIconPath: 'common/img/ui.png'
+                },
+                {
+                    pagePath: 'pages/api/index',
+                    text: 'API',
+                    iconPath: 'common/img/api.png'
+                },
+                {
+                    pagePath: 'pages/components/index',
+                    text: '组件',
+                    iconPath: 'common/img/component.png'
+                },
+                {
+                    pagePath: 'pages/api/tab',
+                    text: 'TabBar'
+                }
+            ]
         },
 
         networkTimeout: {

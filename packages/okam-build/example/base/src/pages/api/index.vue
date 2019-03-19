@@ -50,6 +50,10 @@ export default {
                     {
                         subName: '图片',
                         path: 'api/image'
+                    },
+                    {
+                        subName: 'TabBar',
+                        path: 'api/tab'
                     }
                 ]
             },
