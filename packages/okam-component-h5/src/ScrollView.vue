@@ -2,7 +2,7 @@
     <div :class="classNames" @scroll="onScroll"><slot></slot></div>
 </template>
 <script>
-import {throttle} from './util';
+import {throttle} from './common/util';
 
 export default {
     props: {

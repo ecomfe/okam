@@ -2,7 +2,7 @@
     <div class="okam-image" :style="styleValue"></div>
 </template>
 <script>
-import {uuid, throttle} from './util';
+import {uuid, throttle} from './common/util';
 
 const WIDTH_FIX_MODE = 'widthFix';
 

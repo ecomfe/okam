@@ -7,7 +7,7 @@
     </div>
 </template>
 <script>
-import {unitStyle} from './util';
+import {unitStyle} from './common/util';
 
 export default {
     props: {

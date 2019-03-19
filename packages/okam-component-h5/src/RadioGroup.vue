@@ -2,7 +2,7 @@
     <div><slot></slot></div>
 </template>
 <script>
-import {uuid} from './util';
+import {uuid} from './common/util';
 import formField from './mixins/formField';
 
 function getUniqueName() {

@@ -9,7 +9,7 @@
 <script>
 export default {
     props: {
-        value: String,
+        value: [String, Number],
         disabled: {
             type: Boolean,
             default: false

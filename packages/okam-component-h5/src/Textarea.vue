@@ -62,12 +62,6 @@ export default {
         }
     },
 
-    mounted() {
-        if (this.autoFocus) {
-            this.focus = true;
-        }
-    },
-
     watch: {
         focus: 'focusInput',
         value: {
