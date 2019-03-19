@@ -22,6 +22,45 @@ const {
 } = require('./component');
 
 /**
+ * Get TabBar config visitor
+ *
+ * @inner
+ * @param {Object} t the babel type definition
+ * @param {Function} callback the callback to be executed when tabBar config definition found
+ * @return {Object}
+ */
+function getTabBarConfigVisitor(t, callback) {
+    return {
+        ObjectProperty: {
+            enter(path) {
+                let prop = path.node;
+                let key = prop.key;
+                let keyName = key && key.name;
+                if (keyName === 'tabBar') {
+                    callback && callback(prop.value);
+                }
+                else if (keyName === 'iconPath' || keyName === 'selectedIconPath') {
+                    let iconPath = prop.value;
+                    if (t.isStringLiteral(iconPath)) {
+                        iconPath = iconPath.value;
+
+                        if (iconPath.charAt(0) !== '.') {
+                            iconPath = `./${iconPath}`;
+                        }
+                        path.get('value').replaceWith(
+                            t.callExpression(
+                                t.identifier('require'),
+                                [t.stringLiteral(iconPath)]
+                            )
+                        );
+                    }
+                }
+            }
+        }
+    };
+}
+
+/**
  * Traverse the module definition information and extract the `config` information
  * for the app/page/component or mixins/components for page/component.
  *
@@ -29,9 +68,10 @@ const {
  * @param {Object} t the babel type definition
  * @param {Object} initConfig the config used to cache the extracted information
  * @param {Object} opts the transformation options
+ * @param {Function} configCallback the callback to be executed when config definition found
  * @return {Object}
  */
-function getCodeTraverseVisitors(t, initConfig, opts) {
+function getCodeTraverseVisitors(t, initConfig, opts, configCallback) {
     let {
         isPage,
         isComponent,
@@ -48,6 +88,8 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             let key = prop.key;
             let keyName = key && key.name;
             if (!isBehavior && keyName === 'config') {
+                configCallback && configCallback(path.get('value'));
+
                 // extract the app/component/page config definition
                 let config = getPlainObjectNodeValue(prop.value, path, t);
                 initConfig.config = config;
@@ -75,7 +117,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
 
                 path.skip();
             }
-            if (dataPropValueToFunc && !isBehavior && keyName === 'data') {
+            else if (dataPropValueToFunc && !isBehavior && keyName === 'data') {
                 convertDataPropObjectValueToFunction(prop, t);
                 // skip children traverse
                 path.skip();
@@ -146,6 +188,61 @@ function createInitCallArgs(declarationPath, config, opts, t) {
 }
 
 /**
+ * Init h5 app create call args
+ *
+ * @inner
+ * @param {Object} t the babel type definition
+ * @param {Object} opts the transformation options
+ * @param {?Object} configPath the config node path
+ * @param {Array} callArgs the app creator call args to init
+ */
+function initH5AppCreateCallArgs(t, opts, configPath, callArgs) {
+    let {routeConfigModId, path, bodyPath} = opts;
+    if (!routeConfigModId) {
+        return;
+    }
+
+    let tabBarConfigNode;
+    if (configPath) {
+        configPath.traverse(
+            getTabBarConfigVisitor(
+                t, node => (tabBarConfigNode = node)
+            )
+        );
+    }
+
+    let routerExpression = t.memberExpression(
+        t.callExpression(
+            t.identifier('require'),
+            [t.stringLiteral(routeConfigModId)]
+        ),
+        t.identifier('default')
+    );
+
+    let tabBarProp;
+    if (tabBarConfigNode) {
+        let tabBarClassName = path.scope.generateUid('TabBar');
+        bodyPath.insertBefore(
+            createImportDeclaration(tabBarClassName, 'okam-component-h5/src/TabBar', t)
+        );
+
+        tabBarProp = t.objectProperty(
+            t.identifier('tabBar'),
+            t.objectExpression([
+                t.objectProperty(t.identifier('creator'), t.identifier(tabBarClassName)),
+                t.objectProperty(t.identifier('props'), tabBarConfigNode)
+            ])
+        );
+    }
+
+    let objExpressionArgs = [
+        t.objectProperty(t.identifier('routes'), routerExpression)
+    ];
+    tabBarProp && objExpressionArgs.push(tabBarProp);
+    callArgs.unshift(t.objectExpression(objExpressionArgs));
+}
+
+/**
  * Transform mini program code
  *
  * @inner
@@ -157,10 +254,13 @@ function createInitCallArgs(declarationPath, config, opts, t) {
  * @param {Object} opts the transformation options
  */
 function transformMiniProgram(t, path, declarationPath, config, opts) {
+    let foundConfigPath;
     if (t.isObjectExpression(declarationPath)) {
         // extract the config information defined in the code
         declarationPath.traverse(
-            getCodeTraverseVisitors(t, config, opts)
+            getCodeTraverseVisitors(
+                t, config, opts, configPath => (foundConfigPath = configPath)
+            )
         );
     }
     else if (opts.isExtension) {
@@ -193,17 +293,12 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
     let callArgs = createInitCallArgs(declarationPath, config.config, opts, t);
 
     // add h5 app router config argument
-    let {routeConfigModId} = opts;
-    if (routeConfigModId) {
-        let routerExpression = t.memberExpression(
-            t.callExpression(
-                t.identifier('require'),
-                [t.stringLiteral(routeConfigModId)]
-            ),
-            t.identifier('default')
-        );
-        callArgs.unshift(routerExpression);
-    }
+    let h5InitOpts = {
+        routeConfigModId: opts.routeConfigModId,
+        path,
+        bodyPath
+    };
+    initH5AppCreateCallArgs(t, h5InitOpts, foundConfigPath, callArgs);
 
     let needExport = opts.needExport || !opts.baseClass;
     let toReplacePath = needExport

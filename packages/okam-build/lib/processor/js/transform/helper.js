@@ -61,9 +61,17 @@ function getPlainObjectNodeValue(node, path, t) {
     else if (t.isLiteral(node)) {
         result = node.value;
     }
+    else if (t.isCallExpression(node)
+        && t.isIdentifier(node.callee)
+        && node.callee.name === 'require'
+        && t.isStringLiteral(node.arguments[0])
+    ) {
+        result = node.arguments[0].value;
+    }
     else {
         throw path.buildCodeFrameError('only constant is supported');
     }
+
     return result;
 }
 
