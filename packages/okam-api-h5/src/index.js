@@ -22,6 +22,7 @@ import actionSheetApi from './ui/action';
 import modalApi from './ui/modal';
 import wsApi from './ws';
 import scrollApi from './scroll';
+import tabBarApi from './tab';
 
 export default Object.assign(
     selectorApi,
@@ -39,5 +40,6 @@ export default Object.assign(
     actionSheetApi,
     modalApi,
     wsApi,
-    scrollApi
+    scrollApi,
+    tabBarApi
 );
