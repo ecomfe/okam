@@ -18,7 +18,8 @@ module.exports = {
             okam: utils.resolve('../src'),
             pages: utils.resolve('src/pages'),
             static: utils.resolve('static'),
-            components: utils.resolve('src/components')
+            components: utils.resolve('src/components'),
+            'okam-api-h5': utils.resolve('../../okam-api-h5')
         }
     },
 
