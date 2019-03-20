@@ -10,7 +10,7 @@ import store from './store/index';
 import './app.styl';
 
 if (process.env.APP_TYPE === 'h5') {
-    require('normalize.css');
+    // require('normalize.css');
     require('okam-component-h5/src/index.css');
 }
 

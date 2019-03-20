@@ -1,10 +1,10 @@
 <template>
     <view class="swiper-component-wrap">
-        <!-- <swiper class="swiper" @change="onChangeManual">
-            <swiper-item v-for="item in imgUrls" :key="item">
+        <swiper :currentItemId="11" class="swiper" @change="onChangeManual">
+            <swiper-item :item-id="10 + index" v-for="(item, index) in imgUrls" :key="item">
                 <image :src="item" class="slide-image" style="width: 100%" />
             </swiper-item>
-        </swiper> -->
+        </swiper>
         <swiper class="swiper"
             :indicatorDots="true"
             indicatorColor="#ccc"
@@ -53,9 +53,9 @@ export default {
             'http://img5.imgtn.bdimg.com/it/u=3943723512,1898909937&fm=26&gp=0.jpg',
             'http://img3.imgtn.bdimg.com/it/u=3782685451,3066622536&fm=26&gp=0.jpg',
             'http://img0.imgtn.bdimg.com/it/u=3272199364,3404297250&fm=26&gp=0.jpg',
-            // 'http://img2.imgtn.bdimg.com/it/u=2682247153,4259400185&fm=26&gp=0.jpg',
-            // 'http://www.qnong.com.cn/uploadfile/2016/0416/20160416101826914.jpg',
-            // 'http://img3.imgtn.bdimg.com/it/u=2116894832,602371176&fm=27&gp=0.jpg'
+            'http://img2.imgtn.bdimg.com/it/u=2682247153,4259400185&fm=26&gp=0.jpg',
+            'http://www.qnong.com.cn/uploadfile/2016/0416/20160416101826914.jpg',
+            'http://img3.imgtn.bdimg.com/it/u=2116894832,602371176&fm=27&gp=0.jpg'
 
         ],
         currentIdx: 0,
