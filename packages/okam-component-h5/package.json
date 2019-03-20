@@ -24,7 +24,8 @@
   },
   "peerDependencies": {
     "vue": "^2.6.7",
-    "vue-router": "^3.0.2"
+    "vue-router": "^3.0.2",
+    "okam-api-h5": "^0.1.0"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.29",
@@ -40,8 +41,6 @@
     "webpack": "^4.29.5"
   },
   "dependencies": {
-    "classnames": "^2.2.6",
-    "okam-api-h5": "^0.1.0",
     "weui": "^1.1.3"
   }
 }

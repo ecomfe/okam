@@ -5,11 +5,6 @@
 <script>
 import formField from './mixins/formField';
 
-const TYPE_CLASS_MAP = {
-    switch: 'switch',
-    checkbox: 'check'
-};
-
 export default {
     mixins: [formField],
 

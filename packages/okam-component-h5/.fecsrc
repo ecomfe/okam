@@ -7,7 +7,9 @@
 
         "rules": {
             "fecs-no-require": -1,
-            "no-console": 0
+            "no-console": 0,
+            "fecs-properties-quote": -1,
+            "fecs-esnext-ext": -1
         }
     }
 }

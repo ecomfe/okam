@@ -7,7 +7,6 @@
     </button>
 </template>
 <script>
-import classnames from 'classnames';
 import getHoverMixin from './mixins/hover';
 
 export default {
@@ -47,17 +46,15 @@ export default {
             let disabled = this.disabled;
             let type = this.type;
             let hoverClass = this.getHoverClass() || '';
-            return classnames(
-                'weui-btn',
-                {
-                    [`${hoverClass}`]: this.hover,
-                    [`weui-btn_plain-${type}`]: plain,
-                    [`weui-btn_${type}`]: !plain && type,
-                    'weui-btn_mini': this.size === 'mini',
-                    'weui-btn_loading': this.loading,
-                    'weui-btn_disabled': disabled
-                }
-            );
+            return {
+                'weui-btn': true,
+                [`${hoverClass}`]: this.hover,
+                [`weui-btn_plain-${type}`]: plain,
+                [`weui-btn_${type}`]: !plain && type,
+                'weui-btn_mini': this.size === 'mini',
+                'weui-btn_loading': this.loading,
+                'weui-btn_disabled': disabled
+            };
         }
     },
 
