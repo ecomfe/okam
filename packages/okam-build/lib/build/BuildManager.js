@@ -131,15 +131,20 @@ class BuildManager extends EventEmitter {
     }
 
     onAddNewFile(file) {
-        if (this.envFileUpdated) {
-            return;
-        }
-
         // replace module okam-core/na/index.js content using specified app env module
         if (file.path.indexOf('node_modules/okam-core/src/na/index.js') !== -1) {
             let naEnvModuleId = `../${this.appType}/env`;
             file.content = `'use strict;'\nexport * from '${naEnvModuleId}';\n`;
-            this.envFileUpdated = true;
+        }
+        else if (file.path.indexOf('node_modules/regenerator-runtime/runtime.js') !== -1) {
+            // fix regenerator-runtime>=0.13.2 throw exception in wx
+            let content = file.content.toString();
+            file.content = content.replace(
+                'Function("r", "regeneratorRuntime = r")(runtime);',
+                match => {
+                    return `try {${match}} catch(e) {}`;
+                }
+            );
         }
     }
 
