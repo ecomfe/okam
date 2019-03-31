@@ -72,3 +72,13 @@ exports.format = function (tpl, data, ignoreUndefined = false) {
         return result;
     });
 };
+
+/**
+ * Escape the regexp string
+ *
+ * @param {string} str the regexp string to escape
+ * @return {string}
+ */
+exports.escapeRegExp = function (str) {
+    return str.replace(/([\*\.\^\$\?\(\)\+\[\]\{\}\|\\])/g, '\\$1');
+};
