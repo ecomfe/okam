@@ -145,7 +145,11 @@ class BuildManager extends EventEmitter {
             processors: [
                 [
                     'replacement',
-                    {'process.env.APP_TYPE': `"${this.appType}"`}
+                    {
+                        'process.env.APP_TYPE': `"${this.appType}"`,
+                        'process.env.NODE_ENV': this.isDev
+                            ? '"development"' : '"production"'
+                    }
                 ]
             ]
         });

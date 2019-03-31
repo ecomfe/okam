@@ -7,21 +7,20 @@
 
 const strUtil = require('../util').string;
 
-function replaceContent(str, match, replacement) {
+function replaceContent(content, match, replacement) {
     if (match === replacement) {
-        return str;
+        return content;
     }
 
     if (typeof match === 'string') {
-        // by default replace all matched content if the match is string
-        while (str.indexOf(match) !== -1) {
-            str = str.replace(match, replacement);
-        }
+        match = strUtil.escapeRegExp(match);
+        content = content.replace(new RegExp(match, 'g'), replacement);
     }
     else {
-        str = str.replace(match, replacement);
+        content = content.replace(match, replacement);
     }
-    return str;
+
+    return content;
 }
 
 function doReplacement(content, rules, file) {
@@ -32,6 +31,11 @@ function doReplacement(content, rules, file) {
     }
 
     let result = content;
+    let upContent = (match, replacement) => {
+        replacement = strUtil.format(replacement, tplData, false);
+        result = replaceContent(result, match, replacement);
+    };
+
     if (Array.isArray(rules)) {
         rules.forEach(item => {
             if (typeof item === 'function') {
@@ -39,20 +43,18 @@ function doReplacement(content, rules, file) {
             }
             else if (typeof item === 'object') {
                 let {match, replace} = item;
-                replace = strUtil.format(replace, tplData, false);
-                result = replaceContent(result, match, replace);
+                upContent(match, replace);
             }
         });
     }
     else if (typeof rules === 'object') {
-        Object.keys(rules).forEach(k => {
-            let value = rules[k];
-            if (typeof value !== 'string') {
-                value = '' + value;
+        Object.keys(rules).forEach(match => {
+            let replace = rules[match];
+            if (typeof replace !== 'string') {
+                replace = '' + replace;
             }
 
-            let replace = strUtil.format(value, tplData, false);
-            result = replaceContent(result, k, replace);
+            upContent(match, replace);
         });
     }
 
