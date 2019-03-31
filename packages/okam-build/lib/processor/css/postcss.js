@@ -27,6 +27,12 @@ const BUILTIN_PLUGINS = {
             precision: 2
         }
     },
+    px2rem: {
+        path: path.join(__dirname, 'plugins', 'postcss-plugin-px2rem.js'),
+        options: {
+            precision: 2
+        }
+    },
     env: {
         path: path.join(__dirname, 'plugins', 'postcss-plugin-env.js')
     },
