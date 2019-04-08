@@ -139,7 +139,7 @@ function isCompFileExists(filePath, compileContext) {
     }
     const fileName = getFileName(filePath);
     let sameNameFiles = cacheDirFiles[fileName];
-    return sameNameFiles.indexOf(filePath) >= 0;
+    return sameNameFiles && sameNameFiles.indexOf(filePath) >= 0;
 }
 
 /**
