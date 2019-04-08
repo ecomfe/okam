@@ -109,7 +109,7 @@ function getWebpackConfig(isDev, options) {
  * @param {Object} options the build options
  * @param {string} options.root the project root
  * @param {string} options.sourceDir the build output source dir
- * @param {Array=} options.devServerMws the middewares of the dev server
+ * @param {Array=} options.devServerMws the middlewares of the dev server
  * @param {Object=} options.webpack the custom webpack build config, the detail
  *        option please refer webpack.base.conf.js
  * @param {string=} options.homePath the home page path
@@ -142,11 +142,13 @@ function buildH5App(isDev, options, logger) {
     }
     else {
         compiler.run((err, stats) => {
+            logger.closeErasable();
             logger.info('Webpack compile done');
             let statsInfo = require('./stats').formatStats(
                 stats, webpackConfig.output.path
             );
             console.log(`\n${statsInfo}`);
+            logger.openErasable();
         });
     }
 
@@ -182,9 +184,12 @@ function buildH5App(isDev, options, logger) {
                     let msgs = getBuildSuccessMessages(
                         isDev, devServerOpts, options.homePath
                     );
+
+                    logger.closeErasable();
                     msgs.forEach(item => {
                         logger.info(item);
                     });
+                    logger.openErasable();
                 }
                 resolve();
             }
