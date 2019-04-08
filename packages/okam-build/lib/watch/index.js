@@ -41,12 +41,19 @@ function createFileMonitor(buildConf, buildManager) {
     buildManager.files.on('addFile', f => monitor.add(f.path));
 
     let logger = buildManager.logger;
-    monitor.on('ready', () => logger.info(
-        colors.cyan('Watch file change start...')
-    ));
+    monitor.on('ready', () => {
+        logger.closeErasable();
+        logger.info(
+            colors.cyan('Watch file change start...')
+        );
+        logger.openErasable();
+    });
 
     monitor.on('watch', (type, file) => {
+        logger.closeErasable();
         logger.info('watch', colors.cyan(type), colors.gray(file));
+        logger.openErasable();
+
         let handler = watchHandler[type];
         handler && handler(file, buildManager);
     });

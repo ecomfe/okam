@@ -60,7 +60,13 @@ function initLogger(logger, logLevel, options) {
             logLevel = 'info';
         }
 
+        let erasable = true;
+        if (options && options.logErasable !== undefined) {
+            erasable = !!options.logErasable;
+        }
+
         logger = defaultLogger.create({
+            erasable,
             prefix: 'okam',
             level: logLevel
         });

@@ -39,7 +39,9 @@ class ServerBase {
     }
 
     onStarted() {
+        this.logger.closeErasable();
         this.logger.info('DevServer started:', colors.cyan(`http://${this.ip}:${this.port}`));
+        this.logger.openErasable();
     }
 }
 

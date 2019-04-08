@@ -12,7 +12,6 @@ const pkgInfo = require('../../../package.json');
 const {getVersionAsync, file: fileUtil} = require('../../util');
 const {createFile} = require('../../processor/FileFactory');
 
-
 const OKAM_CLI_VERSION_CMD = 'okam --version';
 const FRAMEWORK_INFO_FILE_NAME = '.frameworkinfo';
 

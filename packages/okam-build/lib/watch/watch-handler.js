@@ -94,14 +94,18 @@ function rebuildFiles(file, buildManager) {
     if (outputFiles.length) {
         let logger = buildManager.logger;
         buildManager.release(outputFiles).then(
-            () => logger.info(
-                'rebuild',
-                colors.cyan(releaseFiles.processFileNum),
-                'output',
-                colors.cyan(outputFiles.length),
-                'files done:',
-                colors.grey(timer.tick())
-            )
+            () => {
+                logger.closeErasable();
+                logger.info(
+                    'rebuild',
+                    colors.cyan(releaseFiles.processFileNum),
+                    'output',
+                    colors.cyan(outputFiles.length),
+                    'files done:',
+                    colors.grey(timer.tick())
+                );
+                logger.openErasable();
+            }
         );
     }
 }
