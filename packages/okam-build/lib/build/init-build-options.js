@@ -95,9 +95,11 @@ function initBuildOptions(appType, options, cliOpts = {}) {
     let userConfig = getUserBuildConfig(
         options, appType, cliOpts.config
     );
+    let userOutputFile = userConfig.output && userConfig.output.file;
 
     // merge user config with default config
     let buildConf = getDefaultBuildConfig(appType);
+    let rawBaseOutputFile = buildConf.output && buildConf.output.file;
     buildConf = merge({}, buildConf, userConfig, {appType});
 
     let {watch: watchMode, server: serverMode, port} = cliOpts || {};
@@ -125,6 +127,18 @@ function initBuildOptions(appType, options, cliOpts = {}) {
     let outputOpts = buildConf.output;
     let outputDir = path.resolve(rootDir, outputOpts.dir || 'dist');
     buildConf.output = Object.assign({}, outputOpts, {dir: outputDir});
+
+    // for user custom file output providing extra raw output file filter handler
+    let superOutputFile = function (...args) {
+        return rawBaseOutputFile && rawBaseOutputFile.apply(this, args);
+    };
+    if (userOutputFile) {
+        buildConf.output.file = function (...args) {
+            return userOutputFile.apply(
+                this, args.concat(superOutputFile.bind(this, ...args))
+            );
+        };
+    }
 
     // init logger
     let {logger, logLevel} = buildConf;

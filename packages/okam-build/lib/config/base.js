@@ -216,9 +216,11 @@ module.exports = {
          *
          * @param {string} path 要输出的文件相对路径
          * @param {Object} file 要输出的文件对象
+         * @param {Function=} next 父配置的文件输出处理方法，如果想保留父（基础）配置，可以
+         *        在自己过滤处理后调用该方法
          * @return {boolean|string}
          */
-        file(path, file) {
+        file(path, file, next) {
             if (file.isStyle && file.extname !== 'css' && !file.compiled) {
                 return false;
             }
