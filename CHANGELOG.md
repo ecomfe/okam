@@ -1,5 +1,17 @@
 # ChangeLog
 
+## 2019-04-18
+
+### okam-build@0.4.24
+
+* **Bug修复**
+    * 修复引用 NPM `mixin` 文件，解析 `mixin` 文件路径出错问题 ([8054ffa](https://github.com/ecomfe/okam/commit/8054ffa))
+    * 修复 `app` 配置里的 `pages` 文件路径不存在异常问题 ([ee3af06](https://github.com/ecomfe/okam/commit/ee3af06))
+    * 修复 `regenerator-runtime@0.13.2` 引入报错问题，参考[问题集锦说明](https://ecomfe.github.io/okam/#/questions/problems?id=%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F) ([2e18c39](https://github.com/ecomfe/okam/commit/2e18c39))
+
+* **新功能**
+    * 增加构建选项 `output.file` 附加 `next` 参数，用于调用基础配置的 `output.file` 过滤器 ([b05d14b](https://github.com/ecomfe/okam/commit/b05d14b))
+
 ## 2019-03-18
 
 ### okam-cli@0.1.11
