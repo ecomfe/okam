@@ -1,5 +1,14 @@
 # ChangeLog
 
+
+## 2019-05-25
+
+### okam-core@0.4.15
+
+* **Bug修复**
+    * 修复 `Redux` 扩展，`$app.$store` 传入为 `function` 类型，导致初始化时候 `$app.$store.subscribe` 报未定义错问题 ([d33f26e](https://github.com/ecomfe/okam/commit/d33f26e))
+ 
+
 ## 2019-04-18
 
 ### okam-build@0.4.24
