@@ -12,7 +12,7 @@ import Vue from './Vue';
 
 function subscribeStoreChange() {
     let computedKeys = Object.keys(this.$rawComputed || {});
-    if (computedKeys.length && !this.__unsubscribeStore) {
+    if (computedKeys.length && !this.__unsubscribeStore && this.$store) {
         this.__unsubscribeStore = Vue.initDataGetSet(this);
     }
 }

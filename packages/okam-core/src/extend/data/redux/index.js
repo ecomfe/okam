@@ -10,7 +10,7 @@
 import connect from './connect';
 
 function subscribeStoreChange() {
-    if (this.__storeChangeHandler && !this.__unsubscribeStore) {
+    if (this.__storeChangeHandler && !this.__unsubscribeStore && this.$store) {
         this.__unsubscribeStore = this.$store.subscribe(
             this.$fireStoreChange
         );
