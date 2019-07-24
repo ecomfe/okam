@@ -30,7 +30,11 @@
                             // 保持 不转 px 的注释值，默认: px2rpx: no
                             // keepComment: 'px2rpx: no'
                             // ignore(path):boolean 忽略要转换的文件
-                            // ignore(path) { // ... return false;}
+                            // ignore(path) {
+                            //    // 为 false 的时候 表示不忽略，
+                            //    // 内部默认 node_module 模块不支持px2rpx，想要node_module也转可以 可以加上此代码
+                            //    return false;
+                            // }
                         }
                     }
                 }
