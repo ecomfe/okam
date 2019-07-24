@@ -63,7 +63,7 @@
 | |  |  | contact-button | | |
 | | ad | ad |  | | |
 | |official-account |  | | | |
-| 其他|aria-component |  |aria-component | | | |
+| 无障碍支持|aria-component |  |aria-component | | | |
 
 ## 组件对齐
 
