@@ -23,9 +23,9 @@
     "url": "https://github.com/ecomfe/okam/issues"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0",
-    "mocha": "^5.2.0",
-    "nyc": "^13.0.1",
+    "cross-env": "^6.0.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
     "promise-polyfill": "^8.0.0",
     "redux": "^4.0.1",
     "regenerator-runtime": "^0.12.1",
