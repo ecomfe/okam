@@ -33,6 +33,7 @@
 |表单组件 | button | button | button | button | |
 | | checkbox-group | checkbox-group | checkbox-group | checkbox-group||
 | | checkbox | checkbox | checkbox | checkbox ||
+| | editor |  |  |  ||
 | | form | form | form | form ||
 | | input | input | input | input | input|
 | | label | label | label | label | label |

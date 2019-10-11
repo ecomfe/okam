@@ -99,7 +99,7 @@ export default {
     },
 
     // 逻辑
-    method: {
+    methods: {
     }
 };
 </script>
