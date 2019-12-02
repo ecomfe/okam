@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 2019-12-02
+
+### okam-build@0.4.15
+
+* **Bug修复**
+    * 修复 `data-x-self` 默认赋值问题，将对象模块的数据属性换成 bool 的 true 而不是 string 的 true ([5fde97b](https://github.com/ecomfe/okam/commit/5fde97b))
+
 
 ## 2019-05-25
 
@@ -7,7 +14,7 @@
 
 * **Bug修复**
     * 修复 `Redux` 扩展，`$app.$store` 传入为 `function` 类型，导致初始化时候 `$app.$store.subscribe` 报未定义错问题 ([d33f26e](https://github.com/ecomfe/okam/commit/d33f26e))
- 
+
 
 ## 2019-04-18
 

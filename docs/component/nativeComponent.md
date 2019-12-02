@@ -28,6 +28,7 @@
 | | rich-text | rich-text | rich-text | rich-text | richtext|
 | | progress | progress | progress | progress | progress |
 | | | animation-view | | | |
+| | | animation-video | | | |
 | |  |  |  | | rating |
 | |  |  |  | | span |
 |表单组件 | button | button | button | button | |
@@ -48,7 +49,9 @@
 | | switch | switch | switch | switch |switch |
 | | textarea | textarea | textarea | textarea |textarea |
 |导航 | navigator | navigator | navigator | navigator | a|
-| | functional-page-navigator |  |  |  | |
+| | functional-page-navigator | functional-page-navigator |  |  | |
+| |  | tabs |  |  | |
+| |  | tab-item |  |  | |
 |媒体组件 | audio | audio |  | |
 | | image | image | image | image | image |
 | | video | video |  | video | video |
@@ -65,6 +68,8 @@
 | | ad | ad |  | | |
 | |official-account |  | | | |
 | 无障碍支持|aria-component |  |aria-component | | | |
+|导航栏 | navigation-bar |  |  | |
+|页面导航条配置节点 | page-meta |  |  | |
 
 ## 组件对齐
 
