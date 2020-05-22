@@ -7,7 +7,7 @@
 
 const merge = require('../../../').merge;
 module.exports = merge({}, require('./base.config'), {
-    polyfill: ['async'],
+    localPolyfill: ['async'],
     wx2swan: true,
     framework: ['filter'],
     processors: {
