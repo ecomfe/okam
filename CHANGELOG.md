@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 2020-05-22
+### okam-cli@0.1.12
+
+* **Bug修复**
+    * 兼容 “百度小程序非兼容性改动-禁用、限制部分全局变量” 导致 `polyfil` 全局挂载失败问题 ([eb56c5b](https://github.com/ecomfe/okam/commit/eb56c5b))
+
+
 ## 2019-12-02
 
 ### okam-build@0.4.15
