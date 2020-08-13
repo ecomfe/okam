@@ -74,5 +74,11 @@
   },
   "engine": {
     "node": ">= 8"
+  },
+  "dependencies": {
+    "vue": "^2.6.11",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.44.0"
   }
 }

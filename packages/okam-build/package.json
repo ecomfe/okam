@@ -40,10 +40,8 @@
     "htmlparser2": "^3.9.2",
     "minimatch": "^3.0.4",
     "mkdirp": "^0.5.1",
-    "okam-helper": "^0.4.4",
     "resolve": "^1.8.1",
     "rimraf": "^2.6.2",
-    "vue-template-compiler": "^2.6.10",
     "yargs-parser": "^13.0.0"
   },
   "engine": {
