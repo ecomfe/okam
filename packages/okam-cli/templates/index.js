@@ -8,23 +8,7 @@ const path = require('path');
 const getLatestVersion = require('latest-version');
 const chalk = require('chalk');
 const ora = require('ora');
-
-/**
- * 获取给定的文件路径的状态信息
- *
- * @inner
- * @param {string} target 文件的目标路径
- * @return {?Object}
- */
-function getFileState(target) {
-    try {
-        let state = fs.statSync(target);
-        return state;
-    }
-    catch (ex) {
-        // ignore
-    }
-}
+const {traverseFilesAndCb} = require('../src/utils');
 
 /**
  * script extname
@@ -271,26 +255,26 @@ class BaseTemplate {
         const spinner = ora('Creating the project, please wait a moment...').start();
 
         // scripts/ files
-        this.traverseFilesAndCb(
+        traverseFilesAndCb(
             path.join(this.templatePath, 'scripts'),
             this.generateBuild.bind(this)
         );
 
         // src/ files
-        this.traverseFilesAndCb(
+        traverseFilesAndCb(
             path.join(this.templatePath, 'src'),
             this.generateNormalFiles.bind(this)
         );
 
         // . files
-        this.traverseFilesAndCb(
+        traverseFilesAndCb(
             path.join(this.templatePath, 'dotFilesAll'),
             this.generateDotFilesAll.bind(this)
         );
 
         // redux
         if (this.params.redux) {
-            this.traverseFilesAndCb(
+            traverseFilesAndCb(
                 path.join(this.templatePath, 'reduxSrc'),
                 this.generateReduxFiles.bind(this)
             );
@@ -298,7 +282,7 @@ class BaseTemplate {
 
         // fecs
         if (this.params.lint === 'fecs') {
-            this.traverseFilesAndCb(
+            traverseFilesAndCb(
                 path.join(this.templatePath, 'dotFilesFecs'),
                 this.generateDotFilesFecs.bind(this)
             );
@@ -306,7 +290,7 @@ class BaseTemplate {
 
         // eslint
         if (this.params.lint === 'eslint') {
-            this.traverseFilesAndCb(
+            traverseFilesAndCb(
                 path.join(this.templatePath, 'dotFilesESLint'),
                 this.generateDotFilesESLint.bind(this)
             );
@@ -526,43 +510,6 @@ class BaseTemplate {
             projectFilePath,
             this.params
         );
-    }
-
-    /**
-     * 遍历当前文件夹下的文件并进行回调操作
-     *
-     * @param  {string}   curDir 当前的目录
-     * @param  {Function} cb callback function
-     */
-    traverseFilesAndCb(curDir, cb) {
-        let fileDirs = [curDir];
-        while (fileDirs.length) {
-            let currDir = fileDirs.pop();
-            let files = fs.readdirSync(currDir);
-            for (let i = 0, len = files.length; i < len; i++) {
-                let fileName = files[i];
-
-                if (/^\./.test(fileName)) {
-                    continue;
-                }
-
-                let fullPath = path.resolve(currDir, fileName);
-                let stat = getFileState(fullPath);
-                if (!stat) {
-                    continue;
-                }
-
-                let isDir = stat.isDirectory();
-                if (isDir) {
-                    fileDirs.push(fullPath);
-                    continue;
-                }
-
-                if (typeof cb === 'function') {
-                    cb(fullPath);
-                }
-            }
-        }
     }
 }
 

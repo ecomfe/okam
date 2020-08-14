@@ -6,7 +6,8 @@
 
 ```javascript
  {
-    polyfill: ['promise']
+    // 如果小程序支持全局挂载，将 `localPolyfill` 改为 `polyfill`
+    localPolyfill: ['promise']
 }
 ```
 
@@ -16,10 +17,10 @@
 
 ```javascript
 {
+    // 如果小程序不支持全局挂载，将 `polyfill` 改为 `localPolyfill`
     polyfill: ['promise', 'async'] // 如果不需要对 Promise 进行 Polyfill，只需要保留 `async` 即可
 }
 ```
-
 
 ## ES Next 支持
 

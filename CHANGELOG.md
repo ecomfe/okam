@@ -1,5 +1,46 @@
 # ChangeLog
 
+## 2020-05-22
+### okam-cli@0.1.12
+
+* **Bug修复**
+    * 兼容 “百度小程序非兼容性改动-禁用、限制部分全局变量” 导致 `polyfil` 全局挂载失败问题 ([eb56c5b](https://github.com/ecomfe/okam/commit/eb56c5b))
+
+
+## 2019-12-02
+
+### okam-build@0.4.15
+
+* **Bug修复**
+    * 修复 `data-x-self` 默认赋值问题，将对象模块的数据属性换成 bool 的 true 而不是 string 的 true ([5fde97b](https://github.com/ecomfe/okam/commit/5fde97b))
+
+
+## 2019-05-25
+
+### okam-core@0.4.15
+
+* **Bug修复**
+    * 修复 `Redux` 扩展，`$app.$store` 传入为 `function` 类型，导致初始化时候 `$app.$store.subscribe` 报未定义错问题 ([d33f26e](https://github.com/ecomfe/okam/commit/d33f26e))
+
+
+## 2019-04-18
+
+### okam-build@0.4.24
+
+* **Bug修复**
+    * 修复引用 NPM `mixin` 文件，解析 `mixin` 文件路径出错问题 ([8054ffa](https://github.com/ecomfe/okam/commit/8054ffa))
+    * 修复 `app` 配置里的 `pages` 文件路径不存在异常问题 ([ee3af06](https://github.com/ecomfe/okam/commit/ee3af06))
+    * 修复 `regenerator-runtime@0.13.2` 引入报错问题，参考[问题集锦说明](https://ecomfe.github.io/okam/#/questions/problems?id=%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F) ([2e18c39](https://github.com/ecomfe/okam/commit/2e18c39))
+
+* **新功能**
+    * 增加构建选项 `output.file` 附加 `next` 参数，用于调用基础配置的 `output.file` 过滤器 ([b05d14b](https://github.com/ecomfe/okam/commit/b05d14b))
+
+## 2019-03-18
+
+### okam-cli@0.1.11
+* **新功能**
+    * 新增 UI 组件开发模板支持 ([ae54590](https://github.com/ecomfe/okam/commit/ae54590))
+
 ## 2019-02-27
 
 ### okam-build@0.4.23

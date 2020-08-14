@@ -1,9 +1,10 @@
 {
   "name": "okam-cli",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "description": "The cli tool for Okam develop framework",
   "main": "index.js",
   "scripts": {
+    "lint": "fecs ./src index.js --reporter=baidu --rule",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -34,14 +35,15 @@
   "homepage": "https://github.com/ecomfe/okam#readme",
   "dependencies": {
     "chalk": "^2.4.1",
-    "commander": "^2.19.0",
+    "commander": "^3.0.1",
+    "download": "^7.1.0",
     "etpl": "^3.2.0",
-    "fs-extra": "^7.0.1",
-    "inquirer": "^6.2.0",
-    "latest-version": "^4.0.0",
+    "fs-extra": "^8.1.0",
+    "inquirer": "^7.0.0",
+    "latest-version": "^5.1.0",
     "mkdirp": "^0.5.1",
     "ora": "^3.0.0",
-    "semver": "^5.6.0"
+    "semver": "^6.3.0"
   },
   "gitHead": "5a63fda2b06d9e374ddf722fbe608482fcb2e5be"
 }

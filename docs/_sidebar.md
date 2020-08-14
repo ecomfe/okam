@@ -56,6 +56,8 @@
     * [组件互转](component/transform.md)
 
     * [原生组件对齐](component/nativeComponent.md)
+    
+    * [第三方组件开发](component/ui.md)
 
 * 进阶
 

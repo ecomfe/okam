@@ -3,8 +3,7 @@
  * @author xiaohong8023@outlook.com
  */
 
-const fs = require('fs-extra');
-const {getAuthor, isEmptyDir} = require('./index');
+const {getAuthor, validateDir} = require('./index');
 
 function setPromptsValue(prompts, name, options) {
     let promptsLen = prompts.length;
@@ -22,15 +21,7 @@ let promptList = [
         'name': 'projectName',
         'message': 'Project name：',
         /* eslint-disable fecs-use-method-definition */
-        'validate': function (input) {
-            if (!input) {
-                return 'The project name can not be empty!';
-            }
-            if (fs.existsSync(input) && (!isEmptyDir(input))) {
-                return 'The target directory is existed, please change another name！';
-            }
-            return true;
-        }
+        'validate': validateDir
     },
     {
         'type': 'input',

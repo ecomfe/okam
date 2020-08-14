@@ -145,7 +145,9 @@ module.exports = function (attrs, name, tplOpts, parseEventName) {
     }
 
     if (eventModifiers.includes('self')) {
-        attrs[`data-${eventType}-self`] = true;
+        // true => data-x-self
+        // 'true' => data-x-self = "true"
+        attrs[`data-${eventType}-self`] = 'true';
     }
 
     delete attrs[name];

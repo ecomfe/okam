@@ -60,10 +60,12 @@
   },
   "devDependencies": {
     "autoresponse": "^0.3.0",
-    "cross-env": "^5.2.0",
     "express": "^4.16.4",
+    "connect": "^3.6.6",
+    "cross-env": "^6.0.0",
     "okam-plugin-tinyimg": "^0.1.4",
+    "postcss-url": "^8.0.0",
     "postcss-import-sync2": "^1.1.0",
-    "postcss-url": "^8.0.0"
+    "promise-polyfill": "^8.1.0"
   }
 }

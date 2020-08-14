@@ -231,7 +231,7 @@ module.exports = {
 * `output.depDir`:
     * `string` 输出的 NPM 依赖文件存放的目录，相对于项目根目录，默认 `node_modules` 目录下文件
     * `Object` 配置多个依赖目录存放的目录 `0.4.8 版本开始支持`
-* `output.file`: `function(string, Object): boolean|string` 自定义输出文件路径，如果该文件不输出，返回 `false`
+* `output.file`: `function(string, Object, Function): boolean|string` 自定义输出文件路径，如果该文件不输出，返回 `false`
 
 ```javascript
 
@@ -249,21 +249,28 @@ module.exports = {
          *
          * @param {string} path 要输出的文件相对路径
          * @param {Object} file 要输出的文件对象
+         * @param {Function} next 基础配置的处理器, okam-build >= 0.4.24 支持
          * @return {boolean|string}
          */
-        file(path, file) {
-            if (file.isStyle && file.extname !== 'css' && !file.compiled) {
+        file(path, file, next) {
+            if (path.indexOf('src/common/img/') === 0) {
                 return false;
             }
+            return next();
 
-            // 不输出未处理的过的文件 和 单文件组件，即 .vue 文件
-            if (!file.allowRelease || file.isComponent) {
-                return false;
-            }
+            // 基础配置默认执行的 file 输出处理逻辑
+            // if (file.isStyle && file.extname !== 'css' && !file.compiled) {
+            //     return false;
+            // }
 
-            // 将所有文件的 src 路径前缀去掉
-            path = path.replace(/^src\//, '');
-            return path;
+            // // 不输出未处理的过的文件 和 单文件组件，即 .vue 文件
+            // if (!file.allowRelease || file.isComponent) {
+            //     return false;
+            // }
+
+            // // 将所有文件的 src 路径前缀去掉
+            // path = path.replace(/^src\//, '');
+            // return path;
         }
     }
 }

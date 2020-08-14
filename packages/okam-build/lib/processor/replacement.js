@@ -79,7 +79,7 @@ function process(file, options) {
     catch (ex) {
         let tip;
         if (ex === 'devServer') {
-            tip = ', you need to enable dev server to get this info';
+            tip = ', please execute `npm run dev:server` script or start with `--server` option';
         }
         logger.error('unknown replacement variable:', ex + (tip || ''));
     }

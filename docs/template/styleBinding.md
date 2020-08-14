@@ -62,7 +62,7 @@
 <view :style="{ color: colorStyle, fontSize: fontStyle + 'px', 'font-weight':'bold' }">对象语法</view>
 
 <!-- data: { colorStyle: 'red', fontStyle: 20} 时， style值为：-->
-<view style="color:'red';font-size:20px;font-weight:'bold"></view>
+<view style="color:'red';font-size:20px;font-weight:'bold'"></view>
 ```
 
 * 数组语法

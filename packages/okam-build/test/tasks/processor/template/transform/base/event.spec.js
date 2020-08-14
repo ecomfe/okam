@@ -63,7 +63,7 @@ describe('修饰符', function () {
         };
         const result = templateProcessor(file, fakeProcessorOptions());
         assert(result.content === '<view bindtap="__handlerProxy" '
-            + 'data-tap-proxy="handleClick" data-tap-self></view>');
+            + 'data-tap-proxy="handleClick" data-tap-self="true"></view>');
     });
 
     it('should transform event-binding with modifier .capture .stop .self', function () {
@@ -72,7 +72,7 @@ describe('修饰符', function () {
         };
         const result = templateProcessor(file, fakeProcessorOptions());
         assert(result.content === '<view capture-catch:tap="__handlerProxy" '
-            + 'data-tap-proxy="handleClick" data-tap-self></view>');
+            + 'data-tap-proxy="handleClick" data-tap-self="true"></view>');
     });
 });
 
