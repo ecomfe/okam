@@ -69,6 +69,17 @@ export default {
                 ]
             },
             {
+                name: '导航',
+                icon: require('../../common/img/navigator.png'),
+                open: false,
+                list: [
+                    {
+                        subName: '页面导航',
+                        path: 'api/navigator'
+                    }
+                ]
+            },
+            {
                 name: '其它',
                 icon: require('../../common/img/ui.png'),
                 open: false,
