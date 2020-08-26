@@ -107,7 +107,7 @@ export default {
                 path: src,
                 width: e.target.naturalWidth || e.target.width,
                 height: e.target.naturalHeight || e.target.height,
-                type: imgTypes.indexOf(imgType) > -1 ? imgType : null,
+                type: imgTypes.indexOf(imgType) > -1 ? imgType : 'jpg',
                 orientation: 'up'
             };
             callback(success, imageInfo);
@@ -151,40 +151,40 @@ export default {
         const urlsCount = urls.length;
 
         const swiperStyle = `
-            position: 'fixed',
-            zIndex: 10000,
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: '#000',
-            overflow: 'hidden'
+            position: fixed;
+            z-index: 10000;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+            overflow: hidden
         `;
 
         const swiperWrapperStyle = `
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: ${urlsCount} + '00%',
-            height: '100%'
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: ${urlsCount * 100}%;
+            height: 100%
         `;
 
         const swiperItemSyle = `
-            position: 'relative',
-            float: 'left',
-            width: ${100 / urlsCount} + '%',
-            height: '100%',
-            display: 'flex',
-            background: 'url(https://mms-graph.cdn.bcebos.com/activity/mp_loading.gif) no-repeat center',
-            backgroundSize: '30px auto'
+            position: relative;
+            float: left;
+            width: ${100 / urlsCount}%;
+            height: 100%;
+            display: flex;
+            background: url(https://mms-graph.cdn.bcebos.com/activity/mp_loading.gif) no-repeat center;
+            backgroundSize: 30px auto
         `;
         const swiperDom = document.createElement('div');
-        swiperDom.className = 'okam-swiper';
-        swiperDom.style.cssText += swiperStyle;
+        swiperDom.className = 'okam-swiper-container';
+        swiperDom.style.cssText = swiperStyle;
 
         const swiperWrapperDom = document.createElement('div');
         swiperWrapperDom.className = 'okam-swiper-wrapper';
-        swiperWrapperDom.style.cssText += swiperWrapperStyle;
+        swiperWrapperDom.style.cssText = swiperWrapperStyle;
 
         Array.prototype.forEach.call(urls, url => {
             const swiperItemDom = document.createElement('div');
@@ -196,10 +196,10 @@ export default {
             }, false);
 
             const imgStyle = `
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                display: 'none'
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: none
             `;
             const img = document.createElement('img');
             img.style.cssText += imgStyle;
@@ -231,12 +231,12 @@ export default {
 
         // progress bar
         const swiperProgressStyle = `
-            position: 'absolute',
-            left: '17px',
-            bottom: '20px',
-            fontSize: '14px',
-            color: '#fff',
-            text-shadow: '1px 1px 3px #000'
+            position: absolute;
+            left: 17px;
+            bottom: 20px;
+            fontSize: 14px;
+            color: #fff;
+            text-shadow: 1px 1px 3px #000
         `;
 
         const swiperProgress = document.createElement('label');
