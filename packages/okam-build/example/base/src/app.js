@@ -53,6 +53,7 @@ export default {
             'pages/api/scroll',
             'pages/api/tab',
             'pages/api/navigator',
+            'pages/api/clipboard',
             'pages/components/index',
             'pages/components/text',
             'pages/components/checkbox',

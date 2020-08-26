@@ -65,6 +65,10 @@ export default {
                     {
                         subName: '网络信息',
                         path: 'api/network'
+                    },
+                    {
+                        subName: '剪贴板',
+                        path: 'api/clipboard'
                     }
                 ]
             },
