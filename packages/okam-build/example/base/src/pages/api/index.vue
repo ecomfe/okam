@@ -65,6 +65,21 @@ export default {
                     {
                         subName: '网络信息',
                         path: 'api/network'
+                    },
+                    {
+                        subName: '剪贴板',
+                        path: 'api/clipboard'
+                    }
+                ]
+            },
+            {
+                name: '导航',
+                icon: require('../../common/img/navigator.png'),
+                open: false,
+                list: [
+                    {
+                        subName: '页面导航',
+                        path: 'api/navigator'
                     }
                 ]
             },
