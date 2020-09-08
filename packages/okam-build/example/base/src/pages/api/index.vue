@@ -69,6 +69,18 @@ export default {
                     {
                         subName: '剪贴板',
                         path: 'api/clipboard'
+                    },
+                    {
+                        subName: '获取系统信息',
+                        path: 'api/system'
+                    },
+                    {
+                        subName: '打电话',
+                        path: 'api/phone'
+                    },
+                    {
+                        subName: '存储',
+                        path: 'api/storage'
                     }
                 ]
             },
