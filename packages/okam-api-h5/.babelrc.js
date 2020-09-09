@@ -8,16 +8,18 @@
 const path = require('path');
 
 module.exports = {
-    presets: ['@babel/preset-env'],
     env: {
         development: {
             plugins: [
+                '@babel/plugin-transform-modules-commonjs',
+                'babel-plugin-espower',
+                'babel-plugin-empower-assert',
                 [
                     'module-resolver',
                     {
                         alias: {
-                            test: path.join(__dirname, 'test/tasks'),
-                            api: path.join(__dirname, 'src')
+                            api: path.join(__dirname, 'src'),
+                            test: path.join(__dirname, 'test')
                         }
                     }
                 ]

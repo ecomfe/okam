@@ -5,6 +5,14 @@
             "browser": false
         },
 
+        "globals": {
+            "after": "readonly",
+            "before":  "readonly",
+            "window": "readonly",
+            "document": "readonly",
+            "localStorage": "readonly"
+        },
+
         "rules": {
             "fecs-no-require": -1,
             "no-console": 0
