@@ -22,10 +22,12 @@
   "bugs": {
     "url": "https://github.com/ecomfe/okam/issues"
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
-    "mochaccino": "^1.2.0",
+    "mochaccino": "^1.2.0"
+  },
+  "devDependencies": {
     "cross-env": "^5.2.0",
     "mocha": "^6.0.0",
     "nyc": "^13.0.1"
