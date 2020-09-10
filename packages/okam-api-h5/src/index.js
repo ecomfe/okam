@@ -12,6 +12,8 @@ import requestApi from './request';
 import routerApi from './router';
 import storageApi from './storage';
 import toastApi from './ui/toast';
+import locationApi from './location';
+import paymentApi from './payment';
 import navApi from './navigator';
 import phoneApi from './phone';
 import networkApi from './network';
@@ -31,6 +33,8 @@ export default Object.assign(
     routerApi,
     storageApi,
     toastApi,
+    locationApi,
+    paymentApi,
     navApi,
     phoneApi,
     networkApi,

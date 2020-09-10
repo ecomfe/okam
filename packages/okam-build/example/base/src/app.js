@@ -47,6 +47,8 @@ export default {
             'pages/api/network',
             'pages/api/window',
             'pages/api/interaction',
+            'pages/api/location',
+            'pages/api/payment',
             'pages/api/animation',
             'pages/api/image',
             'pages/api/websocket',
