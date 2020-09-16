@@ -1,6 +1,9 @@
 <template>
-    <a href="javascript:;" :class="classNames"
-        @touchstart="onTouchstart" @touchend="onTouchend" @click="onClick">
+    <a
+        href="javascript:;"
+        :class="classNames"
+        @click="onClick"
+    >
         <slot></slot>
     </a>
 </template>
