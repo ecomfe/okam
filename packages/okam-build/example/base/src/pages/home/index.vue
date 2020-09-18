@@ -135,6 +135,17 @@ export default {
                 ]
             },
             {
+                name: '性能相关',
+                icon: '../../common/img/performance.png',
+                open: false,
+                list: [
+                    {
+                        subName: '生命周期onInit',
+                        path: 'performance/oninit'
+                    }
+                ]
+            },
+            {
                 icon: '../../common/img/more.png',
                 name: '其他',
                 open: false,

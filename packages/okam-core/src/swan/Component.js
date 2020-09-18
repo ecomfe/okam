@@ -9,7 +9,7 @@
 import {createComponent} from '../helper/factory';
 import {normalizeComponent} from '../helper/component';
 import {normalizeEventArgs, fixEventObject} from './helper/triggerEvent';
-import componentBase from '../base/component';
+import componentBase from './base/component';
 
 /**
  * Fix swan component event args

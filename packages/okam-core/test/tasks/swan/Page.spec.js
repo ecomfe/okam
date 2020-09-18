@@ -12,8 +12,9 @@ import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/swan/App';
 import MyPage from 'core/swan/Page';
-import page from 'core/base/page';
-import component from 'core/base/component';
+import page from 'core/swan/base/page';
+import base from 'core/base/base';
+import component from 'core/swan/base/component';
 import {clearBaseCache} from 'core/helper/factory';
 import {testCallOrder, fakeAppEnvAPIs} from 'test/helper';
 
@@ -28,6 +29,16 @@ describe('Page', () => {
     afterEach('clear global App', function () {
         restoreAppEnv();
         expect.restoreSpies();
+    });
+
+    it('should inherit base api', () => {
+        let pageInstance = {};
+        let page = MyPage(pageInstance);
+        page.onInit();
+
+        Object.keys(base).forEach(k => {
+            assert(page[k] === base[k]);
+        });
     });
 
     it('should inherit component api', () => {
