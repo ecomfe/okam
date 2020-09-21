@@ -18,7 +18,6 @@ export default {
     },
     data: {
         oninitData: '',
-        setDataInit: false,
         createdData: ''
     },
     onInit(query) {
@@ -27,9 +26,6 @@ export default {
         console.log('[performance] onInit....$query', this.$query);
         console.log('[performance] onInit....this.$api', this.$api);
         console.log('[performance] onInit....this.$http', this.$http);
-        this.setData({
-            setDataInit: true
-        });
     },
     created(query) {
         console.log('[performance] created....', query);
