@@ -7,8 +7,9 @@
 import {getCurrApp} from '../../na/index';
 import base from '../../base/base';
 import component from './component';
+import pageBase from '../../base/page';
 
-export default Object.assign({}, component, {
+export default Object.assign({}, pageBase, component, {
 
     /**
      * swan init done hook
@@ -64,32 +65,5 @@ export default Object.assign({}, component, {
         // call component create life cycle method
         this.created();
     },
-
-    /**
-     * The ready hook triggered when paged is ready.
-     *
-     * @private
-     */
-    onReady() {
-        // call component attached/ready life cycle method
-        this.attached();
-        this.ready();
-    },
-
-    /**
-     * The unload hook triggered when page is unload.
-     *
-     * @private
-     */
-    onUnload() {
-        // call component detach life cycle method
-        this.detached();
-    },
-
-    methods: Object.assign(
-        {
-            // cannot define createSelectorQuery here, in weixin 2.1.3 sdk will
-            // leading to error
-        }, component.methods
-    )
+    methods: Object.assign({}, pageBase.methods)
 });
