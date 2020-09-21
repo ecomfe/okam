@@ -39,9 +39,42 @@ describe('swan observable', function () {
         let arr = [12, {d: 78}];
         let page = MyPage({
             data: {
+                initA: 1,
+                initB: 'str',
+                initC: true,
+                initD: {a: 3, b: [23]},
+                initE: [23, {b: 56}],
                 a: obj,
                 b: arr,
                 c: 'ss'
+            },
+            onInit() {
+                assert(this.initA === this.data.initA);
+                assert(this.initB === this.data.initB);
+                assert(this.initC === this.data.initC);
+                expect(this.initD).toEqual(this.data.initD);
+                expect(this.initE).toEqual(this.data.initE);
+
+                this.initA = 66;
+                this.initB = 'ee';
+                this.initC = false;
+                this.initD.b.unshift(55);
+                this.initE.getItem(1).b = 33;
+                expect(this.data).toEqual({
+                    initA: 66,
+                    initB: 'ee',
+                    initC: false,
+                    initD: {a: 3, b: [55, 23]},
+                    initE: [23, {b: 33}],
+                    a: {c: 3},
+                    b: [12, {d: 78}],
+                    c: 'ss'
+                });
+                assert(this.initA === 66);
+                assert(this.initB === 'ee');
+                assert(this.initC === false);
+                expect(this.initD).toEqual({a: 3, b: [55, 23]});
+                expect(this.initE).toEqual(this.data.initE);
             },
             created() {
                 expect(this.a).toEqual(obj);
@@ -51,7 +84,11 @@ describe('swan observable', function () {
                 assert(this.b[1].d === 78);
             }
         });
+        page.onInit();
         page.onLoad();
+        let spySetData = createSpy(() => {});
+        page.setData = spySetData;
+
     });
 
     it('should make data observable', function (done) {
@@ -64,7 +101,6 @@ describe('swan observable', function () {
                 d: {a: 3, b: [23]},
                 e: [23, {b: 56}]
             },
-
             created() {
                 assert(this.a === this.data.a);
                 assert(this.b === this.data.b);
