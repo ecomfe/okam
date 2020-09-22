@@ -18,7 +18,7 @@
 
 ## 2019-12-02
 
-### okam-build@0.4.15
+### okam-build@0.4.25
 
 * **Bug修复**
     * 修复 `data-x-self` 默认赋值问题，将对象模块的数据属性换成 bool 的 true 而不是 string 的 true ([5fde97b](https://github.com/ecomfe/okam/commit/5fde97b))
