@@ -35,7 +35,8 @@ export default {
             'pages/broadcast/index',
             'pages/filter/index',
             'pages/sfc/index',
-            'pages/sfc/separate'
+            'pages/sfc/separate',
+            'pages/performance/oninit'
         ],
         subPackages: [
             {
