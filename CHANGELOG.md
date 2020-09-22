@@ -1,11 +1,11 @@
 # ChangeLog
 
 ## 2020-09-22
-### okam-build@0.1.12
+### okam-build@0.4.26-alpha.0
 * **新功能**
     * 支持百度小程序原生生命周期 `onInit`  ([25fc6f8ad](https://github.com/ecomfe/okam/commit/25fc6f8ad))
   
-### okam-core@0.1.12
+### okam-core@0.4.16-alpha.0
 * **新功能**
     * 支持百度小程序原生生命周期 `onInit`  ([25fc6f8ad](https://github.com/ecomfe/okam/commit/25fc6f8ad))
 
