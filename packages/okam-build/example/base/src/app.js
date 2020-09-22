@@ -47,11 +47,18 @@ export default {
             'pages/api/network',
             'pages/api/window',
             'pages/api/interaction',
+            'pages/api/location',
+            'pages/api/payment',
             'pages/api/animation',
             'pages/api/image',
             'pages/api/websocket',
             'pages/api/scroll',
             'pages/api/tab',
+            'pages/api/navigator',
+            'pages/api/clipboard',
+            'pages/api/storage',
+            'pages/api/system',
+            'pages/api/phone',
             'pages/components/index',
             'pages/components/text',
             'pages/components/checkbox',
@@ -106,16 +113,20 @@ export default {
                 {
                     pagePath: 'pages/api/index',
                     text: 'API',
-                    iconPath: 'common/img/api.png'
+                    iconPath: 'common/img/api.png',
+                    selectedIconPath: 'common/img/ui.png'
                 },
                 {
                     pagePath: 'pages/components/index',
                     text: '组件',
-                    iconPath: 'common/img/component.png'
+                    iconPath: 'common/img/component.png',
+                    selectedIconPath: 'common/img/ui.png'
                 },
                 {
                     pagePath: 'pages/api/tab',
-                    text: 'TabBar'
+                    text: 'TabBar',
+                    iconPath: 'common/img/data.png',
+                    selectedIconPath: 'common/img/ui.png'
                 }
             ]
         },

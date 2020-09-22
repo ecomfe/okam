@@ -58,6 +58,17 @@ export default {
                 ]
             },
             {
+                name: '位置',
+                icon: require('../../common/img/ui.png'),
+                open: false,
+                list: [
+                    {
+                        subName: '获取及查看位置',
+                        path: 'api/location'
+                    }
+                ]
+            },
+            {
                 name: '系统',
                 icon: require('../../common/img/ui.png'),
                 open: false,
@@ -65,6 +76,44 @@ export default {
                     {
                         subName: '网络信息',
                         path: 'api/network'
+                    },
+                    {
+                        subName: '剪贴板',
+                        path: 'api/clipboard'
+                    },
+                    {
+                        subName: '获取系统信息',
+                        path: 'api/system'
+                    },
+                    {
+                        subName: '打电话',
+                        path: 'api/phone'
+                    },
+                    {
+                        subName: '存储',
+                        path: 'api/storage'
+                    }
+                ]
+            },
+            {
+                name: '导航',
+                icon: require('../../common/img/navigator.png'),
+                open: false,
+                list: [
+                    {
+                        subName: '页面导航',
+                        path: 'api/navigator'
+                    }
+                ]
+            },
+            {
+                name: '开放接口',
+                icon: require('../../common/img/ui.png'),
+                open: false,
+                list: [
+                    {
+                        subName: '百度收银台支付',
+                        path: 'api/payment'
                     }
                 ]
             },

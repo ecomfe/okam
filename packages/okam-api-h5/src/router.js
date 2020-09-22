@@ -16,9 +16,21 @@ let _routerInstance = null;
  * Navigate to the specified url
  *
  * @param {Object} options the navigation options
+ * @param {string} options.url the url to navigate to
+ * @param {Function=} options.success the navigation successful callback
+ * @param {Function=} options.complete the navigation done callback
+ * @param {Function=} options.fail the navigation fail callback
+ * @param {string=} options.replaced it navigates without pushing a new history entry
  */
-function navigateTo(options) {
-    let {url, success, complete, fail} = options;
+function navigateTo(options = {}) {
+    let {
+        url,
+        success,
+        complete,
+        fail,
+        replaced
+    } = options;
+
     let queryIdx = url.indexOf('?');
     let path = url;
     let query;
@@ -31,7 +43,9 @@ function navigateTo(options) {
         }
     }
 
-    _routerInstance.push({
+    const routerAction = replaced ? _routerInstance.replace : _routerInstance.push;
+
+    routerAction.call(_routerInstance, {
         path,
         query
     }, () => {
@@ -39,6 +53,8 @@ function navigateTo(options) {
         complete && complete();
     }, fail);
 }
+
+
 
 export default {
 
@@ -57,20 +73,11 @@ export default {
      * @param {Object=} options the navigation options
      * @param {number=} delta the navigation back page number
      */
-    navigateBack(options) {
+    navigateBack(options = {}) {
         const router = _routerInstance;
-        if (!options) {
-            router.back();
-        }
-        else {
-            let {delta} = options;
-            if (delta) {
-                router.go(-1 * delta);
-            }
-            else {
-                router.back();
-            }
-        }
+
+        const delta = options.delta || 1;
+        router.go(-delta);
     },
 
     /**
@@ -90,7 +97,29 @@ export default {
     switchTab: navigateTo,
 
     /**
-     * Redirect to the specified url.
+     * Redirect to the specified url
+     *
+     * @param {Object} options the navigation options
+     * @param {string} options.url the url to navigate to
+     * @param {Function=} options.success the navigation successful callback
+     * @param {Function=} options.complete the navigation done callback
+     * @param {Function=} options.fail the navigation fail callback
      */
-    redirectTo: navigateTo
+    redirectTo(options = {}) {
+        options.replaced = true;
+        navigateTo.call(this, options);
+    },
+
+    /**
+     * reLaunch the specified url
+     * @param {Object} options the navigation options
+     * @param {string} options.url the url to navigate to
+     * @param {Function=} options.success the navigation successful callback
+     * @param {Function=} options.complete the navigation done callback
+     * @param {Function=} options.fail the navigation fail callback
+     */
+    reLaunch(options = {}) {
+        options.replaced = true;
+        navigateTo.call(this, options);
+    }
 };
