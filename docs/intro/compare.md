@@ -14,6 +14,7 @@
 
 |生命周期|微信|百度|支付宝|头条|快应用|
 |---|---|---|---|---|---|
+|onInit|x|√（`onInit`）|x|x|x|
 |beforeCreate|√（`onLoad`）|√（`onLoad`）|√（`onLoad`）|√（`onLoad`）|√（`onInit`）|
 |created|√（`onLoad`）|√（`onLoad`）|√（`onLoad`）|√（`onLoad`）|√（`onInit`）|
 |beforeMount|√（`onReady`）|√（`onReady`）|√（`onReady`）|√（`onReady`）|√（`onReady`）|
@@ -22,6 +23,11 @@
 |destroyed|√（`onUnload`）|√（`onUnload`）|√（`onUnload`）|√（`onUnload`）|√（`onDestroy`）|
 |onShow|√|√|√|√|√|
 |onHide|√|√|√|√|√|
+
+** 注意：**
+* onInit生命周期比较特殊, 仅在百度小程序下对应原生生命周期onInit
+* 快应用的原生生命周期onInit, 需使用beforeCreate或者created开发
+
 
 ## 自定义组件生命周期
 

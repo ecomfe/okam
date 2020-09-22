@@ -45,7 +45,10 @@ const FRAMEWORK_EXTEND_PATH = {
             creator: 'extend/behavior/Behavior'
         }
     },
-    redux: 'extend/data/redux/index',
+    redux: {
+        'swan': 'extend/data/redux/swan/index',
+        'default': 'extend/data/redux/index'
+    },
     vuex: 'extend/data/vuex/index',
     model: 'extend/data/model',
     ref: {
@@ -160,7 +163,6 @@ exports.getFrameworkExtendId = function (appType, extendName, getConstructor = f
     if (value && typeof value === 'object') {
         value = value[appType] || value.default;
     }
-
     if (value == null) {
         throw new Error(`unknown ${appType} framework extension: ${extendName}`);
     }
