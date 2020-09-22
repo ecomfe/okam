@@ -5,10 +5,7 @@
 /* global localStorage:false */
 /* global before:false */
 'use strict';
-
-require('jsdom-global')('', {
-    url: 'http://localhost'
-});
+import expect from 'expect';
 const api = require('api/storage').default;
 
 const localStorage = window.localStorage;

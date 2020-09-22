@@ -2,7 +2,7 @@
  * @file storage test spec
  * @author magicchewl@gmail.com
  */
-
+import expect from 'expect';
 import api from 'api/authrize';
 
 describe('API [authorize]', () => {
