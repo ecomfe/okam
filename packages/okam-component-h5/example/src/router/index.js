@@ -8,6 +8,7 @@ import Router from 'vue-router';
 
 import Button from 'pages/button';
 import TabBar from 'pages/tabbar';
+import Tabs from 'pages/tabs';
 
 Vue.use(Router);
 
@@ -19,6 +20,10 @@ const routes = [
     {
         path: '/tabbar',
         component: TabBar
+    },
+    {
+        path: '/tabs',
+        component: Tabs
     }
 ];
 
