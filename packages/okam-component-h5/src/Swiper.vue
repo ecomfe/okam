@@ -1,13 +1,31 @@
 <template>
-    <div :class="['okam-swiper', vertical ? 'okam-swiper-vertical' : 'okam-swiper-horizontal']">
-        <div class="okam-swiper-slidelist-wrap" :style="slideListWrapStyle"
-            @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-            <div ref="slideList" class="okam-swiper-slidelist"><slot></slot></div>
+    <div
+        :class="[
+            'okam-swiper',
+            vertical ? 'okam-swiper-vertical' : 'okam-swiper-horizontal'
+        ]"
+    >
+        <div
+            :style="slideListWrapStyle"
+            class="okam-swiper-slidelist-wrap"
+            @touchstart="onTouchStart"
+            @touchmove="onTouchMove"
+            @touchend="onTouchEnd"
+        >
+            <div ref="slideList" class="okam-swiper-slidelist">
+                <slot></slot>
+            </div>
         </div>
-        <div class="okam-swiper-indicator" v-if="indicatorDots">
-            <i :class="n | isActiveDot(activeIdx, displayNum, swiperItemNum) | dotClass"
+        <div
+            v-if="indicatorDots"
+            class="okam-swiper-indicator"
+        >
+            <i
+                v-for="n in swiperItemNum"
+                :class="n | isActiveDot(activeIdx, displayNum, swiperItemNum) | dotClass"
                 :style="n | isActiveDot(activeIdx, displayNum, swiperItemNum) | dotStyle(indicatorColor, indicatorActiveColor)"
-                v-for="n in swiperItemNum" :key="n"></i>
+                :key="n"
+            />
         </div>
     </div>
 </template>
@@ -48,10 +66,6 @@ export default {
             type: Number,
             default: 1
         }
-        // skipHiddenItemLayout: {
-        //     type: Boolean,
-        //     default: false
-        // }
     },
 
     data() {
@@ -64,12 +78,10 @@ export default {
 
     computed: {
         prevOffset() {
-            return this.previousMargin
-                ? parseInt(this.previousMargin, 10) || 0 : 0;
+            return this.previousMargin ? parseInt(this.previousMargin, 10) || 0 : 0;
         },
         nextOffset() {
-            return this.nextMargin
-                ? parseInt(this.nextMargin, 10) || 0 : 0;
+            return this.nextMargin ? parseInt(this.nextMargin, 10) || 0 : 0;
         },
         displayNum() {
             return this.displayMultipleItems || 1;
@@ -124,9 +136,7 @@ export default {
             }
 
             let active = n >= startActiveNum && n <= endActiveNum;
-            active = (active
-                || (extralActive && n >= extralActive[0] && n <= extralActive[1])
-            );
+            active = (active || (extralActive && n >= extralActive[0] && n <= extralActive[1]));
             return active;
         },
 
@@ -169,8 +179,7 @@ export default {
 
         // init swiper size
         let sliderListEle = this.$refs.slideList;
-        this.slideListContainerSize = isVertical
-            ? sliderListEle.clientHeight : sliderListEle.clientWidth;
+        this.slideListContainerSize = isVertical ? sliderListEle.clientHeight : sliderListEle.clientWidth;
 
         // init auto play
         if (this.autoplay) {
@@ -260,9 +269,7 @@ export default {
         updateSwiperItemStyle(swiperItem, percentValue, sizePercentValue) {
             let isVertical = this.vertical;
             let percent = `${percentValue}%`;
-            let transform = isVertical
-                ? `translate3d(0, ${percent}, 0)`
-                : `translate3d(${percent}, 0, 0)`;
+            let transform = isVertical ? `translate3d(0, ${percent}, 0)` : `translate3d(${percent}, 0, 0)`;
             let style = {transform};
 
             if (sizePercentValue) {
@@ -298,12 +305,11 @@ export default {
 
         updateSlideListStyle(percentValue, enableAnimation) {
             let percent = percentValue + '%';
-            let transform = this.vertical
-                    ? `translate3d(0, ${percent}, 0)`
-                    : `translate3d(${percent}, 0, 0)`;
+            let transform = this.vertical ? `translate3d(0, ${percent}, 0)` : `translate3d(${percent}, 0, 0)`;
             let transition = `transform ${enableAnimation ? this.duration : 0}ms`;
             let elem = this.$refs.slideList;
             elem.style.transform = transform;
+            elem.style['-webkit-transform'] = transform;
             elem.style.transition = transition;
         },
 
@@ -334,7 +340,7 @@ export default {
 
                 // the order is next direction (move left direction in horizontal),
                 // prev direction does not happen
-                // in auto play mode, so here not need to condider prev direction
+                // in auto play mode, so here not need to consider the prev direction
                 if (oldIdx === total - 1 && index === 0) {
                     this.updateSlideListStyle(this.swiperItemPercent);
                 }
@@ -404,17 +410,29 @@ export default {
                 x: touch.pageX,
                 y: touch.pageY
             };
+            this.touchStartTimestamp = Date.now();
             this.lastActiveIdx = this.activeIdx;
         },
 
         getMoveNextActiveIndex(movePercent, isEnd) {
             let delta = movePercent - this.oldSwipeMovePercent;
+
             let offsetItemNum = Math[isEnd ? 'round' : 'ceil'](
                 Math.abs(delta) / this.swiperItemPercent
             );
+
+            if (isEnd) {
+                const startPoint = this.isVertical ? this.touchStartPosition.y : this.touchStartPosition.x;
+                const endPoint = this.isVertical ? this.touchEndPosition.y : this.touchEndPosition.x;
+
+                if (Math.abs(startPoint - endPoint) * 1000 / this.touchDuration > 100) {
+                    offsetItemNum = 1;
+                }
+            }
             let isPrevDirection = delta > 0;
 
             let nextActiveIdx = this.activeIdx + offsetItemNum * (isPrevDirection ? -1 : 1);
+
             nextActiveIdx = this.normalizeActiveIndex(nextActiveIdx);
             return {
                 index: nextActiveIdx,
@@ -479,7 +497,17 @@ export default {
             if (e.touches.length >= 2) {
                 return this.resetSwiperState(this.activeIdx, 0);
             }
+            let {
+                pageX,
+                pageY
+            } = e.changedTouches[0];
 
+            this.touchEndPosition = {
+                x: pageX,
+                y: pageY
+            }
+
+            this.touchDuration = Date.now() - this.touchStartTimestamp;
             let {
                 index,
                 delta
