@@ -13,9 +13,9 @@
   "scripts": {
     "prepublish": "npm run lint",
     "lint": "fecs ./src index.js --reporter=baidu --rule",
-    "test": "cross-env NODE_ENV=development mocha --require @babel/register \"test/tasks/**/*.spec.js\"",
-    "test:coverage": "cross-env NODE_ENV=development nyc mocha --require @babel/register \"test/tasks/**/*.spec.js\"",
-    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require @babel/register \"test/tasks/**/*.spec.js\""
+    "test:coverage": "cross-env NODE_ENV=development nyc mocha --require @babel/register  \"test/tasks/**/*.spec.js\"",
+    "test": "cross-env NODE_ENV=development mocha --require @babel/register test/setup.js  \"test/tasks/**/*.spec.js\"",
+    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require @babel/register  \"test/tasks/**/*.spec.js\""
   },
   "license": "MIT",
   "repository": "ecomfe/okam",
@@ -26,11 +26,9 @@
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
     "cross-env": "^5.2.0",
-    "fecs": "^1.6.4",
+    "jsdom": "^13.2.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^6.0.0",
     "nyc": "^13.0.1"
-  },
-  "dependencies": {
-    "mochaccino": "^1.2.0"
   }
 }
