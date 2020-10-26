@@ -144,16 +144,6 @@ function hasBabelDepPlugin(plugins) {
  * @return {Array}
  */
 function normalizeBabelPlugins(plugins, file, buildManager) {
-    if (typeof plugins === 'function') {
-        plugins = plugins(file);
-    }
-
-    plugins = plugins ? [].concat(plugins) : [];
-    if (!hasBabelDepPlugin(plugins)) {
-        // add npm resolve plugin
-        plugins.push(DEP_PLUGIN_NAME);
-    }
-
     return (plugins || []).map(item => {
         if (typeof item === 'string') {
             let result = BUILTIN_PLUGINS[item];
@@ -166,6 +156,54 @@ function normalizeBabelPlugins(plugins, file, buildManager) {
 }
 
 /**
+ * Get script babel transform plugin
+ *
+ * @inner
+ * @param {Object} pluginOpts the default init plugin transform options
+ * @param {Object} file the file to transform
+ * @param {BuildManager} buildManager the build manager
+ * @param {string} type the script type
+ * @return {Array}
+ */
+function getTransformPlugin(pluginOpts, file, buildManager, type) {
+    const appBaseClass = buildManager.getOutputAppBaseClass();
+    const getInitOptions = buildManager.getAppBaseClassInitOptions.bind(
+        buildManager, file
+    );
+    const {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
+
+    let customOpts;
+    if (type === 'app') {
+        customOpts = {
+            framework,
+            registerApi: api,
+            baseClass: appBaseClass && appBaseClass.app,
+            routeConfigModId: buildManager.getAppRouterModuleId(),
+            getInitOptions
+        };
+
+        // polyfill using local variable is prior to global polyfill
+        localPolyfill || (customOpts.polyfill = polyfill);
+    }
+    else {
+        const isVue = buildManager.isNativeSupportVue();
+        customOpts = {
+            filterOptions: buildManager.getFilterTransformOptions(),
+            tplRefs: file.tplRefs,
+            baseClass: appBaseClass && appBaseClass[type],
+            getInitOptions,
+            keepComponentsProp: isVue,
+            dataPropValueToFunc: isVue
+        };
+    }
+
+    return [
+        programPlugins[type],
+        Object.assign({}, pluginOpts, customOpts)
+    ];
+}
+
+/**
  * Initialize babel processor options
  *
  * @param {Object} file the file to process
@@ -174,61 +212,64 @@ function normalizeBabelPlugins(plugins, file, buildManager) {
  * @return {Object}
  */
 function initBabelProcessorOptions(file, processorOpts, buildManager) {
+    if (file.noTransform || (file.owner && file.owner.noTransform)) {
+        processorOpts = Object.assign({}, processorOpts);
+        processorOpts.ignoreDefaultOptions = true;
+        processorOpts.plugins = ['dep'];
+    }
+
     processorOpts = Object.assign(
         {}, buildManager.babelConfig, processorOpts
     );
 
     // init plugins
-    let plugins = normalizeBabelPlugins(processorOpts.plugins, file, buildManager);
+    let plugins = processorOpts.plugins || [];
+    if (typeof plugins === 'function') {
+        plugins = plugins(file) || [];
+        Array.isArray(plugins) || (plugins = [plugins]);
+    }
+
+    if (processorOpts.ignoreDefaultOptions) {
+        delete processorOpts.ignoreDefaultOptions;
+        processorOpts.plugins = normalizeBabelPlugins(
+            plugins, file, buildManager
+        );
+        return processorOpts;
+    }
+
+    if (!hasBabelDepPlugin(plugins)) {
+        // add npm resolve plugin
+        plugins.push(DEP_PLUGIN_NAME);
+    }
+
+    plugins = normalizeBabelPlugins(
+        plugins, file, buildManager
+    );
 
     // init app/page/component transform plugin
     let configInitHandler = initConfigInfo.bind(
         null, buildManager, 'config', file
     );
-    let appBaseClass = buildManager.getOutputAppBaseClass();
     let pluginOpts = {
         appType: buildManager.appType,
-        config: configInitHandler
+        config: configInitHandler,
+        enableMixinSupport: buildManager.isEnableMixinSupport()
     };
-    let filterOptions = buildManager.getFilterTransformOptions();
-    let enableMixinSupport = buildManager.isEnableMixinSupport();
-    let {api, framework, localPolyfill, polyfill} = buildManager.buildConf;
-    let getInitOptions = buildManager.getAppBaseClassInitOptions.bind(
-        buildManager, file
-    );
+    let {localPolyfill} = buildManager.buildConf;
     if (file.isEntryScript) {
-        Object.assign(pluginOpts, {
-            framework,
-            registerApi: api,
-            baseClass: appBaseClass && appBaseClass.app
-        });
-        // polyfill using local variable is prior to global polyfill
-        localPolyfill || (pluginOpts.polyfill = polyfill);
-        pluginOpts.getInitOptions = getInitOptions;
-        plugins.push([
-            programPlugins.app,
-            pluginOpts
-        ]);
+        plugins.push(getTransformPlugin(
+            pluginOpts, file, buildManager, 'app'
+        ));
     }
     else if (file.isPageScript) {
-        Object.assign(pluginOpts, {
-            enableMixinSupport,
-            filterOptions,
-            tplRefs: file.tplRefs,
-            baseClass: appBaseClass && appBaseClass.page,
-            getInitOptions
-        });
-        plugins.push([programPlugins.page, pluginOpts]);
+        plugins.push(getTransformPlugin(
+            pluginOpts, file, buildManager, 'page'
+        ));
     }
     else if (file.isComponentScript) {
-        Object.assign(pluginOpts, {
-            enableMixinSupport,
-            filterOptions,
-            tplRefs: file.tplRefs,
-            baseClass: appBaseClass && appBaseClass.component,
-            getInitOptions
-        });
-        plugins.push([programPlugins.component, pluginOpts]);
+        plugins.push(getTransformPlugin(
+            pluginOpts, file, buildManager, 'component'
+        ));
     }
     else if (file.isBehavior) {
         plugins.push([programPlugins.behavior, pluginOpts]);

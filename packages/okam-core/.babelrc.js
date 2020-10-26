@@ -10,6 +10,7 @@ const path = require('path');
 module.exports = {
     env: {
         development: {
+            presets: ['@vue/babel-preset-jsx'],
             plugins: [
                 '@babel/plugin-transform-modules-commonjs',
                 'babel-plugin-espower',

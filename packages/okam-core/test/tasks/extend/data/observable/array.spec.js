@@ -419,10 +419,10 @@ describe('observable array', function () {
                 {
                     'a': [12, 33, 56],
                     'obj.b': [23, 5],
-                    'obj.b[1]': 5,
+                    // 'obj.b[1]': 5,
                     'c.d': 56,
-                    'c.e': {a: 55},
-                    'c.e.a': 55
+                    'c.e': {a: 55}
+                    // 'c.e.a': 55
                 }
             );
             done();

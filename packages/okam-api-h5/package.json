@@ -1,0 +1,34 @@
+{
+  "name": "okam-api-h5",
+  "version": "0.1.0",
+  "description": "The mini program API implementation in H5",
+  "main": "src/index.js",
+  "keywords": [
+    "h5",
+    "web",
+    "okam",
+    "mini program",
+    "framework"
+  ],
+  "scripts": {
+    "prepublish": "npm run lint",
+    "lint": "fecs ./src index.js --reporter=baidu --rule",
+    "test:coverage": "cross-env NODE_ENV=development nyc mocha --require @babel/register  \"test/tasks/**/*.spec.js\"",
+    "test": "cross-env NODE_ENV=development mocha --require @babel/register test/setup.js  \"test/tasks/**/*.spec.js\"",
+    "test:debug": "cross-env NODE_ENV=development mocha --inspect-brk --require @babel/register  \"test/tasks/**/*.spec.js\""
+  },
+  "license": "MIT",
+  "repository": "ecomfe/okam",
+  "bugs": {
+    "url": "https://github.com/ecomfe/okam/issues"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "cross-env": "^5.2.0",
+    "jsdom": "^13.2.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^6.0.0",
+    "nyc": "^13.0.1"
+  }
+}

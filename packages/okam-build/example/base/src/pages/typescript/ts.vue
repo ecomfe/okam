@@ -16,7 +16,7 @@ export default {
         backgroundColor: '#fff'
     },
     data: {
-        title: 'Typescript 测试',
+        title: 'Typescript',
         count: 0
     },
     beforeCreate() {

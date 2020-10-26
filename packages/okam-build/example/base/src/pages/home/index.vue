@@ -1,16 +1,17 @@
 <template>
     <view class="group">
         <view class="group-hd">
-            <image class="group-logo" src="../../common/img/logo.png"></image>
+            <image class="group-logo" src="../../common/img/logo.png" />
             <view class="group-desc">以下将展示小程序开发框架能力</view>
         </view>
 
-        <view for="item, index in items" :key="item.name" class="group-bd">
-            <view class="item border-bottom {{item.open ? '' : 'item-close'}}" @click="toggleClick(index, item.path)">
-                <image class="item-logo" :src="item.icon"></image>
+        <view for="(item, index) in items" :key="item.name" class="group-bd">
+            <view :class="['item', 'border-bottom', item.open ? '' : 'item-close']" @click="toggleClick(index, item.path)">
+                <image class="item-logo" :src="item.icon" />
                 <text class="item-desc">{{item.name}}</text>
-                <image if="item.path" class="item-logo item-toggle" src="../../common/img/goto.png"></image>
-                <image else class="item-logo item-toggle" :src="item.open ? '../../common/img/close.png' : '../../common/img/open.png'"></image>
+                <image class="item-logo item-toggle" src="../../common/img/goto.png" if="item.path" />
+                <image class="item-logo item-toggle" src="../../common/img/close.png" else-if="item.open" />
+                <image class="item-logo item-toggle" src="../../common/img/open.png" else />
             </view>
             <view if="item.open">
                 <view class="sub-item border-bottom" for="subItem in item.list" :key="subItem.subName" @click="oneItemClick(subItem.path)">
@@ -22,16 +23,28 @@
     </view>
 </template>
 <script>
-
 export default {
     config: {
-        navigationBarTitleText: 'OKAM 开发框架示例'
+        navigationBarTitleText: 'OKAM 开发框架示例',
+        onReachBottomDistance: 30
     },
-
+    hasRequest: false,
     data: {
+        flag: true,
+        height: 100,
         items: [
             {
-                icon: '../../common/img/js.png',
+                icon: require('../../common/img/api.png'),
+                name: 'API',
+                path: 'api/index'
+            },
+            {
+                icon: require('../../common/img/ui.png'),
+                name: '基础组件',
+                path: 'components/index'
+            },
+            {
+                icon: require('../../common/img/js.png'),
                 name: '语言',
                 open: false,
                 list: [
@@ -43,7 +56,7 @@ export default {
             },
             {
                 name: '模板',
-                icon: '../../common/img/template.png',
+                icon: require('../../common/img/template.png'),
                 open: false,
                 list: [
                     {
@@ -69,12 +82,16 @@ export default {
                     {
                         subName: 'v- 前缀支持',
                         path: 'tpl/vueSyntax'
+                    },
+                    {
+                        subName: 'template引用',
+                        path: 'tpl/template'
                     }
                 ]
             },
             {
                 name: '组件',
-                icon: '../../common/img/component.png',
+                icon: require('../../common/img/component.png'),
                 open: false,
                 list: [
                     {
@@ -101,7 +118,7 @@ export default {
             },
             {
                 name: '数据操作',
-                icon: '../../common/img/data.png',
+                icon: require('../../common/img/data.png'),
                 open: false,
                 list: [
                     {
@@ -121,6 +138,10 @@ export default {
                         path: 'data/watch',
                     },
                     {
+                        subName: 'watchbug属性',
+                        path: 'data/watchparent',
+                    },
+                    {
                         subName: 'redux状态管理',
                         path: 'todos/todoList'
                     },
@@ -136,7 +157,7 @@ export default {
             },
             {
                 name: '性能相关',
-                icon: '../../common/img/performance.png',
+                icon: require('../../common/img/performance.png'),
                 open: false,
                 list: [
                     {
@@ -146,7 +167,7 @@ export default {
                 ]
             },
             {
-                icon: '../../common/img/more.png',
+                icon: require('../../common/img/more.png'),
                 name: '其他',
                 open: false,
                 list: [
@@ -157,21 +178,35 @@ export default {
                     {
                         subName: '单文件分开引入',
                         path: 'sfc/separate'
+                    },
+                    {
+                        subName: '页面事件处理函数',
+                        path: 'page-event/index'
+                    },
+                    {
+                        subName: '页面栈getCurrentPages',
+                        path: 'page-stack/index'
+                    },
+                    {
+                        subName: '样式单位转换',
+                        path: 'design-width/index'
                     }
                 ]
             }
-        ]
+        ],
+        isInit: false,
+        setDataInit: false
     },
-
     methods: {
-
         oneItemClick(viewPath) {
+            console.log('onitemclick api', this.$api);
             this.$api.navigateTo({
                 url: '/pages/' + viewPath
             });
         },
 
         toggleClick(index, navPath) {
+            console.log('toggleClick api', this.$api);
             // 无子项直接跳转
             if (navPath) {
                 this.$api.navigateTo({
@@ -182,15 +217,80 @@ export default {
 
             // 子项展开与收起
             let items = this.items;
+            let upItem = items[index];
             // this.setData(`items[${index}].open`, !items[index].open)
-            this.items.getItem(index).open = !items[index].open;
+            items.splice(index, 1, Object.assign(upItem, {open: !upItem.open}));
+            // this.items.getItem(index).open = !items[index].open;
+        },
+
+        getData() {
+            // return new Promise((resolve, reject) => {
+            //     swan.request({
+            //         url: 'xxx',
+            //         success: res => resolve(res)
+            //     });
+            // });
         }
+    },
+    mounted() {
+        getApp().globalData.isHome = true;
+        console.log('[home page] mounted.....getApp>>>>>>', getApp().globalData);
+    },
+    onInit(query) {
+        console.log('[home page] onInit......this.$http', this.$http);
+        if (!this.hasRequest) {
+            this.hasRequest = true;
+            this.isInit = true;
+        }
+    },
+    beforeCreate(param) {
+        console.log('[home page] beforeCreate....');
+    },
+    onShow(option) {
+        console.log('[home page] getCurrentPages>>>>>>!!', getCurrentPages());
+    },
+    created(param) {
+        console.log('[home page] created....');
+    },
+    onLoad() {
+        console.log('[home page] onload.............this.$http', this.$http);
+    },
+    onHide() {
+        console.log('[home page] onHide....');
+    },
+    destroyed() {
+        console.log('[home page] destroyed....');
+    },
+    onUnload() {
+        console.log('[home page] onUnload....');
+    },
+    onReachBottom(e) {
+        console.log('[home page] onReachBottom...');
+    },
+    onPageScroll(e) {
+        console.log('[home page] onPageScroll...', e);
+    },
+    onPullDownRefresh() {
+        // console.log('home page onPullDownRefresh...');
+    },
+    onShareAppMessage() {
+        // console.log('home page onShareAppMessage...');
+    },
+    onTabItemTap(item) {
+        // console.log('home page onTabItemTap....');
+        console.log(item.index);
+        console.log(item.pagePath);
+        console.log(item.text);
+    },
+    onURLQueryChange({newURLQuery, oldURLQuery}) {
+        console.log(newURLQuery, oldURLQuery); //  输出结果为 {channel: 'movie'} {}
     }
 };
 </script>
 <style lang="stylus">
 .group
     font-size: 14px
+    border: 1px solid #ccc; /* no */
 
 .group-hd
     height: 150px
@@ -263,4 +363,7 @@ export default {
 
 .sub-item-desc
     color: #666
+
+.area
+    height: 100px
 </style>

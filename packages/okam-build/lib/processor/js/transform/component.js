@@ -111,9 +111,10 @@ function getRequiredModulePath(valuePath, moduleName, t, removeRequireDeclaratio
  * @param {Object} node the components node
  * @param {Object} path the node path
  * @param {Object} t the babel type definition
+ * @param {boolean=} keepComponentDeclaration whether keep component declaration
  * @return {Object}
  */
-exports.getUsedComponentInfo = function (node, path, t) {
+exports.getUsedComponentInfo = function (node, path, t, keepComponentDeclaration) {
     if (!t.isObjectExpression(node)) {
         throw path.buildCodeFrameError('require object');
     }
@@ -122,6 +123,7 @@ exports.getUsedComponentInfo = function (node, path, t) {
     let props = node.properties || [];
     let propPaths = path.get('value.properties');
     let componentPathMap = {};
+    let removeComponentDeclaration = !keepComponentDeclaration;
     for (let i = 0, len = props.length; i < len; i++) {
         let subNode = props[i];
 
@@ -147,7 +149,9 @@ exports.getUsedComponentInfo = function (node, path, t) {
         let componentPath = componentPathMap[componentVarName];
         if (!componentPath) {
             let valuePath = propPaths[i].get('value');
-            componentPath = getRequiredModulePath(valuePath, componentVarName, t, true);
+            componentPath = getRequiredModulePath(
+                valuePath, componentVarName, t, removeComponentDeclaration
+            );
             componentPathMap[componentVarName] = componentPath;
         }
         result[key] = componentPath;
@@ -203,3 +207,18 @@ exports.getUsedMixinModulePaths = function (node, path, t, opts) {
     return mixinModulePaths;
 };
 
+/**
+ * Convert data property object value type to function type
+ *
+ * @param {Object} propNode the object property node to convert
+ * @param {Object} t the babel type definition
+ */
+exports.convertDataPropObjectValueToFunction = function (propNode, t) {
+    if (!t.isObjectExpression(propNode.value)) {
+        return;
+    }
+
+    propNode.value = t.functionExpression(
+        t.identifier('data'), [], t.blockStatement([t.returnStatement(propNode.value)])
+    );
+};

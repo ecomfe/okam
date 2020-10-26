@@ -56,13 +56,13 @@ describe('observable/setData', function () {
         });
 
         result = getSetDataPaths([
-            {a: {b: 3}, b: 56},
-            {'a.b': 23}
+            {a: {b: 23}, b: 56},
+            {'a.b': 23, 'a2.b': 3}
         ]);
         expect(result).toEqual({
-            a: {b: 3},
+            a: {b: 23},
             b: 56,
-            'a.b': 23
+            'a2.b': 3
         });
 
         result = getSetDataPaths([
@@ -86,9 +86,9 @@ describe('observable/setData', function () {
             'a.b0': 23,
             'd.arr': [1],
             c: 55,
-            arr: [],
-            'arr[1]': 23,
-            'd.arr[0]': 23
+            arr: []
+            // 'arr[1]': 23,
+            // 'd.arr[0]': 23
         });
     });
 });

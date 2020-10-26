@@ -7,7 +7,7 @@
 
 const chokidar = require('chokidar');
 const EventEmitter = require('events');
-const eventUtil = require('../util').event;
+const {event: eventUtil} = require('../util');
 
 const FILE_WATCH_EVENT_MAP = {
     ready: '',
@@ -27,6 +27,10 @@ function getProxyEventHandler(watcher, eventType) {
     };
 }
 
+function isNpmDepFile(path) {
+    return path.indexOf('node_modules/') !== -1;
+}
+
 class FileWatcher extends EventEmitter {
 
     /**
@@ -43,6 +47,7 @@ class FileWatcher extends EventEmitter {
         let {files, opts, baseDir} = options || {};
         this.baseDir = baseDir || '.';
         this.watchOpts = opts;
+        this.isDevEnv = process.env.OKAM_ENV === 'dev';
         this.initWatchFiles(files);
     }
 
@@ -68,9 +73,15 @@ class FileWatcher extends EventEmitter {
         }
 
         this.watchFiles = files.filter(path => {
-            if (path.startsWith('node_modules/')) {
-                return false;
+            if (isNpmDepFile(path)) {
+                if (this.isDevEnv) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
+
             return true;
         });
     }
@@ -89,7 +100,7 @@ class FileWatcher extends EventEmitter {
         let watchFiles = this.watchFiles;
         file.forEach(item => {
             let found = watchFiles.indexOf(item);
-            if (found === -1) {
+            if (found === -1 && this.isDevEnv && isNpmDepFile(item)) {
                 watchFiles.push(file);
                 newWatchFiles.push(file);
             }

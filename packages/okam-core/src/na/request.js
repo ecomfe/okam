@@ -47,11 +47,24 @@ function postData(url, options) {
 }
 
 const httpApi = {
-    request: promisify(api.request, api),
     fetch: fetchData,
     get: getData,
     post: postData
 };
+
+// lazy init request
+/* eslint-disable fecs-camelcase */
+let _req;
+Object.defineProperty(httpApi, 'request', {
+    get() {
+        return _req || (_req = promisify(api.request, api));
+    },
+    set(val) {
+        _req = val;
+    },
+    enumerable: true,
+    configurable: true
+});
 
 /* eslint-disable fecs-export-on-declare */
 export default httpApi;

@@ -13,7 +13,6 @@ const EVENT_PREFIX = {
 
 const {toHyphen} = require('../../../../util').string;
 
-
 /**
  * 事件名获取
  *
@@ -94,8 +93,8 @@ exports.modelTransformer = function (attrs, name, tplOpts, opts, element) {
     if (propName) {
         if (hasAttr(propName, attrs)) {
             logger.warn(
-                `${file.path} template attribute 「v-model="${attrs[name]}"」`,
-                `is conflicted with 「${propName}」on element <${element.name}>`
+                `${file.path} template attribute v-model="${attrs[name]}"`,
+                `is conflicted with ${propName} on element <${element.name}>`
             );
         }
         attrs[propName] = '{{' + attrs[name] + '}}';

@@ -20,16 +20,17 @@ export default function initApis() {
 
         Object.assign(this, base);
 
-        let promiseApis = this.$promisifyApis;
         let interceptAPis = this.$interceptApis;
+        let reqApiInterceptOpts = interceptAPis && interceptAPis.request;
+        // here visit $http.request to ensure the request init ahead of time
+        if (this.$http.request && reqApiInterceptOpts) {
+            interceptApis({request: reqApiInterceptOpts}, '$http', this);
+        }
 
+        let promiseApis = this.$promisifyApis;
         promisifyApis(promiseApis, this);
         interceptApis(interceptAPis, '$api', this);
 
-        let reqApiInterceptOpts = interceptAPis && interceptAPis.request;
-        if (reqApiInterceptOpts) {
-            interceptApis({request: reqApiInterceptOpts}, '$http', this);
-        }
         return true;
     }
 

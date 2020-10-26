@@ -19,16 +19,14 @@ function getDefaultBuildConfig(appType) {
     if (appType === 'base') {
         throw new Error('illegal app type', appType);
     }
-
     let defaultConfPath = path.join(
         __dirname, '..', 'config', `${appType}.js`
     );
     if (fileUtil.isFileExists(defaultConfPath)) {
         return require(defaultConfPath);
     }
-    else {
-        return require('../config/base');
-    }
+
+    return require('../config/base');
 }
 
 function getUserBuildConfig(config, appType, confPath) {
@@ -60,7 +58,13 @@ function initLogger(logger, logLevel, options) {
             logLevel = 'info';
         }
 
+        let erasable = true;
+        if (options && options.logErasable !== undefined) {
+            erasable = !!options.logErasable;
+        }
+
         logger = defaultLogger.create({
+            erasable,
             prefix: 'okam',
             level: logLevel
         });

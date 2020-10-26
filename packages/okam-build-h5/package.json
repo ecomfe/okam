@@ -1,0 +1,46 @@
+{
+  "name": "okam-build-h5",
+  "version": "0.1.0",
+  "description": "The h5 build tool for Okam to support H5 platform",
+  "main": "index.js",
+  "keywords": [
+    "h5",
+    "web",
+    "okam",
+    "mini program",
+    "build"
+  ],
+  "scripts": {
+    "lint": "fecs ./lib index.js --reporter=baidu --rule",
+    "prepublish": "npm run lint"
+  },
+  "license": "MIT",
+  "repository": "ecomfe/okam",
+  "bugs": {
+    "url": "https://github.com/ecomfe/okam/issues"
+  },
+  "peerDependencies": {
+    "okam-build": "^0.4.23"
+  },
+  "dependencies": {
+    "babel-loader": "^8.0.5",
+    "cliui": "^4.1.0",
+    "copy-webpack-plugin": "^5.0.0",
+    "css-loader": "^2.1.0",
+    "file-loader": "^3.0.1",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "url-loader": "^1.1.2",
+    "vue-style-loader": "^4.1.2",
+    "webpack": "^4.29.4",
+    "webpack-bundle-analyzer": "^3.0.4",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.2.1"
+  },
+  "engine": {
+    "node": ">= 8"
+  }
+}

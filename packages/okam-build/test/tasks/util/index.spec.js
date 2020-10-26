@@ -10,15 +10,16 @@ const util = require('okam/util');
 
 describe('util', function () {
     it('should have given api', function () {
-        let {string, Timer, file, event, logger, require: customRequire, colors, helper} = util;
-        assert(string != null);
-        assert(Timer != null);
-        assert(file != null);
-        assert(event != null);
-        assert(logger != null);
-        assert(customRequire != null);
-        assert(colors != null);
-        assert(helper != null);
+        assert(util.string != null);
+        assert(util.Timer != null);
+        assert(util.file != null);
+        assert(util.event != null);
+        assert(util.logger != null);
+        assert(util.require != null);
+        assert(util.colors != null);
+        assert(util.misc != null);
+        assert(util.net != null);
+        assert(util.os != null);
     });
 
     it('should cover to object map', function () {

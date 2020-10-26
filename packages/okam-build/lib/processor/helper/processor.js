@@ -183,7 +183,13 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
         processorOpts = merge({}, defaultOpts, processorOpts);
     }
 
-    let isNativeViewProcessor = processorName === 'nativeView';
+    // call before hook
+    let hook = result.hook;
+    if (hook && typeof hook.before === 'function') {
+        hook.before(file, processorOpts);
+    }
+
+    const isNativeView = processorName === 'nativeView';
 
     // init babel transform extra options
     let isUsingBabelProcessor = hasBabelProcessor(referProcessorName || processorName);
@@ -192,21 +198,16 @@ function getBuiltinProcessor(file, processorInfo, buildManager) {
             file, processorOpts, buildManager
         );
     }
-    else if (processorName === 'view' || isNativeViewProcessor) {
+    else if (processorName === 'view' || isNativeView) {
+        isNativeView && (processorOpts.ignoreDefaultOptions = true);
         processorOpts = initViewProcessorOptions(
-            file, processorOpts, buildManager, isNativeViewProcessor
+            file, processorOpts, buildManager
         );
     }
 
     let handler = result.processor;
     if (typeof handler === 'string') {
         handler = customRequire(handler);
-    }
-
-    // call before hook
-    let hook = result.hook;
-    if (hook && typeof hook.before === 'function') {
-        hook.before(file, processorOpts);
     }
 
     return {
@@ -246,10 +247,28 @@ function addScriptDefaultBabelProcessor(file, buildManager, processors) {
     }
 }
 
+function addMatchedProcessor(target, replacementProcessors, processors) {
+    if (!Array.isArray(processors)) {
+        processors = [processors];
+    }
+
+    // ensure the replacement processor to be executed ahead of the time
+    // and ensure the dead code can be removed by the babel processor afterwards
+    processors.forEach(item => {
+        if (item.name === 'replacement') {
+            replacementProcessors.push(item);
+        }
+        else {
+            target.push(item);
+        }
+    });
+}
+
 function findMatchProcessor(file, rules, buildManager) {
-    let logger = buildManager.logger;
-    let matchProcessors = [];
-    let unknownProcessors = [];
+    const logger = buildManager.logger;
+    const matchProcessors = [];
+    const unknownProcessors = [];
+    const replacementProcessors = [];
 
     rules || (rules = []);
     for (let r = 0, rLen = rules.length; r < rLen; r++) {
@@ -274,11 +293,10 @@ function findMatchProcessor(file, rules, buildManager) {
                 }
 
                 let result = getProcessor(item, file, buildManager);
-                if (Array.isArray(result)) {
-                    matchProcessors.push.apply(matchProcessors, result);
-                }
-                else if (result) {
-                    matchProcessors.push(result);
+                if (result) {
+                    addMatchedProcessor(
+                        matchProcessors, replacementProcessors, result
+                    );
                 }
                 else {
                     unknownProcessors.push({ruleIndex: r, processorIndex: k});
@@ -296,7 +314,7 @@ function findMatchProcessor(file, rules, buildManager) {
         addScriptDefaultBabelProcessor(file, buildManager, matchProcessors);
     }
 
-    return matchProcessors;
+    return replacementProcessors.concat(matchProcessors);
 }
 
 exports.getBuiltinProcessor = function (name, options) {

@@ -5,8 +5,7 @@
 
 'use strict';
 
-const colors = require('../util').colors;
-const net = require('./net');
+const {net, colors} = require('../util');
 
 class ServerBase {
     constructor({port, logger, middlewares, dep}) {
@@ -40,7 +39,9 @@ class ServerBase {
     }
 
     onStarted() {
+        this.logger.closeErasable();
         this.logger.info('DevServer started:', colors.cyan(`http://${this.ip}:${this.port}`));
+        this.logger.openErasable();
     }
 }
 

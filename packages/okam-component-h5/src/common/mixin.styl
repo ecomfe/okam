@@ -1,0 +1,54 @@
+/* 1px retina support */
+hairline($color, $pos = bottom, $radius = false)
+    &:after
+        content: ''
+        position: absolute
+        pointer-events: none
+        if $radius
+            border-radius: $radius
+
+        if $pos != all
+            background-color: $color
+
+        if $pos == top || $pos == bottom
+            @media only screen and (-webkit-min-device-pixel-ratio: 2)
+                transform: scaleY(0.5)
+                transform-origin: 0 0
+
+        if $pos == left || $pos == right
+            @media only screen and (-webkit-min-device-pixel-ratio: 2)
+                transform: scaleX(0.5)
+                transform-origin: 0 0
+
+        if $pos == top
+            top: 0
+            right: 0
+            left: 0
+            height: 1px /* px2rpx: no */
+        else if $pos == bottom
+            bottom: 0
+            right: 0
+            left: 0
+            height: 1px /* px2rpx: no */
+        else if $pos == left
+            top: 0
+            bottom: 0
+            left: 0
+            width: 1px /* px2rpx: no */
+        else if $pos == right
+            top: 0
+            bottom: 0
+            right: 0
+            width: 1px /* px2rpx: no */
+        else if $pos == all
+            top: 0
+            left: 0
+            right: 0
+            bottom: 0
+            border: 1px solid $color /* px2rpx: no */
+            box-sizing: border-box
+            @media only screen and (-webkit-min-device-pixel-ratio: 2)
+                right: -100% !important
+                bottom: -100% !important
+                transform: scale(0.5)
+                transform-origin: 0 0

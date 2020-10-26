@@ -45,7 +45,7 @@ function normalizeUsingComponentConfig(config, components, file, buildManager) {
         // the inner component declaration has higher priority than the global
         Object.keys(injectComponents).forEach(k => {
             if (!existed[k]) {
-                usingComponents[k] = injectComponents[k];
+                usingComponents[k] = injectComponents[k].id;
             }
         });
     }

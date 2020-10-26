@@ -13,20 +13,19 @@ module.exports = {
     element: elementTransformerMap,
     attribute: attrTransformerMap,
     text: {
-        bind: {
-            match(node) {
-                let value = node.data;
-                if (!value || value.indexOf('{{') === -1) {
-                    return false;
-                }
-                return true;
-            },
+        filter: {
             transform(node, tplOpts, opts) {
                 let {logger, config} = tplOpts;
                 let filterOpts = config.filter;
                 if (!filterOpts) {
                     return;
                 }
+
+                let value = node.data;
+                if (!value || value.indexOf('{{') === -1) {
+                    return;
+                }
+
                 return transformTextNode(node, filterOpts, logger);
             }
         }

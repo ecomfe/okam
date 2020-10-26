@@ -5,11 +5,13 @@
 
 'use strict';
 
+const {isPlainObject} = require('../../../util').lang;
 const {
     getBaseId,
     getFrameworkExtendId,
     normalizeInternalBehavior
 } = require('../../../framework');
+const {getBabelParser} = require('../babel-parser-helper');
 
 const LEADING_COMMENT_TYPE = 'leadingComments';
 const TRAILING_COMMENT_TYPE = 'trailingComments';
@@ -59,9 +61,17 @@ function getPlainObjectNodeValue(node, path, t) {
     else if (t.isLiteral(node)) {
         result = node.value;
     }
+    else if (t.isCallExpression(node)
+        && t.isIdentifier(node.callee)
+        && node.callee.name === 'require'
+        && t.isStringLiteral(node.arguments[0])
+    ) {
+        result = node.arguments[0].value;
+    }
     else {
         throw path.buildCodeFrameError('only constant is supported');
     }
+
     return result;
 }
 
@@ -138,7 +148,7 @@ function createNode(value, t) {
         return t.arrayExpression(elements);
     }
 
-    if (Object.prototype.toString.call(value) === '[object Object]') {
+    if (isPlainObject(value)) {
         let props = [];
         Object.keys(value).forEach(k => {
             let node = createNode(value[k], t);
@@ -268,12 +278,22 @@ exports.isVariableDefined = function (path, varName) {
  *
  * @param {Object} ast the code ast to generate
  * @param {Object} options the generation options
- * @param {boolean=} usingBabel6 whether using babel 6
  * @return {string}
  */
-exports.generateCode = function (ast, options, usingBabel6) {
-    let generate = usingBabel6
-        ? require('babel-generator').default
-        : require('@babel/generator').default;
-    return generate(ast, options);
+exports.generateCode = function (ast, options) {
+    let babel = getBabelParser();
+    return babel.generate(ast, options);
+};
+
+/**
+ * Generate ast based on the given code and code placeholder data
+ *
+ * @param {string} code the code to generate ast
+ * @param {Object=} data the code placeholder data
+ * @return {Object}
+ */
+exports.generateAst = function (code, data) {
+    let babel = getBabelParser();
+    let tpl = babel.template(code);
+    return tpl(data);
 };

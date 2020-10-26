@@ -7,6 +7,12 @@
 
 import store from './store/index';
 // import a from 'a';
+import './app.styl';
+
+if (process.env.APP_TYPE === 'h5') {
+    // require('normalize.css');
+    require('okam-component-h5/src/index.css');
+}
 
 export default {
     // the app config defined in app.json
@@ -19,6 +25,7 @@ export default {
             'pages/tpl/tplReuse',
             'pages/tpl/tplPug',
             'pages/tpl/ref',
+            'pages/tpl/template',
             'pages/typescript/ts',
             'pages/component/componentPage',
             'pages/component/canvas',
@@ -37,6 +44,44 @@ export default {
             'pages/sfc/index',
             'pages/sfc/separate',
             'pages/performance/oninit'
+            'pages/api/index',
+            'pages/api/navTitle',
+            'pages/api/network',
+            'pages/api/window',
+            'pages/api/interaction',
+            'pages/api/location',
+            'pages/api/payment',
+            'pages/api/animation',
+            'pages/api/image',
+            'pages/api/websocket',
+            'pages/api/scroll',
+            'pages/api/tab',
+            'pages/api/navigator',
+            'pages/api/clipboard',
+            'pages/api/storage',
+            'pages/api/system',
+            'pages/api/phone',
+            'pages/components/index',
+            'pages/components/text',
+            'pages/components/checkbox',
+            'pages/components/icon',
+            'pages/components/radio',
+            'pages/components/image',
+            'pages/components/progress',
+            'pages/components/scrollview',
+            'pages/components/switch',
+            'pages/components/slider',
+            'pages/components/swiper',
+            'pages/components/input',
+            'pages/components/textarea',
+            'pages/components/picker',
+            'pages/components/form',
+            'pages/components/richText',
+            'pages/components/video',
+            'pages/components/webview',
+            'pages/page-event/index',
+            'pages/page-stack/index',
+            'pages/detail/detail'
         ],
         subPackages: [
             {
@@ -56,11 +101,55 @@ export default {
             navigationBarTextStyle: 'white',
             backgroundTextStyle: 'light',
             enablePullDownRefresh: false,
-            backgroundColor: '#211E2E'
+            backgroundColor: '#fff',
+            onReachBottomDistance: 30
+        },
+        tabBar: {
+            color: '#2196F3',
+            selectedColor: '#f44336',
+            backgroundColor: '#fff',
+            // position: 'top', // 'bottom',
+            list: [
+                {
+                    pagePath: 'pages/home/index',
+                    text: '首页',
+                    iconPath: 'common/img/data.png',
+                    selectedIconPath: 'common/img/ui.png'
+                },
+                {
+                    pagePath: 'pages/api/index',
+                    text: 'API',
+                    iconPath: 'common/img/api.png',
+                    selectedIconPath: 'common/img/ui.png'
+                },
+                {
+                    pagePath: 'pages/components/index',
+                    text: '组件',
+                    iconPath: 'common/img/component.png',
+                    selectedIconPath: 'common/img/ui.png'
+                },
+                {
+                    pagePath: 'pages/api/tab',
+                    text: 'TabBar',
+                    iconPath: 'common/img/data.png',
+                    selectedIconPath: 'common/img/ui.png'
+                }
+            ]
         },
 
         networkTimeout: {
             request: 30000
+        },
+
+        /* eslint camelcase: 0 */
+        dynamicLib: {
+            bd_bcp_sdk: { // 自定义名称
+                provider: 'bd_bcp_sdk'
+            }
+        },
+
+        preloadRule: {
+            
         },
 
         _quickEnv: {
@@ -75,7 +164,8 @@ export default {
     $store: store,
 
     globalData: {
-        config: {}
+        sid: '',
+        uuid: ''
     },
 
     // apis which need promisify
@@ -123,12 +213,18 @@ export default {
     },
 
     async onLaunch() {
-        let result = await this.$api.getSystemInfo();
+        console.log('[app] onLaunch...');
+        this.globalData.pfLaunchSt = Date.now();
+        const systemInfo = this.$api.getSystemInfoSync() || {};
+        console.log('launch system info Sync', systemInfo);
+        this.globalData.systemInfo = systemInfo;
+        console.log('[app] globalData>>>>', this.globalData);
+
+        let result = this.$api.getSystemInfo();
         console.log('launch system info', result);
-        console.log('show onLaunch...');
 
         let reqResult = await this.testReq();
-        console.log('request result', reqResult);
+        console.log('[app page] request result', reqResult);
     },
 
     onShow() {
@@ -136,7 +232,7 @@ export default {
             console.log('systemInfo', res);
         });
 
-        console.log('show app...');
+        console.log('[app] onShow...');
 
         // for (let i = 0; i < 5; i++) {
         //     this.$http.get(
@@ -152,10 +248,10 @@ export default {
     },
 
     onHide() {
-        console.log('hide app...');
+        console.log('[app] onHide...');
     },
 
     onError(e) {
-        console.error('app error happen', e);
+        console.error('[app] error happen', e);
     }
 };

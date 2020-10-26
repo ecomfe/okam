@@ -15,7 +15,15 @@ const {
     removeComments
 } = require('./helper');
 const appTransformer = require('./app');
-const componentTransformer = require('./component');
+const {
+    getUsedMixinModulePaths,
+    getUsedComponentInfo,
+    convertDataPropObjectValueToFunction
+} = require('./component');
+const {
+    initH5CreateCallArgs,
+    handleH5PageSomeLifeCycle
+} = require('./h5/initCallArgs');
 
 /**
  * Traverse the module definition information and extract the `config` information
@@ -25,10 +33,20 @@ const componentTransformer = require('./component');
  * @param {Object} t the babel type definition
  * @param {Object} initConfig the config used to cache the extracted information
  * @param {Object} opts the transformation options
+ * @param {Object} pageHookObj config, methods, and other attributes
  * @return {Object}
  */
-function getCodeTraverseVisitors(t, initConfig, opts) {
-    let {isPage, isComponent, isBehavior, enableMixinSupport, filterOptions} = opts;
+function getCodeTraverseVisitors(t, initConfig, opts, pageHookObj) {
+    let {
+        isPage,
+        isComponent,
+        isBehavior,
+        enableMixinSupport,
+        filterOptions,
+        keepComponentsProp,
+        dataPropValueToFunc,
+        appType
+    } = opts;
     let hasComponents = isPage || isComponent;
     return {
         ObjectProperty(path) {
@@ -36,6 +54,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             let key = prop.key;
             let keyName = key && key.name;
             if (!isBehavior && keyName === 'config') {
+                pageHookObj.config = path.get('value');
                 // extract the app/component/page config definition
                 let config = getPlainObjectNodeValue(prop.value, path, t);
                 initConfig.config = config;
@@ -46,7 +65,7 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             }
             else if (enableMixinSupport && keyName === 'mixins') {
                 // extract the mixins information for page/component
-                let mixins = componentTransformer.getUsedMixinModulePaths(
+                let mixins = getUsedMixinModulePaths(
                     prop.value, path, t, opts
                 );
                 initConfig.mixins = mixins;
@@ -55,12 +74,17 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
             }
             else if (!isBehavior && hasComponents && keyName === 'components') {
                 // extract the using components information for page/component
-                let config = componentTransformer.getUsedComponentInfo(
-                    prop.value, path, t
+                let config = getUsedComponentInfo(
+                    prop.value, path, t, keepComponentsProp
                 );
                 initConfig.components = config;
-                removeNode(t, path, {tail: true});
+                keepComponentsProp || removeNode(t, path, {tail: true});
 
+                path.skip();
+            }
+            else if (dataPropValueToFunc && !isBehavior && keyName === 'data') {
+                convertDataPropObjectValueToFunction(prop, t);
+                // skip children traverse
                 path.skip();
             }
             else if (filterOptions && !isBehavior && keyName === 'filters') {
@@ -83,8 +107,17 @@ function getCodeTraverseVisitors(t, initConfig, opts) {
 
                 path.skip();
             }
+            else if (keyName === 'methods') {
+                pageHookObj.methods = path.get('value').node.properties;
+                path.skip();
+            }
             else {
                 path.skip();
+            }
+        },
+        ObjectMethod(path) {
+            if (appType === 'h5' && isPage) {
+                handleH5PageSomeLifeCycle(t, path, pageHookObj);
             }
         }
     };
@@ -140,13 +173,21 @@ function createInitCallArgs(declarationPath, config, opts, t) {
  * @param {Object} opts the transformation options
  */
 function transformMiniProgram(t, path, declarationPath, config, opts) {
+    // the transformation page hook
+    let pageHookObj = {
+        pageEvent: {},
+        lifeCycle: {}
+    };
     if (t.isObjectExpression(declarationPath)) {
         // extract the config information defined in the code
         declarationPath.traverse(
-            getCodeTraverseVisitors(t, config, opts)
+            getCodeTraverseVisitors(
+                t, config, opts, pageHookObj
+            )
         );
     }
     else if (opts.isExtension) {
+        // do not throw exception for not object export extension
         return;
     }
     else {
@@ -166,13 +207,32 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
     );
 
     if (opts.isApp) {
-        // insert the app extension use statements
+        // insert the app extension using statements
         appTransformer.extendAppFramework(
             t, path, bodyPath, baseClassName, opts
         );
     }
 
     let callArgs = createInitCallArgs(declarationPath, config.config, opts, t);
+
+    if (opts.appType === 'h5') {
+        // add h5 app router config argument
+        let h5InitOpts = {
+            routeConfigModId: opts.routeConfigModId,
+            path,
+            bodyPath
+        };
+        initH5CreateCallArgs({
+            t,
+            h5InitOpts,
+            pageHookObj,
+            callArgs,
+            path,
+            opts,
+            declarationPath
+        });
+    }
+
     let needExport = opts.needExport || !opts.baseClass;
     let toReplacePath = needExport
         ? path.get('declaration')
@@ -182,6 +242,7 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         t.identifier(baseClassName),
         callArgs
     );
+
     if (opts.isBehavior || !opts.baseClass) {
         toReplacePath.replaceWith(t.expressionStatement(
             callExpression

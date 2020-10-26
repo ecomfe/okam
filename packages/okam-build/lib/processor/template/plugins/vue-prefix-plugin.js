@@ -55,7 +55,7 @@ const DIRECTIVES_NOT_SUPPORT = [
  * @type {Object}
  * @const
  */
-const DIRECTIVES_FRAMWORK_SUPPORT = {
+const DIRECTIVES_FRAMEWORK_SUPPORT = {
     'v-model': 'model',
     'v-html': 'vhtml'
 };
@@ -88,26 +88,26 @@ function getNewAttrKey(attr) {
 module.exports = {
     tag(node, tplOpts) {
         const {logger, file, config} = tplOpts;
-        const framwork = config.framework || [];
-
-        let attrs = node.attribs || {};
+        const framework = config.framework || [];
+        const attrs = node.attribs || {};
 
         Object.keys(attrs).forEach(key => {
-
             if (DIRECTIVES_NOT_SUPPORT.indexOf(key) >= 0) {
                 logger.error(`${file.path} template attribute ${key} not support`);
                 return;
             }
 
-            let supportByFramework = DIRECTIVES_FRAMWORK_SUPPORT[key];
-            if (supportByFramework && framwork.indexOf(supportByFramework) < 0) {
+            let supportByFramework = DIRECTIVES_FRAMEWORK_SUPPORT[key];
+            if (supportByFramework && framework.indexOf(supportByFramework) < 0) {
                 logger.error(`${file.path} template attribute ${key} not support`);
-                logger.warn(`you can add 「'${supportByFramework}'」 on framwork config to support`);
+                logger.warn(
+                    `you can try to add '${supportByFramework}' in build`,
+                    'config `framework` to enable'
+                );
                 return;
             }
 
             let newAttr = getNewAttrKey(key);
-
             if (!newAttr || key === newAttr) {
                 return;
             }

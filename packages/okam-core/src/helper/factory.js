@@ -43,11 +43,9 @@ function initExtensions(type, instance, base) {
         let args = [{}];
         plugins && Array.prototype.push.apply(args, plugins);
         args.push(base);
-
         existedBase = mixin.apply(this, args);
         cache.baseClasses[type] = existedBase;
     }
-
     return mixin.apply(this, [instance, existedBase]);
 }
 
@@ -87,11 +85,15 @@ function addExtension(type, extension) {
  */
 function initComponentData(instance, options, isPage) {
     let data = instance.data;
-    if (isFunction(data)) {
+    let isH5 = options && options.isH5;
+    if (!isH5 && isFunction(data)) {
         instance.data = instance.data();
     }
 
-    instance.$init && instance.$init(isPage, options);
+    if (instance.$init) {
+        instance.$init(isPage, options);
+        delete instance.$init; // remove not instance api
+    }
 }
 
 /**
@@ -168,6 +170,7 @@ export function createApp(instance, base, options) {
  * @param {Object=} options the extra init options
  * @param {Object=} options.refs the component reference used in the component, the
  *        reference information is defined in the template
+ * @param {boolean=} options.isH5 whether is h5 app
  * @return {Object}
  */
 export function createPage(instance, base, normalize, options) {
@@ -175,7 +178,6 @@ export function createPage(instance, base, normalize, options) {
 
     initComponentData(pageInfo, options, true);
     normalize && (pageInfo = normalize(pageInfo));
-
     return pageInfo;
 }
 
@@ -188,6 +190,7 @@ export function createPage(instance, base, normalize, options) {
  * @param {Object=} options the extra init options
  * @param {Object=} options.refs the component reference used in the component, the
  *        reference information is defined in the template
+ * @param {boolean=} options.isH5 whether is h5 app
  * @return {Object}
  */
 export function createComponent(instance, base, normalize, options) {

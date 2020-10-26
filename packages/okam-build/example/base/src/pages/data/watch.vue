@@ -102,7 +102,7 @@ export default {
 
         'obj.arr': {
             handler(newVal, oldVal) {
-                console.log('obj change...', newVal, oldVal, newVal === oldVal);
+                console.log('obj.arr change...', newVal, oldVal, newVal === oldVal);
             }
         },
 
@@ -112,7 +112,6 @@ export default {
             },
             deep: true
         },
-
         // TODO 由于小程序框架会把数组转成对象。。。待修复
         // flag: [
         //     function (newVal, oldVal) {
@@ -155,7 +154,7 @@ export default {
         },
 
         onChangeArrElemValue2() {
-            this.arr.getItem(0).a = 400;
+            this.arr[0].a = 400;
         },
 
         onChangeA() {

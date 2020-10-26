@@ -251,8 +251,9 @@ export default {
          *
          * @private
          * @param {string} prop the changed prop name
+         * @param {boolean=} force whether force update for the reference type
          */
-        __handleDataChange(prop) {
+        __handleDataChange(prop, force) {
             let computedInfo = this.$rawComputed;
             if (!computedInfo) {
                 return;
@@ -271,6 +272,19 @@ export default {
             changeProps.forEach(k => {
                 let getter = computedInfo[k];
                 let value = getter.call(this);
+
+                // force update the value that has the same reference value
+                if (force && value
+                    && typeof value === 'object'
+                    && value === this[k]
+                ) {
+                    if (Array.isArray(value)) {
+                        value = [].concat(value);
+                    }
+                    else {
+                        value = Object.assign({}, value);
+                    }
+                }
                 this[k] = value;
             });
         },

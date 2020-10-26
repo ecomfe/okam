@@ -4,8 +4,6 @@
   "description": "The build helper for Okam develop framework",
   "main": "index.js",
   "keywords": [
-    "swan",
-    "wx",
     "okam",
     "mini program",
     "build",

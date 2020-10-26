@@ -14,6 +14,7 @@ const babel7Traverse = require('@babel/traverse').default;
 const babel6Traverse = require('babel-traverse').default;
 const {readFile, writeFile} = require('test/helper');
 const {generateCode} = require('okam/processor/js/transform/filter');
+const {initBabelParser} = require('okam/processor/js/babel-parser-helper');
 
 describe('filter transform', function () {
 
@@ -23,6 +24,8 @@ describe('filter transform', function () {
         const ast = parse6(code, {
             sourceType: 'module'
         });
+
+        initBabelParser(6);
         babel6Traverse(ast, {
             ObjectProperty(path) {
                 let prop = path.node;
@@ -46,6 +49,8 @@ describe('filter transform', function () {
         const ast = parse7(code, {
             sourceType: 'module'
         });
+
+        initBabelParser(7);
         babel7Traverse(ast, {
             ObjectProperty(path) {
                 let prop = path.node;

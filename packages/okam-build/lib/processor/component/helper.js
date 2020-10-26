@@ -23,6 +23,11 @@ exports.getComponentPartFile = function (part, options) {
     if (part.src) {
         let dir = path.dirname(filePath);
         fullPath = path.resolve(dir, part.src);
+        let file = options.getFileByFullPath(fullPath);
+        if (file) {
+            file.isVirtual = false;
+            return file;
+        }
         isVirtual = false;
     }
     else {

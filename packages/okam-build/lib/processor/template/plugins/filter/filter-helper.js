@@ -5,7 +5,6 @@
 
 'use strict';
 
-
 const {FILTER_NAME_WRAP_REGEXP} = require('../../transform/base/filter');
 
 function findFilterModuleName(filters, filterName) {
@@ -74,6 +73,7 @@ function transformFilterInTextNode(node, tplOpts, options) {
 
 function insertFilterModule(filterTagOpts, root, tplOpts, options) {
     let {filters} = options;
+
     // insert filter declaration like:
     // <wxs src="../filter/util.wxs" module="util"></wxs>
     let next = root.children[0];

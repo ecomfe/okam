@@ -5,7 +5,7 @@
 
 // import behvaiorB from './behaviorB';
 import util from './util';
-console.log(util);
+
 export default {
     props: {
         title: {

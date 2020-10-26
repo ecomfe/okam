@@ -1,8 +1,9 @@
 /**
  * @file Create Fake Vue
- * @author wuhuiyao@baidu.com
+ * @author sparklewhy@gmail.com
  */
 
+import {appGlobal} from '../../../na/index';
 import watch from '../watch/index';
 import observable from '../observable/index';
 import proxyArrayApis from '../observable/array';
@@ -11,10 +12,19 @@ import {addDep} from '../observable/helper';
 const observableComp = observable.component;
 const watchComp = watch.component;
 
-const getCallbacks = [];
-const setCallbacks = [];
+let getCallbacks = [];
+let setCallbacks = [];
 function handleDataGetSet(isGet, paths, newVal, oldVal) {
-    const callbacks = isGet ? getCallbacks : setCallbacks;
+    let callbacks;
+    if (process.env.APP_TYPE === 'quick') {
+        callbacks = isGet
+            ? appGlobal.okamVuexGetCallbacks
+            : appGlobal.okamVuexSetCallbacks;
+    }
+    else {
+        callbacks = isGet ? getCallbacks : setCallbacks;
+    }
+
     callbacks.forEach(item => item.call(null, paths, newVal, oldVal));
 }
 
@@ -40,10 +50,6 @@ function Vue(options) {
     observableComp.$init.call(instance, true);
     watchComp.$init.call(instance, true);
 
-    // init inner data get/set listener
-    instance.__onDataGet = handleDataGetSet.bind(instance, true);
-    instance.__onDataSet = handleDataGetSet.bind(instance, false);
-
     instance.created();
 
     // define observable data and exported on `_data` attribute (Vuex need it)
@@ -58,6 +64,20 @@ function Vue(options) {
         Object.defineProperties(data, def);
     }
     instance._data = data;
+
+    // init inner data get/set listener
+    instance.__onDataGet = handleDataGetSet.bind(instance, true);
+    instance.__onDataSet = handleDataGetSet.bind(instance, false);
+
+    if (process.env.APP_TYPE === 'quick') {
+        if (!appGlobal.okamVuexGetCallbacks) {
+            appGlobal.okamVuexGetCallbacks = [];
+        }
+
+        if (!appGlobal.okamVuexSetCallbacks) {
+            appGlobal.okamVuexSetCallbacks = [];
+        }
+    }
 
     return instance;
 }
@@ -111,16 +131,21 @@ Vue.use = function (plugin) {
     }
 };
 
-Vue.initDataGetSet = function (instance) {
+Vue.initDataGetSet = function (instance, customAddDep) {
+    if (process.env.APP_TYPE === 'quick') {
+        getCallbacks = appGlobal.okamVuexGetCallbacks;
+        setCallbacks = appGlobal.okamVuexSetCallbacks;
+    }
+
     // init get/set callback
     const currGetCallback = paths => {
         let deps = instance.__deps;
-        deps && addDep(deps, paths);
+        deps && (customAddDep || addDep)(deps, paths);
     };
     getCallbacks.push(currGetCallback);
 
     const currSetCallback = (paths, newVal, oldVal) => {
-        let listener = instance && instance.$dataListener;
+        let listener = instance && instance.__dataListener;
         listener && listener.emit('change', newVal, oldVal, paths);
     };
     setCallbacks.push(currSetCallback);

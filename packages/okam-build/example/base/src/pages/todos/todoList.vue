@@ -12,11 +12,12 @@
         <button plain class="add-todo-btn" @click="onAddTodo">增加 Todo</button>
         <view class="todo-list">
             <view class="todo-item new-item" if="addNew">
-                <input focus="true" placeholder="输入 Todo 项内容" type="text"
+                <input focus placeholder="输入 Todo 项内容" type="text"
                     class="todo-input" @blur="onInputDone" @confirm="onInputDone"/>
             </view>
             <view class="empty-tip" if="!filterList.length">无</view>
-            <view @click="onToggleDone(item.id)" for="item, index in filterList"
+            <view @click="onToggleDone(item.id)"
+                for="item, index in filterList" :key="item.id"
                 :class="[item.completed ? 'done' : '', 'todo-item']" else>
                 <text class="todo-content">{{item.text}}</text>
                 <icon size="16" class="op-btn" type="clear" @click.stop="onRemoveTodo(item.id)"/>
@@ -118,19 +119,19 @@ export default {
 
         let newObj = {a: 3};
         this.setData({obj: newObj}, () => {
-            console.log('after done newObj', newObj, newObj === this.data.obj);
+            console.log('after done newObj', newObj, newObj === this.obj);
         });
-        console.log('before done newObj', newObj, this.data.obj, newObj === this.data.obj);
+        console.log('before done newObj', newObj, this.obj, newObj === this.obj);
     },
 
     methods: {
         onToggleDone(id) {
             this.oldTodos = this.$store.getState().todos;
-            console.log('before toggle done', this.todos, this.oldTodos === this.data.todos)
+            console.log('before toggle done', this.todos, this.oldTodos === this.todos)
             this.toggle(id);
-            console.log('after toggle done', this.todos, this.oldTodos === this.data.todos)
+            console.log('after toggle done', this.todos, this.oldTodos === this.todos)
             setTimeout(() => {
-                console.log('after toggle success', this.todos, this.oldTodos === this.data.todos)
+                console.log('after toggle success', this.todos, this.oldTodos === this.todos)
             }, 300)
         },
 

@@ -8,7 +8,7 @@
 const assert = require('assert');
 const {fakeProcessorOptions} = require('test/helper');
 const templateProcessor = require('okam/processor/template/index');
-const reverseTagMap = require('okam/util/tag-tansform-helper');
+const reverseTagMap = require('okam/util/tag-transform-helper');
 
 const transformTags = reverseTagMap({
     view: ['div', 'p']

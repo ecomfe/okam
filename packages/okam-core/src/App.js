@@ -15,13 +15,18 @@ import base from './base/base';
  * Register API
  *
  * @param {Object} apiConfig the api config to register
+ * @param {boolean=} override whether override the all api definition
  */
-function registerApi(apiConfig) {
-    let baseApi = base.$api;
-    apiConfig && Object.keys(apiConfig).forEach(k => {
-        // TODO: when in dev mode, warn the existed API will be override
-        definePropertyValue(baseApi, k, apiConfig[k]);
-    });
+function registerApi(apiConfig, override) {
+    let apis = base.$api;
+    if (override) {
+        Object.assign(apis, apiConfig);
+    }
+    else {
+        apiConfig && Object.keys(apiConfig).forEach(k => {
+            definePropertyValue(apis, k, apiConfig[k]);
+        });
+    }
 }
 
 /**

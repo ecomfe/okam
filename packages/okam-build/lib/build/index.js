@@ -45,7 +45,10 @@ function startBuild(buildConf, clear) {
         buildManager.clear();
     }
 
-    startDevServer(buildConf, buildManager);
+    if (!buildManager.usingCustomDevServer) {
+        startDevServer(buildConf, buildManager);
+    }
+
     let doneHandler = function () {
         startFileChangeMonitor(buildConf, buildManager);
     };
@@ -61,7 +64,6 @@ function main(appType, options) {
     // init build config
     let cliOpts = yargsParser(process.argv.slice(2));
     let buildConf = initBuildOptions(appType, options, cliOpts);
-
     let {logger} = buildConf;
     try {
         startBuild(buildConf, cliOpts.clean);

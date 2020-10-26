@@ -7,6 +7,7 @@
 
 /* eslint-disable fecs-properties-quote */
 const path = require('path');
+const {defaultH5TagToMiniProgram} = require('../../../');
 
 module.exports = {
     verbose: false,
@@ -29,53 +30,11 @@ module.exports = {
                     detailProp: 'value'
                 }
             },
-            transformTags: {
-                div: 'view',
-                p: 'view',
-                ul: 'view',
-                ol: 'view',
-                li: 'view',
-                // span 会被转为 view 标签，若想让它拥有 inline 属性，可通过 配置 class 值如：okam-inline 进行 样式属性控制
-                // 注：okam-inline 样式 需自行在样式文件(app.css)中定义
-                // 最终 view 标签 class 将额外添加 okam-inline 值，而不是覆盖
-                span: {
-                    tag: 'view',
-                    class: 'okam-inline'
-                },
-                strong: {
-                    tag: 'view',
-                    class: 'okam-inline'
-                },
-                h1: 'view',
-                h2: 'view',
-                h3: 'view',
-                h4: 'view',
-                h5: 'view',
-                h6: 'view',
-                article: 'view',
-                section: 'view',
-                aside: 'view',
-                nav: 'view',
-                header: 'view',
-                footer: 'view',
-                pre: 'view',
-                code: 'view',
-
-                // Object
-                // eg
-                //     <a class="home-link" href='xxx'></a>
-                // 转为:
-                //     <navigator class="okam-inline home-link" url='xxx'></navigator>
-                a: {
-                    tag: 'navigator',
-                    class: 'okam-inline',
-                    href: 'url'
-                },
-
-                // string
-                img: 'image'
-            }
+            transformTags: defaultH5TagToMiniProgram
         }
+    },
+    api: {
+        hi: './api/hi.js'
     },
     framework: [
         'data',
@@ -95,6 +54,9 @@ module.exports = {
         modules: ['node_modules', path.join(__dirname, '../dep')]
     },
     processors: {
+        babel7: {
+            extnames: 'js'
+        },
         pug: {
             options: {
                 doctype: 'xml',
@@ -156,14 +118,13 @@ module.exports = {
     ],
 
     server: {
-        port: 9090,
-        type: 'connect'
-        // middlewares: [{
-        //     name: 'autoresponse',
-        //     options: {
-
-        //     }
-        // }]
+        port: 8080,
+        middlewares: [{
+            name: 'autoresponse',
+            options: {
+                post: true
+            }
+        }]
     },
 
     dev: {

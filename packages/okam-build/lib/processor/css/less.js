@@ -5,6 +5,7 @@
 
 'use strict';
 
+const pathUtil = require('path');
 const less = require('less');
 
 module.exports = function (file, options) {
@@ -34,7 +35,12 @@ module.exports = function (file, options) {
             throw err;
         }
         processResult.content = result.css;
-        processResult.deps = result.imports;
+        processResult.deps = (result.imports || []).map(item => {
+            if (!pathUtil.isAbsolute(item)) {
+                return pathUtil.join(root, item);
+            }
+            return item;
+        });
     });
     return processResult;
 };

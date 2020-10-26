@@ -121,18 +121,23 @@ const BUILTIN_PROCESSORS = {
     babel: {
         processor: getProcessorPath('js/babel-parser'),
         deps: 'babel-core',
-        rext: 'js'
+        rext: 'js',
+        order: 10
     },
     babel7: {
         processor: getProcessorPath('js/babel7-parser'),
         deps: '@babel/core',
-        rext: 'js'
+        rext: 'js',
+        order: 10
     },
     component: {
         processor: getProcessorPath('component/sfc-parser')
     },
     quickComponentGenerator: {
         processor: getProcessorPath('component/ux-generator')
+    },
+    vueComponentGenerator: {
+        processor: getProcessorPath('component/vue-generator')
     },
     quickComponent: {
         processor: getProcessorPath('component/ux-parser'),
@@ -207,7 +212,7 @@ exports.isScript = function (extname) {
     return SCRIPT_EXT_NAMES.includes(extname);
 };
 
-const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg'];
+const IMG_EXT_NAMES = ['png', 'gif', 'jpeg', 'jpg', 'webp', 'svg', 'ico'];
 exports.IMG_EXT_NAMES = IMG_EXT_NAMES;
 exports.isImg = function (extname) {
     return IMG_EXT_NAMES.includes(extname);

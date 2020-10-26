@@ -6,6 +6,7 @@
 'use strict';
 
 const {relative, replaceExtname} = require('../../util').file;
+const {normalizeUrlPath} = require('../helper/url');
 
 module.exports = function (file, options) {
     let {config, resolve} = options;
@@ -16,6 +17,7 @@ module.exports = function (file, options) {
     // add css style dependencies
     styleFiles && styleFiles.forEach(item => {
         let relPath = relative(item, dirName);
+        relPath = normalizeUrlPath(relPath);
         relPath = resolve(file, relPath);
         rext && (relPath = replaceExtname(relPath, rext));
         content = `@import '${relPath}';\n` + content;

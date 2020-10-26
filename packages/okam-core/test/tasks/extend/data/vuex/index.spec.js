@@ -26,6 +26,8 @@ import Vuex, {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
 import {executeSequentially, fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
 describe('Vuex support', function () {
+    this.timeout(0); // disable timeout
+
     let restoreAppEnv;
     let rawGetCurrApp;
     let MyComponent;

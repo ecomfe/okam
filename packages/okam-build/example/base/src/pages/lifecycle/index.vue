@@ -1,7 +1,8 @@
 <template>
     <view>
         <text class="title">Hello</text>
-        <button for="item in 5" @click="onClickView(item)">{{item}}</button>
+        <button for="item in 5" key="index" @click="onClickView(item)">{{item}}</button>
+        <view class="s-title">import引入css文件</view>
     </view>
 </template>
 
@@ -13,7 +14,6 @@ export default {
         backgroundColor: '#fff'
     },
     data: {
-        title: 'Typescript 测试',
         count: 0
     },
     beforeCreate() {
@@ -46,11 +46,14 @@ export default {
     }
 };
 </script>
-<style lang="stylus">
-.title
-    display: block
-    width: 100%
-    padding: 20px 0
-    text-align: center
+<style>
+@import 'style/index.css';
+
+.title {
+    display: block;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+}
 
 </style>

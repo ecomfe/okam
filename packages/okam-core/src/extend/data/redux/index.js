@@ -36,7 +36,8 @@ export default {
          */
         $init() {
             let methods = this.methods;
-            methods.__storeChangeHandler = connect(this);
+            let handler = connect(this);
+            handler && (methods.__storeChangeHandler = handler);
         },
 
         /**

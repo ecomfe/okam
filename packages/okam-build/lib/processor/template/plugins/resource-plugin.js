@@ -20,19 +20,24 @@ module.exports = {
         }
 
         let {attribs: attrs, name} = element;
-        let srcAttrName = tags && tags[name];
-        if (srcAttrName === false) {
+        let resourceAttrNames = tags && tags[name];
+        if (resourceAttrNames === false) {
             return;
         }
 
-        if (!srcAttrName || typeof srcAttrName !== 'string') {
-            srcAttrName = 'src';
+        if (!resourceAttrNames || resourceAttrNames === true) {
+            resourceAttrNames = ['src'];
+        }
+        else if (!Array.isArray(resourceAttrNames)) {
+            resourceAttrNames = [resourceAttrNames];
         }
 
-        let src = attrs && attrs[srcAttrName];
-        let relPath = src && resolveUrlPath(src, file, resolve, logger);
-        if (relPath) {
-            attrs[srcAttrName] = relPath;
-        }
+        resourceAttrNames.forEach(name => {
+            let src = attrs && attrs[name];
+            let relPath = src && resolveUrlPath(src, file, resolve, logger);
+            if (relPath) {
+                attrs[name] = relPath;
+            }
+        });
     }
 };
