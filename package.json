@@ -7,7 +7,7 @@
     "bootstrap": "lerna bootstrap --ignore-scripts",
     "init": "bash ./scripts/install.sh",
     "lint": "lerna run lint",
-    "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register --require ./packages/okam-core/test/prepare.js --recursive \"packages/*/test/tasks/**/*.spec.js\" --exclude \"packages/okam-component-h5/**/*\"",
+    "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register --require ./packages/okam-core/test/prepare.js --require ./packages/okam-api-h5/test/setup.js --recursive \"packages/*/test/tasks/**/*.spec.js\" --exclude \"packages/okam-component-h5/**/*\"",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "commit": "git-cz",
     "commitmsg": "commitlint -E HUSKY_GIT_PARAMS",

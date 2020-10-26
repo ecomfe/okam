@@ -6,9 +6,7 @@
 'use strict';
 
 import LocationApi from 'api/location';
-// import {strict as assert} from 'assert';
-// import {expect} from 'chai';
-import {expect, spy} from 'mochaccino';
+import expect, {createSpy} from 'expect';
 
 const {
     getLocation
@@ -17,8 +15,8 @@ const {
 
 describe('[api-group]location', function () {
     it('api:getLocation', function () {
-        let success = spy();
-        let fail = spy();
+        let success = createSpy(() => {});
+        let fail = createSpy(() => {});
 
         getLocation({
             success,

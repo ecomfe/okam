@@ -1,6 +1,6 @@
 <template>
-    <div class="component-container">
-        <o-button>Default button</o-button>
+    <div class="okam-demo-container">
+        <o-button @click="clickFn">Default button</o-button>
         <o-button size="default">Default size button</o-button>
         <o-button size="mini">Mini button</o-button>
         <o-button type="primary">Primary button</o-button>
@@ -20,6 +20,18 @@ import OButton from 'okam/Button';
 export default {
     components: {
         OButton
+    },
+    methods: {
+        clickFn() {
+            console.log('default click');
+        }
     }
 };
 </script>
+
+<style lang="stylus">
+.okam-demo-container
+    padding 15px 17px 15px
+    button
+        margin-bottom 5px
+</style>
