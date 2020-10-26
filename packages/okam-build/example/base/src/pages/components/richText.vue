@@ -28,7 +28,10 @@ export default {
                 text: 'Hello&nbsp;World!<div>ss</div>'
             }]
         }],
-        nodesStr: '<div class="div-class" style="line-height: 60px; color: red;">Hello&nbsp;World!</div>'
+        nodesStr: `<div class="div-class" style="line-height: 60px; color: red;">
+                <p>Hello&nbsp;World!</p>
+                <img height="100px" width="100px" src="https://b.bdstatic.com/miniapp/images/demo-dog.png" />
+            </div>`
     },
 
     methods: {

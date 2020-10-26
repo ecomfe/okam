@@ -38,6 +38,7 @@ function compile(file, options) {
 
     let appSpecConf = obj[envConfigKey];
     let isAppConfig = file.isAppConfig;
+
     appSpecConf && Object.keys(appSpecConf).forEach(k => {
         let value = appSpecConf[k];
         if (value == null) {

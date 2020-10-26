@@ -121,6 +121,17 @@ export default {
                         path: 'video'
                     }
                 ]
+            },
+            {
+                name: '开发能力',
+                icon: require('../../common/img/ui.png'),
+                open: false,
+                list: [
+                    {
+                        subName: 'web-view',
+                        path: 'webview'
+                    }
+                ]
             }
         ]
     },
@@ -148,6 +159,12 @@ export default {
             newItem.open = !newItem.open;
             this.items.splice(index, 1, newItem);
         }
+    },
+    created() {
+        console.log('[components page] onload......');
+    },
+    onShow() {
+        console.log('[components page] onShow......', getCurrentPages());
     }
 };
 </script>

@@ -13,8 +13,8 @@ import MyApp from 'core/swan/App';
 import MyPage from 'core/swan/Page';
 import {clearBaseCache} from 'core/helper/factory';
 import ref from 'core/extend/ref';
-import component from 'core/base/component';
-import page from 'core/base/page';
+import component from 'core/swan/base/component';
+import page from 'core/swan/base/page';
 import {fakeComponent, fakeAppEnvAPIs} from 'test/helper';
 
 describe('ref plugin', function () {
@@ -84,7 +84,6 @@ describe('ref plugin', function () {
                 assert(this.$refs.a === 'c.xx-a');
                 assert(this.$refs.b === 'c.xx-b');
                 expect(this.$refs.c).toEqual([]);
-
             }
         }, {refs: refInfo});
         page.onLoad();

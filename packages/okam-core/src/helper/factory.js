@@ -43,11 +43,9 @@ function initExtensions(type, instance, base) {
         let args = [{}];
         plugins && Array.prototype.push.apply(args, plugins);
         args.push(base);
-
         existedBase = mixin.apply(this, args);
         cache.baseClasses[type] = existedBase;
     }
-
     return mixin.apply(this, [instance, existedBase]);
 }
 
@@ -180,7 +178,6 @@ export function createPage(instance, base, normalize, options) {
 
     initComponentData(pageInfo, options, true);
     normalize && (pageInfo = normalize(pageInfo));
-
     return pageInfo;
 }
 

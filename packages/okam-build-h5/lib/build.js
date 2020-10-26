@@ -22,7 +22,8 @@ function getDevServerConfig(isDev, devServer) {
         open: false, // auto open browser
         publicPath: '/',
         overlay: {warnings: false, errors: true},
-        quiet: true // necessary for FriendlyErrorsPlugin
+        quiet: true, // necessary for FriendlyErrorsPlugin
+        disableHostCheck: true
     }, devServer);
 }
 

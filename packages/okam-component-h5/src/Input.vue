@@ -1,16 +1,19 @@
 <template>
-    <input class="weui-input" :value="value == null ? '' : value"
+    <input class="weui-input" :value="value"
         :disabled="disabled" :type="inputType" :autofocus="focus"
         :maxlength="allowInputMaxLen" :placeholder="placeholder || ''"
         :name="name || ''" v-bind="$attrs"
-        @input="onInput" @focus="onFocus" @blur="onBlur" @change="onChange" @keydown.enter="onEnter" />
+        @input="onInput" @focus="onFocus" @blur="onBlur" @change="onChange" @keydown.enter="onEnter"/>
 </template>
 <script>
 import formField from './mixins/formField';
 
 export default {
     mixins: [formField],
-
+    model: {
+        prop: 'value',
+        event: '_change'
+    },
     props: {
         name: String,
         value: String,
@@ -96,6 +99,7 @@ export default {
             });
 
             this.$emit('input', e);
+            this.$emit('_change', e.target.value);
         },
 
         onChange(e) {

@@ -7,7 +7,7 @@
 'use strict';
 
 // 像素样式值正则常量
-const PX_VALUE_REGEXP = /\b(\d+(\.\d+)?)px\b/g;
+const PX_VALUE_REGEXP = /\b(\d+(\.\d+)?)px\b/ig;
 
 /**
  * 获取像素转换后的值
@@ -24,7 +24,7 @@ function getPxTransformValue(node, noTrans1px, transform) {
             return match;
         }
 
-        return transform(node.value);
+        return transform(value);
     });
 }
 
@@ -48,7 +48,7 @@ exports.transformPx = function (cssAst, opts) {
 
     cssAst.walkRules(rule => {
         rule.walk(node => {
-            if (node.type === 'decl' && PX_VALUE_REGEXP.test(node.value)) {
+            if (node.type === 'decl' && node.value) {
                 let nodeRaws = node.raws;
                 if (
                     nodeRaws.value

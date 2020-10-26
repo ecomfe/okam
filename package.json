@@ -62,7 +62,7 @@
     "intelli-espower-loader": "^1.0.1",
     "lerna": "^3.5.1",
     "less": "^3.9.0",
-    "lint-staged": "^9.2.5",
+    "lint-staged": "8.2.1",
     "mocha": "^6.2.0",
     "node-sass": "^4.10.0",
     "nyc": "^14.1.1",
@@ -73,6 +73,7 @@
     "stylus": "^0.54.5"
   },
   "dependencies": {
+    "caniuse-lite": "^1.0.30001114",
     "vue": "^2.6.11",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.11",
@@ -80,11 +81,5 @@
   },
   "engine": {
     "node": ">= 8"
-  },
-  "dependencies": {
-    "vue": "^2.6.11",
-    "vue-loader": "^15.7.0",
-    "vue-template-compiler": "^2.6.11",
-    "webpack": "^4.44.0"
   }
 }

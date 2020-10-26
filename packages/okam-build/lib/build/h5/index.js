@@ -17,7 +17,7 @@ function getPageComponentName(modId, existedName) {
     let lastIdx = parts.length - 1;
     let name = parts[lastIdx];
     if (name === 'index' && lastIdx > 0) {
-        name = parts[lastIdx - 1] + 'Index';
+        name = formatPart(parts[lastIdx - 1]) + 'Index';
     }
 
     let counter = 0;
@@ -27,6 +27,20 @@ function getPageComponentName(modId, existedName) {
     }
     existedName[name] = true;
     return name;
+}
+
+// 对文件名以短横线链接的做下处理
+function formatPart(fileName) {
+    if (fileName.indexOf('-') === -1) {
+        return fileName;
+    }
+    const part = fileName.split('-');
+    return part.map((item, index) => {
+        if (index !== 0) {
+            return item.slice(0, 1).toUpperCase() + item.slice(1);
+        }
+        return item;
+    }).join('');
 }
 
 function padding(spaceNum, str) {

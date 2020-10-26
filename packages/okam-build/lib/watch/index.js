@@ -38,7 +38,9 @@ function createFileMonitor(buildConf, buildManager) {
         files: getWatchFilePatterns(buildManager)
     });
 
-    buildManager.files.on('addFile', f => monitor.add(f.path));
+    buildManager.files.on('addFile', f => {
+        monitor.add(f.path);
+    });
 
     let logger = buildManager.logger;
     monitor.on('ready', () => {

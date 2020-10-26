@@ -1,5 +1,5 @@
 <template>
-    <div class="okam-tabbar-container"
+    <div class="okam-tabbar-wrap"
         @animationend="onAnimationEnd"
         @webkitAnimationend="onAnimationEnd" v-show="show">
         <div :class="tabBarClassNames" :style="tabBarStyle" >
@@ -174,7 +174,7 @@ export default {
         }
 
         this.initTabList(this.list);
-
+        
         tabBarApi._initTabBarInstance(this);
     },
 
@@ -291,17 +291,21 @@ export default {
 @require './common/mixin.styl'
 $-okam-tabbar-height := 50px
 
-.okam-tabbar-wrap
-    display: flex
-    flex-direction: column
-    height: 100%
+.okam-app-wrap
+    width: 100%
 
-.okam-tabbar-container
-    position: relative
+.okam-tabbar-wrap
+    position: fixed
+    left: 0
+    bottom: 0
+    right: 0
     min-height: $-okam-tabbar-height
     .weui-tabbar
         position: relative
         height: 100%
+
+        &:before
+            border-top: none
 
 @keyframes topSlideUp
     from
@@ -323,9 +327,8 @@ $-okam-tabbar-height := 50px
 .okam-tabbar-top-animate-slide-down
     animation: topSlideDown ease .3s forwards
 
-.okam-tabbar-content
+.okam-app-container
     position: relative
-    flex: 1
     overflow: auto
     -webkit-overflow-scrolling: touch
 

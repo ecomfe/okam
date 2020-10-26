@@ -13,8 +13,5 @@ export default Object.assign({}, component, {
         component.beforeCreate.call(this);
         this.$isPage = true;
         this.$query = this.$route.query;
-
-        // call wx native onLoad hook
-        this.onLoad && this.onLoad();
     }
 });

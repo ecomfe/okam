@@ -57,10 +57,10 @@ module.exports = function (file, options) {
     } = options;
     let styleExtname = output.componentPartExtname
         && output.componentPartExtname.style;
-
     // init default design width
     if (designWidth) {
         BUILTIN_PLUGINS.px2rpx.options.designWidth = designWidth;
+        BUILTIN_PLUGINS.px2rem.options.designWidth = designWidth;
     }
 
     let plugins = config.plugins || [];

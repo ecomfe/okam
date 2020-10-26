@@ -99,6 +99,12 @@ export default {
                 }
             });
         }
+    },
+    created() {
+        console.log('[tab page] created......');
+    },
+    onShow() {
+        console.log('[tab page] onShow......', getCurrentPages());
     }
 };
 </script>

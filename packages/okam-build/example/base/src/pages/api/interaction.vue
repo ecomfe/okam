@@ -14,6 +14,9 @@
         <view class="show-loading">
             <button type="primary" @click="showLoading">showLoading</button>
         </view>
+        <view class="hide-loading">
+            <button type="primary" @click="hideToast">hideToast</button>
+        </view>
     </view>
 </template>
 <script>
@@ -26,6 +29,9 @@ export default {
     },
 
     methods: {
+        hideToast() {
+            this.$api.hideToast();
+        },
         showToast() {
             this.$api.showToast({
                 title: '这是 Toast'

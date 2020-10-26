@@ -12,7 +12,8 @@ const isDev = true;
 runH5Compile(isDev, {
     webpack: Object.assign({
         devServer: {
-            port: 9090
+            port: 9090,
+            disableHostCheck: true
         }
     }, require('../h5.config').webpack),
     root: path.join(__dirname, '../..'),

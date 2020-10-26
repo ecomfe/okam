@@ -1,8 +1,8 @@
 <template>
     <view class="simple-component-wrap">
-        <text class="f-title" if="flag">{{text}}</text>
+        <text class="s-title" if="flag">{{text}}</text>
         <simple-component2 ref="a"></simple-component2>
-        <button @click="handleClick">simple click</button>
+        <button @click="handleClick">get selectQuery</button>
     </view>
 </template>
 <script>
@@ -14,7 +14,8 @@ export default {
     },
 
     data: {
-        text: 'simple component'
+        text: 'simple component',
+        queryEleHeight: 0
     },
 
     computed: {
@@ -24,12 +25,10 @@ export default {
     },
 
     mounted() {
-        console.log('simple component mounted', this);
         let query = this.createSelectorQuery();
-        query.selectAll('.f-title').boundingClientRect().exec(
-            (res) => {
-                this.queryEle = res.length ? res[0].height : '-';
-                console.log('query res2222', res);
+        query.select('.s-title').boundingClientRect().exec(res => {
+                console.log('节点信息：', res[0]);
+                this.queryEleHeight = res.length ? res[0].height : '-';
             }
         );
     },
@@ -41,7 +40,7 @@ export default {
 
         handleClick() {
             this.$api.showToast({
-                title: 'query:' + this.queryEle
+                title: 'query:' + this.queryEleHeight
             });
         }
     }

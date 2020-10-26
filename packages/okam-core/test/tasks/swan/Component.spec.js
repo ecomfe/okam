@@ -12,7 +12,7 @@ import assert from 'assert';
 import expect, {createSpy, spyOn} from 'expect';
 import MyApp from 'core/swan/App';
 import base from 'core/base/base';
-import component from 'core/base/component';
+import component from 'core/swan/base/component';
 import {clearBaseCache} from 'core/helper/factory';
 import EventListener from 'core/util/EventListener';
 import {testCallOrder, fakeComponent, fakeAppEnvAPIs} from 'test/helper';
@@ -35,7 +35,22 @@ describe('Component', () => {
     });
 
     it('should inherit base api', () => {
-        let componentInstance = {};
+        let componentInstance = {
+            $isPage: false
+        };
+        let component = MyComponent(componentInstance);
+        component.created();
+
+        Object.keys(base).forEach(k => {
+            assert(component[k] === base[k]);
+        });
+    });
+
+    it('When OnInit is not supported, the API needs to be inherited to execute created', () => {
+        let componentInstance = {
+            $isPage: true,
+            $isSupportOninit: false
+        };
         let component = MyComponent(componentInstance);
         component.created();
 

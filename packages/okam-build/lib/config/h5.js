@@ -92,7 +92,8 @@ module.exports = merge({}, baseConf, {
                 'picker': 'opicker',
                 'form': 'oform',
                 'rich-text': 'orich-text',
-                'video': 'ovideo'
+                'video': 'ovideo',
+                'web-view': 'oweb-view'
             }
         },
         global: {
@@ -117,7 +118,8 @@ module.exports = merge({}, baseConf, {
             'opicker': 'ocomp/Picker',
             'oform': 'ocomp/Form',
             'orich-text': 'ocomp/RichText',
-            'ovideo': 'ocomp/Video'
+            'ovideo': 'ocomp/Video',
+            'oweb-view': 'ocomp/WebView'
         }
     },
 

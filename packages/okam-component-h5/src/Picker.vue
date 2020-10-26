@@ -45,7 +45,10 @@ import {
 
 export default {
     mixins: [formField],
-
+    model: {
+        prop: 'value',
+        event: '_change'
+    },
     components: {
         PickerGroup
     },
@@ -244,6 +247,7 @@ export default {
             this.open = false;
             let value = this.getFieldValue();
             this.$emit('change', {detail: {value}});
+            this.$emit('_change', value);
         },
 
         initDateDayGroupData() {

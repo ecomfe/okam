@@ -14,13 +14,20 @@
         <button @click="getObjectData">getObjectData</button>
         <button @click="updateCounter">变更父组件counter:{{counter}}</button>
         <my-component :counter="counter"></my-component>
+        <!--slot插槽-->
+        <slot-comp>
+            <view slot="inner">
+                <view class="title">slot插槽的数据前缀var-</view>
+                <view>子组件的name值为：{{name}}</view>
+            </view>
+        </slot-comp>
     </view>
 </template>
 
 <script>
 import Hello from '../../components/Hello';
 import MyComponent from '../../components/MyComponent';
-
+import slotComp from '../../components/slot';
 export default {
     config: {
         navigationBarTitleText: '自定义组件示例'
@@ -28,7 +35,8 @@ export default {
 
     components: {
         Hello,
-        MyComponent
+        MyComponent,
+        slotComp
     },
 
     data: {
@@ -36,7 +44,8 @@ export default {
         myTitle: '自定义组件默认Slot',
         num: 33,
         counter: 0,
-        obj: {a: 3}
+        obj: {a: 3},
+        name: 'swan-outer'
     },
 
     mounted() {
@@ -101,4 +110,7 @@ export default {
     .hello-title
         font-weight: 600
         font-size: 16
+
+.global-class
+    color: blue        
 </style>

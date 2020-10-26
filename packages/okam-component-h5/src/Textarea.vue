@@ -1,5 +1,5 @@
 <template>
-    <textarea class="weui-textarea" v-model="currValue"
+    <textarea class="weui-textarea" :value="currValue"
         :disabled="disabled" :autofocus="focus" :maxlength="allowInputMaxLen"
         :placeholder="placeholder || ''" v-bind="$attrs"
         @input="onInput" @focus="onFocus" @blur="onBlur" @change="onChange" />
@@ -9,7 +9,10 @@ import formField from './mixins/formField';
 
 export default {
     mixins: [formField],
-
+    model: {
+        prop: 'value',
+        event: '_change'
+    },
     props: {
         value: String,
         type: {
@@ -47,6 +50,9 @@ export default {
         // selection-start selection-end
         // placeholder-class placeholder-style
         // fixed show-confirm-bar
+        // confirm-type
+        
+        // confirm event is not supported
     },
 
     data() {
@@ -132,6 +138,8 @@ export default {
             this.autoHeight && this.updateAutoHeightRows();
 
             this.$emit('input', e);
+            
+            this.$emit('_change', e.target.value);
         },
 
         onChange(e) {

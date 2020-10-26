@@ -43,15 +43,16 @@ function addFileExtnameAssociatedProcessor(extnames, processorName, existedMap) 
     if (!Array.isArray(extnames)) {
         extnames = [extnames];
     }
-
+    // 文件扩展名做遍历，
     extnames.forEach(k => {
         k = k.toLowerCase();
-
+        // 比如是less的processor
         let processors = existedMap[k];
         if (Array.isArray(processors)) {
             processors.push(processorName);
         }
         else if (processors) {
+            // {less: []}// 再定
             existedMap[k] = [processors, processorName];
         }
         else {
@@ -101,11 +102,16 @@ function removeFileExtnameAssociatedProcessor(extnames, processorName, existedMa
  * @return {Object}
  */
 function getFileExtnameAssociatedProcessor(processors) {
+
+    // 遍历process/types的每一项less\sass...，
     let result = Object.keys(processors).reduce(
         (lastValue, processorName) => {
+            // types里的processors的less、sass值
             let processor = processors[processorName];
+            // 获取上面的扩展名
             let extnames = processor.extnames || [];
             if (!Array.isArray(extnames)) {
+                // 转成数组
                 extnames = [extnames];
             }
             addFileExtnameAssociatedProcessor(extnames, processorName, lastValue);

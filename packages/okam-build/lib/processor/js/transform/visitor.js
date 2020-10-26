@@ -20,45 +20,10 @@ const {
     getUsedComponentInfo,
     convertDataPropObjectValueToFunction
 } = require('./component');
-
-/**
- * Get TabBar config visitor
- *
- * @inner
- * @param {Object} t the babel type definition
- * @param {Function} callback the callback to be executed when tabBar config definition found
- * @return {Object}
- */
-function getTabBarConfigVisitor(t, callback) {
-    return {
-        ObjectProperty: {
-            enter(path) {
-                let prop = path.node;
-                let key = prop.key;
-                let keyName = key && key.name;
-                if (keyName === 'tabBar') {
-                    callback && callback(prop.value);
-                }
-                else if (keyName === 'iconPath' || keyName === 'selectedIconPath') {
-                    let iconPath = prop.value;
-                    if (t.isStringLiteral(iconPath)) {
-                        iconPath = iconPath.value;
-
-                        if (iconPath.charAt(0) !== '.') {
-                            iconPath = `./${iconPath}`;
-                        }
-                        path.get('value').replaceWith(
-                            t.callExpression(
-                                t.identifier('require'),
-                                [t.stringLiteral(iconPath)]
-                            )
-                        );
-                    }
-                }
-            }
-        }
-    };
-}
+const {
+    initH5CreateCallArgs,
+    handleH5PageSomeLifeCycle
+} = require('./h5/initCallArgs');
 
 /**
  * Traverse the module definition information and extract the `config` information
@@ -68,10 +33,10 @@ function getTabBarConfigVisitor(t, callback) {
  * @param {Object} t the babel type definition
  * @param {Object} initConfig the config used to cache the extracted information
  * @param {Object} opts the transformation options
- * @param {Function} configCallback the callback to be executed when config definition found
+ * @param {Object} pageHookObj config, methods, and other attributes
  * @return {Object}
  */
-function getCodeTraverseVisitors(t, initConfig, opts, configCallback) {
+function getCodeTraverseVisitors(t, initConfig, opts, pageHookObj) {
     let {
         isPage,
         isComponent,
@@ -79,7 +44,8 @@ function getCodeTraverseVisitors(t, initConfig, opts, configCallback) {
         enableMixinSupport,
         filterOptions,
         keepComponentsProp,
-        dataPropValueToFunc
+        dataPropValueToFunc,
+        appType
     } = opts;
     let hasComponents = isPage || isComponent;
     return {
@@ -88,8 +54,7 @@ function getCodeTraverseVisitors(t, initConfig, opts, configCallback) {
             let key = prop.key;
             let keyName = key && key.name;
             if (!isBehavior && keyName === 'config') {
-                configCallback && configCallback(path.get('value'));
-
+                pageHookObj.config = path.get('value');
                 // extract the app/component/page config definition
                 let config = getPlainObjectNodeValue(prop.value, path, t);
                 initConfig.config = config;
@@ -142,8 +107,17 @@ function getCodeTraverseVisitors(t, initConfig, opts, configCallback) {
 
                 path.skip();
             }
+            else if (keyName === 'methods') {
+                pageHookObj.methods = path.get('value').node.properties;
+                path.skip();
+            }
             else {
                 path.skip();
+            }
+        },
+        ObjectMethod(path) {
+            if (appType === 'h5' && isPage) {
+                handleH5PageSomeLifeCycle(t, path, pageHookObj);
             }
         }
     };
@@ -188,61 +162,6 @@ function createInitCallArgs(declarationPath, config, opts, t) {
 }
 
 /**
- * Init h5 app create call args
- *
- * @inner
- * @param {Object} t the babel type definition
- * @param {Object} opts the transformation options
- * @param {?Object} configPath the config node path
- * @param {Array} callArgs the app creator call args to init
- */
-function initH5AppCreateCallArgs(t, opts, configPath, callArgs) {
-    let {routeConfigModId, path, bodyPath} = opts;
-    if (!routeConfigModId) {
-        return;
-    }
-
-    let tabBarConfigNode;
-    if (configPath) {
-        configPath.traverse(
-            getTabBarConfigVisitor(
-                t, node => (tabBarConfigNode = node)
-            )
-        );
-    }
-
-    let routerExpression = t.memberExpression(
-        t.callExpression(
-            t.identifier('require'),
-            [t.stringLiteral(routeConfigModId)]
-        ),
-        t.identifier('default')
-    );
-
-    let tabBarProp;
-    if (tabBarConfigNode) {
-        let tabBarClassName = path.scope.generateUid('TabBar');
-        bodyPath.insertBefore(
-            createImportDeclaration(tabBarClassName, 'okam-component-h5/src/TabBar', t)
-        );
-
-        tabBarProp = t.objectProperty(
-            t.identifier('tabBar'),
-            t.objectExpression([
-                t.objectProperty(t.identifier('creator'), t.identifier(tabBarClassName)),
-                t.objectProperty(t.identifier('props'), tabBarConfigNode)
-            ])
-        );
-    }
-
-    let objExpressionArgs = [
-        t.objectProperty(t.identifier('routes'), routerExpression)
-    ];
-    tabBarProp && objExpressionArgs.push(tabBarProp);
-    callArgs.unshift(t.objectExpression(objExpressionArgs));
-}
-
-/**
  * Transform mini program code
  *
  * @inner
@@ -254,12 +173,16 @@ function initH5AppCreateCallArgs(t, opts, configPath, callArgs) {
  * @param {Object} opts the transformation options
  */
 function transformMiniProgram(t, path, declarationPath, config, opts) {
-    let foundConfigPath;
+    // the transformation page hook
+    let pageHookObj = {
+        pageEvent: {},
+        lifeCycle: {}
+    };
     if (t.isObjectExpression(declarationPath)) {
         // extract the config information defined in the code
         declarationPath.traverse(
             getCodeTraverseVisitors(
-                t, config, opts, configPath => (foundConfigPath = configPath)
+                t, config, opts, pageHookObj
             )
         );
     }
@@ -292,13 +215,23 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
 
     let callArgs = createInitCallArgs(declarationPath, config.config, opts, t);
 
-    // add h5 app router config argument
-    let h5InitOpts = {
-        routeConfigModId: opts.routeConfigModId,
-        path,
-        bodyPath
-    };
-    initH5AppCreateCallArgs(t, h5InitOpts, foundConfigPath, callArgs);
+    if (opts.appType === 'h5') {
+        // add h5 app router config argument
+        let h5InitOpts = {
+            routeConfigModId: opts.routeConfigModId,
+            path,
+            bodyPath
+        };
+        initH5CreateCallArgs({
+            t,
+            h5InitOpts,
+            pageHookObj,
+            callArgs,
+            path,
+            opts,
+            declarationPath
+        });
+    }
 
     let needExport = opts.needExport || !opts.baseClass;
     let toReplacePath = needExport
@@ -309,6 +242,7 @@ function transformMiniProgram(t, path, declarationPath, config, opts) {
         t.identifier(baseClassName),
         callArgs
     );
+
     if (opts.isBehavior || !opts.baseClass) {
         toReplacePath.replaceWith(t.expressionStatement(
             callExpression

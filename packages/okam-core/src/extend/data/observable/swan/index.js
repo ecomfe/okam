@@ -5,6 +5,25 @@
 
 'use strict';
 
-import observable from '../index';
+import observable from '../base';
+import initProps from '../initProps';
+import proxyArrayApis from '../array';
 
-export default observable;
+const rawCreated = observable.created;
+delete observable.created;
+
+export default {
+    component: Object.assign({}, observable, {
+        onInit() {
+            rawCreated.call(this);
+        },
+        created() {
+            if (!this.$isPage
+                || (this.$isPage && !this.$isSupportOninit)) {
+                rawCreated.call(this);
+            }
+        },
+        __initProps: initProps,
+        proxyArrayApis
+    })
+};

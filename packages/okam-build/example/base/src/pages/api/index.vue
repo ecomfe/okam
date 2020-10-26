@@ -162,7 +162,23 @@ export default {
             newItem.open = !newItem.open;
             this.items.splice(index, 1, newItem);
         }
+    },
+    onReachBottom(e) {
+        console.log('>>>api/index page onReachBottom...');
+    },
+    onPageScroll(e) {
+        console.log('>>>api/index page onPageScroll...', e);
+    },
+    onPullDownRefresh() {
+        console.log('>>>api/index page onPullDownRefresh...');
+    },
+    onLoad() {
+        console.log('[api page] onload......');
+    },
+    onShow() {
+        console.log('[api page] onShow......', getCurrentPages());
     }
+
 };
 </script>
 <style lang="stylus" scoped>
