@@ -2,6 +2,7 @@
     <view>
         <text class="title">Hello</text>
         <button for="item in 5" key="index" @click="onClickView(item)">{{item}}</button>
+        <view class="s-title">import引入css文件</view>
     </view>
 </template>
 

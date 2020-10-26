@@ -1,10 +1,10 @@
 <template>
     <view class="template-ref-syntax-wrap">
         <text class="f-title" if="flag">hello</text>
-        <view for="tabs" :key="index">arritem: {{item.name}}</view>
+        <view for="(item,index) in tabs" :key="index">arritem: {{item.name}}</view>
         <view>
             <button class="my-btn" @click="updateArray">change ref components</button>
-            <button class="my-btn" ref="myBtn" @click="handleClick">test button</button>
+            <button class="my-btn" ref="myBtn" @click="handleClick">get all refs</button>
         </view>
         <view ref="my-view">
             <simple-component ref="myComponent"></simple-component>
@@ -58,7 +58,7 @@ export default {
         },
 
         handleClick() {
-            console.log(this.$refs)
+            console.log('[ref] refs>>>>>', this.$refs);
         }
     }
 };

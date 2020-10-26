@@ -10,11 +10,11 @@
 |视图容器 | view | view | view | view | div |
 | | scroll-view | scroll-view | scroll-view | scroll-view | |
 | | swiper | swiper | swiper | swiper | |
-| |  | swiper-item | swiper-item | swiper-item | |
+| | swiper-item | swiper-item | swiper-item | swiper-item | |
 | | movable-view | movable-view | movable-view | | |
 | | movable-area | movable-area | movable-area | | |
-| | cover-view | cover-view | cover-image | | |
-| | cover-image | cover-image | | | |
+| | cover-view | cover-view | cover-view | | |
+| | cover-image | cover-image |cover-image | | |
 | |  |  |  | | list |
 | |  |  |  | | list-item |
 | |  |  |  | | popup |
@@ -25,14 +25,16 @@
 | |  |  |  | | tabs-content |
 |基础内容 | icon | icon | icon | icon | |
 | | text | text | text | text | text |
-| | rich-text | rich-text |  | rich-text | richtext|
+| | rich-text | rich-text | rich-text | rich-text | richtext|
 | | progress | progress | progress | progress | progress |
 | | | animation-view | | | |
+| | | animation-video | | | |
 | |  |  |  | | rating |
 | |  |  |  | | span |
 |表单组件 | button | button | button | button | |
 | | checkbox-group | checkbox-group | checkbox-group | checkbox-group||
 | | checkbox | checkbox | checkbox | checkbox ||
+| | editor |  |  |  ||
 | | form | form | form | form ||
 | | input | input | input | input | input|
 | | label | label | label | label | label |
@@ -47,21 +49,27 @@
 | | switch | switch | switch | switch |switch |
 | | textarea | textarea | textarea | textarea |textarea |
 |导航 | navigator | navigator | navigator | navigator | a|
+| | functional-page-navigator | functional-page-navigator |  |  | |
+| |  | tabs |  |  | |
+| |  | tab-item |  |  | |
 |媒体组件 | audio | audio |  | |
 | | image | image | image | image | image |
 | | video | video |  | video | video |
-| | camera | camera |  | | |
+| | camera | camera |  | | camera|
+| |  | ar-camera |  | | |
 | | live-player | live-player |  | | |
 | | live-pusher |  |  | | |
 |地图 | map | map | map | map | map |
 |画布 | canvas | canvas | canvas | canvas | canvas |
 |开放能力 | open-data | open-data |  | | |
-| | web-view | web-view | web-view | web-view | |
-| |  |  |  | | web |
+| | web-view | web-view | web-view | web-view | web|
 | |  |  | lifestyle | |  |
 | |  |  | contact-button | | |
-| | ad |  |  | | |
+| | ad | ad |  | | |
 | |official-account |  | | | |
+| 无障碍支持|aria-component |  |aria-component | | | |
+|导航栏 | navigation-bar |  |  | |
+|页面导航条配置节点 | page-meta |  |  | |
 
 ## 组件对齐
 
@@ -83,5 +91,6 @@
 * [微信小程序组件](https://developers.weixin.qq.com/miniprogram/dev/component/)
 * [百度小程序组件](https://smartprogram.baidu.com/docs/develop/component/native/)
 * [支付宝小程序组件](https://docs.alipay.com/mini/component/overview)
+* [支付宝小程序扩展组件](https://docs.alipay.com/mini/component-ext/overview-ext-common)
 * [头条小程序组件](https://microapp.bytedance.com/docs/comp/)
 * [快应用组件](https://doc.quickapp.cn/tutorial/widgets/list-tutorial.html)

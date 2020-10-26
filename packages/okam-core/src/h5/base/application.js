@@ -16,6 +16,16 @@ import bindUnCatchException from '../util/error';
 
 Vue.use(VueRouter);
 
+Vue.prototype.currentRoute = [];
+
+window.getApp = function () {
+    return window.__currOkamAppInstance;
+};
+
+window.getCurrentPages = function () {
+    return Vue.prototype.currentRoute;
+};
+
 export default {
 
     beforeCreate() {

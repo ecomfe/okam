@@ -7,7 +7,10 @@ import formField from './mixins/formField';
 
 export default {
     mixins: [formField],
-
+    model: {
+        prop: 'checked',
+        event: '_change'
+    },
     props: {
         name: String,
         checked: {
@@ -64,6 +67,7 @@ export default {
                     value: this.currChecked
                 }
             });
+            this.$emit('_change', this.currChecked);
         },
 
         getFieldValue() {

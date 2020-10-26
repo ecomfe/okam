@@ -64,7 +64,6 @@ function main(appType, options) {
     // init build config
     let cliOpts = yargsParser(process.argv.slice(2));
     let buildConf = initBuildOptions(appType, options, cliOpts);
-
     let {logger} = buildConf;
     try {
         startBuild(buildConf, cliOpts.clean);

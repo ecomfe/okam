@@ -7,6 +7,7 @@
 'use strict';
 
 /* global XMLHttpRequest:false */
+/* global window:false */
 
 import {isPlainObject} from './util/lang';
 
@@ -213,8 +214,12 @@ function createRequester(options) {
 
     credentials && (xhr.withCredentials = true);
 
-    // TODO: init using global app config `networkTimeout.request`
-    // xhr.timeout = 5000;
+    // init using global app config `networkTimeout.request`
+    const networkTimeout = window.__currOkamAppInstance.appConfig.networkTimeout;
+    if (networkTimeout && networkTimeout.request) {
+        xhr.timeout = networkTimeout.request;
+    }
+
     xhr.open(method, reqInfo.url, true);
 
     setRequestHeaders(xhr, header);

@@ -23,7 +23,7 @@ export default {
     methods: {
         setNavTitle() {
             this.$api.setNavigationBarTitle({
-                title: this.inputVal,
+                title: '123',
                 complete: res => {
                     this.msg = `设置 ${this.inputVal} 结果：${JSON.stringify(res)}`;
                 }

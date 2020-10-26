@@ -312,7 +312,6 @@ class FileFactory extends EventEmitter {
         if (result) {
             let newPath = this.resolveFileNewPath(f.path);
             newPath && (f.resolvePath = newPath);
-
             /**
              * @event addFile
              */

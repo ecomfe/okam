@@ -1,19 +1,22 @@
 <template>
     <view class="hello-wrap">
         <text class="title">Hello Title: {{myName}} - {{myNum}}</text>
-        <view :class=' myClass '>Computed Prop:<text>{{myComputedNum}} - {{obj}}</text></view>
+        <view :class="myClass">Computed Prop:<text>{{myComputedNum}} - {{obj}}</text></view>
         <slot name="top"></slot>
         <slot></slot>
-        <button class="btn" @click="handleClick">{{source}}-{{num}}</button>
+        <button class="btn" @click="handleClick">click {{source}}-{{num}}</button>
         <button @click="changeObjectData">changeObjectProperty: {{obj.a}}</button>
         <button @click="changeCounter">变更 counter:{{counter}}</button>
         <slot name="bottom"></slot>
+        <view class="global-class">这段文本的颜色由组件外的 class 决定</view>
     </view>
 </template>
 <script>
 
 export default {
-
+    options: {
+        addGlobalClass: false
+    },
     // mixins: ['form-fields'],
 
     config: { // The component config defined in component.json
@@ -62,42 +65,46 @@ export default {
 
     pageLifetimes: {
         show() {
-            console.log('hello component show', this)
+            console.log('[hello component] pageLifetimes show', this)
         },
 
         hide() {
-            console.log('hello component hide', this)
+            console.log('[hello component] pageLifetimes hide', this)
         }
     },
 
     beforeCreate() {
-        console.log('before create hello component...');
+        console.log('[hello component] before create...');
         console.log(this)
     },
 
     created() {
-        console.log('create hello component...');
+        console.log('[hello component] created...');
         // console.log(this.properties)
         // console.log(this.$rawProps)
         // console.log(this.$app)
     },
 
     beforeMount() {
-        console.log('before mount hello component...');
+        console.log('[hello component] beforeMount...');
         console.log(this)
         this.myNum = this.num;
     },
 
     mounted() {
-        console.log('mounted hello component...', this.obj);
+        console.log('[hello component] mounted...', this.obj);
     },
 
     beforeDestroy() {
-        console.log('before destroy hello component...');
+        console.log('[hello component] beforeDestroy...');
     },
 
     destroyed() {
-        console.log('destroyed hello component...');
+        console.log('[hello component] destroyed...');
+    },
+
+    ready() {
+        console.log('[hello component] ready...');
     },
 
     methods: {
@@ -136,4 +143,5 @@ export default {
         font-size: 16px
     .btn
         width: 150px
+
 </style>

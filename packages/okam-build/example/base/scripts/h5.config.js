@@ -54,7 +54,7 @@ module.exports = merge({}, require('./base.config'), {
                     [
                         'autoprefixer',
                         {
-                            browsers: [
+                            'overrideBrowserslist': [
                                 '> 1%',
                                 'last 2 versions',
                                 'not ie <= 8'
@@ -62,6 +62,12 @@ module.exports = merge({}, require('./base.config'), {
                         }
                     ],
                     'postcss-url',
+                    [
+                        'px2rem',
+                        {
+                            keepComment: 'no'
+                        }
+                    ],
                     // 'postcss-import-sync2',
                     'env'
                 ]

@@ -13,7 +13,7 @@
 - [x] [百度小程序](https://smartprogram.baidu.com/docs/introduction/enter_application/)
 - [x] [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/)
 - [x] [支付宝小程序](https://docs.alipay.com/mini/developer/getting-started)
-- [ ] H5 `待支持`
+- [ ] H5 `支持中`
 
 ### 功能特性
 
@@ -51,6 +51,7 @@
 
 * [使用教程](https://ecomfe.github.io/okam)
 * [其它示例](https://github.com/awesome-okam)
+* [第三方组件开发](https://ecomfe.github.io/okam/#/component/ui)
 
 ## Main Packages
 

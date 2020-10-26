@@ -9,7 +9,7 @@ const merge = require('okam-build').merge;
 
 module.exports = merge({}, require('./base.config'), {
     <% if: ${async} %>
-    polyfill: ['async'],
+    localPolyfill: ['async'],
     <% /if %>
     // wx2swan: true,
     rules: []

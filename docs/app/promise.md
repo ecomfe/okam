@@ -37,6 +37,7 @@
 
     ```javascript
     {
+        // 如果小程序不支持全局挂载，将 `polyfill` 改为 `localPolyfill`
         polyfill: ['promise']
     }
     ```

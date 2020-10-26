@@ -38,7 +38,7 @@
     "prod:quick": "npm run prod -- --type quick",
     "dev:h5": "npm run dev:server -- --type h5",
     "dev:h5:clean": "npm run dev:clean -- --server --type h5",
-    "dev:h5:server": "npm run dev:server -- --type h5",
+    "dev:h5:server": "npm run dev:server -- --type h5 --port 9090",
     "dev:h5:debug": "npm run dev:debug -- --server --type h5",
     "prod:h5": "npm run prod -- --type h5",
     "start:h5": "cross-env NODE_ENV=dev NODE_PATH=./node_modules node scripts/h5/build.js"
@@ -49,21 +49,29 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-minify-dead-code-elimination": "^0.5.1",
     "lodash": "^4.17.10",
+    "mini-html-parser2": "^0.1.0",
     "moment": "^2.24.0",
     "normalize.css": "^8.0.1",
-    "mini-html-parser2": "^0.1.0",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "vue": "^2.6.7",
+    "vue": "^2.6.11",
     "vue-router": "^3.0.2"
   },
   "devDependencies": {
     "autoresponse": "^0.3.0",
-    "cross-env": "^5.2.0",
     "express": "^4.16.4",
+    "connect": "^3.6.6",
+    "cross-env": "^6.0.0",
     "okam-plugin-tinyimg": "^0.1.4",
+    "postcss-url": "^8.0.0",
     "postcss-import-sync2": "^1.1.0",
-    "postcss-url": "^8.0.0"
-  }
+    "promise-polyfill": "^8.1.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }

@@ -124,7 +124,6 @@ class BuildManager extends EventEmitter {
         else if (this.isProd) {
             extraConf || (extraConf = buildConf.prod || buildConf.production);
         }
-
         let {rules: baseRules, processors: baseProcessors} = buildConf;
         let {rules, processors} = extraConf || {};
         if (extraConf) {
@@ -133,7 +132,7 @@ class BuildManager extends EventEmitter {
         }
         buildConf = merge(buildConf, extraConf);
         this.buildConf = buildConf;
-
+        // 合并rules
         rules && (rules = [].concat(baseRules, rules));
         this.rules = rules || baseRules || [];
 
@@ -154,6 +153,7 @@ class BuildManager extends EventEmitter {
             ]
         });
 
+        // processors合并
         processors && (processors = merge({}, baseProcessors, processors));
         buildConf.processors = processors || baseProcessors;
         this.initProcessor(buildConf);
@@ -163,12 +163,20 @@ class BuildManager extends EventEmitter {
         if (this.envFileUpdated) {
             return;
         }
-
         // replace module okam-core/na/index.js content using specified app env module
         if (file.path.indexOf('node_modules/okam-core/src/na/index.js') !== -1) {
             let naEnvModuleId = `../${this.appType}/env`;
             file.content = `'use strict;'\nexport * from '${naEnvModuleId}';\n`;
-            this.envFileUpdated = true;
+        }
+        else if (file.path.indexOf('node_modules/regenerator-runtime/runtime.js') !== -1) {
+            // fix regenerator-runtime>=0.13.2 throw exception in wx
+            let content = file.content.toString();
+            file.content = content.replace(
+                'Function("r", "regeneratorRuntime = r")(runtime);',
+                match => {
+                    return `try {${match}} catch(e) {}`;
+                }
+            );
         }
     }
 
@@ -186,6 +194,7 @@ class BuildManager extends EventEmitter {
         } = loadProcessFiles(this.buildConf, this.logger);
 
         this.files = files;
+
         this.root = root;
         this.noParse = noParse;
         this.noTransform = noTransform;

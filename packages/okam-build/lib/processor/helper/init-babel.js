@@ -40,10 +40,9 @@ const BUILTIN_PLUGINS = {
  */
 function initMixinFile(mixins, buildManager, file) {
     mixins && mixins.forEach(modulePath => {
-        let moduleFullPath = buildManager.resolve(
-            modulePath, file
-        );
-        let mixinFile = moduleFullPath && buildManager.getFileByFullPath(moduleFullPath);
+        let {resolvedModIds: cacheResolveModIds} = file;
+        let cacheInfo = cacheResolveModIds[modulePath];
+        let mixinFile = cacheInfo && cacheInfo.file;
         if (mixinFile && !mixinFile.isBehavior) {
             mixinFile.isBehavior = true;
         }

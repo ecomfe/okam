@@ -16,13 +16,17 @@ function initRadio(vm, radio, index) {
         radio.$on('change', e => {
             vm.$emit('change', {detail: {value}});
             vm.value = value;
+            vm.$emit('_change', value);
         });
     }
 }
 
 export default {
     mixins: [formField],
-
+    model:{
+        prop: 'value',
+        event: '_change'
+    },
     props: {
         name: String
     },

@@ -11,7 +11,8 @@ const {transformPx, isNPMFilePath} = require('./px-helper');
 
 function px2rem(cssAst, opts) {
     let {precision, rootFontSize} = opts;
-    precision = parseInt(typeof precision === 'undefined' ? 2 : 0, 10) || 0;
+    precision = parseInt(!precision ? 4 : precision, 10) || 4;
+    const proportion = 750 / (opts.designWidth || 750);
     rootFontSize = parseInt(rootFontSize, 10) || 16;
     const {noTrans1px, keepComment, transform} = opts;
 
@@ -19,7 +20,7 @@ function px2rem(cssAst, opts) {
         noTrans1px,
         keepComment: keepComment || 'px2rem: no',
         transform: transform || (value => {
-            let num = parseFloat(value, 10) / rootFontSize;
+            let num = proportion * parseFloat(value, 10) * .5 / rootFontSize;
             num = Number.isInteger(num) ? num : num.toFixed(precision);
             return `${num}rem`;
         })

@@ -25,13 +25,17 @@ function initCheckbox(vm, checkbox, index) {
                 item => item.checked && checkedValues.push(item.value)
             );
             vm.$emit('change', {detail: {value: checkedValues}});
+            vm.$emit('_change', checkedValues);
         });
     }
 }
 
 export default {
     mixins: [formField],
-
+    model: {
+        prop: 'value',
+        event: '_change'
+    },
     props: {
         name: String
     },

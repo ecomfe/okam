@@ -50,6 +50,7 @@ const FRAMEWORK_EXTEND_PATH = {
     },
     redux: {
         'default': 'extend/data/redux/index',
+        'swan': 'extend/data/redux/swan/index',
         'h5': 'extend/data/redux/h5/index'
     },
     vuex: {
