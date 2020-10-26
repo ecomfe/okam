@@ -43,7 +43,7 @@ export default {
             'pages/filter/index',
             'pages/sfc/index',
             'pages/sfc/separate',
-            'pages/performance/oninit',
+            'pages/performance/oninit'
             'pages/api/index',
             'pages/api/navTitle',
             'pages/api/network',
