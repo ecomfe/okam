@@ -5,7 +5,7 @@
   ],
   "command": {
     "publish": {
-      "allowBranch": ["master", "0.3.x"],
+      "allowBranch": ["master", "0.3.x", "feature/h5_2"],
       "message": "chore: publish"
     }
   },
