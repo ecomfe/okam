@@ -132,7 +132,7 @@ class BuildManager extends EventEmitter {
         }
         buildConf = merge(buildConf, extraConf);
         this.buildConf = buildConf;
-        // 合并rules
+
         rules && (rules = [].concat(baseRules, rules));
         this.rules = rules || baseRules || [];
 
@@ -153,16 +153,12 @@ class BuildManager extends EventEmitter {
             ]
         });
 
-        // processors合并
         processors && (processors = merge({}, baseProcessors, processors));
         buildConf.processors = processors || baseProcessors;
         this.initProcessor(buildConf);
     }
 
     onAddNewFile(file) {
-        if (this.envFileUpdated) {
-            return;
-        }
         // replace module okam-core/na/index.js content using specified app env module
         if (file.path.indexOf('node_modules/okam-core/src/na/index.js') !== -1) {
             let naEnvModuleId = `../${this.appType}/env`;

@@ -1,6 +1,6 @@
 <template>
     <view class="simple-component-wrap">
-        <text class="s-title" if="flag">{{text}}</text>
+        <text class="f-title" if="flag">{{text}}</text>
         <simple-component2 ref="a"></simple-component2>
         <button @click="handleClick">get selectQuery</button>
     </view>
@@ -26,7 +26,7 @@ export default {
 
     mounted() {
         let query = this.createSelectorQuery();
-        query.select('.s-title').boundingClientRect().exec(res => {
+        query.selectAll('.f-title').boundingClientRect().exec(res => {
                 console.log('节点信息：', res[0]);
                 this.queryEleHeight = res.length ? res[0].height : '-';
             }

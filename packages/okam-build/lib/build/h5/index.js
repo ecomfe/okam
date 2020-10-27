@@ -29,7 +29,7 @@ function getPageComponentName(modId, existedName) {
     return name;
 }
 
-// 对文件名以短横线链接的做下处理
+// The file name with a short horizontal link to do processing
 function formatPart(fileName) {
     if (fileName.indexOf('-') === -1) {
         return fileName;

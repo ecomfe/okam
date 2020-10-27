@@ -32,7 +32,7 @@
             <view else></view>
             <button @click="handleButton" plain>plain=hello</button>
 
-            <h2>JS表达式1111</h2>
+            <h2>JS表达式</h2>
             <span if="length > 5">逻辑判断</span>
             <span>数据路径计算: {{object.key}} {{list[0][0]}}</span>
             <div :data-a="{a: 1, b: 2}"> 对象 </div>
@@ -271,7 +271,7 @@ export default {
 
         handleButton(event) {
             // console.log(event)
-            console.log('click button event!关注dataset', event.currentTarget);
+            console.log('click button>>>>>>>dataset', event.currentTarget);
         },
 
         handleParent(event) {

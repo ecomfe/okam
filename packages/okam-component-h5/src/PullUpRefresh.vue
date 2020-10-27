@@ -22,7 +22,6 @@ export default {
     },
     methods: {
         handleScroll(e) {
-            // console.log('scrollTop>>>>>>>>>>>>>>>>>', window.pageYOffset);
             this.$emit('page-scroll', {
                 scrollTop: window.pageYOffset
             });
@@ -46,5 +45,6 @@ export default {
 </script>
 
 <style lang="stylus">
-
+.okam-pull-down-refresh
+    padding-bottom 50px
 </style>

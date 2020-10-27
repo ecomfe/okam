@@ -138,10 +138,6 @@ export default {
                         path: 'data/watch',
                     },
                     {
-                        subName: 'watchbug属性',
-                        path: 'data/watchparent',
-                    },
-                    {
                         subName: 'redux状态管理',
                         path: 'todos/todoList'
                     },

@@ -81,7 +81,8 @@ export default {
             'pages/components/webview',
             'pages/page-event/index',
             'pages/page-stack/index',
-            'pages/detail/detail'
+            'pages/detail/detail',
+            'pages/design-width/index'
         ],
         subPackages: [
             {

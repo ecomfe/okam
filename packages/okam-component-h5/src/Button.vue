@@ -112,7 +112,7 @@ export default {
 <style lang="stylus">
 .okam-button
     &.weui-btn_primary
-        background-color #38f
+        background-color #3c76ff
     &.weui-btn_disabled.weui-btn_primary
         background-color #3c76ff
         opacity .3

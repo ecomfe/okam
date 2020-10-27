@@ -38,7 +38,8 @@ export default Object.assign({}, componentBase, {
             Object.defineProperties(this, propDescriptors);
 
         }
-        this.listener = new EventListener();
+
+        this.$listener = new EventListener();
         // call beforeCreate hook
         this.beforeCreate && this.beforeCreate();
     },

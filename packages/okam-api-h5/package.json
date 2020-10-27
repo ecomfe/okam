@@ -1,6 +1,6 @@
 {
   "name": "okam-api-h5",
-  "version": "0.1.0",
+  "version": "0.1.1-alpha.0",
   "description": "The mini program API implementation in H5",
   "main": "src/index.js",
   "keywords": [
@@ -11,7 +11,7 @@
     "framework"
   ],
   "scripts": {
-    "prepublish": "npm run lint",
+    "prepublish": "npm run lint && npm test",
     "lint": "fecs ./src index.js --reporter=baidu --rule",
     "test:coverage": "cross-env NODE_ENV=development nyc mocha --require @babel/register  \"test/tasks/**/*.spec.js\"",
     "test": "cross-env NODE_ENV=development mocha --require @babel/register test/setup.js  \"test/tasks/**/*.spec.js\"",

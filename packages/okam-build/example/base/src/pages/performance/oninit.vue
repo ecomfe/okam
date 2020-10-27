@@ -2,16 +2,12 @@
     <view class="oninit-wrap">
         <view class="oninit-title">生命周期oninit:</view>
         <view class="oninit-item">
-            isInit:
-            <text class="orange-color">{{isInit}}</text>
+            oninitData:
+            <text class="orange-color">{{oninitData}}</text>
         </view>
         <view class="oninit-item">
-            setDataInit:
-            <text class="orange-color">{{setDataInit}}</text>
-        </view>
-        <view class="oninit-item">
-            获取当前页面查询参数$query: 
-            <text class="orange-color">{{query}}</text>
+            createdData:
+            <text class="orange-color">{{createdData}}</text>
         </view>
     </view>
 </template>
@@ -21,51 +17,35 @@ export default {
         navigationBarTitleText: '提升性能-onInit'
     },
     data: {
-        flag: true,
-        height: 100,
-        isInit: '',
-        setDataInit: false,
-        query: null
+        oninitData: '',
+        createdData: ''
     },
-    onInit(query) {
-        console.log('[performance] onInit..............');
-        console.log('[performance] onInit $query', this.$query);
-        this.isInit = '[onInit] isInit';
-        console.log('change isInit.....', this.isInit);
-        console.log('[performance] onInit ....重点关注this.$api', this.$api);
-        console.log('[performance] onInit this.....关注this.$http之类', this.$http);
-    },
-    beforeCreate() {
-        console.log('page beforeCreate.....');
-        console.log('page beforeCreate....重点关注this.$api', this.$api);
-        console.log('page beforeCreate....重点关注this.$http', this.$http);
-        // this.isInit = '[beforeCreate] isInit';
+    onInit() {
+        this.oninitData = 'onInit生命周期赋值';
+        console.log('[performance] onInit....$query', this.$query);
+        console.log('[performance] onInit....this.$api', this.$api);
+        console.log('[performance] onInit....this.$http', this.$http);
     },
     created() {
-        console.log('page created....');
-        console.log('page created....重点关注this.$api', this.$api);
-        console.log('page created....重点关注this.$http', this.$http);
-        console.log('page created....重点关注this.$http', this.$query);
-        this.query = JSON.stringify(this.$query);
-        // this.isInit = '[created] isInit';
+        console.log('[performance] created....this.$query', this.$query);
+        console.log('[performance] created....this.$api', this.$api);
+        console.log('[performance] created....this.$http', this.$http);
+        this.createdData = 'created生命周期赋值';
     },
     onShow(option) {
-        // console.log('page onshow getCurrentPages', getCurrentPages());
-    },
-    onLoad() {
-        console.log('page onload....');
+        console.log('[oninit] page onShow....');
     },
     onHide() {
-        console.log('page onHide....');
+        console.log('[oninit] page onHide....');
     },
     onUnload() {
-        console.log('page onUnload....');
+        console.log('[oninit] page onUnload....');
     },
     onReachBottom() {
-        console.log('page onReachBottom...');
+        console.log('[oninit] page onReachBottom...');
     },
     onPageScroll() {
-        console.log('page onPageScroll...');
+        console.log('[oninit] page onPageScroll...');
     }
 };
 </script>
