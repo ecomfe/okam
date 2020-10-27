@@ -1,18 +1,18 @@
 <template>
     <view class="page-stack-wrap">
-        <button @click="navigateTo" type="primary">
+        <button class="stack-btn" @click="navigateTo" type="primary">
             navigateTo跳转到新页面
         </button>
-        <button @click="redirectTo" type="primary">
+        <button class="stack-btn" @click="redirectTo" type="primary">
             redirectTo跳转到新页面
         </button>
-        <button @click="switchTab" type="primary">
+        <button class="stack-btn" @click="switchTab" type="primary">
             switchTab跳转到新tabBar页面
         </button>
-        <button @click="navigateBack" type="primary">
+        <button class="stack-btn" @click="navigateBack" type="primary">
             navigateBack返回某页面
         </button>
-        <button @click="reLaunch" type="primary">
+        <button class="stack-btn" @click="reLaunch" type="primary">
             reLaunch返回某页面
         </button>
     </view>
@@ -76,7 +76,8 @@ export default {
 </script>
 <style lang="stylus">
 .page-stack-wrap
-    display flex
-    flex-direction column
-    padding 20px
+    padding 14px
+
+    .stack-btn
+        margin-bottom 5px
 </style>

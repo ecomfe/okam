@@ -14,7 +14,6 @@ export default {
     props: {
     },
     created() {
-        // console.log('navigate bar !!!!!!!!------------------');
     }
 };
 </script>

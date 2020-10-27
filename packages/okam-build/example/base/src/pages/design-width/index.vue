@@ -1,6 +1,6 @@
 <template>
     <div class="design-width-wrap">
-        设计稿宽度为1242下测试
+        <div class="design-title">设计稿宽度为1242下</div>
         <div
             v-for="(item, index) in list"
             :key="index"
@@ -9,6 +9,7 @@
                 'active': index === clickNum
             }"
             @click="handleClickItem(item)"
+            style= "display: none"
         >
             <div class="item-shop-inner">
                 <div
@@ -23,12 +24,6 @@
                         <div v-if="item.isChain == 1" class="item-chain-tag">连锁</div>
                     </div>
                     <div class="item-rank">
-                        <!-- <starbar
-                            theme="small"
-                            :value="item.score ? item.score : 0"
-                            :text="item.score ? item.score + '分' : '0分'"
-                            :font-color="'#FB705A'"
-                        /> -->
                         <div
                             v-if="item.due30days"
                             class="offer-num"
@@ -133,6 +128,10 @@ export default {
 };
 </script>
 <style lang="stylus">
+.design-width-wrap
+    background-color #fff
+    .design-title
+        font-size 42px;
 #border1px-all
     position relative
     display inline-block

@@ -25,26 +25,25 @@ export default {
 
     },
     created() {
-        console.log('page created....');
-        
+        console.log('[page-event] page created....');
     },
     onShow(option) {
         // console.log('page onshow getCurrentPages', getCurrentPages());
     },
     onLoad() {
-        console.log('page onload....');
+        console.log('[page-event] page onload....');
     },
     onHide() {
-        console.log('page onHide....');
+        console.log('[page-event] page onHide....');
     },
     onUnload() {
-        console.log('page onUnload....');
+        console.log('[page-event] page onUnload....');
     },
     onReachBottom() {
-        console.log('page onReachBottom...');
+        console.log('[page-event] page onReachBottom...');
     },
     onPageScroll() {
-        console.log('page onPageScroll...');
+        console.log('[page-event] page onPageScroll...');
     }
 };
 </script>

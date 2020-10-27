@@ -43,7 +43,7 @@ export default {
             'pages/filter/index',
             'pages/sfc/index',
             'pages/sfc/separate',
-            'pages/performance/oninit'
+            'pages/performance/oninit',
             'pages/api/index',
             'pages/api/navTitle',
             'pages/api/network',
@@ -81,7 +81,8 @@ export default {
             'pages/components/webview',
             'pages/page-event/index',
             'pages/page-stack/index',
-            'pages/detail/detail'
+            'pages/detail/detail',
+            'pages/design-width/index'
         ],
         subPackages: [
             {

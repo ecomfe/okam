@@ -20,34 +20,32 @@ export default {
         oninitData: '',
         createdData: ''
     },
-    onInit(query) {
-        console.log('[performance] onInit..............', query);
+    onInit() {
         this.oninitData = 'onInit生命周期赋值';
         console.log('[performance] onInit....$query', this.$query);
         console.log('[performance] onInit....this.$api', this.$api);
         console.log('[performance] onInit....this.$http', this.$http);
     },
-    created(query) {
-        console.log('[performance] created....', query);
+    created() {
+        console.log('[performance] created....this.$query', this.$query);
         console.log('[performance] created....this.$api', this.$api);
         console.log('[performance] created....this.$http', this.$http);
-        console.log('[performance] created....this.$http', this.$query);
         this.createdData = 'created生命周期赋值';
     },
     onShow(option) {
-        console.log('page onShow....');
+        console.log('[oninit] page onShow....');
     },
     onHide() {
-        console.log('page onHide....');
+        console.log('[oninit] page onHide....');
     },
     onUnload() {
-        console.log('page onUnload....');
+        console.log('[oninit] page onUnload....');
     },
     onReachBottom() {
-        console.log('page onReachBottom...');
+        console.log('[oninit] page onReachBottom...');
     },
     onPageScroll() {
-        console.log('page onPageScroll...');
+        console.log('[oninit] page onPageScroll...');
     }
 };
 </script>
