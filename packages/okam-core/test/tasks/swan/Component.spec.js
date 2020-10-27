@@ -80,10 +80,10 @@ describe('Component', () => {
         assert(component.$app && typeof component.$app === 'object');
     });
 
-    it('should exist __eventListener extension API', () => {
+    it('should exist $listener extension API', () => {
         let component = MyComponent({
             beforeCreate() {
-                assert(component.__eventListener && component.__eventListener instanceof EventListener);
+                assert(component.$listener && component.$listener instanceof EventListener);
             }
         });
         component.created();
@@ -166,8 +166,8 @@ describe('Component', () => {
         instance.attached();
         instance.ready();
 
-        instance.__eventListener.on('xx', () => {});
-        assert(instance.__eventListener._listeners.xx.length === 1);
+        instance.$listener.on('xx', () => {});
+        assert(instance.$listener._listeners.xx.length === 1);
         instance.detached();
 
         expect(spyBeforeDestroy).toHaveBeenCalled();
@@ -177,7 +177,7 @@ describe('Component', () => {
         expect(spyBaseDetached).toHaveBeenCalled();
         expect(spyDetached).toHaveBeenCalled();
 
-        expect(instance.__eventListener._listeners).toEqual({});
+        expect(instance.$listener._listeners).toEqual({});
         assert(instance.$isDestroyed);
     });
 
