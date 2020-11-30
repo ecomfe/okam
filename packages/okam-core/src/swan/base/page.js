@@ -20,6 +20,9 @@ export default Object.assign({}, pageBase, component, {
     onInit(query) {
         this.$isSupportOninit = true;
         this.$isPage = true;
+        if (this.$isDefineThisProp) {
+            return;
+        }
         this.$query = query;
 
         let propDescriptors = {

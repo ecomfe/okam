@@ -25,7 +25,10 @@ export default {
         },
         d: 666
     },
-
+    onInit(query) {
+        console.log('call behvaiorB onInit.......this.$query', this.$query);
+        console.log('call behvaiorB onInit.......this.$http', this.$http);
+    },
     created() {
         console.log('call behvaiorB created...', this);
     },
