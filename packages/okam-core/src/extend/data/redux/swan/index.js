@@ -10,7 +10,6 @@
 import redux from '../index';
 
 const rawCreated = redux.component.created;
-delete redux.component.created;
 
 export default {
     component: Object.assign({}, redux.component, {

@@ -14,6 +14,7 @@ module.exports = {
     output: {
         dir: 'dist',
         depDir: {
+            /* eslint-disable fecs-camelcase*/
             node_modules: 'src/common',
             dep: 'src/common'
         }
@@ -82,7 +83,7 @@ module.exports = {
         'watch',
         'model',
         'vhtml',
-        ['behavior', '{useNativeBehavior: true}'],
+        ['behavior', '{useNativeBehavior: true, mixinHooks: ["onInit"]}'],
         'broadcast',
         'redux',
         'ref'
@@ -109,7 +110,11 @@ module.exports = {
         postcss: {
             extnames: ['styl', 'less'],
             options: {
-                plugins: [/*'autoprefixer',*/ 'px2rpx', 'env']
+                plugins: [
+                    // 'autoprefixer'
+                    'px2rpx',
+                    'env'
+                ]
             }
         }
     },
