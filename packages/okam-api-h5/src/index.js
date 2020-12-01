@@ -13,6 +13,7 @@ import routerApi from './router';
 import storageApi from './storage';
 import toastApi from './ui/toast';
 import locationApi from './location';
+import loginApi from './login';
 import paymentApi from './payment';
 import navApi from './navigator';
 import phoneApi from './phone';
@@ -34,6 +35,7 @@ export default Object.assign(
     storageApi,
     toastApi,
     locationApi,
+    loginApi,
     paymentApi,
     navApi,
     phoneApi,

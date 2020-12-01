@@ -48,6 +48,7 @@ export default {
             'pages/api/window',
             'pages/api/interaction',
             'pages/api/location',
+            'pages/api/login',
             'pages/api/payment',
             'pages/api/animation',
             'pages/api/image',
