@@ -1,5 +1,22 @@
 # ChangeLog
 
+## 2020-12-02
+###  okam-build@0.4.27-alpha.0
+* **Bug修复**
+  * 修复百度小程序使用`oninit`造成的`vuex`报错问题([9b5b423](https://github.com/ecomfe/okam/pull/80/commits/9b5b423))
+
+###  okam-core@0.4.18-alpha.0
+* **Bug修复**
+  * 修复百度小程序使用`oninit`造成的`vuex`报错问题([9b5b423](https://github.com/ecomfe/okam/pull/80/commits/9b5b423))
+
+
+## 2020-11-30
+### okam-core@0.4.17-alpha.0
+* **新功能**
+   * mixins支持`oninit`生命周期(仅在`百度小程序` `Page`生效)  ([f7af8d2d7](https://github.com/ecomfe/okam/commit/f7af8d2d714))
+* **Bug修复**
+  * 修复使用`oninit`造成的`vuex`报错问题([f7af8d2d7](https://github.com/ecomfe/okam/commit/f7af8d2d714))
+
 ## 2020-09-22
 ### okam-build@0.4.26-alpha.0
 * **新功能**
@@ -13,7 +30,7 @@
 ### okam-cli@0.1.12
 
 * **Bug修复**
-    * 兼容 “百度小程序非兼容性改动-禁用、限制部分全局变量” 导致 `polyfil` 全局挂载失败问题 ([eb56c5b](https://github.com/ecomfe/okam/commit/eb56c5b))
+    * 兼容 "百度小程序非兼容性改动-禁用、限制部分全局变量" 导致 `polyfil` 全局挂载失败问题 ([eb56c5b](https://github.com/ecomfe/okam/commit/eb56c5b))
 
 
 ## 2019-12-02

@@ -10,9 +10,8 @@ export default {
         },
         dc: 666
     },
-
     created() {
-        console.log('call behvaiorC created...');
+        console.log('call behvaiorC created...this.$query', this.$query);
     },
 
     beforeMount() {

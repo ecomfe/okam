@@ -10,7 +10,6 @@ import initProps from '../initProps';
 import proxyArrayApis from '../array';
 
 const rawCreated = observable.created;
-delete observable.created;
 
 export default {
     component: Object.assign({}, observable, {

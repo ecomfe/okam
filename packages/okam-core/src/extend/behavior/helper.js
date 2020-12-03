@@ -44,6 +44,12 @@ function doMixin(target, source, k, opts) {
         if (!Array.isArray(child)) {
             child = child ? [child] : [];
         }
+        /* global swan */
+        // override the OnInit function
+        if (k === 'onInit' && typeof parent === 'function' && swan) {
+            const {overrideOninitFunc} = require('./override');
+            parent = overrideOninitFunc(parent);
+        }
 
         if (!Array.isArray(parent)) {
             parent = parent ? [parent] : [];
