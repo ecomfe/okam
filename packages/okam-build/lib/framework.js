@@ -49,7 +49,10 @@ const FRAMEWORK_EXTEND_PATH = {
         'swan': 'extend/data/redux/swan/index',
         'default': 'extend/data/redux/index'
     },
-    vuex: 'extend/data/vuex/index',
+    vuex: {
+        'swan': 'extend/data/vuex/swan/index',
+        'default': 'extend/data/vuex/index'
+    },
     model: 'extend/data/model',
     ref: {
         'default': 'extend/ref/index',
