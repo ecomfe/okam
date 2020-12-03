@@ -1,5 +1,15 @@
 # ChangeLog
 
+## 2020-12-02
+###  okam-build@0.4.27-alpha.0
+* **Bug修复**
+  * 修复百度小程序使用`oninit`造成的`vuex`报错问题([9b5b423](https://github.com/ecomfe/okam/pull/80/commits/9b5b423))
+
+###  okam-core@0.4.18-alpha.0
+* **Bug修复**
+  * 修复百度小程序使用`oninit`造成的`vuex`报错问题([9b5b423](https://github.com/ecomfe/okam/pull/80/commits/9b5b423))
+
+
 ## 2020-11-30
 ### okam-core@0.4.17-alpha.0
 * **新功能**
