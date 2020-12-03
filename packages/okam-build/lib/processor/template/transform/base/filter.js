@@ -1,6 +1,6 @@
 /**
  * @file Convert Vue filter syntax to mini program syntax
- * @author wuhuiyao(wuhuiyao@baidu.com)
+ * @author sparklewhy@gmail.com
  */
 
 'use strict';

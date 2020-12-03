@@ -8,6 +8,24 @@
 const path = require('path');
 const {colors, Timer} = require('../util');
 
+function filterChangedFiles(depFile, changedFiles) {
+    let result = [];
+    changedFiles.forEach(item => {
+        if (depFile.isStyle) {
+            if (item.isStyle || item.isComponent) {
+                result.push(item);
+            }
+        }
+        else if (depFile.isTpl) {
+            item.isComponent && result.push(item);
+        }
+        else if (depFile.isScript) {
+            item.isComponent && depFile.owner && result.push(item);
+        }
+    });
+    return result;
+}
+
 function compileFile(buildManager, file, releaseFiles) {
     let logger = buildManager.logger;
     typeof file === 'string' && (file = buildManager.createFile(file));
@@ -25,19 +43,19 @@ function compileFile(buildManager, file, releaseFiles) {
     releaseFiles.processFileNum += 1;
     if (file.isImg) {
         file.allowRelease = true;
-        // xxx: skip image file rebuild to avoid rebuild repeatedly
+        // xxx: skip image file rebuild to avoid rebuild in frequency
         file.processing || releaseFiles.add(file);
         return;
     }
 
     // analyse the style file dependence and determine which style file need to recompile
-    if (file.isStyle && !file.owner) {
+    if (file.isStyle || file.isScript || file.isTpl) {
         // TODO init dep map global to search file by dep effectively
-        let changeFiles = buildManager.getFilesByDep(file.path);
-        logger.debug(file.path, 'changeFiles:' + changeFiles.length);
-
-        if (changeFiles.length) {
-            changeFiles.forEach(
+        let changedFiles = buildManager.getFilesByDep(file.path);
+        logger.debug(file.path, 'changedFiles:' + changedFiles.length);
+        changedFiles = filterChangedFiles(file, changedFiles);
+        if (changedFiles.length) {
+            changedFiles.forEach(
                 item => compileFile(buildManager, item, releaseFiles)
             );
             return;
@@ -69,17 +87,25 @@ function rebuildFiles(file, buildManager) {
 
     buildManager.on('buildFileDone', addReleaseFile);
     compileFile(buildManager, file, releaseFiles);
+    buildManager.updateRouterFileContent
+        && buildManager.updateRouterFileContent(timer);
     buildManager.removeListener('buildFileDone', addReleaseFile);
 
     if (outputFiles.length) {
         let logger = buildManager.logger;
         buildManager.release(outputFiles).then(
-            () => logger.info(
-                'rebuild',
-                colors.cyan(releaseFiles.processFileNum),
-                'files done:',
-                colors.grey(timer.tick())
-            )
+            () => {
+                logger.closeErasable();
+                logger.info(
+                    'rebuild',
+                    colors.cyan(releaseFiles.processFileNum),
+                    'output',
+                    colors.cyan(outputFiles.length),
+                    'files done:',
+                    colors.grey(timer.tick())
+                );
+                logger.openErasable();
+            }
         );
     }
 }

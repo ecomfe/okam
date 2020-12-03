@@ -42,14 +42,23 @@ function traverseFiles(rootDir, filter) {
     }
 }
 
-function addFileRule(allRules, rule) {
+function normalizeMatchRule(rule) {
     if (typeof rule === 'string') {
-        let m = new MM(rule, {matchBase: true});
-        allRules.push(m);
+        return new MM(rule, {matchBase: true});
     }
-    else if (rule instanceof RegExp) {
-        allRules.push({match: str => rule.test(str)});
+
+    if (rule instanceof RegExp) {
+        return {match: str => rule.test(str)};
     }
+
+    if (typeof rule === 'function') {
+        return {match: rule};
+    }
+}
+
+function addFileRule(allRules, rule) {
+    rule = normalizeMatchRule(rule);
+    rule && allRules.push(rule);
 }
 
 function resolvePath(file, rootDir) {
@@ -130,7 +139,7 @@ function addExtraIncludeFiles(includeGlob, initBuildFiles, fileFactory) {
 
 function loadProcessFiles(options, logger) {
     let rootDir = options.root;
-    let {dir, exclude, include} = options.source;
+    let {dir, exclude, include, noParse, noTransform} = options.source;
     if (!dir) {
         logger.error('missing the source dir config information');
         return;
@@ -159,9 +168,11 @@ function loadProcessFiles(options, logger) {
         }
     });
 
+    let {depDir: rebaseDepDir, pathMap: outputPathMap} = options.output || {};
     let fileFactory = new FileFactory({
         root: rootDir,
-        rebaseDepDir: (options.output || {}).depDir,
+        rebaseDepDir,
+        outputPathMap,
         entryStyle,
         entryScript,
         projectConfig,
@@ -184,6 +195,8 @@ function loadProcessFiles(options, logger) {
     return {
         root: rootDir,
         sourceDir,
+        noParse: normalizeMatchRule(noParse),
+        noTransform: normalizeMatchRule(noTransform),
         files: fileFactory,
         buildFiles: initBuildFiles
     };

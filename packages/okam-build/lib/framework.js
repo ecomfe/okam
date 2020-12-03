@@ -21,10 +21,12 @@ const FRAMEWORK_EXTEND_PATH = {
         'wx': 'extend/data/observable/wx/index',
         'tt': 'extend/data/observable/tt/index',
         'quick': 'extend/data/observable/quick/index',
+        'h5': true,
         'default': 'extend/data/observable/index'
     },
     watch: {
         'default': 'extend/data/watch/index',
+        'h5': true,
         'quick': 'extend/data/watch/quick/index'
     },
     broadcast: {
@@ -40,24 +42,32 @@ const FRAMEWORK_EXTEND_PATH = {
             base: 'extend/behavior/quick/index',
             creator: 'extend/behavior/quick/Behavior'
         },
+        'h5': true,
         'default': {
             base: 'extend/behavior/index',
             creator: 'extend/behavior/Behavior'
         }
     },
     redux: {
+        'default': 'extend/data/redux/index',
         'swan': 'extend/data/redux/swan/index',
-        'default': 'extend/data/redux/index'
+        'h5': 'extend/data/redux/h5/index'
     },
     vuex: {
-        'swan': 'extend/data/vuex/swan/index',
-        'default': 'extend/data/vuex/index'
+        'default': 'extend/data/vuex/index',
+        'quick': 'extend/data/vuex/quick/index',
+        'h5': 'extend/data/vuex/h5/index',
+        'swan': 'extend/data/vuex/swan/index'
     },
-    model: 'extend/data/model',
+    model: {
+        'default': 'extend/data/model',
+        'h5': true
+    },
     ref: {
         'default': 'extend/ref/index',
         'ant': 'extend/ref/ant/index',
-        'quick': 'extend/ref/quick/index'
+        'quick': 'extend/ref/quick/index',
+        'h5': true
     },
     vhtml: {
         'default': true
@@ -67,6 +77,7 @@ const FRAMEWORK_EXTEND_PATH = {
         tt: true,
         swan: true,
         ant: true,
+        h5: true,
         quick: 'extend/filter/quick/index'
     }
 };
@@ -162,16 +173,21 @@ exports.getBaseId = function (appType, baseName) {
  * @return {string|boolean}
  */
 exports.getFrameworkExtendId = function (appType, extendName, getConstructor = false) {
-    let value = FRAMEWORK_EXTEND_PATH[extendName];
-    if (value && typeof value === 'object') {
-        value = value[appType] || value.default;
-    }
-    if (value == null) {
-        throw new Error(`unknown ${appType} framework extension: ${extendName}`);
+    const extensionInfo = FRAMEWORK_EXTEND_PATH[extendName];
+    const defaultValue = extensionInfo && extensionInfo.default;
+
+    let value;
+    if (extensionInfo && typeof extensionInfo === 'object') {
+        value = extensionInfo[appType];
     }
 
+    (value == null) && (value = defaultValue);
     if (typeof value === 'boolean') {
         return;
+    }
+
+    if (value == null) {
+        throw new Error(`unknown ${appType} framework extension: ${extendName}`);
     }
 
     if (typeof value === 'object') {

@@ -105,11 +105,11 @@ module.exports = merge({}, baseConf, {
             },
 
             transformTags: {
-                'button': 'o-button'
+                'button': 'obutton'
             }
         },
         global: {
-            'o-button': 'okam/button/index'
+            'obutton': 'okam-component/src/quick/button/index'
         }
     },
 

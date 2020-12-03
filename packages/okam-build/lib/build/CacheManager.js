@@ -8,7 +8,7 @@
 const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
-const {helper, file: fileUtil} = require('../util');
+const {os, file: fileUtil} = require('../util');
 
 class CacheManager {
     constructor(options) {
@@ -16,7 +16,7 @@ class CacheManager {
             dirFileInfo: {}
         };
         this.localCache = null;
-        this.cacheDir = options.cacheDir || path.join(helper.getUserHomeDir(), '.okam');
+        this.cacheDir = options.cacheDir || path.join(os.getUserHomeDir(), '.okam');
         this.localCacheFile = '.meta';
     }
 

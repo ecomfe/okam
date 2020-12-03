@@ -169,17 +169,13 @@ class BuildQuickAppManager extends BuildManager {
             }
 
             let subFiles = item.subFiles;
-            let found;
-
             subFiles && subFiles.some(item => {
                 if (item.isConfig) {
-                    found = item;
+                    result.push(item);
                     return true;
                 }
                 return false;
             });
-
-            found && result.push(found);
         });
 
         return result;

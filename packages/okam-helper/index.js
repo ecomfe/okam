@@ -1,6 +1,6 @@
 /**
- * @file entrance
- * @author wuhuiyao <sparklewhy@gmail.com>
+ * @file The okam helper entrance
+ * @author sparklewhy@gmail.com
  */
 
 'use strict';
@@ -12,6 +12,9 @@ module.exports = exports = {
     require: require('./lib/require'),
     string: require('./lib/string'),
     Timer: require('./lib/Timer'),
-    helper: require('./lib/helper'),
+    lang: require('./lib/lang'),
+    net: require('./lib/net'),
+    os: require('./lib/os'),
+    misc: require('./lib/misc'),
     colors: require('chalk')
 };

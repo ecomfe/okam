@@ -16,7 +16,9 @@ import base from 'core/base/base';
 import {clearBaseCache} from 'core/helper/factory';
 import {testCallOrder, fakeAppEnvAPIs} from 'test/helper';
 
-describe('App', () => {
+describe('App', function () {
+    // this.timeout(0); // disable timeout
+
     let restoreAppEnv;
     beforeEach('init global App', function () {
         clearBaseCache();

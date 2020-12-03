@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const createFile = require('../processor/FileFactory').createFile;
-const {replaceFileName, replaceExtname, isFileExists} = require('../util').file;
+const {replaceExtname, isFileExists} = require('../util').file;
 
 function outputFile(file, targetPath, logger) {
     if (file.isProjectConfig && isFileExists(targetPath)) {
@@ -33,45 +33,20 @@ function outputFile(file, targetPath, logger) {
     });
 }
 
-function updateFileName(filePath, newFileName) {
-    if (!newFileName) {
-        return false;
-    }
-
-    return replaceFileName(filePath, newFileName);
-}
-
 function getOutputPath(filePath, file, options) {
     let {
         componentPartExtname,
-        outputPathMap = {},
         getCustomPath: getPath
     } = options;
 
-    let result;
-    if (file.isProjectConfig) {
-        result = updateFileName(filePath, outputPathMap.projectConfig);
+    let result = file.resolvePath || filePath;
+    if (file.isTpl && !file.rext && componentPartExtname) {
+        file.rext = componentPartExtname.tpl;
     }
-    else if (file.isEntryScript) {
-        result = updateFileName(filePath, outputPathMap.entryScript);
-    }
-    else if (file.isEntryStyle) {
-        result = updateFileName(filePath, outputPathMap.entryStyle);
-    }
-    else if (file.isAppConfig) {
-        result = updateFileName(filePath, outputPathMap.appConfig);
-    }
-    else {
-        result = file.resolvePath || filePath;
 
-        if (file.isTpl && !file.rext && componentPartExtname) {
-            file.rext = componentPartExtname.tpl;
-        }
-
-        let rext = file.rext;
-        if (rext) {
-            result = replaceExtname(result, rext);
-        }
+    let rext = file.rext;
+    if (rext) {
+        result = replaceExtname(result, rext);
     }
 
     if (result !== false && typeof getPath === 'function') {
@@ -87,26 +62,28 @@ function getOutputPath(filePath, file, options) {
 
 function getComponentPartOutputFilePath(partFile, owner, options) {
     let {componentPartExtname} = options;
-    if (!componentPartExtname) {
+    if (!componentPartExtname && !partFile.release) {
         return;
     }
 
     let filePath = owner.resolvePath || owner.path;
-    if (partFile.isJson) {
-        partFile.rext = componentPartExtname.config;
-    }
-    else if (partFile.isFilter) {
-        partFile.rext = '';
-        filePath = partFile.path;
-    }
-    else if (partFile.isScript) {
-        partFile.rext = componentPartExtname.script;
-    }
-    else if (partFile.isStyle) {
-        partFile.rext = componentPartExtname.style;
-    }
-    else if (partFile.isTpl) {
-        partFile.rext = componentPartExtname.tpl;
+    if (componentPartExtname) {
+        if (partFile.isJson) {
+            partFile.rext = componentPartExtname.config;
+        }
+        else if (partFile.isFilter) {
+            partFile.rext = '';
+            filePath = partFile.path;
+        }
+        else if (partFile.isScript) {
+            partFile.rext = componentPartExtname.script;
+        }
+        else if (partFile.isStyle) {
+            partFile.rext = componentPartExtname.style;
+        }
+        else if (partFile.isTpl) {
+            partFile.rext = componentPartExtname.tpl;
+        }
     }
 
     return getOutputPath(filePath, partFile, options);
@@ -148,7 +125,7 @@ function isComponentFile(f) {
 }
 
 function addFileOutputTask(allTasks, options, file) {
-    if (file.release === false || file.processing) {
+    if (file.release === false) {
         return;
     }
 
@@ -172,7 +149,6 @@ class FileOutput {
         let {root, logger, files} = buildManager;
         let {
             dir: outputDir,
-            pathMap: outputPathMap,
             componentPartExtname,
             file: getCustomPath
         } = options || {};
@@ -183,7 +159,6 @@ class FileOutput {
         this.files = files;
         this.outputOpts = {
             outputDir,
-            outputPathMap,
             componentPartExtname,
             getCustomPath,
             logger

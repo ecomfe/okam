@@ -46,7 +46,6 @@ function addFileExtnameAssociatedProcessor(extnames, processorName, existedMap) 
 
     extnames.forEach(k => {
         k = k.toLowerCase();
-
         let processors = existedMap[k];
         if (Array.isArray(processors)) {
             processors.push(processorName);

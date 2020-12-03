@@ -5,6 +5,7 @@
 
 'use strict';
 
+const readline = require('readline');
 const colors = require('chalk');
 
 /* eslint-disable no-console */
@@ -12,17 +13,20 @@ const LOG_LEVEL = {
     debug: {
         id: 0,
         prefix: '[DEBUG]',
-        color: colors.gray
+        color: colors.gray,
+        erasable: true
     },
     trace: {
         id: 1,
         prefix: '[TRACE]',
-        color: colors.white
+        color: colors.white,
+        erasable: true
     },
     info: {
         id: 2,
         prefix: '[INFO]',
-        color: colors.green
+        color: colors.green,
+        erasable: true
     },
     warn: {
         id: 3,
@@ -37,6 +41,26 @@ const LOG_LEVEL = {
 };
 /* eslint-enable no-console */
 
+/**
+ * Erasable log
+ *
+ * @inner
+ * @param {string} msg the message to log
+ * @param {boolean} erasable whether to erase the current line before log new message
+ */
+function erasableLog(msg, erasable) {
+    // clear line and move caret position to line start
+    readline.clearLine(process.stdout, 0);
+    readline.cursorTo(process.stdout, 0);
+
+    process.stdout.write(msg);
+
+    if (!erasable) {
+        // start new line if not erasable
+        process.stdout.write('\n');
+    }
+}
+
 class Logger {
 
     /**
@@ -45,10 +69,13 @@ class Logger {
      * @param {Object} options the options
      * @param {string=} options.prefix the log prefix
      * @param {string=} options.level the minimum log level to print
+     * @param {boolean=} options.erasable whether to erase the previous log
      */
     constructor(options = {}) {
         this.setLogPrefix(options.prefix);
         this.setLogLevel(options.level);
+
+        this.erasable = !!options.erasable;
     }
 
     /**
@@ -112,7 +139,24 @@ class Logger {
             params.unshift(colors.bold(logPrefix));
         }
 
-        console.log.apply(console, params);
+        erasableLog(
+            params.join(' '),
+            !this.erasableClosed && this.erasable && logType.erasable
+        );
+    }
+
+    /**
+     * Close erasable support
+     */
+    closeErasable() {
+        this.erasableClosed = true;
+    }
+
+    /**
+     * Open erasable support
+     */
+    openErasable() {
+        this.erasableClosed = false;
     }
 
     /**

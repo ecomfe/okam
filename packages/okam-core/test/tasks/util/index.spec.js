@@ -10,7 +10,6 @@
 import assert from 'assert';
 import expect, {spyOn} from 'expect';
 import {
-    isPropertyWritable,
     isPromise,
     mixin,
     isFunction,
@@ -22,38 +21,6 @@ import {
 describe('App', () => {
     afterEach(() => {
         expect.restoreSpies();
-    });
-
-    it('isPropertyWritable', () => {
-        let obj = {};
-        assert.ok(isPropertyWritable(obj, 'a'));
-
-        Object.freeze(obj);
-        assert.ok(!isPropertyWritable(obj, 'a'));
-
-        obj = Object.seal({a: 3});
-        assert.ok(isPropertyWritable(obj, 'a'));
-        assert.ok(isPropertyWritable(obj, 'b'));
-
-        obj = {};
-        Object.defineProperties(obj, {
-            a: {
-                get() {
-                    return 3;
-                }
-            },
-            b: {
-                get() {
-                    return this._val;
-                },
-                set(val) {
-                    this._val = val;
-                }
-            }
-        });
-        assert.ok(!isPropertyWritable(obj, 'a'));
-        assert.ok(isPropertyWritable(obj, 'b'));
-        assert.ok(isPropertyWritable(obj, 'c'));
     });
 
     it('definePropertyValue', () => {
@@ -75,6 +42,16 @@ describe('App', () => {
         Object.defineProperty(obj, 'f', {});
         let obj2 = Object.create(obj);
         definePropertyValue(obj2, 'd', 9);
+        Object.defineProperty(obj2, 'sd', {
+            get() {
+                return 23;
+            },
+            enumerable: true
+        });
+        assert.throws(
+            () => definePropertyValue(obj2, 'sd', 12),
+            err => err.message.indexOf('Cannot redefine property') !== -1
+        );
         definePropertyValue(obj2, 'e', 12);
         definePropertyValue(obj2, 'f', 66);
 
@@ -84,7 +61,7 @@ describe('App', () => {
         assert(obj2.d === 9);
         assert(obj2.e === 12);
         assert(obj2.f === 66);
-        expect(Object.keys(obj2)).toEqual(['d', 'e', 'f']);
+        expect(Object.keys(obj2)).toEqual(['d', 'sd', 'e', 'f']);
 
         let fObj = Object.freeze({c: 's'});
         let fObj2 = Object.create(fObj);

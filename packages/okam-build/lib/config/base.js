@@ -53,6 +53,14 @@ module.exports = {
      * {
      *    'audio': '@system.audio', // 导入外部依赖
      *    'myRequest': './common/request', // 相对模块，相对于项目源目录
+     *    defaultApi: { // 重写默认环境提供的 API，直接覆盖默认的环境 API
+     *       modId: 'my-apis',
+     *       override: true
+     *    },
+     *    spreadApi: { // 展开导出的 API，用于返回的 API 包含多个 API 情况
+     *       modId: './common/apis',
+     *       spread: true
+     *    }
      * }
      *
      * key: 为对应要导出的 api 名称，value 为对应的该 API 的实现
@@ -151,7 +159,24 @@ module.exports = {
          *
          * @type {Array.<string|RegExp>}
          */
-        include: [/^project\.\w+$/]
+        include: [/^project\.\w+$/],
+
+        /**
+         * 不解析编译处理的文件定义，基本可以认为文件内容不会做任何解析转换处理
+         * 支持 glob pattern 或者 传入不解析的文件路径的正则或者 function
+         * 优先级高于 noTransform
+         *
+         * @type {string|RegExp|function(filePath):boolean}
+         */
+        noParse: null,
+
+        /**
+         * 不转换处理的文件定义，但会解析文件内容，比如 js 会解析依赖
+         * 支持 glob pattern 或者 传入不解析的文件路径的正则或者 function
+         *
+         * @type {string|RegExp|function(filePath):boolean}
+         */
+        noTransform: null
     },
 
     /**
@@ -354,6 +379,7 @@ module.exports = {
              *
              * {
              *    img: 'src',
+             *    video: ['src', 'poster'], // 指定多个资源属性
              *    import: true, // 设为 true，默认为 src 属性获取依赖的资源
              *    include: false // 设为 false，不会分析该标签的依赖资源
              * }
@@ -459,10 +485,6 @@ module.exports = {
              * @return {boolean}
              */
             match(file) {
-                if (file.isStyle && file.extname !== 'css' && !file.isEntryStyle && !file.owner) {
-                    // 默认不处理非入口样式及单文件组件的样式文件
-                    return false;
-                }
                 return !!file.processor;
             },
 

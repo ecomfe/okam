@@ -1,11 +1,17 @@
 {
   "name": "okam-build",
-  "version": "0.4.27-alpha.0",
+  "version": "0.5.0-alpha.0",
   "description": "The build tool for Okam develop framework",
   "main": "index.js",
   "keywords": [
+    "h5",
+    "web",
+    "quick app",
+    "toutiao",
     "swan",
     "wx",
+    "alipay",
+    "weapp",
     "okam",
     "mini program",
     "build"
@@ -33,10 +39,9 @@
     "htmlparser2": "^3.9.2",
     "minimatch": "^3.0.4",
     "mkdirp": "^0.5.1",
-    "okam-helper": "^0.4.4",
+    "okam-helper": "^0.5.0-alpha.0",
     "resolve": "^1.8.1",
     "rimraf": "^3.0.0",
-    "vue-template-compiler": "^2.5.16",
     "yargs-parser": "^14.0.0"
   },
   "engine": {

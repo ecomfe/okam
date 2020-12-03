@@ -1,0 +1,44 @@
+{
+  "name": "okam-component-h5",
+  "version": "0.1.1-alpha.0",
+  "description": "The okam components that provide the missing components for H5 platform",
+  "main": "src/index.js",
+  "keywords": [
+    "h5",
+    "web",
+    "okam",
+    "mini program",
+    "component"
+  ],
+  "scripts": {
+    "prepublish": "npm run lint",
+    "lint": "fecs ./src --reporter=baidu --rule",
+    "vuelint": "fecs ./src --reporter=baidu --rule --type=vue",
+    "test": "node ./node_modules/mochapack/lib/cli/index --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\"",
+    "test:debug": "node --inspect-brk ./node_modules/mochapack/lib/cli/index --webpack-config scripts/webpack.test.conf.js --require test/setup.js \"test/tasks/**/*.spec.js\""
+  },
+  "license": "MIT",
+  "repository": "ecomfe/okam",
+  "bugs": {
+    "url": "https://github.com/ecomfe/okam/issues"
+  },
+  "peerDependencies": {
+    "okam-api-h5": "^0.1.0",
+    "vue": "^2.6.11",
+    "vue-router": "^3.0.2"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "cross-env": "^5.2.0",
+    "jsdom": "^13.2.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^6.0.0",
+    "mochapack": "^1.0.0",
+    "vue-router": "^3.0.2",
+    "webpack": "^4.29.5"
+  },
+  "dependencies": {
+    "vue": "^2.6.11",
+    "weui": "^1.1.3"
+  }
+}

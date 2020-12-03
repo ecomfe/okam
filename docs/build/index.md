@@ -115,7 +115,7 @@ import Promise from 'okam-core/src/polyfill/promise';
 `Object` 可选，模块路径 `resolve` 选项
 
 * `resolve.extensions`: `Array.<string>` 查找的模块文件后缀名，会跟默认查找的后缀名做合并
-* `resolve.ignore`: `RegExp|Array.<string|RegExp>|(moduleId, appType):Boolean` 要忽略 resolve 的模块 id，可以传入正则，或者数组，也可以是一个 function
+* `resolve.ignore`: `RegExp|Array.<string|RegExp>|(moduleId, file):Boolean` 要忽略 resolve 的模块 id，可以传入正则，或者数组，也可以是一个 function
 * `resolve.onResolve(depModId, file)`: `Function` resolve dep 时候事件监听回调
 * `resolve.alias`: 设置引用的模块的别名设置，具体设置同 [webpack.alias](https://webpack.js.org/configuration/resolve/#resolve-alias)，默认 `{'okam$': 'okam-core/src/index'}` `0.4.8 版本开始支持`
 * `resolve.modules`: 设置递归查找模块的目录，默认 `node_modules` `0.4.8 版本开始支持`

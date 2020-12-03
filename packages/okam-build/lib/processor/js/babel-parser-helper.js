@@ -5,6 +5,76 @@
 
 'use strict';
 
+class Babel7 {
+    constructor() {
+        this.babel = require('@babel/core');
+        this.template = this.babel.template;
+    }
+
+    transformFromAst(ast, content, config) {
+        return this.babel.transformFromAstSync(ast, content, config);
+    }
+
+    transform(content, config) {
+        return this.babel.transformSync(content, config);
+    }
+
+    generate(...args) {
+        let generate = require('@babel/generator').default;
+        return generate.apply(null, args);
+    }
+}
+
+class Babel6 {
+    constructor() {
+        this.babel = require('babel-core');
+        this.template = this.babel.template;
+    }
+
+    transformFromAst(ast, content, config) {
+        return this.babel.transformFromAst(ast, content, config);
+    }
+
+    transform(content, config) {
+        return this.babel.transform(content, config);
+    }
+
+    generate(...args) {
+        let generate = require('babel-generator').default;
+        return generate.apply(null, args);
+    }
+}
+
+let babel6Parser = null;
+let babel7Parser = null;
+
+function initBabelParser(babelVersion) {
+    let isBabel6 = babelVersion <= 6;
+    if (isBabel6 && !babel6Parser) {
+        babel6Parser = new Babel6();
+    }
+
+    if (!isBabel6 && !babel7Parser) {
+        babel7Parser = new Babel7();
+    }
+
+    return isBabel6 ? babel6Parser : babel7Parser;
+}
+
+/**
+ * Init babel parser for test purpose
+ *
+ * @param {number=} babelVersion the babel version to init
+ */
+exports.initBabelParser = function (babelVersion) {
+    babel7Parser = babel6Parser = null;
+    initBabelParser(babelVersion);
+};
+
+exports.getBabelParser = function () {
+    return babel7Parser || babel6Parser;
+};
+
 /**
  * Compile the file using babel
  *
@@ -14,12 +84,7 @@
  * @return {{content: string, sourceMap: string}}
  */
 exports.compile = function (file, options, babelVersion = 6) {
-    if (file.disableBabel) {
-        return;
-    }
-
-    let isBabel6 = babelVersion <= 6;
-    let babel = isBabel6 ? require('babel-core') : require('@babel/core');
+    let babel = initBabelParser(babelVersion);
     let config = Object.assign(
         {babelrc: false, ast: true},
         options.config,
@@ -27,17 +92,9 @@ exports.compile = function (file, options, babelVersion = 6) {
     );
 
     // transform code
-    let result;
-    if (isBabel6) {
-        result = file.ast
-            ? babel.transformFromAst(file.ast, file.content, config)
-            : babel.transform(file.content, config);
-    }
-    else {
-        result = file.ast
-            ? babel.transformFromAstSync(file.ast, file.content, config)
-            : babel.transformSync(file.content, config);
-    }
+    let result = file.ast
+        ? babel.transformFromAst(file.ast, file.content, config)
+        : babel.transform(file.content, config);
 
     // extract used babel helper api
     let usedHelpers = result.metadata

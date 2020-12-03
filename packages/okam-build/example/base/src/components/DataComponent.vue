@@ -4,7 +4,7 @@
         <view>{{myName}}</view>
         <view>title: {{title}}</view>
         <view>A: {{obj.a}}</view>
-        <view>Arr: <text for="item in arr">{{item}},</text></view>
+        <view>Arr: <text for="item in arr" :key="item">{{item}},</text></view>
         <view><button @click="onPush">Push</button></view>
         <view><button @click="onPush2">Push2</button></view>
         <view><button @click="onPop">Pop</button></view>

@@ -19,6 +19,7 @@ const ModuleResolver = require('./ModuleResolver');
 const allAppTypes = require('./app-type');
 const cleanBuild = require('./clean-build');
 const initGlobalComponents = require('./global-component');
+const {registerProcessor} = require('../processor/type');
 
 class BuildManager extends EventEmitter {
     constructor(buildConf) {
@@ -46,6 +47,9 @@ class BuildManager extends EventEmitter {
         this.envConfigKey = `_${appType}Env`;
         this.isDev = env === 'dev' || env === 'development';
         this.isProd = !env || env === 'prod' || env === 'production';
+        if (this.isProd) {
+            process.env.NODE_ENV = 'production';
+        }
 
         this.initBuildRules(buildConf);
 
@@ -63,7 +67,8 @@ class BuildManager extends EventEmitter {
      */
     initGlobalComponents(componentConf) {
         this.globalComponents = initGlobalComponents(
-            this.appType, componentConf, this.sourceDir
+            componentConf,
+            pathUtil.join(this.root, this.sourceDir)
         );
     }
 
@@ -89,6 +94,20 @@ class BuildManager extends EventEmitter {
         this.defaultBabelProcessorName = getDefaultBabelProcessor(
             buildConf.processors
         );
+
+        // register dead code remove processor
+        registerProcessor({
+            name: 'removeDeadCode',
+            processor: this.defaultBabelProcessorName,
+            extnames: ['js'],
+            order: 1, // ensure this processor executed in priority
+            options: {
+                ignoreDefaultOptions: true,
+                plugins: [
+                    'minify-dead-code-elimination'
+                ]
+            }
+        });
     }
 
     /**
@@ -105,9 +124,14 @@ class BuildManager extends EventEmitter {
         else if (this.isProd) {
             extraConf || (extraConf = buildConf.prod || buildConf.production);
         }
-
         let {rules: baseRules, processors: baseProcessors} = buildConf;
         let {rules, processors} = extraConf || {};
+        if (extraConf) {
+            delete extraConf.rules;
+            delete extraConf.processors;
+        }
+        buildConf = merge(buildConf, extraConf);
+        this.buildConf = buildConf;
 
         rules && (rules = [].concat(baseRules, rules));
         this.rules = rules || baseRules || [];
@@ -120,7 +144,11 @@ class BuildManager extends EventEmitter {
             processors: [
                 [
                     'replacement',
-                    {'process.env.APP_TYPE': `"${this.appType}"`}
+                    {
+                        'process.env.APP_TYPE': `"${this.appType}"`,
+                        'process.env.NODE_ENV': this.isDev
+                            ? '"development"' : '"production"'
+                    }
                 ]
             ]
         });
@@ -155,12 +183,17 @@ class BuildManager extends EventEmitter {
         let {
             root,
             sourceDir,
+            noParse,
+            noTransform,
             files,
             buildFiles
         } = loadProcessFiles(this.buildConf, this.logger);
 
         this.files = files;
+
         this.root = root;
+        this.noParse = noParse;
+        this.noTransform = noTransform;
         this.sourceDir = sourceDir;
         this.babelConfig = babelUtil.readBabelConfig(root);
         this.waitingBuildFiles = buildFiles;
@@ -211,7 +244,7 @@ class BuildManager extends EventEmitter {
      *        by default false
      */
     addNeedBuildFile(file, force = false) {
-        if (!force && file.compiled) {
+        if ((!force && file.compiled) || file.processing) {
             return;
         }
 
@@ -271,12 +304,10 @@ class BuildManager extends EventEmitter {
      * @return {?Object}
      */
     getFilterTransformOptions() {
-        let enable = this.isEnableFilterSupport();
+        let enable = !this.isNativeSupportVue() && this.isEnableFilterSupport();
         if (enable) {
-            let isUsingBabel7 = this.defaultBabelProcessorName === 'babel7';
             return {
-                format: 'es6',
-                usingBabel6: !isUsingBabel7
+                format: 'es6'
             };
         }
         return null;
@@ -289,6 +320,28 @@ class BuildManager extends EventEmitter {
      */
     getModulePathKeepExtnames() {
         return null;
+    }
+
+    /**
+     * Get the router config module id, if none, return null
+     *
+     * @return {?string}
+     */
+    getAppRouterModuleId() {
+        return null;
+    }
+
+    initFileParseOptions(file) {
+        let noParse = this.noParse;
+        if (noParse && noParse.match(file.path)) {
+            file.noParse = true;
+            return;
+        }
+
+        let noTransform = this.noTransform;
+        if (noTransform && noTransform.match(file.path)) {
+            file.noTransform = true;
+        }
     }
 
     /**
@@ -306,6 +359,7 @@ class BuildManager extends EventEmitter {
         let {watch: isWatchMode} = this.buildConf;
 
         try {
+            this.initFileParseOptions(file);
             processor.compile(file, this);
         }
         catch (ex) {
@@ -380,10 +434,10 @@ class BuildManager extends EventEmitter {
         // build files that need to compile
         let buildFail = this.buildDependencies(t);
         if (buildFail) {
-            return Promise.reject('error happen');
+            return Promise.reject('build fail');
         }
 
-        this.onBuildDone && this.onBuildDone();
+        this.onBuildDone && this.onBuildDone(t);
 
         logger.info('process files done:', colors.gray(timer.tick()));
         return Promise.resolve();
@@ -421,24 +475,33 @@ class BuildManager extends EventEmitter {
         });
     }
 
+    isNativeSupportVue() {
+        return false;
+    }
+
     isEnableRefSupport() {
-        return this.isEnableFrameworkExtension('ref');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('ref');
     }
 
     isEnableMixinSupport() {
-        return this.isEnableFrameworkExtension('behavior');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('behavior');
     }
 
     isEnableFilterSupport() {
-        return this.isEnableFrameworkExtension('filter');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('filter');
     }
 
     isEnableModelSupport() {
-        return this.isEnableFrameworkExtension('model');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('model');
     }
 
     isEnableVHtmlSupport() {
-        return this.isEnableFrameworkExtension('vhtml');
+        return !this.isNativeSupportVue()
+            && this.isEnableFrameworkExtension('vhtml');
     }
 
     getProcessFileCount() {
@@ -469,9 +532,10 @@ class BuildManager extends EventEmitter {
         let {rext, content, deps, sourceMap, ast} = compileResult;
         file.compiled = true;
         file.content = content;
-        rext && (file.rext = rext);
+        rext && !file.rext && (file.rext = rext);
         ast && (file.ast = ast);
 
+        const isStyleCompiled = file.isStyle;
         deps && deps.forEach(item => {
             this.logger.debug('add dep', item);
             if (!pathUtil.isAbsolute(item)) {
@@ -482,6 +546,11 @@ class BuildManager extends EventEmitter {
             }
 
             let depFile = this.files.addFile(item);
+            // not need to compile the preprocess style file dependence style files again
+            if (isStyleCompiled && depFile.isStyle && depFile.extname !== 'css') {
+                depFile.compiled = true;
+            }
+
             file.addDeps(depFile.path);
             this.addNeedBuildFile(depFile);
         });
@@ -501,7 +570,6 @@ class BuildManager extends EventEmitter {
     }
 
     addAsyncTask(file, promise) {
-        file.processing = true;
         promise.then(
             null,
             err => {

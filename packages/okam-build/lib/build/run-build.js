@@ -17,6 +17,7 @@ function getRelativePath(absPath) {
 }
 
 function buildDone(timer, logger, outputDir) {
+    logger.closeErasable();
     logger.info(
         'output files to',
         colors.cyan(path.relative(process.cwd(), outputDir)),
@@ -24,6 +25,7 @@ function buildDone(timer, logger, outputDir) {
         colors.grey(timer.tick())
     );
     logger.info('build done:', colors.grey(timer.elapsedTime()));
+    logger.openErasable();
 }
 
 /**
@@ -56,10 +58,17 @@ function buildProject(timer, buildConf, buildManager) {
     ).then(
         doneHandler
     ).then(
+        () => buildManager.runPostBuild && buildManager.runPostBuild()
+    ).then(
         () => {
+            // do not return the run result, which may lead to
+            // the outside watch task cannot trigger
             runBuildDoneHook(buildManager, onBuildDone);
         }
-    ).catch(doneHandler);
+    ).catch(err => {
+        logger.error('build fail', err.stack || '');
+        doneHandler();
+    });
 }
 
 /**
@@ -75,6 +84,7 @@ function runBuild(buildConf, buildManager) {
 
     let {appType, logger, root: rootDir, configPath} = buildConf;
 
+    logger.closeErasable();
     logger.info('build start...');
     logger.info('build app type:', colors.cyan(appType));
     logger.info(
@@ -104,6 +114,7 @@ function runBuild(buildConf, buildManager) {
             colors.gray(timer.tick())
         );
         logger.info('build for', colors.cyan(buildManager.getBuildEnv()), 'env');
+        logger.openErasable();
 
         return buildProject(timer, buildConf, buildManager);
     });

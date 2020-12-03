@@ -3,21 +3,30 @@
  * @author xxx
  */
 
+//
 /* @see http://stylus-lang.com/docs/keyframes.html */
 vendors = official
 
+/* @import '~normalize.css'
+@import '~okam-component-h5/src/main.css' */
 @require './common/css/base.styl'
+
+@media h5
+    html, body
+        height: 100%
+        min-height: 100%
+
 
 .okam-inline
     display: inline
 
-.title
-    margin: 15px 0
-    padding: 10px
-    background: #fff
-    width: 10px
-    /* px2rpx: no */
-    border: 1px solid #ff0000
+// .title
+//     margin: 15px 0
+//     padding: 10px
+//     background: #fff
+//     width: 10px
+//     /* px2rpx: no */
+//     border: 1px solid #ff0000
 
 .page-footer
     background: #fff
@@ -69,4 +78,8 @@ testPxFn()
     /* px2rpx: no */
     testPxFn()
     hairline('#fff')
+
+.global-class {
+    color: green;
+}
 

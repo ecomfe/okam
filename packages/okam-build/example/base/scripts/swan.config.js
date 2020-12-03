@@ -11,6 +11,18 @@ module.exports = merge({}, require('./base.config'), {
     wx2swan: true,
     framework: ['filter'],
     processors: {
+        postcss: {
+            options: {
+                plugins: [
+                    [
+                        'px2rpx',
+                        {
+                            keepComment: 'no'
+                        }
+                    ]
+                ]
+            }
+        }
         // vant: {
         //     processor: 'babel',
         //     options: {

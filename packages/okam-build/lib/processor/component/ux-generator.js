@@ -1,5 +1,5 @@
 /**
- * @file The single file component generator
+ * @file The quick app single file component generator
  * @author sparklewhy@gmail.com
  */
 

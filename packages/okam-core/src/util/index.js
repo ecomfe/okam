@@ -99,24 +99,6 @@ export function isPromise(obj) {
 }
 
 /**
- * Check the given property whether is writable in the given object.
- *
- * @param {Object} obj the object tho check
- * @param {string} name the property name to check
- * @return {boolean}
- */
-export function isPropertyWritable(obj, name) {
-    let result = Object.isFrozen(obj);
-    if (result) {
-        return false;
-    }
-
-    let desc = Object.getOwnPropertyDescriptor(obj, name);
-    desc ? (result = !!desc.set || desc.writable) : (result = true);
-    return result;
-}
-
-/**
  * Define property value
  *
  * @param {Object} obj the object to define property
@@ -125,19 +107,12 @@ export function isPropertyWritable(obj, name) {
  */
 export function definePropertyValue(obj, name, value) {
     let desc = Object.getOwnPropertyDescriptor(obj, name);
-    if (desc && !desc.configurable) {
+    if (desc && (desc.set || desc.writable)) {
         obj[name] = value;
         return;
     }
 
-    desc || (desc = {enumerable: true, configurable: true});
-    if (desc.get) {
-        desc.get = () => value;
-    }
-    else {
-        desc.value = value;
-    }
-
+    desc = {enumerable: true, configurable: true, value};
     Object.defineProperty(obj, name, desc);
 }
 

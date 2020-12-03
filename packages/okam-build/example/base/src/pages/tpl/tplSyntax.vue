@@ -24,20 +24,20 @@
             <h2>style 绑定</h2>
             <span :style="{ color: colorStyle, fontSize: fontStyle + 'px' }">对象语法</span>
             <span :style="[{ color: colorStyle, fontSize: fontStyle + 'px' }, {fontWeight:'bold'}]">数组语法</span>
-            <span for="item in 3" :style="{fontSize: fontSize[item], fontFamily:'Times New Roman'}">测试循环遍历</span>
+            <span for="item in 3" :key="item" :style="{fontSize: fontSize[item], fontFamily:'Times New Roman'}">测试循环遍历</span>
             <span :style="styleString">普通字符串</span>
 
             <h2>布尔属性</h2>
-            <view if="true" hi="{{true}}">hello im true</view>
+            <view if="true" :hi="true">hello im true</view>
             <view else></view>
             <button @click="handleButton" plain>plain=hello</button>
 
             <h2>JS表达式</h2>
             <span if="length > 5">逻辑判断</span>
             <span>数据路径计算: {{object.key}} {{list[0][0]}}</span>
-            <span :data-a="{a: 1, b: 2}"> 对象 </span>
-            <span :data-b="{...object, e: 5}" @click="handleButton">扩展运算符</span>
-            <span :data-c="{foo, bar}" @click="handleButton">key、value相同</span>
+            <div :data-a="{a: 1, b: 2}"> 对象 </div>
+            <div :data-b="{...object, e: 5}" @click="handleButton">扩展运算符</div>
+            <div :data-c="{foo, bar}" @click="handleButton">key、value相同</div>
 
             <h2>条件渲染</h2>
             <div if="2<1"> 2 &lt; 1  </div>
@@ -83,7 +83,7 @@
                 for and if when {{item}}
             </view>
 
-            <block for="item,index in [false,true,false]" :key="item" if="item" hello="hello">
+            <block for="item,index in [false,true,false]"  if="item" hello="hello">
                 <span>block 为父元素，for 和 if 共存：</span>
                 <span>i'm from</span>
                 for and if when {{item}}
@@ -151,6 +151,10 @@
             <pre class="code">
                 <code for="item in condition" :key="item">{{item}}</code>
             </pre>
+            <view>
+                <view class="title">条件渲染example</view>
+                <view v-if="isShow">当isShow为true的时候显示</view>
+            </view>
         </section>
 
         <section>
@@ -161,7 +165,7 @@
             </pre>
         </section>
 
-        <section>
+        <section class="block">
             <h2 class="section-title">事件处理</h2>
             <span class="text">参数可传：字符串、变量、数组、对象、括号表达式（仅支持简单运算及三元运算符）、$event（即原事件对象）</span>
             <pre class="code">
@@ -174,14 +178,14 @@
             <button @click="handleClick($event)">click me with bracket one $event</button>
             <button @click="handleNoArgs()">click me with bracket no arguments</button>
             <button @click.prevent="handleNoArgs">click me with no arguments</button>
-            <a href="/subPackages/pages/subPageA/index">go sub page A</a>
+            <a href="/subPackages/pages/subPageA/index" class="link">go sub page A</a>
         </section>
 
-        <a class="backButton" href="/pages/home/index"></a>
+        <a class="backButton" href="/pages/home/index">返回首页</a>
     </article>
 </template>
 <script>
-import moment from 'moment';
+// import moment from 'moment';
 
 export default {
     config: { // The page config defined in page.json
@@ -190,6 +194,7 @@ export default {
     },
 
     data: {
+        isShow: true,
         a: 'test-a',
         b: 'test-b',
         keyArray:[{id: 5, unique: 'unique_5'},
@@ -265,8 +270,8 @@ export default {
         },
 
         handleButton(event) {
-            console.log(event)
-            console.log('click button');
+            // console.log(event)
+            console.log('click button>>>>>>>dataset', event.currentTarget);
         },
 
         handleParent(event) {
@@ -299,6 +304,14 @@ export default {
     background-color: #ffffff
     color: #333333
     padding: 10px 20px
+
+    .block
+        margin-bottom 20px
+
+    .link
+        margin: 10px 0
+        font-size: 20px
+
     .demo-title
         text-align center
         font-weight bold

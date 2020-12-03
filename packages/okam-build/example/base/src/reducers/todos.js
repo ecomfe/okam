@@ -69,6 +69,10 @@ const toggleTodo = (state, {id}) => {
     let curr = state[found];
     newArr[found] = Object.assign({}, curr, {completed: !curr.completed});
     return newArr;
+
+    // let curr = state[found];
+    // curr.completed = !curr.completed;
+    // return state;
 };
 
 const fetchTodos = (state, {isFetching, todos, isFail}) => {

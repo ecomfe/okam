@@ -6,10 +6,7 @@
 'use strict';
 
 const helper = require('okam-helper');
-
-function isPlainObject(obj) {
-    return toString.call(obj) === '[object Object]';
-}
+const {isPlainObject} = helper.lang;
 
 function doMerge(target, source, selector, doNotMergeSelectors) {
     if (doNotMergeSelectors && doNotMergeSelectors.includes(selector)) {
@@ -52,7 +49,7 @@ function doMerge(target, source, selector, doNotMergeSelectors) {
 
 /**
  * Merge the given source objects to target object.
- * Notice: it is not supported array data merge.
+ * Notice: it does not support array type data merge.
  *
  * Optional, you can pass property selector array used for controlling property
  * merge behavior. Currently, the given property selector will be override the

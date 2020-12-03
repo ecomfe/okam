@@ -6,7 +6,7 @@
 'use strict';
 
 const postcss = require('postcss');
-const {resolveUrlPath} = require('../../helper/url');
+const {resolveUrlPath, normalizeUrlPath} = require('../../helper/url');
 
 const URL_REGEXP = /(url\s*\(\s*['"]?\s*)([^'"\)]+)(\s*['"]?\s*\))/g;
 
@@ -39,6 +39,7 @@ module.exports = postcss.plugin('postcss-plugin-resource', function (opts = {}) 
         css.walkAtRules(rule => {
             if (rule.name === 'import') {
                 let relPath = rule.params.slice(1, -1);
+                relPath = normalizeUrlPath(relPath);
                 relPath = resolve(file, relPath);
                 extname && (relPath = relPath.replace(/\.css$/, '.' + extname));
                 rule.params = `'${relPath}'`;

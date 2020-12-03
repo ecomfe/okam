@@ -1,0 +1,35 @@
+@import '~weui/dist/style/weui.min.css';
+
+.weui-btn + .weui-btn {
+    margin-top: 0;
+}
+
+[class*=" weui-icon-"]:before,
+[class^="weui-icon-"]:before {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.weui-btn_primary {
+    background-color: #3c76ff;
+}
+
+.weui-btn_warn {
+    background-color: #f7534f;
+}
+
+.weui-btn_warn.weui-btn_disabled {
+    background-color: #f7534f;
+    opacity: .3;
+}
+
+
+.weui-btn_primary:not(.weui-btn_disabled):active {
+    background-color: #c2dbff;
+}
+
+.weui-btn_warn:not(.weui-btn_disabled):active {
+    background-color: #f0cccc;
+}
+
+

@@ -1,11 +1,16 @@
 {
   "name": "okam-core",
-  "version": "0.4.18-alpha.0",
+  "version": "0.5.0-alpha.0",
   "description": "The extension for small program framework",
   "main": "src/index.js",
   "keywords": [
     "swan",
+    "weapp",
     "wx",
+    "toutiao",
+    "quick app",
+    "h5",
+    "web",
     "okam",
     "mini program",
     "framework"
@@ -23,12 +28,14 @@
     "url": "https://github.com/ecomfe/okam/issues"
   },
   "devDependencies": {
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
+    "@vue/babel-preset-jsx": "^1.1.2",
     "cross-env": "^6.0.0",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
     "promise-polyfill": "^8.0.0",
     "redux": "^4.0.1",
-    "regenerator-runtime": "^0.12.1",
+    "regenerator-runtime": "^0.13.1",
     "vuex": "^3.1.0"
   }
 }

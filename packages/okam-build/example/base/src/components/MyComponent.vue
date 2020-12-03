@@ -5,12 +5,12 @@
             @counterChange="onCounterChange" :source="myProp"
             :obj="info"
             :num="info.luckyNo" :counter="counter">
-            default slot
+            <view>default slot</view>
         </hello>
     </view>
 </template>
 <script>
-const Hello = require('./Hello');
+import Hello from './Hello';
 
 export default {
     config: { // The component config defined in component.json
@@ -37,8 +37,9 @@ export default {
 
     methods: {
         onCounterChange(e) {
-            console.log(this.selectComponent('#my-hello-wrap'))
-            console.log('mycompoent catch hello counter change', e);
+            console.log('[mycompoent] catch hello counter change', e);
+            // todo: selectComponent
+            // console.log(this.selectComponent('#my-hello-wrap'));
         }
     }
 }

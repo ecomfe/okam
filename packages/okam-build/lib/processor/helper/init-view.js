@@ -59,55 +59,30 @@ const REF_PLUGIN_PATH = path.join(PLUGIN_BASE_NAME, 'ref-plugin');
  * @type {Object}
  */
 const BUILTIN_PLUGINS = {
+    resource: path.join(PLUGIN_BASE_NAME, 'resource-plugin'),
+    tag: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
+    vue: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
+    vhtml: path.join(PLUGIN_BASE_NAME, 'vhtml-plugin'),
     syntax: getTemplateSyntaxPlugin,
-    eventSync: getEventSyntaxPlugin,
+    event: getEventSyntaxPlugin,
     model: getModelSyntaxPlugin,
-    tagTransform: path.join(PLUGIN_BASE_NAME, 'tag-transform-plugin'),
-    vuePrefix: path.join(PLUGIN_BASE_NAME, 'vue-prefix-plugin'),
-    vhtml: path.join(PLUGIN_BASE_NAME, 'v-html-plugin'),
     ref: {
         'quick': [
             REF_PLUGIN_PATH, {useId: true}
         ],
         'default': [REF_PLUGIN_PATH]
-    },
-    resource: path.join(PLUGIN_BASE_NAME, 'resource-plugin')
+    }
 };
-
-/**
- * Add ref plugin
- *
- * @inner
- * @param {string} pluginName the builtin plugin name to add
- * @param {string} appType the app type to transform
- * @param {Array.<Object>} plugins the existed plugins
- * @param {boolean=} insertAtTop whether insert the added plugin at the first position
- */
-function addBuiltinPlugin(pluginName, appType, plugins, insertAtTop) {
-    let pluginInfo = BUILTIN_PLUGINS[pluginName];
-    if (typeof pluginInfo === 'object') {
-        pluginInfo = pluginInfo[appType] || pluginInfo.default;
-    }
-    pluginInfo = normalizeViewPlugins([pluginInfo], appType)[0];
-
-    let plugin = Array.isArray(pluginInfo) ? pluginInfo[0] : pluginInfo;
-    let hasBuiltinPlugin = plugins.some(
-        item => (plugin === (Array.isArray(item) ? item[0] : item))
-    );
-    if (!hasBuiltinPlugin) {
-        plugins[insertAtTop ? 'unshift' : 'push'](pluginInfo);
-    }
-}
 
 /**
  * Normalize the view transformation plugins
  *
  * @inner
- * @param {Array.<string|Object>} plugins the plugins to normalize
  * @param {string} appType the appType to transform
+ * @param {Array.<string|Object>} plugins the plugins to normalize
  * @return {Array.<Object>}
  */
-function normalizeViewPlugins(plugins, appType) {
+function normalizeViewPlugins(appType, plugins) {
     return plugins.map(pluginInfo => {
         let pluginItem = pluginInfo;
         let pluginOptions;
@@ -175,6 +150,60 @@ function handleOnFilter(file, filterName) {
 }
 
 /**
+ * Add view plugin
+ *
+ * @inner
+ * @param {string} pluginName the builtin plugin name to add
+ * @param {Array.<Object>} plugins the existed plugins
+ * @param {boolean=} insertAtTop whether insert the added plugin at the first position
+ */
+function addViewPlugin(pluginName, plugins, insertAtTop) {
+    let existed = plugins.some(
+        item => (pluginName === (Array.isArray(item) ? item[0] : item))
+    );
+    if (!existed) {
+        plugins[insertAtTop ? 'unshift' : 'push'](pluginName);
+    }
+}
+
+/**
+ * Init view processor plugins
+ *
+ * @inner
+ * @param {string} appType the app type to transform
+ * @param {Object} templateConf the template transform config
+ * @param {Array.<Object>} plugins the existed plugins
+ * @param {BuildManager} buildManager the build mananger
+ * @return {Array}
+ */
+function initViewPlugins(appType, templateConf, plugins, buildManager) {
+    plugins || (plugins = []);
+    addViewPlugin('syntax', plugins);
+
+    if (templateConf.transformTags) {
+        addViewPlugin('tag', plugins);
+    }
+
+    if (!buildManager.isNativeSupportVue() && templateConf.useVuePrefix) {
+        // vue plugin should be placed on first, convert vue syntax to
+        // okam syntax firstly
+        addViewPlugin('vue', plugins, true);
+    }
+
+    if (buildManager.isEnableRefSupport()) {
+        addViewPlugin('ref', plugins);
+    }
+
+    if (buildManager.isEnableVHtmlSupport()) {
+        addViewPlugin('vhtml', plugins);
+    }
+
+    addViewPlugin('resource', plugins, true);
+
+    return normalizeViewPlugins(appType, plugins);
+}
+
+/**
  * Initialize component view template transform options.
  *
  * @param {Object} file the file to process
@@ -182,49 +211,36 @@ function handleOnFilter(file, filterName) {
  * @param {Array.<string|Object>} processOpts.plugins the view processor plugins,
  *        the builtin plugins:
  *        `syntax`: transform okam template syntax to mini program template syntax
- *        `tagTransform`: transform tags A to tag B
+ *        `tag`: transform tags A to tag B
  *        `ref`: provide view `ref` attribute support like Vue
  *        You can also pass your custom plugin:
  *        {
  *           tag() {} // refer to the ref plugin implementation
  *        }
  * @param {BuildManager} buildManager the build manager
- * @param {boolean=} isNativeView whether is native view transformation
  * @return {Object}
  */
-function initViewTransformOptions(file, processOpts, buildManager, isNativeView) {
-    let plugins = processOpts.plugins;
+function initViewTransformOptions(file, processOpts, buildManager) {
+    if (file.noTransform || (file.owner && file.owner.noTransform)) {
+        processOpts = Object.assign({}, processOpts);
+        processOpts.ignoreDefaultOptions = true;
+        processOpts.keepOriginalContent = true;
+        processOpts.plugins = ['resource'];
+    }
+
+    let {plugins, ignoreDefaultOptions} = processOpts;
     let {appType, componentConf, buildConf} = buildManager;
-    if (isNativeView) {
+    if (ignoreDefaultOptions) {
+        delete processOpts.ignoreDefaultOptions;
         return Object.assign({}, processOpts, {
-            plugins: normalizeViewPlugins(plugins, appType)
+            plugins: normalizeViewPlugins(appType, plugins)
         });
     }
 
     let templateConf = (componentConf && componentConf.template) || {};
-    if (!plugins || !plugins.length) {
-        plugins = ['syntax'];
-
-        if (templateConf.transformTags) {
-            plugins.push('tagTransform');
-        }
-
-        // vuePrefix  需要在第一位，v- directives 处理成 directives 再处理
-        if (templateConf.useVuePrefix) {
-            plugins.unshift('vuePrefix');
-        }
-    }
-
-    plugins = normalizeViewPlugins(plugins, appType);
-    let isSupportRef = buildManager.isEnableRefSupport();
-    isSupportRef && addBuiltinPlugin('ref', appType, plugins);
-
-    let isSupportVHtml = buildManager.isEnableVHtmlSupport();
-    isSupportVHtml && addBuiltinPlugin('vhtml', appType, plugins);
-
-    addBuiltinPlugin('resource', appType, plugins, true);
-
-    processOpts.plugins = plugins;
+    plugins = processOpts.plugins = initViewPlugins(
+        appType, templateConf, plugins, buildManager
+    );
 
     let filterOptions = buildManager.getFilterTransformOptions();
     if (filterOptions) {

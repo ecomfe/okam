@@ -6,6 +6,7 @@
 'use strict';
 
 const customRequire = require('../util').require;
+const {normalizeMiddlewares} = require('./helper');
 
 const SERVER = {
     koa: {
@@ -22,43 +23,6 @@ const SERVER = {
     }
 };
 
-function normalizeMiddlewares(mws, root) {
-    if (!Array.isArray(mws)) {
-        return;
-    }
-
-    let result = [];
-    let deps = [];
-    mws.forEach(item => {
-        let name;
-        let options;
-        if (Array.isArray(item)) {
-            name = item[0];
-            options = item[1];
-        }
-        else if (typeof item === 'object') {
-            name = item.name;
-            options = item.options;
-        }
-        else if (typeof item === 'function') {
-            result.push(item);
-            return;
-        }
-        else {
-            // ignore invalidated middlware
-            return;
-        }
-
-        if (!deps.includes(name)) {
-            customRequire.ensure(name, [name], root);
-            deps.push(name);
-            result.push(customRequire(name, root)(options));
-        }
-    });
-
-    return result;
-}
-
 /* eslint-disable fecs-camelcase */
 let _instance;
 function createDevServer(options) {
@@ -66,7 +30,7 @@ function createDevServer(options) {
         return _instance;
     }
 
-    let {port, logger, middlewares, type = 'connect', root} = options;
+    let {port, logger, middlewares, type = 'express', root} = options;
     port || (port = process.env.PORT || 8080);
 
     let serverInfo = SERVER[type];

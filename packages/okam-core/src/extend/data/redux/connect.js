@@ -36,7 +36,7 @@ function normalizeStoreComputed(stateMap) {
             k => {
                 let getter = computed[k];
                 computed[k] = function () {
-                    let state = this.$store.getState();
+                    let state = this.$store.getState && this.$store.getState();
                     return getter.call(this, state);
                 };
             }

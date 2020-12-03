@@ -34,7 +34,7 @@
             <div class="example">
                 <div v-if="2<1"> 2 &lt; 1  </div>
                 <div v-if="2<1"> 2  </div>
-                <div v-elif="1===3">1===3</div>
+                <div v-else-if="1===3">1===3</div>
                 <div v-else-if="2===3">2===3</div>
                 <div v-else>3</div>
             </div>
@@ -53,9 +53,9 @@
                 <div class="hello" v-for="(item, index) of ['of', 2]">
                     for of 遍历数组{{item}}
                 </div>
-                <view v-for="item of {a:1,b:2}">of遍历字面量对象: hello {{index}} {{item}}</view>
-                <view v-for="item of {a,b}">of遍历字面量对象2: hello {{index}} {{item}}</view>
-                <view v-for="item of {a2: a, b2: b}">of遍历字面量对象3: hello {{index}} {{item}}</view>
+                <view v-for="item of {a:1,b:2}" :key="index">of遍历字面量对象: hello {{index}} {{item}}</view>
+                <view v-for="item of {a,b}" :key="index">of遍历字面量对象2: hello {{index}} {{item}}</view>
+                <view v-for="item of {a2: a, b2: b}" :key="index">of遍历字面量对象3: hello {{index}} {{item}}</view>
             </div>
         </section>
 
@@ -78,8 +78,6 @@
     </article>
 </template>
 <script>
-import moment from 'moment';
-
 export default {
     config: {
         navigationBarTitleText: 'Hello Okam Smart Program',

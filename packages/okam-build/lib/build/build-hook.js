@@ -74,13 +74,18 @@ function executeCommand(command, logger) {
 
 function executeBuildCallback(buildManager, listener) {
     let result = listener;
-    let {buildConf, logger} = buildManager;
+    let {buildConf, logger, isDev, root, homePagePath} = buildManager;
     let {watch: isWatchMode} = buildConf;
-
     if (typeof listener === 'function') {
-        result = listener({watch: isWatchMode});
-        if (!result) {
-            return;
+        result = listener({
+            root,
+            isDev,
+            buildConf,
+            watch: isWatchMode,
+            homePath: homePagePath || '/'
+        });
+        if (!result || result instanceof Promise) {
+            return result;
         }
     }
 

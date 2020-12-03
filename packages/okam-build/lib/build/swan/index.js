@@ -8,7 +8,7 @@
 const BuildManager = require('../BuildManager');
 const initWx2SwanProcessor = require('./init-wx2swan-processor');
 const {initFrameworkInfo} = require('./build-info');
-const {md5} = require('../../util').helper;
+const {md5} = require('../../util').misc;
 
 class BuildSwanAppManager extends BuildManager {
 

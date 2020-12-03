@@ -13,12 +13,12 @@
         </view>
         <view class="example-item">
             <view class="sub-title">属性冲突</view>
-            <view>input has value attr「value=input1」: {{input1}}</view>
-            <input v-model="input1" value={{input1}}/>
+            <!-- <view>input has value attr「value=input1」: {{input1}}</view>
+            <input v-model="input1" :value="input1"/>
             <view>input has value attr「:value="input2"」: {{input2}}</view>
             <input v-model="input2" :value="input2" />
             <view>input has value attr「v-bind:value="input3"」: {{input3}}</view>
-            <input v-model="input3" v-bind:value="input3" />
+            <input v-model="input3" v-bind:value="input3" /> -->
         </view>
         <view class="example-item">
             <view class="sub-title">事件冲突</view>
