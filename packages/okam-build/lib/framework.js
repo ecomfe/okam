@@ -56,7 +56,8 @@ const FRAMEWORK_EXTEND_PATH = {
     vuex: {
         'default': 'extend/data/vuex/index',
         'quick': 'extend/data/vuex/quick/index',
-        'h5': 'extend/data/vuex/h5/index'
+        'h5': 'extend/data/vuex/h5/index',
+        'swan': 'extend/data/vuex/swan/index'
     },
     model: {
         'default': 'extend/data/model',

@@ -7,21 +7,21 @@
 
 'use strict';
 
-import redux from '../index';
+import vuexBase from '../index';
 
-const rawCreated = redux.component.created;
+const rawBeforeCreate = vuexBase.component.beforeCreate;
 
 export default {
-    component: Object.assign({}, redux.component, {
+    component: Object.assign({}, vuexBase.component, {
         onInit() {
-            rawCreated.call(this);
+            rawBeforeCreate.call(this);
         },
-        created() {
+        beforeCreate() {
             // Compatible with the case that OnInit is not supported in the lower version
             if (!this.$isSupportOninit) {
-                rawCreated.call(this);
+                rawBeforeCreate.call(this);
             }
         }
     }),
-    page: redux.page
+    page: vuexBase.page
 };

@@ -114,6 +114,10 @@ export default {
                     {
                         subName: '百度收银台支付',
                         path: 'api/payment'
+                    },
+                    {
+                        subName: '登录',
+                        path: 'api/login'
                     }
                 ]
             },
