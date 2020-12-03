@@ -1,10 +1,11 @@
 <template>
-    <div class="okam-image" :style="styleValue"></div>
+    <div
+        class="okam-image"
+        :style="styleValue"
+    />
 </template>
 <script>
 import {uuid, throttle} from './common/util';
-
-const WIDTH_FIX_MODE = 'widthFix';
 
 const MODE_STYLE_MAP =  {
     'scaleToFill': {
@@ -18,7 +19,7 @@ const MODE_STYLE_MAP =  {
         backgroundSize: 'cover',
         backgroundPosition: 'center center'
     },
-    [WIDTH_FIX_MODE]: {
+    'widthFix': {
         backgroundSize: '100% auto'
     },
     'top': {
@@ -51,7 +52,7 @@ const MODE_STYLE_MAP =  {
 };
 
 function isFixWidthMode(mode) {
-    return mode === WIDTH_FIX_MODE;
+    return mode === 'widthFix';
 }
 
 export default {
@@ -214,10 +215,10 @@ export default {
 </script>
 <style lang="stylus">
 .okam-image
-    position: relative
-    display: inline-block
-    overflow: hidden
-    width: 300px
-    height: 225px
+    position relative
+    display inline-block
+    overflow hidden
+    width 300px
+    height 225px
 </style>
 
