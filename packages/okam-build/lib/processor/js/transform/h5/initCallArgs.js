@@ -83,9 +83,11 @@ function extractPageApi(t, path, opts, pageHookObj) {
         const extractPageEvent = transPageEventList[key];
         const apiBody = extractPageEvent.body;
         const apiParams = extractPageEvent.params;
+        const apiAsync = extractPageEvent.async;
+        const apiKey = apiAsync ? 'async' + ' ' + key : key;
         const methodObj = t.objectMethod(
             'method',
-            t.identifier(key),
+            t.identifier(apiKey),
             apiParams,
             apiBody
         );

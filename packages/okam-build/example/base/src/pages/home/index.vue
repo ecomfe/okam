@@ -259,8 +259,8 @@ export default {
     },
     async onLoad() {
         console.log('[home page] onload.............this.$http', this.$http);
-        const result1 = await this.resolveAfter2Seconds();
-        console.log(result1);
+        const result = await this.resolveAfter2Seconds();
+        console.log(result);
     },
     onHide() {
         console.log('[home page] onHide....');
@@ -271,8 +271,10 @@ export default {
     onUnload() {
         console.log('[home page] onUnload....');
     },
-    onReachBottom(e) {
+    async onReachBottom(e) {
         console.log('[home page] onReachBottom...');
+        const result = await this.resolveAfter2Seconds();
+        console.log(result);
     },
     onPageScroll(e) {
         console.log('[home page] onPageScroll...', e);
