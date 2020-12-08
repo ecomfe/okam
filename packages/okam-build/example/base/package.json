@@ -55,11 +55,9 @@
     "normalize.css": "^8.0.1",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "vue": "^2.6.11",
     "vue-router": "^3.0.2"
   },
   "devDependencies": {
-    "babel-plugin-minify-dead-code-elimination": "^0.5.1",
     "autoresponse": "^0.3.0",
     "express": "^4.16.4",
     "connect": "^3.6.6",

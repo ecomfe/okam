@@ -122,6 +122,7 @@ function extractLifeCycleHook(t, path, opts, pageHookObj, declarationPath) {
     Object.keys(pageLifeCycleMap).forEach(transItem => {
         const transPageHookNode = lifeCycleList[transItem];
         const targetPageHook = pageLifeCycleMap[transItem];
+
         let insertLoc;
         let targetLifeCycle;
         if (typeof targetPageHook === 'object') {
@@ -138,6 +139,8 @@ function extractLifeCycleHook(t, path, opts, pageHookObj, declarationPath) {
         targetPageHookTempList[targetLifeCycle] = targetPageHookTempList[targetLifeCycle] || {};
         targetPageHookTempList[targetLifeCycle].node = targetPageHookTempList[targetLifeCycle].node || [];
         targetPageHookTempList[targetLifeCycle].params = targetPageHookTempList[targetLifeCycle].params || [];
+        targetPageHookTempList[targetLifeCycle].generator = targetPageHookNode && targetPageHookNode.generator || false;
+        targetPageHookTempList[targetLifeCycle].async = targetPageHookNode && targetPageHookNode.async || false;
 
         if (targetPageHookNode && targetPageHookNode.body && !targetPageHookTempList[targetLifeCycle].node.length) {
             const targetBody = targetPageHookNode.body.body;
@@ -155,7 +158,9 @@ function extractLifeCycleHook(t, path, opts, pageHookObj, declarationPath) {
                         t.functionExpression(
                             null,
                             [t.identifier(paramName)],
-                            t.blockStatement(transPageHookNode.body.body)
+                            t.blockStatement(transPageHookNode.body.body),
+                            transPageHookNode.generator,
+                            transPageHookNode.async
                         ),
                         t.identifier('call')
                     ),
@@ -173,10 +178,12 @@ function extractLifeCycleHook(t, path, opts, pageHookObj, declarationPath) {
     Object.keys(targetPageHookTempList).forEach(targetItem => {
         const targetNode = targetPageHookTempList[targetItem].node;
         const targetParams = targetPageHookTempList[targetItem].params;
+        const targetAsync = targetPageHookTempList[targetItem].async;
+        const targetHookName = targetAsync ? 'async' + ' ' + targetItem : targetItem;
         if (targetNode.length) {
             declarationPath.node.properties.push(t.objectMethod(
                 'method',
-                t.identifier(targetItem),
+                t.identifier(targetHookName),
                 targetParams,
                 t.blockStatement(targetNode)
             ));
