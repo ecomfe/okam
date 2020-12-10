@@ -54,8 +54,7 @@
     "moment": "^2.24.0",
     "normalize.css": "^8.0.1",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0",
-    "vue-router": "^3.0.2"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "autoresponse": "^0.3.0",
