@@ -26,6 +26,8 @@ window.getCurrentPages = function () {
     return Vue.prototype.currentRoute;
 };
 
+window.swan = null;
+
 export default {
 
     beforeCreate() {
@@ -45,6 +47,8 @@ export default {
 
         // init extension api
         initApi.call(this);
+        // compatible business side nonstandard writing
+        window.swan = this.$api;
 
         // inject router instance
         const initRouterInstance = this.$api._initRouterInstance;
@@ -69,6 +73,7 @@ export default {
         let handler = this.__removeVisibilityChange;
         handler && handler();
         window.__currOkamAppInstance = null;
+        window.swan = null;
     }
 };
 
