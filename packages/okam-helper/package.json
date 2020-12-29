@@ -1,6 +1,6 @@
 {
   "name": "okam-helper",
-  "version": "0.5.0-alpha.0",
+  "version": "0.5.1-alpha.0",
   "description": "The build helper for Okam develop framework",
   "main": "index.js",
   "keywords": [
@@ -29,5 +29,6 @@
   },
   "devDependencies": {
     "mocha": "^6.2.0"
-  }
+  },
+  "gitHead": "9a09f89ca8f10ce5faca5cc07f6b2cf9d9da103e"
 }

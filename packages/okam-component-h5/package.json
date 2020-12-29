@@ -1,6 +1,6 @@
 {
   "name": "okam-component-h5",
-  "version": "0.1.1-alpha.0",
+  "version": "0.1.2-alpha.0",
   "description": "The okam components that provide the missing components for H5 platform",
   "main": "src/index.js",
   "keywords": [
@@ -40,5 +40,6 @@
   "dependencies": {
     "vue": "^2.6.11",
     "weui": "^1.1.3"
-  }
+  },
+  "gitHead": "02b5b52fbdad3265f040429c4814fb50fa43855a"
 }

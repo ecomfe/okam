@@ -226,6 +226,13 @@ export default {
             //         success: res => resolve(res)
             //     });
             // });
+        },
+        resolveAfter2Seconds() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve('resolved');
+                }, 2000);
+            });
         }
     },
     mounted() {
@@ -245,11 +252,15 @@ export default {
     onShow(option) {
         console.log('[home page] getCurrentPages>>>>>>!!', getCurrentPages());
     },
-    created(param) {
-        console.log('[home page] created....');
+    async created(param) {
+        console.log('[home page] created....@@@@@@@');
+        const result = await this.resolveAfter2Seconds();
+        console.log(result);
     },
-    onLoad() {
+    async onLoad() {
         console.log('[home page] onload.............this.$http', this.$http);
+        const result = await this.resolveAfter2Seconds();
+        console.log(result);
     },
     onHide() {
         console.log('[home page] onHide....');
@@ -260,8 +271,10 @@ export default {
     onUnload() {
         console.log('[home page] onUnload....');
     },
-    onReachBottom(e) {
+    async onReachBottom(e) {
         console.log('[home page] onReachBottom...');
+        const result = await this.resolveAfter2Seconds();
+        console.log(result);
     },
     onPageScroll(e) {
         console.log('[home page] onPageScroll...', e);
