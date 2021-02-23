@@ -15,7 +15,7 @@
                 ? 'demo'
                 : ''"
         >
-            标签
+            属性内换行兼容
         </div>
     </article>
 </template>
@@ -23,7 +23,7 @@
 
 export default {
     config: { // The page config defined in page.json
-        navigationBarTitleText: 'Bugfix',
+        navigationBarTitleText: '属性内换行兼容',
         backgroundColor: '#fff'
     },
 

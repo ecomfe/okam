@@ -71,8 +71,8 @@ export default {
                         path: 'tpl/vueSyntax'
                     },
                     {
-                        subName: 'bugfix',
-                        path: 'tpl/bugfix'
+                        subName: '属性值内换行',
+                        path: 'tpl/tplNewline'
                     }
                 ]
             },
