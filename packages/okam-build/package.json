@@ -43,7 +43,6 @@
     "node": ">= 8"
   },
   "devDependencies": {
-    "fecs": "^1.6.4",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1"
   }
