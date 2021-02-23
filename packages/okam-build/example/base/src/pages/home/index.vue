@@ -69,6 +69,10 @@ export default {
                     {
                         subName: 'v- 前缀支持',
                         path: 'tpl/vueSyntax'
+                    },
+                    {
+                        subName: '属性值内换行',
+                        path: 'tpl/tplNewline'
                     }
                 ]
             },

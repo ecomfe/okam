@@ -46,6 +46,9 @@ function parseStyleProp(style) {
             return '\' + ' + express + ' + \'';
         }) + '\'';
     });
+
+    // delete \n to solve wx compilation error
+    styleValue = styleValue.replace(/\n\s*/g, ' ');
     styleProp = styleProp.replace(/([A-Z])/g, '-$1').toLowerCase();
     return `${styleProp}:{{${styleValue}}}`;
 }

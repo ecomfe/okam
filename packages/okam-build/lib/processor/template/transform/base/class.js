@@ -44,6 +44,9 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
     );
     value = `{{${newValue}}}`;
 
+    // delete \n to solve wx compilation error
+    value = value.replace(/\n\s*/g, ' ');
+
     // add up static class and dynamic class when there is class attribute
     attrs.class = attrs.hasOwnProperty('class') ? `${attrs.class} ${value}` : value;
 

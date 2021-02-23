@@ -19,6 +19,7 @@ export default {
             'pages/tpl/tplReuse',
             'pages/tpl/tplPug',
             'pages/tpl/ref',
+            'pages/tpl/tplNewline',
             'pages/typescript/ts',
             'pages/component/componentPage',
             'pages/component/canvas',
