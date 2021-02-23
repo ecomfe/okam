@@ -69,6 +69,10 @@ export default {
                     {
                         subName: 'v- 前缀支持',
                         path: 'tpl/vueSyntax'
+                    },
+                    {
+                        subName: 'bugfix',
+                        path: 'tpl/bugfix'
                     }
                 ]
             },

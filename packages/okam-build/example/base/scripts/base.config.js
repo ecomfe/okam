@@ -83,7 +83,7 @@ module.exports = {
         'watch',
         'model',
         'vhtml',
-        ['behavior', '{useNativeBehavior: true, mixinHooks: ["onInit"]}'],
+        // ['behavior', '{useNativeBehavior: true, mixinHooks: ["onInit"]}'],
         'broadcast',
         'redux',
         'ref'
