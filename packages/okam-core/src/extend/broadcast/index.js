@@ -110,7 +110,7 @@ const broadcastAPIs = {
      *
      * @private
      */
-     __initEvents() {
+    __initEvents() {
         if (this.__hasInitEvents) {
             return;
         }
@@ -158,7 +158,7 @@ export default {
          *
          * @private
          */
-         onInit() {
+        onInit() {
             this.__initEvents();
         },
 
