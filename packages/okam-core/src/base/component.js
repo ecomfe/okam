@@ -70,7 +70,7 @@ export default {
         // call beforeDestroy hook
         this.beforeDestroy && this.beforeDestroy();
 
-        this.$listener.off();
+        this.$listener && this.$listener.off();
         this.$isDestroyed = true; // add destroyed flag
 
         // call destroyed hook
