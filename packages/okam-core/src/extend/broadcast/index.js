@@ -103,6 +103,25 @@ const broadcastAPIs = {
 
         bindEvents.forEach(item => eventCenter.off(item[0], item[1]));
         this._bindBroadcastEvents = [];
+    },
+
+    /**
+     * init 'broadcastEvent' and 'eventHub' event
+     *
+     * @private
+     */
+    __initEvents() {
+        if (this.__hasInitEvents) {
+            return;
+        }
+
+        this.__hasInitEvents = true;
+        this.$eventHub = eventCenter;
+        let events = this.$rawBroadcastEvents;
+        if (typeof events === 'function') {
+            events = this.$rawBroadcastEvents = events();
+        }
+        this.__bindBroadcastEvents(events);
     }
 };
 
@@ -135,17 +154,21 @@ export default {
         },
 
         /**
+         * The hook when page onInit
+         *
+         * @private
+         */
+        onInit() {
+            this.__initEvents();
+        },
+
+        /**
          * The hook when component created
          *
          * @private
          */
         created() {
-            this.$eventHub = eventCenter;
-            let events = this.$rawBroadcastEvents;
-            if (typeof events === 'function') {
-                events = this.$rawBroadcastEvents = events();
-            }
-            this.__bindBroadcastEvents(events);
+            this.__initEvents();
         },
 
         /**
