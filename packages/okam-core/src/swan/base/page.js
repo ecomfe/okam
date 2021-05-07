@@ -10,21 +10,8 @@ import component from './component';
 import pageBase from '../../base/page';
 
 export default Object.assign({}, pageBase, component, {
-
-    /**
-     * swan init done hook
-     *
-     * @private
-     * @param {Object} query the page query params
-     */
-    onInit(query) {
-        this.$isSupportOninit = true;
-        this.$isPage = true;
-        if (this.$isDefineThisProp) {
-            return;
-        }
-        this.$query = query;
-
+    onPrefetch() {
+        this.__isSupportOnPrefetch = true;
         let propDescriptors = {
             $app: {
                 get() {
@@ -40,6 +27,38 @@ export default Object.assign({}, pageBase, component, {
             };
         });
         Object.defineProperties(this, propDescriptors);
+    },
+
+    /**
+     * swan init done hook
+     *
+     * @private
+     * @param {Object} query the page query params
+     */
+    onInit(query) {
+        this.$isSupportOninit = true;
+        this.$isPage = true;
+        if (this.$isDefineThisProp) {
+            return;
+        }
+        this.$query = query;
+        if (!this.__isSupportOnPrefetch) {
+            let propDescriptors = {
+                $app: {
+                    get() {
+                        return getCurrApp();
+                    }
+                }
+            };
+            Object.keys(base).forEach(k => {
+                propDescriptors[k] = {
+                    get() {
+                        return base[k];
+                    }
+                };
+            });
+            Object.defineProperties(this, propDescriptors);
+        }
     },
 
     /**

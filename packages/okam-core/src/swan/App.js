@@ -7,6 +7,11 @@
 
 import createApp from '../App';
 import appBase from '../base/application';
+import initApi from '../base/init-api';
 
-export default createApp(appBase);
+export default createApp(Object.assign(appBase, {
+    onPrefetch() {
+        initApi.call(this);
+    }
+}));
 
