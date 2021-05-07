@@ -189,7 +189,7 @@ export default {
         this.__setDataQueue = null;
         this.__upDoneCallbackQueue = null;
 
-        this.$dataListener.dispose();
+        this.$dataListener && this.$dataListener.dispose();
         this.$dataListener = null;
         this.__computedObserver && this.__computedObserver.dispose();
         this.__propsObserver = this.__dataObserver = this.__computedObserver = null;
