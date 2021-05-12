@@ -8,6 +8,7 @@
 import {mixin, isFunction} from '../util/index';
 import {normalizeOkamProps} from './props';
 import {appGlobal} from '../na/index';
+import EventListener from '../util/EventListener';
 
 let pluginCache = {
     usedExtensions: Object.create(null),
@@ -175,6 +176,7 @@ export function createPage(instance, base, normalize, options) {
 
     initComponentData(pageInfo, options, true);
     normalize && (pageInfo = normalize(pageInfo));
+    pageInfo.$listener = new EventListener();
 
     return pageInfo;
 }

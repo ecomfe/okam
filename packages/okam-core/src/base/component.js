@@ -35,8 +35,6 @@ export default {
         });
         Object.defineProperties(this, propDescriptors);
 
-        this.$listener = new EventListener();
-
         // call beforeCreate hook
         this.beforeCreate && this.beforeCreate();
     },

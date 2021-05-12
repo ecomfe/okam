@@ -10,6 +10,17 @@ import component from './component';
 export default Object.assign({}, component, {
 
     /**
+     * The onInit hook triggered when page on init.
+     *
+     * @private
+     * @param {Object} query the page query params
+     */
+    onInit(query) {
+        this.$isPage = true;
+        this.$query = query || {};
+    },
+
+    /**
      * The onLoad hook triggered when page on load.
      *
      * @private
