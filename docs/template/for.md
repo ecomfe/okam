@@ -52,12 +52,12 @@
 ## for 和 if 共存
 支持在同一个标签中使用`for`和`if`，在`if`的属性值中可以获取`for`的索引或当前项变量。如下：
 ```html
-  <view for="item,index in [false,true,false]" if="item">hello:{item}</view>
+  <view for="item,index in [false,true,false]" if="item">hello:{{item}}</view>
 ```
 可以发现，for 和 if 共存时，for 的优先级高于 if。但如果你的目的就是根据if条件，决定是否循环，你应该如下编码
 ```html
 <view if="list.length">
-  <view for="item,index in list">hello:{item}</view>
+  <view for="item,index in list">hello:{{item}}</view>
 </view>
 ```
 
