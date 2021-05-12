@@ -28,6 +28,12 @@ module.exports = function (attrs, name, tplOpts, opts) {
     }
 
     let value = attrs[name];
+
+    // delete \n to solve wx compilation error
+    if (typeof value === 'string') {
+        value = value.replace(/\n\s*/g, ' ');
+    }
+
     if (wrapCondition && typeof value === 'string') {
         value = `{{${value}}}`;
     }
