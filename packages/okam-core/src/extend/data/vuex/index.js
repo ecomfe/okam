@@ -34,6 +34,25 @@ function onStoreChange() {
     }
 }
 
+function initVuex() {
+    let store = this.$app.$store;
+    if (typeof store === 'function') {
+        store = store.call(this);
+    }
+
+    this.$fireStoreChange = onStoreChange.bind(this);
+    this.$subscribeStoreChange = subscribeStoreChange.bind(this);
+    this.$unsubscribeStoreChange = removeStoreChangeSubscribe.bind(this);
+    this.$store = store;
+
+    let computedInfo = this.$rawComputed || {};
+    if (typeof computedInfo === 'function') {
+        this.$rawComputed = computedInfo = computedInfo();
+    }
+
+    subscribeStoreChange.call(this);
+}
+
 // should use it at first, vuex store should be created after vuex plugin is enabled
 Vue.use(Vuex);
 
@@ -41,28 +60,22 @@ export default {
 
     component: {
 
+        onInit() {
+            initVuex.call(this);
+            this.__vuexInited = true;
+        },
+
         /**
          * The created hook when component created
          *
          * @private
          */
         beforeCreate() {
-            let store = this.$app.$store;
-            if (typeof store === 'function') {
-                store = store.call(this);
+            if (this.__vuexInited) {
+                return;
+            } else {
+                initVuex.call(this);
             }
-
-            this.$fireStoreChange = onStoreChange.bind(this);
-            this.$subscribeStoreChange = subscribeStoreChange.bind(this);
-            this.$unsubscribeStoreChange = removeStoreChangeSubscribe.bind(this);
-            this.$store = store;
-
-            let computedInfo = this.$rawComputed || {};
-            if (typeof computedInfo === 'function') {
-                this.$rawComputed = computedInfo = computedInfo();
-            }
-
-            subscribeStoreChange.call(this);
         },
 
         /**
