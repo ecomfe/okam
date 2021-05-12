@@ -42,6 +42,9 @@ module.exports = function (attrs, name, tplOpts, opts, element) {
             );
             value = `{{${newValue}}}`;
         }
+
+        // delete \n to solve wx compilation error
+        value = value.replace(/\n\s*/g, ' ');
     }
 
     if (attrs.hasOwnProperty(newName)) {

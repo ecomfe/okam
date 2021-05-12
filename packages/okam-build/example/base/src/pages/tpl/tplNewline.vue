@@ -1,6 +1,8 @@
 <template>
     <article class="home-wrap">
         <div
+            v-if="isShowA
+                && isShowB"
             :style="[
                 {
                     color: colorStyle,
@@ -17,6 +19,12 @@
         >
             属性内换行兼容
         </div>
+        <div
+            v-for="item, index in demoArr"
+            key="id"
+        >
+            {{ item.name }}
+        </div>
     </article>
 </template>
 <script>
@@ -31,7 +39,19 @@ export default {
         fontStyle: 30,
         colorStyle: '#f00',
         isWider: true,
-        showClass: true
+        showClass: true,
+        isShowA: true,
+        isShowB: true,
+        demoArr: [
+            {
+                name: 'aaa',
+                id: 1
+            },
+            {
+                name: 'bbb',
+                id: 2
+            }
+        ]
     }
 };
 </script>
