@@ -57,7 +57,7 @@
     "less": "^3.9.0",
     "lint-staged": "^9.2.5",
     "mocha": "^6.2.0",
-    "node-sass": "^4.10.0",
+    "node-sass": "^7.0.0",
     "nyc": "^14.1.1",
     "postcss": "^7.0.6",
     "power-assert": "^1.6.1",
